@@ -201,10 +201,22 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
   font-size:13px; color:var(--amber); flex-shrink:0; width:20px; text-align:center; padding-top:2px;
 }
 .group-title{ min-width:0; }
+.group-title .title-row{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
 .group-title h3{ font-family:var(--display); font-size:15px; font-weight:600; line-height:1.3;}
+.group-title h3.group-title-name{
+  cursor:text; border-radius:5px; padding:1px 5px; margin:-1px -5px;
+  outline:none; transition:background .15s, box-shadow .15s;
+}
+.group-title h3.group-title-name:hover{ background:var(--surface2); }
+.group-title h3.group-title-name:focus{ background:#fff; box-shadow:0 0 0 2px var(--accent); }
 .group-title .sub{ font-size:12px; color:var(--text-dim); margin-top:3px; display:flex; gap:10px; flex-wrap:wrap;}
 .group-title .sub b{ color:var(--text-faint); font-weight:500; font-family:var(--mono); }
-.group-title .sub.group-contacts{ margin-top:6px; }
+.group-title .title-meta{ margin-top:0; }
+.group-title .sub.group-contacts{ margin-top:6px; display:flex; gap:16px; flex-wrap:wrap; }
+.mgr-primary{
+  font-weight:700; color:var(--accent-dim);
+  background:#E6F4FD; padding:0 5px; border-radius:4px;
+}
 .group-badges{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
 .badge{
   font-size:10.5px; font-family:var(--mono); padding:3px 8px; border-radius:6px;
