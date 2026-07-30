@@ -549,9 +549,9 @@
       "owner_primary": "강성준",
       "owner_secondary": "윤태리",
       "check_method": "원격 (RC) ※PS 제외",
-      "cust_contact": "Harshit Tripathi / Ajay Kumar",
+      "cust_contact": "",
       "cust_phone": "",
-      "cust_email": "h.tripathi@samsung.com; ajay3.kumar@samsung.com",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "인도 SDN (Proxy/RP/PS)",
       "id": 14,
@@ -569,14 +569,27 @@
         "iv": "FWstY2967ay05aCf",
         "ct": "xXJYXX/8Th98mlLH",
         "tag": "wFcBxLeRk2eOEOxNf1X85Q=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Harshit Tripathi",
+          "phone": "",
+          "email": "h.tripathi@samsung.com"
+        },
+        {
+          "name": "Ajay Kumar",
+          "phone": "",
+          "email": "ajay3.kumar@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 디스플레이 Noida (SDN) (구 시큐아이 담당)",
+      "location": "인도 SDN (Proxy/RP/PS)",
+      "support_id": "379966",
       "sku": "SG-S400-20-PR-STDPLUS",
       "sn": "4717320088",
       "entitlement": "🔗",
@@ -588,8 +601,8 @@
       "deploy_log": "23.07.22 윤태리 6.7.4.3>7.3.14.2 / 23.07.22 윤태리 7.3.14.2>6.7.4.3 / 23.08.03 윤태리 6.7.4.3>7.3.11.3 (vpm xml issue 7.3.14.2)",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -611,14 +624,27 @@
         "iv": "vH/aIaduslRDXbhc",
         "ct": "bUueFTgp1QOfF6lv",
         "tag": "Ywz8L+U/yuETiHKgVmXOnQ=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Harshit Tripathi",
+          "phone": "",
+          "email": "h.tripathi@samsung.com"
+        },
+        {
+          "name": "Ajay Kumar",
+          "phone": "",
+          "email": "ajay3.kumar@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 디스플레이 Noida (SDN) (구 시큐아이 담당)",
+      "location": "인도 SDN (Proxy/RP/PS)",
+      "support_id": "379966",
       "sku": "RP-S500-20-STDPLUS",
       "sn": "00117470009",
       "entitlement": "🔗",
@@ -630,8 +656,8 @@
       "deploy_log": "24.09.07 Proxy1,2,RP PM (매년 같은날 전부 PM예정), RP stop까지 1시간정도 소요, disk 2% 기준",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -653,14 +679,27 @@
         "iv": "XHH3SdPotnhmyDOz",
         "ct": "wmaBly3hp8qDDsFvJpmV79/8aoXw/xR9Jp+hufNzuA==",
         "tag": "MHWcxjJcfMuWLEAqO9V9DQ=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Harshit Tripathi",
+          "phone": "",
+          "email": "h.tripathi@samsung.com"
+        },
+        {
+          "name": "Ajay Kumar",
+          "phone": "",
+          "email": "ajay3.kumar@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 디스플레이 Noida (SDN) (구 시큐아이 담당)",
+      "location": "인도 SDN (Proxy/RP/PS)",
+      "support_id": "379966",
       "sku": "BCWF-S-500-999-1YR",
       "sn": "QJ4X6-WZG8X",
       "entitlement": "🔗",
@@ -672,8 +711,8 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -683,14 +722,27 @@
       "id": 17,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Harshit Tripathi",
+          "phone": "",
+          "email": "h.tripathi@samsung.com"
+        },
+        {
+          "name": "Ajay Kumar",
+          "phone": "",
+          "email": "ajay3.kumar@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 디스플레이 Noida (SDN) (구 시큐아이 담당)",
+      "location": "인도 SDN (Proxy/RP/PS)",
+      "support_id": "379966",
       "sku": "PS-S400-250MH-STDPLUS",
       "sn": "0219320073",
       "entitlement": "🔗",
@@ -702,8 +754,8 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "11.10.1.3",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -725,14 +777,27 @@
         "iv": "Yp6VELe8QhOSoEUM",
         "ct": "yAhBXPC+cPSEPS9BXA==",
         "tag": "Ml/6nmr7ym44eMWqFGQFVA=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Harshit Tripathi",
+          "phone": "",
+          "email": "h.tripathi@samsung.com"
+        },
+        {
+          "name": "Ajay Kumar",
+          "phone": "",
+          "email": "ajay3.kumar@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 디스플레이 Noida (SDN) (구 시큐아이 담당)",
+      "location": "인도 SDN (Proxy/RP/PS)",
+      "support_id": "379966",
       "sku": "WEB-PROTECT-SUB",
       "sn": "",
       "entitlement": "🔗",
@@ -744,8 +809,8 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -755,7 +820,20 @@
       "id": 19,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Harshit Tripathi",
+          "phone": "",
+          "email": "h.tripathi@samsung.com"
+        },
+        {
+          "name": "Ajay Kumar",
+          "phone": "",
+          "email": "ajay3.kumar@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-shi",
