@@ -8,7 +8,7 @@ let githubSha = null;      // sha of the last-loaded file, needed to PUT updates
 const DEFAULT_GITHUB_CONFIG = {
   repo: 'etech-symantec/ma',
   branch: 'main',
-  path: 'etech-symantec/ma/data.json'
+  path: 'data.json'
 };
 
 // ---------- embedded access token (restricted-use deployment only) ----------
