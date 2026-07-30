@@ -356,11 +356,13 @@ function render(){
           <div class="group-head-left">
             <div class="group-flag">${esc(meta.flag)}</div>
             <div class="group-title">
-              <h3>${esc(meta.owner)}</h3>
-              <div class="sub">
-                <span>${esc(meta.location)||''}</span>
-                ${meta.support_id? `<span><b>Support ID</b> ${esc(meta.support_id)}</span>`:''}
-                <span><b>항목</b> ${items.length}건</span>
+              <div class="title-row">
+                <h3 class="group-title-name" contenteditable="true" spellcheck="false" data-gid="${gid}" title="클릭하여 법인명 수정">${esc(meta.owner)}</h3>
+                <div class="sub title-meta">
+                  <span>${esc(meta.location)||''}</span>
+                  ${meta.support_id? `<span><b>Support ID</b> ${esc(meta.support_id)}</span>`:''}
+                  <span><b>항목</b> ${items.length}건</span>
+                </div>
               </div>
               ${groupContactsHtml(meta)}
             </div>
@@ -391,6 +393,33 @@ function render(){
       const gid = el.dataset.toggle;
       if (expandedGroups.has(gid)) expandedGroups.delete(gid); else expandedGroups.add(gid);
       render();
+    };
+  });
+
+  document.querySelectorAll('.group-title-name').forEach(el=>{
+    el.onclick = (e) => { e.stopPropagation(); };
+    el.onkeydown = (e) => {
+      if (e.key === 'Enter'){ e.preventDefault(); el.blur(); }
+      if (e.key === 'Escape'){ e.preventDefault(); el.textContent = el.dataset.orig || el.textContent; el.blur(); }
+    };
+    el.onfocus = () => { el.dataset.orig = el.textContent.trim(); };
+    el.onblur = () => {
+      const gid = el.dataset.gid;
+      const newName = el.textContent.trim();
+      const orig = el.dataset.orig !== undefined ? el.dataset.orig : newName;
+      if (newName === orig) return;
+      if (viewOnly || !sessionKey){
+        alert('법인명을 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.');
+        el.textContent = orig;
+        return;
+      }
+      if (!newName){
+        el.textContent = orig;
+        return;
+      }
+      records.forEach(r => { if (r.group === gid) r.owner = newName; });
+      render();
+      scheduleAutoSync();
     };
   });
   document.querySelectorAll('.sec-toggle').forEach(btn=>{
@@ -449,8 +478,12 @@ function snLink(r, groupSupportId){
 
 function groupContactsHtml(meta){
   const parts = [];
-  if (meta.owner_primary) parts.push(`<span><b>담당(정)</b> ${esc(meta.owner_primary)}</span>`);
-  if (meta.owner_secondary) parts.push(`<span><b>담당(부)</b> ${esc(meta.owner_secondary)}</span>`);
+  if (meta.owner_primary || meta.owner_secondary){
+    const names = [];
+    if (meta.owner_primary) names.push(`<span class="mgr-primary">${esc(meta.owner_primary)}</span>`);
+    if (meta.owner_secondary) names.push(esc(meta.owner_secondary));
+    parts.push(`<span><b>담당자</b> ${names.join(' ')}</span>`);
+  }
   if (meta.cust_contact || meta.cust_phone || meta.cust_email){
     const bits = [meta.cust_contact, meta.cust_phone, meta.cust_email].filter(Boolean).map(esc).join(' · ');
     parts.push(`<span><b>고객사 담당자</b> ${bits}</span>`);
