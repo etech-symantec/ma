@@ -45,6 +45,7 @@
     <div class="topbar-actions">
       <button class="icon-btn" id="expandAllBtn">전체 펼치기</button>
       <button class="icon-btn" id="addBtn">＋ 자산 추가</button>
+      <button class="icon-btn" id="changePassBtn">🔑 비밀번호 변경</button>
       <button class="icon-btn" id="exportBtn">내보내기</button>
       <button class="icon-btn" id="importBtn">가져오기</button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
@@ -111,6 +112,22 @@
   </div>
 </div>
 
+<div id="changePassModal">
+  <div class="modal-card">
+    <h2>마스터 비밀번호 변경</h2>
+    <p class="hint">현재 비밀번호 확인 후, IP / 계정 ID / 비밀번호 등 모든 민감정보를 새 비밀번호로 다시 암호화합니다. 변경 후에는 반드시 <b>내보내기</b>로 새 파일을 저장하고, 서버의 data.json을 그 파일로 교체해야 합니다. 교체 전까지는 예전 비밀번호로 암호화된 파일이 그대로 남아있습니다.</p>
+    <div class="form-grid">
+      <div class="full"><label>현재 마스터 비밀번호</label><input type="password" id="cp_old" autocomplete="off"></div>
+      <div class="full"><label>새 마스터 비밀번호</label><input type="password" id="cp_new" autocomplete="off"></div>
+      <div class="full"><label>새 비밀번호 확인</label><input type="password" id="cp_new2" autocomplete="off"></div>
+    </div>
+    <div id="cpError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelCpBtn">취소</button>
+      <button class="btn btn-primary" id="saveCpBtn">비밀번호 변경</button>
+    </div>
+  </div>
+</div>
 
 <script src="app.js"></script>
 </body>
