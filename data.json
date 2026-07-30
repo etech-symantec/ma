@@ -42,7 +42,16 @@
         "iv": "qJWZpWlzjdTSFOFA",
         "ct": "8I6IZohYrE1AVFsD8vAHqeOaUhoRtlPgUFpZygnnYgxWtiEF/DI=",
         "tag": "lvDppXl7BUi7cYFkSfvU/Q=="
-      }
+      },
+      "work_log": [
+        {
+          "id": 1785392219162,
+          "type": "장비 구축",
+          "date": "2026.7.30",
+          "manager": "테스트",
+          "note": "테스트"
+        }
+      ]
     },
     {
       "group": "jp-sds",
