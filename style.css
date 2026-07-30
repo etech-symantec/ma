@@ -20,7 +20,8 @@
   --body:'Inter', sans-serif;
 }
 *{box-sizing:border-box; margin:0; padding:0;}
-html,body{height:100%;}
+html{ height:100%; }
+body{ min-height:100%; }
 body{
   background: radial-gradient(1200px 800px at 85% -10%, rgba(14,165,233,0.08) 0%, transparent 60%),
               radial-gradient(900px 600px at -10% 110%, rgba(30,58,138,0.06) 0%, transparent 55%),
