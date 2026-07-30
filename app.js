@@ -19,7 +19,24 @@ let records = [];           // working array (mutable, in-memory)
 let expandedGroups = new Set();
 let activeStatusFilters = new Set(['ok','warn','crit','na']);
 let activeCountryFilter = null;
-let activeTagFilter = null;
+let activeDeviceTypeFilter = null;
+let workLogRecordId = null; // which record's modal is currently open
+
+// ---------- device type ----------
+const DEVICE_COLORS = ['#31D8C9','#F2AE40','#EC5F4B','#7C9EFF','#C792EA','#48D48A','#FF8A65','#4FC3F7','#BA68C8','#AED581'];
+function deviceTypeLabel(r){ return (r.device_type && r.device_type.trim()) || '미지정'; }
+function deviceTypeColor(label){
+  let hash = 0;
+  for (let i=0;i<label.length;i++) hash = (hash*31 + label.charCodeAt(i)) >>> 0;
+  return DEVICE_COLORS[hash % DEVICE_COLORS.length];
+}
+function deviceBadge(r){
+  const label = deviceTypeLabel(r);
+  const color = deviceTypeColor(label);
+  return `<span class="device-badge" style="color:${color}; border-color:${color}55; background:${color}1a;">
+    <span class="device-dot" style="background:${color}"></span>${esc(label)}
+  </span>`;
+}
 
 // ---------- crypto helpers ----------
 function b64ToBuf(b64){ return Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer; }
@@ -175,8 +192,7 @@ function groupMeta(items){
     flag: head.flag || '',
     owner: head.owner || '(법인명 미확인)',
     location: items.map(i=>i.location).find(Boolean) || '',
-    support_id: items.map(i=>i.support_id).find(Boolean) || '',
-    country: items.map(i=>i.tag_note).find(Boolean) || ''
+    support_id: items.map(i=>i.support_id).find(Boolean) || ''
   };
 }
 
@@ -197,14 +213,14 @@ function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   let list = records.filter(r => {
     if (!activeStatusFilters.has(licenseStatus(r))) return false;
-    if (activeTagFilter && r.tag !== activeTagFilter) return false;
+    if (activeDeviceTypeFilter && deviceTypeLabel(r) !== activeDeviceTypeFilter) return false;
     if (activeCountryFilter){
       const grpItems = records.filter(x=>x.group===r.group);
       const meta = groupMeta(grpItems);
       if (meta.owner !== activeCountryFilter) return false;
     }
     if (q){
-      const hay = [r.owner,r.location,r.sku,r.sn,r.support_id,r.owner_primary,r.owner_secondary,r.cust_contact,r.tag_note,r.remarks].join(' ').toLowerCase();
+      const hay = [r.owner,r.location,r.sku,r.sn,r.support_id,r.owner_primary,r.owner_secondary,r.cust_contact,deviceTypeLabel(r),r.remarks].join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -247,8 +263,8 @@ function render(){
         <div class="items ${isOpen?'open':''}">
           <table>
             <thead><tr>
-              <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
-              <th>IP</th><th>ID</th><th>PW</th><th>OS</th><th>담당</th><th>고객사 담당자</th><th>비고</th><th>Tag</th>
+              <th>장비 종류</th><th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
+              <th>IP</th><th>ID</th><th>PW</th><th>OS</th><th>담당(정/부)</th><th>고객사 담당자</th><th>비고</th><th>작업이력</th>
             </tr></thead>
             <tbody>
               ${items.map(r=>rowHtml(r)).join('')}
@@ -286,6 +302,13 @@ function render(){
     };
   });
 
+  document.querySelectorAll('[data-worklog]').forEach(btn=>{
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      openWorkLogModal(btn.dataset.worklog);
+    };
+  });
+
   updateStats();
   buildFilters();
 }
@@ -293,13 +316,33 @@ function render(){
 function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료됨', na:'기간정보없음'}[s]; }
 function statusColorVar(s){ return {ok:'var(--green)', warn:'var(--amber)', crit:'var(--red)', na:'var(--text-faint)'}[s]; }
 
+function snLink(r){
+  const sn = esc(r.sn);
+  if (!sn) return '—';
+  if (!r.support_id || !r.sn) return sn;
+  const url = `https://support.broadcom.com/group/ecx/licensing?siteId=${encodeURIComponent(r.support_id)}&serialNumber=${encodeURIComponent(r.sn)}`;
+  return `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${sn}</a>`;
+}
+
+function managerCell(r){
+  const primary = esc(r.owner_primary);
+  const secondary = esc(r.owner_secondary);
+  const rows = [];
+  if (primary) rows.push(`<div>정: ${primary}</div>`);
+  if (secondary) rows.push(`<div>부: ${secondary}</div>`);
+  const body = rows.length ? rows.join('') : '—';
+  return `${body}${r.check_method? `<div style="color:var(--text-faint); font-size:11px; margin-top:2px;">${esc(r.check_method)}</div>`:''}`;
+}
+
 function rowHtml(r){
   const status = licenseStatus(r);
   const pct = licenseBarPct(r);
+  const logCount = (r.work_log||[]).length;
   return `
   <tr data-id="${r.id}">
+    <td data-label="장비 종류">${deviceBadge(r)}</td>
     <td class="sku" data-label="SKU">${esc(r.sku)||'—'}</td>
-    <td class="sn" data-label="S/N">${esc(r.sn)||'—'}</td>
+    <td class="sn" data-label="S/N">${snLink(r)}</td>
     <td data-label="수량">${esc(r.qty||r.entitlement)||'—'}</td>
     <td data-label="라이선스 기간">
       <div class="lic-bar-wrap">
@@ -312,14 +355,16 @@ function rowHtml(r){
     <td data-label="ID">${maskedField(r,'id')}</td>
     <td data-label="PW">${maskedField(r,'pw')}</td>
     <td data-label="OS">${esc(r.os_ver)||'—'}</td>
-    <td data-label="담당">${esc([r.owner_primary,r.owner_secondary].filter(Boolean).join(' / '))||'—'}<br><span style="color:var(--text-faint); font-size:11px;">${esc(r.check_method)||''}</span></td>
+    <td data-label="담당(정/부)">${managerCell(r)}</td>
     <td class="contact-cell" data-label="고객사 담당자">
       <div class="who">${esc(r.cust_contact)||'—'}</div>
       ${r.cust_phone? `<div>${esc(r.cust_phone)}</div>`:''}
       ${r.cust_email? `<div class="mail">${esc(r.cust_email)}</div>`:''}
     </td>
-    <td class="remarks-cell" data-label="비고"><div class="remarks-txt">${esc([r.remarks, r.deploy_log].filter(Boolean).join(' · '))||'—'}</div></td>
-    <td data-label="Tag">${r.tag? `<span class="badge ${r.tag==='O'?'tag-o':'tag-x'}">${esc(r.tag)}</span>`:'—'}</td>
+    <td class="remarks-cell" data-label="비고"><div class="remarks-txt">${esc(r.remarks)||'—'}</div></td>
+    <td data-label="작업이력">
+      <button class="worklog-btn" data-worklog="${r.id}">이력 <span class="cnt">${logCount}</span></button>
+    </td>
   </tr>`;
 }
 
@@ -363,15 +408,20 @@ function buildFilters(){
     };
   });
 
-  const tagBox = document.getElementById('tagFilters');
-  tagBox.innerHTML = ['O','X'].map(t=>`
-    <div class="filter-item ${activeTagFilter===t?'active':''}" data-tag="${t}">
-      <span>${t}</span><span class="cnt">${records.filter(r=>r.tag===t).length}</span>
-    </div>`).join('');
-  tagBox.querySelectorAll('[data-tag]').forEach(el=>{
+  const deviceBox = document.getElementById('deviceTypeFilters');
+  const deviceTypes = [...new Set(records.map(deviceTypeLabel))].sort((a,b)=>a.localeCompare(b,'ko'));
+  deviceBox.innerHTML = deviceTypes.map(t=>{
+    const color = deviceTypeColor(t);
+    return `
+    <div class="filter-item ${activeDeviceTypeFilter===t?'active':''}" data-devicetype="${esc(t)}">
+      <span><span class="device-dot" style="display:inline-block; background:${color}; margin-right:6px;"></span>${esc(t)}</span>
+      <span class="cnt">${records.filter(r=>deviceTypeLabel(r)===t).length}</span>
+    </div>`;
+  }).join('');
+  deviceBox.querySelectorAll('[data-devicetype]').forEach(el=>{
     el.onclick = ()=>{
-      const v = el.dataset.tag;
-      activeTagFilter = activeTagFilter===v ? null : v;
+      const v = el.dataset.devicetype;
+      activeDeviceTypeFilter = activeDeviceTypeFilter===v ? null : v;
       render();
     };
   });
@@ -395,10 +445,10 @@ document.getElementById('saveAddBtn').onclick = async () => {
   const gid = 'custom-' + newId;
   const rec = {
     id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', location:val('f_location'),
-    support_id:val('f_support'), sku:val('f_sku'), sn:val('f_sn'), entitlement:'🔗', qty:val('f_qty'),
-    start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'', deploy_log:'',
-    mode:'', os_ver:val('f_os'), owner_primary:'', owner_secondary:'', check_method:val('f_check'),
-    cust_contact:val('f_cust'), cust_phone:'', cust_email:'', tag:val('f_tag'), tag_note:val('f_location'),
+    support_id:val('f_support'), device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), entitlement:'🔗', qty:val('f_qty'),
+    start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
+    mode:'', os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
+    cust_contact:val('f_cust'), cust_phone:'', cust_email:'', work_log:[],
     ip_enc: await encryptField(val('f_ip')),
     id_enc: await encryptField(val('f_id')),
     pw_enc: await encryptField(val('f_pw')),
@@ -406,7 +456,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
   records.push(rec);
   expandedGroups.add(gid);
   document.getElementById('addModal').classList.remove('open');
-  ['f_owner','f_location','f_support','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_tag','f_cust','f_remarks'].forEach(id=>document.getElementById(id).value='');
+  ['f_owner','f_location','f_support','f_device_type','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_owner_primary','f_owner_secondary','f_cust','f_remarks'].forEach(id=>document.getElementById(id).value='');
   render();
 };
 
@@ -517,3 +567,63 @@ document.getElementById('importFile').addEventListener('change', (e) => {
   };
   reader.readAsText(file);
 });
+
+// ---------- work log ----------
+function openWorkLogModal(recId){
+  workLogRecordId = String(recId);
+  const rec = records.find(r=>String(r.id)===workLogRecordId);
+  if (!rec) return;
+  document.getElementById('wlSubtitle').textContent =
+    `${rec.sku||'장비'}${rec.sn? ' · S/N '+rec.sn : ''} — 비고와 별도로 구축/제거/교체/OS 변경/PM 이력을 남길 수 있습니다.`;
+  document.getElementById('wl_type').value = '장비 구축';
+  document.getElementById('wl_date').value = '';
+  document.getElementById('wl_manager').value = '';
+  document.getElementById('wl_note').value = '';
+  renderWorkLogList();
+  document.getElementById('workLogModal').classList.add('open');
+}
+
+function renderWorkLogList(){
+  const rec = records.find(r=>String(r.id)===workLogRecordId);
+  const listEl = document.getElementById('wlList');
+  if (!rec){ listEl.innerHTML=''; return; }
+  const log = (rec.work_log||[]).slice().sort((a,b)=>{
+    const da = parseDate(a.date), db = parseDate(b.date);
+    if (da && db) return db - da;
+    return 0;
+  });
+  if (log.length === 0){
+    listEl.innerHTML = `<div class="worklog-empty">등록된 작업 이력이 없습니다.</div>`;
+    return;
+  }
+  listEl.innerHTML = log.map(entry => `
+    <div class="worklog-item">
+      <div class="wl-type">${esc(entry.type)}</div>
+      <div class="wl-body">
+        <div class="wl-meta">${esc(entry.date)||'날짜 미기재'} · ${esc(entry.manager)||'담당자 미기재'}</div>
+        <div class="wl-note">${esc(entry.note)||'—'}</div>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('wlAddBtn').onclick = () => {
+  const rec = records.find(r=>String(r.id)===workLogRecordId);
+  if (!rec) return;
+  const type = document.getElementById('wl_type').value;
+  const date = document.getElementById('wl_date').value.trim();
+  const manager = document.getElementById('wl_manager').value.trim();
+  const note = document.getElementById('wl_note').value.trim();
+  if (!date && !manager && !note){ alert('날짜, 담당자, 내용 중 하나 이상을 입력해 주세요.'); return; }
+  if (!Array.isArray(rec.work_log)) rec.work_log = [];
+  rec.work_log.push({ id: Date.now(), type, date, manager, note });
+  document.getElementById('wl_date').value = '';
+  document.getElementById('wl_manager').value = '';
+  document.getElementById('wl_note').value = '';
+  renderWorkLogList();
+  render();
+};
+
+document.getElementById('wlCloseBtn').onclick = () => {
+  document.getElementById('workLogModal').classList.remove('open');
+  workLogRecordId = null;
+};
