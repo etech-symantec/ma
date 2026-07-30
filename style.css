@@ -59,7 +59,7 @@ a{color:var(--accent);}
   margin-bottom:20px;
   font-size:22px;
 }
-.lock-card h1{
+.lock-card .lock-title{
   font-family:var(--display); font-size:22px; font-weight:600; letter-spacing:-0.01em;
   margin-bottom:8px;
 }
@@ -93,7 +93,7 @@ a{color:var(--accent);}
 #app{ display:none; }
 #app.ready{ display:block; }
 
-header.topbar{
+.topbar{
   position:sticky; top:0; z-index:40;
   display:flex; align-items:center; gap:18px;
   padding:16px 26px;
