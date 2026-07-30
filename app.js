@@ -143,7 +143,15 @@ function deviceBadge(r){
 
 // ---------- crypto helpers ----------
 function b64ToBuf(b64){ return Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer; }
-function bufToB64(buf){ return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+function bufToB64(buf){
+  const bytes = new Uint8Array(buf);
+  let binary = '';
+  const chunkSize = 0x8000; // 32768 — avoid spreading huge arrays into fromCharCode (call stack limit)
+  for (let i = 0; i < bytes.length; i += chunkSize){
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
 
 async function deriveKey(passphrase, saltB64, iterations){
   const enc = new TextEncoder();
@@ -894,12 +902,10 @@ async function githubApiPut(cfg, token, jsonObj, sha, message){
 
 function updateGithubButtonState(){
   const connected = !!(githubConfig && githubConfig.repo && githubToken);
-  document.getElementById('githubConnectBtn').classList.toggle('on', connected);
-  document.getElementById('githubConnectBtn').textContent = connected ? `🐙 ${githubConfig.repo}` : '🐙 GitHub';
   if (!connected) setSyncStatus('offline');
 }
 
-document.getElementById('githubConnectBtn').onclick = () => {
+function openGithubConnectModal(){
   const cfg = githubConfig || loadGithubConfigFromStorage() || DEFAULT_GITHUB_CONFIG;
   document.getElementById('gh_repo').value = cfg.repo || '';
   document.getElementById('gh_branch').value = cfg.branch || 'main';
@@ -908,7 +914,8 @@ document.getElementById('githubConnectBtn').onclick = () => {
   document.getElementById('gh_remember').checked = !!loadRememberedToken();
   document.getElementById('githubError').textContent = '';
   document.getElementById('githubModal').classList.add('open');
-};
+}
+document.getElementById('githubSyncStatus').onclick = openGithubConnectModal;
 document.getElementById('cancelGithubBtn').onclick = () => {
   document.getElementById('githubModal').classList.remove('open');
 };
@@ -959,8 +966,8 @@ document.getElementById('githubConnectLoadBtn').onclick = async () => {
 
 document.getElementById('githubSaveBtn').onclick = async () => {
   if (!githubConfig || !githubToken){
-    alert('먼저 "🐙 GitHub" 버튼으로 저장소에 연결해 주세요.');
-    document.getElementById('githubConnectBtn').click();
+    alert('먼저 GitHub 저장소에 연결해 주세요.');
+    openGithubConnectModal();
     return;
   }
   const btn = document.getElementById('githubSaveBtn');
