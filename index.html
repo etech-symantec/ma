@@ -25,7 +25,7 @@
 <div id="lockOverlay">
   <div class="lock-card">
     <div class="lock-glyph">🔒</div>
-    <div class="lock-title">SAMSUNG · Broadcom 자산 대장</div>
+    <h1>SAMSUNG · Broadcom 자산 대장</h1>
     <p>계정 ID / 비밀번호 / IP 정보는 AES‑256‑GCM으로 암호화되어 저장되어 있습니다. 마스터 비밀번호를 입력하면 이번 세션 동안만 복호화하여 열람할 수 있습니다.</p>
     <input type="password" id="passInput" placeholder="마스터 비밀번호" autocomplete="off" />
     <div id="lockError"></div>
@@ -40,7 +40,7 @@
 </div>
 
 <div id="app">
-  <div class="topbar">
+  <header class="topbar">
     <div class="brand">
       <div class="brand-mark">BC</div>
       <div class="brand-text">
@@ -63,7 +63,7 @@
       <button class="icon-btn" id="importBtn">가져오기</button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
     </div>
-  </div>
+  </header>
 
   <div class="stats">
     <div class="stat"><div class="n" id="statTotal">0</div><div class="l">전체 자산 항목</div></div>
@@ -147,11 +147,11 @@
 <div id="githubModal">
   <div class="modal-card">
     <h2>GitHub 연동</h2>
-    <p class="hint">저장소 / 브랜치 / 파일 경로는 <b>etech-symantec/ma</b> · <b>main</b> · <b>etech-symantec/ma/data.json</b>으로 기본 설정되어 있습니다. Personal Access Token만 입력하면 연결되며, 이후 자산 추가/수정/삭제, 작업 이력 변경, 비밀번호 변경 시 <b>자동으로</b> 저장소에 동기화됩니다 (수동으로 "GitHub에 저장"을 눌러도 됩니다). 토큰은 보안상 코드에 하드코딩되어 있지 않으며, 이 저장소에 대한 <b>contents 쓰기 권한</b>이 있어야 합니다.</p>
+    <p class="hint">저장소 / 브랜치 / 파일 경로는 <b>etech-symantec/ma</b> · <b>main</b> · <b>data.json</b>으로 기본 설정되어 있습니다. Personal Access Token만 입력하면 연결되며, 이후 자산 추가/수정/삭제, 작업 이력 변경, 비밀번호 변경 시 <b>자동으로</b> 저장소에 동기화됩니다 (수동으로 "GitHub에 저장"을 눌러도 됩니다). 토큰은 보안상 코드에 하드코딩되어 있지 않으며, 이 저장소에 대한 <b>contents 쓰기 권한</b>이 있어야 합니다.</p>
     <div class="form-grid">
       <div class="full"><label>저장소 (owner/repo)</label><input id="gh_repo" placeholder="예: etech-symantec/ma"></div>
       <div><label>브랜치</label><input id="gh_branch" placeholder="main"></div>
-      <div><label>파일 경로</label><input id="gh_path" placeholder="etech-symantec/ma/data.json"></div>
+      <div><label>파일 경로</label><input id="gh_path" placeholder="data.json"></div>
       <div class="full"><label>Personal Access Token</label><input type="password" id="gh_token" autocomplete="off" placeholder="ghp_… (contents 쓰기 권한 필요)"></div>
     </div>
     <label style="display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12.5px; color:var(--text-dim); cursor:pointer;">
