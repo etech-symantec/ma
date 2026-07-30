@@ -1,11 +1,70 @@
 // ---------- data loading (external JSON / GitHub) ----------
 let ENC_STORE = null;
-let githubConfig = null;   // {repo, branch, path} - non-sensitive, persisted in localStorage
+let githubConfig = null;   // {repo, branch, path} - non-sensitive, persisted in localStorage (set below to hardcoded defaults)
 let githubToken = null;    // PAT - only persisted if user opts in
 let githubSha = null;      // sha of the last-loaded file, needed to PUT updates
 
+// Hardcoded default repo location. The Personal Access Token itself is
+// intentionally NOT hardcoded here: this file is served to the browser as
+// plain text, so anyone who opens dev tools / view-source would be able to
+// read a token baked in here and get write access to the repo. The token is
+// entered once via the "GitHub" button and can optionally be remembered in
+// this browser's localStorage (see gh_remember checkbox).
+const DEFAULT_GITHUB_CONFIG = {
+  repo: 'etech-symantec/ma',
+  branch: 'main',
+  path: 'etech-symantec/ma/data.json'
+};
+
+// ---------- auto-sync ----------
+// Any local mutation (add/edit/delete asset, work-log change, password
+// change) schedules a debounced push to GitHub so the repo file stays in
+// sync automatically, as long as a token is available for this session.
+let autoSyncTimer = null;
+let autoSyncInFlight = false;
+let autoSyncQueued = false;
+
+function setSyncStatus(state, msg){
+  const el = document.getElementById('githubSyncStatus');
+  if (!el) return;
+  if (state === 'pending'){ el.textContent = '변경사항 동기화 대기 중…'; el.className = 'sync-status pending'; }
+  else if (state === 'syncing'){ el.textContent = 'GitHub에 동기화 중…'; el.className = 'sync-status syncing'; }
+  else if (state === 'synced'){ el.textContent = '✓ GitHub에 동기화됨 · ' + new Date().toLocaleTimeString('ko-KR'); el.className = 'sync-status synced'; }
+  else if (state === 'error'){ el.textContent = '⚠ 동기화 실패: ' + (msg || ''); el.className = 'sync-status error'; }
+  else if (state === 'offline'){ el.textContent = ''; el.className = 'sync-status'; }
+}
+
+function scheduleAutoSync(){
+  if (!githubConfig || !githubToken){ setSyncStatus('offline'); return; }
+  setSyncStatus('pending');
+  clearTimeout(autoSyncTimer);
+  autoSyncTimer = setTimeout(runAutoSync, 1200);
+}
+
+async function runAutoSync(){
+  if (!githubConfig || !githubToken) return;
+  if (autoSyncInFlight){ autoSyncQueued = true; return; }
+  autoSyncInFlight = true;
+  autoSyncQueued = false;
+  setSyncStatus('syncing');
+  try{
+    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records };
+    const newSha = await githubApiPut(githubConfig, githubToken, payload, githubSha, '자산 데이터 자동 동기화 - ' + new Date().toLocaleString('ko-KR'));
+    githubSha = newSha;
+    setSyncStatus('synced');
+  }catch(e){
+    console.error('자동 동기화 실패:', e);
+    setSyncStatus('error', e.message);
+  }finally{
+    autoSyncInFlight = false;
+    if (autoSyncQueued){ runAutoSync(); }
+  }
+}
+
+githubConfig = loadGithubConfigFromStorage() || DEFAULT_GITHUB_CONFIG;
+
 const dataReady = (async () => {
-  const cfg = loadGithubConfigFromStorage();
+  const cfg = githubConfig;
   const token = loadRememberedToken();
   if (cfg && cfg.repo && token){
     try{
@@ -527,6 +586,7 @@ function deleteAsset(recId){
   if (!confirm(`이 자산 항목을 삭제하시겠습니까?\n${rec.sku||''} ${rec.sn? '(S/N '+rec.sn+')':''}`)) return;
   records = records.filter(r=>String(r.id)!==String(recId));
   render();
+  scheduleAutoSync();
 }
 
 document.getElementById('saveAddBtn').onclick = async () => {
@@ -575,6 +635,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
   document.getElementById('addModal').classList.remove('open');
   clearAssetForm();
   render();
+  scheduleAutoSync();
 };
 
 // ---------- change master password ----------
@@ -652,7 +713,12 @@ document.getElementById('saveCpBtn').onclick = async () => {
   document.getElementById('changePassModal').classList.remove('open');
   errEl.textContent = '';
   render();
-  alert('비밀번호가 변경되었습니다.\n\n지금 바로 "내보내기"를 눌러 새 백업 파일을 저장한 뒤, 서버의 data.json을 그 파일로 교체해 주세요.\n교체하지 않으면 예전 비밀번호로 암호화된 data.json이 그대로 남아, 다음에 열 때는 여전히 예전 비밀번호가 필요합니다.');
+  if (githubConfig && githubToken){
+    scheduleAutoSync();
+    alert('비밀번호가 변경되었습니다. GitHub에 연결되어 있으므로 잠시 후 저장소에 자동으로 동기화됩니다.');
+  } else {
+    alert('비밀번호가 변경되었습니다.\n\n지금 바로 "내보내기"를 눌러 새 백업 파일을 저장한 뒤, 서버의 data.json을 그 파일로 교체해 주세요.\n교체하지 않으면 예전 비밀번호로 암호화된 data.json이 그대로 남아, 다음에 열 때는 여전히 예전 비밀번호가 필요합니다.');
+  }
 };
 
 // ---------- export / import ----------
@@ -769,10 +835,11 @@ function updateGithubButtonState(){
   const connected = !!(githubConfig && githubConfig.repo && githubToken);
   document.getElementById('githubConnectBtn').classList.toggle('on', connected);
   document.getElementById('githubConnectBtn').textContent = connected ? `🐙 ${githubConfig.repo}` : '🐙 GitHub';
+  if (!connected) setSyncStatus('offline');
 }
 
 document.getElementById('githubConnectBtn').onclick = () => {
-  const cfg = githubConfig || loadGithubConfigFromStorage() || {};
+  const cfg = githubConfig || loadGithubConfigFromStorage() || DEFAULT_GITHUB_CONFIG;
   document.getElementById('gh_repo').value = cfg.repo || '';
   document.getElementById('gh_branch').value = cfg.branch || 'main';
   document.getElementById('gh_path').value = cfg.path || 'data.json';
@@ -839,12 +906,16 @@ document.getElementById('githubSaveBtn').onclick = async () => {
   const originalText = btn.textContent;
   btn.textContent = '저장 중…';
   btn.disabled = true;
+  clearTimeout(autoSyncTimer);
+  setSyncStatus('syncing');
   try{
     const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records };
     const newSha = await githubApiPut(githubConfig, githubToken, payload, githubSha);
     githubSha = newSha;
+    setSyncStatus('synced');
     alert(`GitHub 저장소(${githubConfig.repo})에 저장되었습니다.`);
   }catch(e){
+    setSyncStatus('error', e.message);
     alert(e.message || 'GitHub 저장에 실패했습니다.');
   }finally{
     btn.textContent = originalText;
@@ -946,6 +1017,7 @@ function renderWorkLogList(){
       }
       renderWorkLogList();
       render();
+      scheduleAutoSync();
     };
   });
 }
@@ -973,6 +1045,7 @@ document.getElementById('wlAddBtn').onclick = () => {
   document.getElementById('wl_note').value = '';
   renderWorkLogList();
   render();
+  scheduleAutoSync();
 };
 
 document.getElementById('wlCancelEditBtn').onclick = () => {
