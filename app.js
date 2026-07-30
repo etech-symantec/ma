@@ -143,6 +143,7 @@ let expandedGroups = new Set();
 let activeStatusFilters = new Set(['ok','warn','na']);
 let activeCountryFilter = null;
 let activeDeviceTypeFilter = null;
+let activeSkuKeywordFilters = new Set();
 let workLogRecordId = null; // which record's modal is currently open
 let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
 let editingRecordId = null; // asset record id currently being edited via addModal (null = adding new)
@@ -216,6 +217,24 @@ function skuBadge(sku){
   return `<span class="sku-tag" style="color:${cat.color}; border-color:${cat.color}55; background:${cat.color}1a;">
     <span class="sku-dot" style="background:${cat.color}"></span>${label}
   </span>`;
+}
+
+// ---------- SKU keyword tags (filterable/searchable) ----------
+// A second, independent tagging layer: any of these keywords found inside
+// the SKU string gets its own small tag rendered below the main SKU badge,
+// and doubles as a sidebar filter + search term.
+const SKU_KEYWORDS = ['ASG','MC','RP','ISG','SG','PS','SSP','VA','ELK','CLD','BCWF','WSS'];
+
+function skuKeywordMatches(sku){
+  if (!sku) return [];
+  const upper = sku.toUpperCase();
+  return SKU_KEYWORDS.filter(k => upper.includes(k));
+}
+
+function skuKeywordTagsHtml(sku){
+  const kws = skuKeywordMatches(sku);
+  if (!kws.length) return '';
+  return `<div class="sku-kw-tags">${kws.map(k=>`<span class="sku-kw-tag${activeSkuKeywordFilters.has(k)?' active':''}" data-kwtag="${esc(k)}">${esc(k)}</span>`).join('')}</div>`;
 }
 
 // ---------- crypto helpers ----------
@@ -375,6 +394,16 @@ function groupRecords(list){
   return map;
 }
 
+function getGroupCustContacts(items){
+  // Prefer the new multi-contact array field; fall back to legacy single
+  // cust_contact/cust_phone/cust_email fields for older data.
+  const withArr = items.find(i => Array.isArray(i.cust_contacts) && i.cust_contacts.length);
+  if (withArr) return withArr.cust_contacts.slice(0,3);
+  const legacy = items.map(i => ({name:i.cust_contact||'', phone:i.cust_phone||'', email:i.cust_email||''}))
+    .find(c => c.name || c.phone || c.email);
+  return legacy ? [legacy] : [];
+}
+
 function groupMeta(items){
   const head = items.find(r => r.owner) || items[0];
   return {
@@ -384,9 +413,8 @@ function groupMeta(items){
     support_id: items.map(i=>i.support_id).find(Boolean) || '',
     owner_primary: items.map(i=>i.owner_primary).find(Boolean) || '',
     owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
-    cust_contact: items.map(i=>i.cust_contact).find(Boolean) || '',
-    cust_phone: items.map(i=>i.cust_phone).find(Boolean) || '',
-    cust_email: items.map(i=>i.cust_email).find(Boolean) || ''
+    cust_contacts: getGroupCustContacts(items),
+    group_remarks: items.map(i=>i.group_remarks).find(Boolean) || ''
   };
 }
 
@@ -411,13 +439,18 @@ function render(){
   let list = records.filter(r => {
     if (!activeStatusFilters.has(licenseStatus(r))) return false;
     if (activeDeviceTypeFilter && deviceTypeLabel(r) !== activeDeviceTypeFilter) return false;
+    if (activeSkuKeywordFilters.size){
+      const kws = skuKeywordMatches(r.sku);
+      if (!kws.some(k => activeSkuKeywordFilters.has(k))) return false;
+    }
     if (activeCountryFilter){
       const grpItems = records.filter(x=>x.group===r.group);
       const meta = groupMeta(grpItems);
       if (meta.owner !== activeCountryFilter) return false;
     }
     if (q){
-      const hay = [r.owner,r.location,r.sku,r.sn,r.support_id,r.owner_primary,r.owner_secondary,r.cust_contact,deviceTypeLabel(r),r.remarks].join(' ').toLowerCase();
+      const custBits = (r.cust_contacts||[]).flatMap(c=>[c.name,c.phone,c.email]);
+      const hay = [r.owner,r.location,r.sku,r.sn,r.support_id,r.owner_primary,r.owner_secondary,r.cust_contact,...custBits,deviceTypeLabel(r),r.remarks,r.group_remarks,skuKeywordMatches(r.sku).join(' ')].join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -445,10 +478,6 @@ function render(){
             <div class="group-title">
               <div class="title-row">
                 <h3 class="group-title-name">${esc(meta.owner)}</h3>
-                <div class="group-title-actions">
-                  <button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/위치/Support ID/담당자/고객사 담당자)">${pencilSvg()}</button>
-                  <button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>
-                </div>
                 <div class="sub title-meta">
                   <span>${esc(meta.location)||'위치 미입력'}</span>
                   <span><b>Support ID</b> ${esc(meta.support_id)||'—'}</span>
@@ -459,6 +488,10 @@ function render(){
             </div>
           </div>
           <div class="group-badges">
+            <div class="group-title-actions">
+              <button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/위치/Support ID/담당자/고객사 담당자)">${pencilSvg()}</button>
+              <button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>
+            </div>
             <span class="badge ${worst==='crit'?'tag-x':worst==='warn'?'':'tag-o'}" style="color:${worst==='crit'?'var(--red)':worst==='warn'?'var(--amber)':worst==='ok'?'var(--green)':'var(--text-faint)'}">${statusLabel(worst)}</span>
             <span class="chev ${isOpen?'open':''}">›</span>
           </div>
@@ -492,6 +525,14 @@ function render(){
   });
   document.querySelectorAll('[data-group-delete]').forEach(btn=>{
     btn.onclick = (e) => { e.stopPropagation(); deleteGroup(btn.dataset.groupDelete); };
+  });
+  document.querySelectorAll('[data-kwtag]').forEach(tag=>{
+    tag.onclick = (e) => {
+      e.stopPropagation();
+      const k = tag.dataset.kwtag;
+      if (activeSkuKeywordFilters.has(k)) activeSkuKeywordFilters.delete(k); else activeSkuKeywordFilters.add(k);
+      render();
+    };
   });
   document.querySelectorAll('.sec-toggle').forEach(btn=>{
     btn.onclick = async (e) => {
@@ -555,12 +596,16 @@ function groupContactsHtml(meta){
     if (meta.owner_secondary) names.push(esc(meta.owner_secondary));
     parts.push(`<span><b>담당자</b> ${names.join(' ')}</span>`);
   }
-  if (meta.cust_contact || meta.cust_phone || meta.cust_email){
-    const bits = [meta.cust_contact, meta.cust_phone, meta.cust_email].filter(Boolean).map(esc).join(' · ');
-    parts.push(`<span><b>고객사 담당자</b> ${bits}</span>`);
+  if (meta.cust_contacts && meta.cust_contacts.length){
+    const people = meta.cust_contacts
+      .map(c => [c.name, c.phone, c.email].filter(Boolean).map(esc).join(' · '))
+      .filter(Boolean);
+    if (people.length) parts.push(`<span><b>고객사 담당자</b> ${people.join(' / ')}</span>`);
   }
-  if (!parts.length) return '';
-  return `<div class="sub group-contacts">${parts.join('')}</div>`;
+  let html = '';
+  if (parts.length) html += `<div class="sub group-contacts">${parts.join('')}</div>`;
+  if (meta.group_remarks) html += `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
+  return html;
 }
 
 function rowHtml(r, groupSupportId){
@@ -569,9 +614,9 @@ function rowHtml(r, groupSupportId){
   const logCount = (r.work_log||[]).length;
   return `
   <tr data-id="${r.id}">
-    <td class="sku" data-label="SKU / 제품">${skuBadge(r.sku)}</td>
+    <td class="sku" data-label="SKU / 제품">${skuBadge(r.sku)}${skuKeywordTagsHtml(r.sku)}</td>
     <td class="sn" data-label="S/N">${snLink(r, groupSupportId)}</td>
-    <td data-label="수량">${esc(r.qty||r.entitlement)||'—'}</td>
+    <td data-label="수량">${esc(r.qty)||''}</td>
     <td data-label="라이선스 기간">
       <div class="lic-bar-wrap">
         <div class="lic-dates">${esc(r.start)||'-'} → ${esc(r.end)||'-'}</div>
@@ -653,6 +698,22 @@ function buildFilters(){
       render();
     };
   });
+
+  const kwBox = document.getElementById('skuKeywordFilters');
+  kwBox.innerHTML = SKU_KEYWORDS.map(k=>{
+    const cnt = records.filter(r=>skuKeywordMatches(r.sku).includes(k)).length;
+    return `
+    <div class="filter-item ${activeSkuKeywordFilters.has(k)?'active':''}" data-skukw="${esc(k)}">
+      <span>${esc(k)}</span><span class="cnt">${cnt}</span>
+    </div>`;
+  }).join('');
+  kwBox.querySelectorAll('[data-skukw]').forEach(el=>{
+    el.onclick = ()=>{
+      const k = el.dataset.skukw;
+      if (activeSkuKeywordFilters.has(k)) activeSkuKeywordFilters.delete(k); else activeSkuKeywordFilters.add(k);
+      render();
+    };
+  });
 }
 
 document.getElementById('searchInput').addEventListener('input', render);
@@ -694,7 +755,7 @@ async function openEditAssetModal(recId){
   set('f_device_type', rec.device_type);
   set('f_sku', rec.sku);
   set('f_sn', rec.sn);
-  set('f_qty', rec.qty || rec.entitlement);
+  set('f_qty', rec.qty);
   set('f_start', rec.start);
   set('f_end', rec.end);
   set('f_os', rec.os_ver);
@@ -751,7 +812,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
     const gid = 'custom-' + newId;
     const rec = {
       id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', location:val('f_location'),
-      support_id:val('f_support'), device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), entitlement:'🔗', qty:val('f_qty'),
+      support_id:val('f_support'), device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
       start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
       mode:'', os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
       cust_contact:val('f_cust'), cust_phone:'', cust_email:'', work_log:[],
@@ -771,6 +832,47 @@ document.getElementById('saveAddBtn').onclick = async () => {
 
 // ---------- group (title bar) edit / delete ----------
 let groupEditId = null;
+let geCustContacts = []; // working copy of {name,phone,email} rows while modal is open
+
+function renderCustContactRows(){
+  const wrap = document.getElementById('ge_cust_list');
+  wrap.innerHTML = geCustContacts.map((c,idx)=>`
+    <div class="cust-contact-row" data-idx="${idx}">
+      <input class="cc-name" placeholder="이름" value="${esc(c.name||'')}">
+      <input class="cc-phone" placeholder="연락처" value="${esc(c.phone||'')}">
+      <input class="cc-email" placeholder="이메일" value="${esc(c.email||'')}">
+      <button type="button" class="cc-remove-btn" data-remove="${idx}" title="이 담당자 삭제">✕</button>
+    </div>`).join('');
+  wrap.querySelectorAll('[data-remove]').forEach(btn=>{
+    btn.onclick = () => {
+      captureCustContactsFromDom();
+      geCustContacts.splice(Number(btn.dataset.remove),1);
+      renderCustContactRows();
+    };
+  });
+  updateCustAddBtnState();
+}
+
+function captureCustContactsFromDom(){
+  const rows = document.querySelectorAll('#ge_cust_list .cust-contact-row');
+  geCustContacts = Array.from(rows).map(row=>({
+    name: row.querySelector('.cc-name').value.trim(),
+    phone: row.querySelector('.cc-phone').value.trim(),
+    email: row.querySelector('.cc-email').value.trim(),
+  }));
+}
+
+function updateCustAddBtnState(){
+  const btn = document.getElementById('ge_cust_add_btn');
+  btn.style.display = geCustContacts.length >= 3 ? 'none' : '';
+}
+
+document.getElementById('ge_cust_add_btn').onclick = () => {
+  captureCustContactsFromDom();
+  if (geCustContacts.length >= 3) return;
+  geCustContacts.push({name:'', phone:'', email:''});
+  renderCustContactRows();
+};
 
 function openGroupEditModal(gid){
   if (viewOnly || !sessionKey){ alert('법인 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
@@ -783,7 +885,12 @@ function openGroupEditModal(gid){
   document.getElementById('ge_support').value = meta.support_id || '';
   document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
   document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
-  document.getElementById('ge_cust').value = meta.cust_contact || '';
+  document.getElementById('ge_remarks').value = meta.group_remarks || '';
+  geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
+    ? meta.cust_contacts.slice(0,3)
+    : [{name:'',phone:'',email:''}]
+  ).map(c=>({...c}));
+  renderCustContactRows();
   document.getElementById('geError').textContent = '';
   document.getElementById('groupEditModal').classList.add('open');
 }
@@ -802,7 +909,9 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newSupport = val('ge_support');
   const newPrimary = val('ge_owner_primary');
   const newSecondary = val('ge_owner_secondary');
-  const newCust = val('ge_cust');
+  const newRemarks = val('ge_remarks');
+  captureCustContactsFromDom();
+  const newContacts = geCustContacts.filter(c => c.name || c.phone || c.email).slice(0,3);
   records.forEach(r => {
     if (r.group === groupEditId){
       r.owner = newOwner;
@@ -810,7 +919,10 @@ document.getElementById('saveGeBtn').onclick = () => {
       r.support_id = newSupport;
       r.owner_primary = newPrimary;
       r.owner_secondary = newSecondary;
-      r.cust_contact = newCust;
+      r.group_remarks = newRemarks;
+      r.cust_contacts = newContacts;
+      // clear legacy single-contact fields now that the array field is authoritative
+      r.cust_contact = ''; r.cust_phone = ''; r.cust_email = '';
     }
   });
   document.getElementById('groupEditModal').classList.remove('open');
