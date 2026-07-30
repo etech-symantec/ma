@@ -145,11 +145,18 @@
           <option value="PM">PM</option>
         </select>
       </div>
-      <div><label>날짜 (YYYY.M.D)</label><input id="wl_date" placeholder="2026.7.30"></div>
+      <div><label>날짜 (YYYY.M.D)</label>
+        <div class="date-field">
+          <input id="wl_date" placeholder="2026.7.30">
+          <button type="button" id="wl_date_pick_btn" class="date-pick-btn" title="달력에서 선택">📅</button>
+          <input type="date" id="wl_date_picker" class="date-native-input" tabindex="-1">
+        </div>
+      </div>
       <div><label>담당자</label><input id="wl_manager" placeholder="작업 담당자"></div>
       <div class="full"><label>내용 / 멘트</label><textarea id="wl_note" placeholder="간단한 작업 내용"></textarea></div>
     </div>
     <div class="modal-actions">
+      <button class="btn btn-ghost" id="wlCancelEditBtn" style="flex:none; display:none;">수정 취소</button>
       <button class="btn btn-primary" id="wlAddBtn" style="flex:none;">이력 추가</button>
     </div>
 
