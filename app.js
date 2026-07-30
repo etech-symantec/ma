@@ -44,6 +44,38 @@ if (window.ResizeObserver){
   new MutationObserver(watchHeaderSize).observe(document.body, { childList:true, subtree:true });
 }
 
+// ---------- sticky offsets: topbar + stats strip ----------
+// The stats strip renders directly under the sticky topbar and should stay
+// pinned there while scrolling too. Its offset depends on the topbar's
+// *actual* rendered height, which can vary (button wrapping, font metrics,
+// responsive layout) — so, exactly like the global header height above, we
+// measure it live instead of hardcoding a pixel guess that goes stale.
+// The sidebar filter panel then stacks on top of both.
+function syncStickyOffsets(){
+  const topbar = document.querySelector('.topbar');
+  const stats = document.querySelector('.stats');
+  const topbarH = topbar ? Math.ceil(topbar.getBoundingClientRect().height) : 0;
+  const statsH = stats ? Math.ceil(stats.getBoundingClientRect().height) : 0;
+  document.documentElement.style.setProperty('--topbar-h', topbarH + 'px');
+  document.documentElement.style.setProperty('--stats-h', statsH + 'px');
+}
+document.addEventListener('DOMContentLoaded', () => {
+  syncStickyOffsets();
+  requestAnimationFrame(syncStickyOffsets);
+});
+window.addEventListener('load', syncStickyOffsets);
+window.addEventListener('resize', syncStickyOffsets);
+if (document.fonts && document.fonts.ready){
+  document.fonts.ready.then(syncStickyOffsets).catch(()=>{});
+}
+if (window.ResizeObserver){
+  const stickyResizeObserver = new ResizeObserver(syncStickyOffsets);
+  ['.topbar', '.stats'].forEach(sel => {
+    const el = document.querySelector(sel);
+    if (el) stickyResizeObserver.observe(el); // also fires when #app flips from display:none to visible
+  });
+}
+
 // ---------- data loading (external JSON / GitHub) ----------
 let ENC_STORE = null;
 let githubConfig = null;   // {repo, branch, path} - non-sensitive, persisted in localStorage (set below to hardcoded defaults)
@@ -378,6 +410,7 @@ function boot(){
   document.getElementById('lockState').textContent = viewOnly ? '👁 보기 전용 (민감정보 숨김)' : '🔓 잠금 해제됨 · 이 세션 동안만 유지';
   updateGithubButtonState();
   render();
+  requestAnimationFrame(syncStickyOffsets);
 }
 
 // ---------- date / status ----------
