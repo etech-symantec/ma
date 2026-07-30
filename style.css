@@ -20,7 +20,6 @@
   --body:'Inter', sans-serif;
 }
 *{box-sizing:border-box; margin:0; padding:0;}
-
 html,body{height:100%;}
 body{
   background: radial-gradient(1200px 800px at 85% -10%, rgba(14,165,233,0.08) 0%, transparent 60%),
@@ -94,8 +93,13 @@ a{color:var(--accent);}
 #app{ display:none; }
 #app.ready{ display:block; }
 
+/* 공용 헤더(.header-wrap, header.js가 주입)는 외부 style.css에서 이미
+   position:sticky !important; top:0 !important; z-index:1000 !important 로 지정되어 있음.
+   이 페이지에서도 동일하게 재확인 고정 — 혹시 모를 다른 규칙에 덮이지 않도록 방어적으로 추가. */
+.header-wrap{ position:sticky !important; top:0 !important; z-index:1000 !important; }
+
 .topbar{
-  position:sticky; top:0; z-index:40;
+  position:sticky; top:var(--global-header-h, 0px); z-index:40;
   display:flex; align-items:center; gap:18px;
   padding:16px 26px;
   background:rgba(255,255,255,0.86); backdrop-filter:blur(10px);
@@ -166,8 +170,8 @@ a{color:var(--accent);}
 aside.filters{
   width:250px; flex-shrink:0;
   padding:22px 16px 60px;
-  position:sticky; top:130px;
-  max-height:calc(100vh - 130px); overflow-y:auto;
+  position:sticky; top:calc(var(--global-header-h, 0px) + 130px);
+  max-height:calc(100vh - var(--global-header-h, 0px) - 130px); overflow-y:auto;
 }
 .filter-group{ margin-bottom:22px; }
 .filter-group h4{
