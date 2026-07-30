@@ -1,0 +1,424 @@
+// ---------- data loading (external JSON) ----------
+let ENC_STORE = null;
+const dataReady = fetch('data.json')
+  .then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(json => {
+    ENC_STORE = json;
+    records = ENC_STORE.records.map(r => ({...r}));
+  })
+  .catch(err => {
+    console.error('data.json 로드 실패:', err);
+  });
+
+let sessionKey = null;      // CryptoKey, present only after unlock
+let viewOnly = false;
+let records = [];           // working array (mutable, in-memory)
+let expandedGroups = new Set();
+let activeStatusFilters = new Set(['ok','warn','crit','na']);
+let activeCountryFilter = null;
+let activeTagFilter = null;
+
+// ---------- crypto helpers ----------
+function b64ToBuf(b64){ return Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer; }
+function bufToB64(buf){ return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+
+async function deriveKey(passphrase, saltB64, iterations){
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey('raw', enc.encode(passphrase), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name:'PBKDF2', salt: b64ToBuf(saltB64), iterations, hash:'SHA-256' },
+    baseKey,
+    { name:'AES-GCM', length:256 },
+    false,
+    ['encrypt','decrypt']
+  );
+}
+
+async function decryptField(field){
+  if (!field || !sessionKey) return '';
+  try{
+    const iv = b64ToBuf(field.iv);
+    const ct = new Uint8Array(b64ToBuf(field.ct));
+    const tag = new Uint8Array(b64ToBuf(field.tag));
+    const combined = new Uint8Array(ct.length + tag.length);
+    combined.set(ct,0); combined.set(tag, ct.length);
+    const plainBuf = await crypto.subtle.decrypt({name:'AES-GCM', iv}, sessionKey, combined.buffer);
+    return new TextDecoder().decode(plainBuf);
+  }catch(e){ return '⚠️ 복호화 실패'; }
+}
+
+async function encryptField(plain){
+  if (!plain) return null;
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder().encode(plain);
+  const buf = await crypto.subtle.encrypt({name:'AES-GCM', iv}, sessionKey, enc);
+  const full = new Uint8Array(buf);
+  const ct = full.slice(0, full.length-16);
+  const tag = full.slice(full.length-16);
+  return { iv: bufToB64(iv.buffer), ct: bufToB64(ct.buffer), tag: bufToB64(tag.buffer) };
+}
+
+async function tryUnlock(passphrase){
+  const key = await deriveKey(passphrase, ENC_STORE.salt, ENC_STORE.iterations);
+  // verify against first record that actually has an encrypted field
+  const probe = ENC_STORE.records.find(r => r.ip_enc || r.id_enc || r.pw_enc);
+  if (probe){
+    const f = probe.ip_enc || probe.id_enc || probe.pw_enc;
+    try{
+      const iv = b64ToBuf(f.iv);
+      const ct = new Uint8Array(b64ToBuf(f.ct));
+      const tag = new Uint8Array(b64ToBuf(f.tag));
+      const combined = new Uint8Array(ct.length+tag.length); combined.set(ct,0); combined.set(tag,ct.length);
+      await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, combined.buffer);
+    }catch(e){ return false; }
+  }
+  sessionKey = key;
+  return true;
+}
+
+// ---------- boot ----------
+document.getElementById('unlockBtn').onclick = async () => {
+  const pass = document.getElementById('passInput').value;
+  const errEl = document.getElementById('lockError');
+  if (!pass){ errEl.textContent = '비밀번호를 입력해 주세요.'; return; }
+  errEl.textContent = '데이터 불러오는 중…';
+  await dataReady;
+  if (!ENC_STORE){ errEl.textContent = 'data.json을 불러오지 못했습니다. 로컬 웹서버로 열어주세요.'; return; }
+  errEl.textContent = '확인 중…';
+  const ok = await tryUnlock(pass);
+  if (!ok){ errEl.textContent = '비밀번호가 올바르지 않습니다.'; return; }
+  errEl.textContent = '';
+  viewOnly = false;
+  boot();
+};
+document.getElementById('passInput').addEventListener('keydown', e => { if (e.key==='Enter') document.getElementById('unlockBtn').click(); });
+document.getElementById('viewOnlyBtn').onclick = async () => {
+  const errEl = document.getElementById('lockError');
+  errEl.textContent = '데이터 불러오는 중…';
+  await dataReady;
+  if (!ENC_STORE){ errEl.textContent = 'data.json을 불러오지 못했습니다. 로컬 웹서버로 열어주세요.'; return; }
+  errEl.textContent = '';
+  viewOnly = true; sessionKey = null; boot();
+};
+document.getElementById('howBtn').onclick = () => {
+  alert('마스터 비밀번호는 이 페이지를 만들 때 채팅으로 전달된 문자열입니다. 안전한 곳(비밀번호 관리자 등)에 보관하고, 필요하다면 "자산 추가" 후 내보내기 전에 별도 절차로 비밀번호를 교체하는 기능을 요청하세요.');
+};
+
+function boot(){
+  document.getElementById('lockOverlay').style.display = 'none';
+  document.getElementById('app').classList.add('ready');
+  document.getElementById('lockState').textContent = viewOnly ? '👁 보기 전용 (민감정보 숨김)' : '🔓 잠금 해제됨 · 이 세션 동안만 유지';
+  render();
+}
+
+// ---------- date / status ----------
+function parseDate(s){
+  if (!s || s === '-' ) return null;
+  const parts = s.replace(/\s/g,'').split('.').map(Number);
+  if (parts.length < 3 || parts.some(isNaN)) return null;
+  return new Date(parts[0], parts[1]-1, parts[2]);
+}
+function licenseStatus(rec){
+  const end = parseDate(rec.end);
+  if (!end) return 'na';
+  const now = new Date();
+  const days = (end - now) / 86400000;
+  if (days < 0) return 'crit';
+  if (days <= 90) return 'warn';
+  return 'ok';
+}
+function licenseBarPct(rec){
+  const start = parseDate(rec.start), end = parseDate(rec.end);
+  if (!start || !end || end <= start) return 100;
+  const now = new Date();
+  const pct = ((now-start)/(end-start))*100;
+  return Math.max(0, Math.min(100, pct));
+}
+
+// ---------- rendering ----------
+function esc(s){
+  if (s===null || s===undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function groupRecords(list){
+  const map = new Map();
+  list.forEach(r => {
+    if (!map.has(r.group)) map.set(r.group, []);
+    map.get(r.group).push(r);
+  });
+  return map;
+}
+
+function groupMeta(items){
+  const head = items.find(r => r.owner) || items[0];
+  return {
+    flag: head.flag || '',
+    owner: head.owner || '(법인명 미확인)',
+    location: items.map(i=>i.location).find(Boolean) || '',
+    support_id: items.map(i=>i.support_id).find(Boolean) || '',
+    country: items.map(i=>i.tag_note).find(Boolean) || ''
+  };
+}
+
+function maskedField(rec, kind){
+  const encKey = kind+'_enc';
+  const hasVal = !!rec[encKey];
+  if (!hasVal) return `<span class="sec-val masked">—</span>`;
+  const id = rec.id + '_' + kind;
+  return `
+    <span class="sec-field">
+      <span class="sec-val masked" id="disp_${id}">••••••••</span>
+      <button class="sec-toggle" data-id="${rec.id}" data-kind="${kind}" title="표시/숨기기">${eyeSvg()}</button>
+    </span>`;
+}
+function eyeSvg(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>`; }
+
+function render(){
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  let list = records.filter(r => {
+    if (!activeStatusFilters.has(licenseStatus(r))) return false;
+    if (activeTagFilter && r.tag !== activeTagFilter) return false;
+    if (activeCountryFilter){
+      const grpItems = records.filter(x=>x.group===r.group);
+      const meta = groupMeta(grpItems);
+      if (meta.owner !== activeCountryFilter) return false;
+    }
+    if (q){
+      const hay = [r.owner,r.location,r.sku,r.sn,r.support_id,r.owner_primary,r.owner_secondary,r.cust_contact,r.tag_note,r.remarks].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+
+  const groups = groupRecords(list);
+  const content = document.getElementById('content');
+
+  if (groups.size === 0){
+    content.innerHTML = `<div class="empty-state"><h3>조건에 맞는 자산이 없습니다</h3><p>검색어나 필터를 조정해 보세요.</p></div>`;
+  } else {
+    let html = '';
+    for (const [gid, items] of groups){
+      const meta = groupMeta(items);
+      const isOpen = expandedGroups.has(gid);
+      const worst = items.reduce((acc,r)=>{
+        const s = licenseStatus(r);
+        const rank = {crit:3,warn:2,ok:1,na:0};
+        return rank[s]>rank[acc]?s:acc;
+      },'na');
+      html += `
+      <div class="group-card" data-gid="${gid}">
+        <div class="group-head ${isOpen?'expanded':''}" data-toggle="${gid}">
+          <div class="group-head-left">
+            <div class="group-flag">${esc(meta.flag)}</div>
+            <div class="group-title">
+              <h3>${esc(meta.owner)}</h3>
+              <div class="sub">
+                <span>${esc(meta.location)||''}</span>
+                ${meta.support_id? `<span><b>Support ID</b> ${esc(meta.support_id)}</span>`:''}
+                <span><b>항목</b> ${items.length}건</span>
+              </div>
+            </div>
+          </div>
+          <div class="group-badges">
+            <span class="badge ${worst==='crit'?'tag-x':worst==='warn'?'':'tag-o'}" style="color:${worst==='crit'?'var(--red)':worst==='warn'?'var(--amber)':worst==='ok'?'var(--green)':'var(--text-faint)'}">${statusLabel(worst)}</span>
+            <span class="chev ${isOpen?'open':''}">›</span>
+          </div>
+        </div>
+        <div class="items ${isOpen?'open':''}">
+          <table>
+            <thead><tr>
+              <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
+              <th>IP</th><th>ID</th><th>PW</th><th>OS</th><th>담당</th><th>고객사 담당자</th><th>비고</th><th>Tag</th>
+            </tr></thead>
+            <tbody>
+              ${items.map(r=>rowHtml(r)).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+    }
+    content.innerHTML = html;
+  }
+
+  document.querySelectorAll('[data-toggle]').forEach(el=>{
+    el.onclick = () => {
+      const gid = el.dataset.toggle;
+      if (expandedGroups.has(gid)) expandedGroups.delete(gid); else expandedGroups.add(gid);
+      render();
+    };
+  });
+  document.querySelectorAll('.sec-toggle').forEach(btn=>{
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id, kind = btn.dataset.kind;
+      const rec = records.find(r=>String(r.id)===String(id));
+      const dispEl = document.getElementById(`disp_${id}_${kind}`);
+      if (!dispEl) return;
+      if (dispEl.classList.contains('masked')){
+        if (viewOnly || !sessionKey){ alert('민감정보를 보려면 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+        const val = await decryptField(rec[kind+'_enc']);
+        dispEl.textContent = val;
+        dispEl.classList.remove('masked');
+      } else {
+        dispEl.textContent = '••••••••';
+        dispEl.classList.add('masked');
+      }
+    };
+  });
+
+  updateStats();
+  buildFilters();
+}
+
+function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료됨', na:'기간정보없음'}[s]; }
+function statusColorVar(s){ return {ok:'var(--green)', warn:'var(--amber)', crit:'var(--red)', na:'var(--text-faint)'}[s]; }
+
+function rowHtml(r){
+  const status = licenseStatus(r);
+  const pct = licenseBarPct(r);
+  return `
+  <tr data-id="${r.id}">
+    <td class="sku" data-label="SKU">${esc(r.sku)||'—'}</td>
+    <td class="sn" data-label="S/N">${esc(r.sn)||'—'}</td>
+    <td data-label="수량">${esc(r.qty||r.entitlement)||'—'}</td>
+    <td data-label="라이선스 기간">
+      <div class="lic-bar-wrap">
+        <div class="lic-dates">${esc(r.start)||'-'} → ${esc(r.end)||'-'}</div>
+        <div class="lic-bar"><i style="width:${pct}%; background:${statusColorVar(status)}"></i></div>
+        <div class="lic-status ${status}">${statusLabel(status)}</div>
+      </div>
+    </td>
+    <td data-label="IP">${maskedField(r,'ip')}</td>
+    <td data-label="ID">${maskedField(r,'id')}</td>
+    <td data-label="PW">${maskedField(r,'pw')}</td>
+    <td data-label="OS">${esc(r.os_ver)||'—'}</td>
+    <td data-label="담당">${esc([r.owner_primary,r.owner_secondary].filter(Boolean).join(' / '))||'—'}<br><span style="color:var(--text-faint); font-size:11px;">${esc(r.check_method)||''}</span></td>
+    <td class="contact-cell" data-label="고객사 담당자">
+      <div class="who">${esc(r.cust_contact)||'—'}</div>
+      ${r.cust_phone? `<div>${esc(r.cust_phone)}</div>`:''}
+      ${r.cust_email? `<div class="mail">${esc(r.cust_email)}</div>`:''}
+    </td>
+    <td class="remarks-cell" data-label="비고"><div class="remarks-txt">${esc([r.remarks, r.deploy_log].filter(Boolean).join(' · '))||'—'}</div></td>
+    <td data-label="Tag">${r.tag? `<span class="badge ${r.tag==='O'?'tag-o':'tag-x'}">${esc(r.tag)}</span>`:'—'}</td>
+  </tr>`;
+}
+
+function updateStats(){
+  document.getElementById('statTotal').textContent = records.length;
+  document.getElementById('statOk').textContent = records.filter(r=>licenseStatus(r)==='ok').length;
+  document.getElementById('statWarn').textContent = records.filter(r=>licenseStatus(r)==='warn').length;
+  document.getElementById('statExpired').textContent = records.filter(r=>licenseStatus(r)==='crit').length;
+}
+
+function buildFilters(){
+  const statusBox = document.getElementById('statusFilters');
+  const statuses = [['ok','정상'],['warn','만료임박'],['crit','만료됨'],['na','기간없음']];
+  statusBox.innerHTML = statuses.map(([k,l])=>`
+    <div class="filter-item ${activeStatusFilters.has(k)?'active':''}" data-status="${k}">
+      <span>${l}</span><span class="cnt">${records.filter(r=>licenseStatus(r)===k).length}</span>
+    </div>`).join('');
+  statusBox.querySelectorAll('[data-status]').forEach(el=>{
+    el.onclick = ()=>{
+      const k = el.dataset.status;
+      if (activeStatusFilters.has(k)) activeStatusFilters.delete(k); else activeStatusFilters.add(k);
+      render();
+    };
+  });
+
+  const countryBox = document.getElementById('countryFilters');
+  const owners = [...new Map(records.map(r=>{
+    const grp = records.filter(x=>x.group===r.group);
+    const meta = groupMeta(grp);
+    return [meta.owner, meta];
+  })).values()];
+  countryBox.innerHTML = owners.map(m=>`
+    <div class="filter-item ${activeCountryFilter===m.owner?'active':''}" data-owner="${esc(m.owner)}">
+      <span>${esc(m.owner)}</span>
+    </div>`).join('');
+  countryBox.querySelectorAll('[data-owner]').forEach(el=>{
+    el.onclick = ()=>{
+      const v = el.dataset.owner;
+      activeCountryFilter = activeCountryFilter===v ? null : v;
+      render();
+    };
+  });
+
+  const tagBox = document.getElementById('tagFilters');
+  tagBox.innerHTML = ['O','X'].map(t=>`
+    <div class="filter-item ${activeTagFilter===t?'active':''}" data-tag="${t}">
+      <span>${t}</span><span class="cnt">${records.filter(r=>r.tag===t).length}</span>
+    </div>`).join('');
+  tagBox.querySelectorAll('[data-tag]').forEach(el=>{
+    el.onclick = ()=>{
+      const v = el.dataset.tag;
+      activeTagFilter = activeTagFilter===v ? null : v;
+      render();
+    };
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', render);
+document.getElementById('expandAllBtn').onclick = () => {
+  const allOpen = expandedGroups.size > 0;
+  if (allOpen){ expandedGroups.clear(); }
+  else { records.forEach(r=>expandedGroups.add(r.group)); }
+  render();
+};
+
+// ---------- add record ----------
+document.getElementById('addBtn').onclick = () => document.getElementById('addModal').classList.add('open');
+document.getElementById('cancelAddBtn').onclick = () => document.getElementById('addModal').classList.remove('open');
+document.getElementById('saveAddBtn').onclick = async () => {
+  if (viewOnly || !sessionKey){ alert('자산을 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const val = id => document.getElementById(id).value.trim();
+  const newId = Math.max(0,...records.map(r=>r.id)) + 1;
+  const gid = 'custom-' + newId;
+  const rec = {
+    id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', location:val('f_location'),
+    support_id:val('f_support'), sku:val('f_sku'), sn:val('f_sn'), entitlement:'🔗', qty:val('f_qty'),
+    start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'', deploy_log:'',
+    mode:'', os_ver:val('f_os'), owner_primary:'', owner_secondary:'', check_method:val('f_check'),
+    cust_contact:val('f_cust'), cust_phone:'', cust_email:'', tag:val('f_tag'), tag_note:val('f_location'),
+    ip_enc: await encryptField(val('f_ip')),
+    id_enc: await encryptField(val('f_id')),
+    pw_enc: await encryptField(val('f_pw')),
+  };
+  records.push(rec);
+  expandedGroups.add(gid);
+  document.getElementById('addModal').classList.remove('open');
+  ['f_owner','f_location','f_support','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_tag','f_cust','f_remarks'].forEach(id=>document.getElementById(id).value='');
+  render();
+};
+
+// ---------- export / import ----------
+document.getElementById('exportBtn').onclick = () => {
+  const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const d = new Date();
+  a.download = `broadcom-assets-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.json`;
+  a.click();
+};
+document.getElementById('importBtn').onclick = () => document.getElementById('importFile').click();
+document.getElementById('importFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const data = JSON.parse(reader.result);
+      if (!data.records) throw new Error('invalid');
+      ENC_STORE.salt = data.salt; ENC_STORE.iterations = data.iterations;
+      records = data.records.map(r=>({...r}));
+      sessionKey = null; viewOnly = true;
+      alert('가져오기 완료. 민감정보를 보려면 이 파일을 만들 때 사용한 마스터 비밀번호로 다시 잠금 해제해 주세요.');
+      document.getElementById('lockOverlay').style.display='flex';
+      document.getElementById('app').classList.remove('ready');
+    }catch(err){ alert('올바른 백업 파일이 아닙니다.'); }
+  };
+  reader.readAsText(file);
+});
