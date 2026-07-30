@@ -22,9 +22,9 @@
       "owner_primary": "강성준",
       "owner_secondary": "김상문",
       "check_method": "원격 (RC)",
-      "cust_contact": "김용현 차장 (전자 일본 법인)",
-      "cust_phone": "+81-80-5470-5302 / +81-3-6369-6336",
-      "cust_email": "yhyun2.kim@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "일본",
       "id": 1,
@@ -58,14 +58,22 @@
           "manager": "ㄴㅇㅀㄴㅇㅀ",
           "note": "ㄴㅇㅀㄴㅇㅀ"
         }
+      ],
+      "group_remarks": "용현짜응~~☆",
+      "cust_contacts": [
+        {
+          "name": "김용현 차장 (전자 일본 법인)",
+          "phone": "+81-80-5470-5302 / +81-3-6369-6336",
+          "email": "yhyun2.kim@samsung.com"
+        }
       ]
     },
     {
       "group": "jp-sds",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 SDS(아시아 법인)",
+      "location": "일본",
+      "support_id": "560569",
       "sku": "ASG-S400-30-U5000",
       "sn": "3917320085",
       "entitlement": "🔗",
@@ -77,8 +85,8 @@
       "deploy_log": "24.03.11 박동석 6.7.5.12 > 7.3.17.1",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "김상문",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -92,14 +100,22 @@
         "tag": "w088d+pRRHWomjdZbcLnuA=="
       },
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "용현짜응~~☆",
+      "cust_contacts": [
+        {
+          "name": "김용현 차장 (전자 일본 법인)",
+          "phone": "+81-80-5470-5302 / +81-3-6369-6336",
+          "email": "yhyun2.kim@samsung.com"
+        }
+      ]
     },
     {
       "group": "jp-sds",
       "flag": "",
-      "owner": "(신규 항목)",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 SDS(아시아 법인)",
+      "location": "일본",
+      "support_id": "560569",
       "sku": "IS-SWSA-SWG-1000-2500-1Y",
       "sn": "50648324-4-1",
       "entitlement": "🔗",
@@ -111,8 +127,8 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "김상문",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -123,14 +139,22 @@
       "ip_enc": null,
       "id_enc": null,
       "pw_enc": null,
-      "device_type": ""
+      "device_type": "",
+      "group_remarks": "용현짜응~~☆",
+      "cust_contacts": [
+        {
+          "name": "김용현 차장 (전자 일본 법인)",
+          "phone": "+81-80-5470-5302 / +81-3-6369-6336",
+          "email": "yhyun2.kim@samsung.com"
+        }
+      ]
     },
     {
       "group": "jp-sds",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 SDS(아시아 법인)",
+      "location": "일본",
+      "support_id": "560569",
       "sku": "MC-S400-20-100",
       "sn": "5017320101",
       "entitlement": "🔗",
@@ -142,8 +166,8 @@
       "deploy_log": "24.03.11 박동석 2.4.3.1 > 3.3.4.1",
       "mode": "",
       "os_ver": "3.3.4.1",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "김상문",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -165,14 +189,22 @@
         "iv": "HIoWnZBwfzROgvBv",
         "ct": "eYl55YKxithW+j3PuR2YplpG5zHNu6RFighfTM4n0BNQZZuBihmQCF2uqMBjheLD6704hSZkZklMaPY=",
         "tag": "8pj7YYDPfN2BVZcTmhHgjg=="
-      }
+      },
+      "group_remarks": "용현짜응~~☆",
+      "cust_contacts": [
+        {
+          "name": "김용현 차장 (전자 일본 법인)",
+          "phone": "+81-80-5470-5302 / +81-3-6369-6336",
+          "email": "yhyun2.kim@samsung.com"
+        }
+      ]
     },
     {
       "group": "jp-sds",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 SDS(아시아 법인)",
+      "location": "일본",
+      "support_id": "560569",
       "sku": "RP-V100-1Y",
       "sn": "26482591",
       "entitlement": "🔗",
@@ -184,8 +216,8 @@
       "deploy_log": "KSD/HWC",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "김상문",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -199,7 +231,15 @@
         "tag": "2gNYuJa/unEBdXyJ996TMg=="
       },
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "용현짜응~~☆",
+      "cust_contacts": [
+        {
+          "name": "김용현 차장 (전자 일본 법인)",
+          "phone": "+81-80-5470-5302 / +81-3-6369-6336",
+          "email": "yhyun2.kim@samsung.com"
+        }
+      ]
     },
     {
       "group": "tw-ds",
