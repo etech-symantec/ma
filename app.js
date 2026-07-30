@@ -25,11 +25,7 @@ const DEFAULT_GITHUB_CONFIG = {
 // date set, so a leak has minimal blast radius. Rotate it periodically.
 const _ok = 'etechMA26-restricted'; // xor key — also just visible text, not a secret
 const _ot = [
-  'Ah0RCx0vHkJXWS1UQjYoLjcwMyU=',
-  'VUIoWl8pDAtvQQQnHCsTAi84FjU=',
-  'P009WiE4LnB5QBkMNTYjEyUlIhY=',
-  'Kh4pNhECE1VSfgU8HUIHH1s6IzA=',
-  'IjI9Il8PGFpCWjkWBQ==',
+  /* PASTE_TOKEN_BLOB_HERE — generate with encode-token.js, see instructions */
 ];
 function _xorB64(b64, key){
   const raw = atob(b64);
