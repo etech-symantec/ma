@@ -1,17 +1,31 @@
-// ---------- data loading (external JSON) ----------
+// ---------- data loading (external JSON / GitHub) ----------
 let ENC_STORE = null;
-const dataReady = fetch('data.json')
-  .then(r => {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(json => {
-    ENC_STORE = json;
-    records = ENC_STORE.records.map(r => ({...r}));
-  })
-  .catch(err => {
-    console.error('data.json 로드 실패:', err);
-  });
+let githubConfig = null;   // {repo, branch, path} - non-sensitive, persisted in localStorage
+let githubToken = null;    // PAT - only persisted if user opts in
+let githubSha = null;      // sha of the last-loaded file, needed to PUT updates
+
+const dataReady = (async () => {
+  const cfg = loadGithubConfigFromStorage();
+  const token = loadRememberedToken();
+  if (cfg && cfg.repo && token){
+    try{
+      const { json, sha } = await githubApiGet(cfg, token);
+      ENC_STORE = json;
+      records = ENC_STORE.records.map(r => ({...r}));
+      githubConfig = cfg; githubToken = token; githubSha = sha;
+      return;
+    }catch(e){
+      console.warn('GitHub 자동 불러오기 실패, 로컬 data.json으로 대체합니다:', e);
+    }
+  }
+  const r = await fetch('data.json');
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const json = await r.json();
+  ENC_STORE = json;
+  records = ENC_STORE.records.map(r => ({...r}));
+})().catch(err => {
+  console.error('데이터 로드 실패:', err);
+});
 
 let sessionKey = null;      // CryptoKey, present only after unlock
 let viewOnly = false;
@@ -22,6 +36,7 @@ let activeCountryFilter = null;
 let activeDeviceTypeFilter = null;
 let workLogRecordId = null; // which record's modal is currently open
 let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
+let editingRecordId = null; // asset record id currently being edited via addModal (null = adding new)
 
 // ---------- device type ----------
 const DEVICE_COLORS = ['#31D8C9','#F2AE40','#EC5F4B','#7C9EFF','#C792EA','#48D48A','#FF8A65','#4FC3F7','#BA68C8','#AED581'];
@@ -146,6 +161,7 @@ function boot(){
   document.getElementById('lockOverlay').style.display = 'none';
   document.getElementById('app').classList.add('ready');
   document.getElementById('lockState').textContent = viewOnly ? '👁 보기 전용 (민감정보 숨김)' : '🔓 잠금 해제됨 · 이 세션 동안만 유지';
+  updateGithubButtonState();
   render();
 }
 
@@ -193,7 +209,12 @@ function groupMeta(items){
     flag: head.flag || '',
     owner: head.owner || '(법인명 미확인)',
     location: items.map(i=>i.location).find(Boolean) || '',
-    support_id: items.map(i=>i.support_id).find(Boolean) || ''
+    support_id: items.map(i=>i.support_id).find(Boolean) || '',
+    owner_primary: items.map(i=>i.owner_primary).find(Boolean) || '',
+    owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
+    cust_contact: items.map(i=>i.cust_contact).find(Boolean) || '',
+    cust_phone: items.map(i=>i.cust_phone).find(Boolean) || '',
+    cust_email: items.map(i=>i.cust_email).find(Boolean) || ''
   };
 }
 
@@ -254,6 +275,7 @@ function render(){
                 ${meta.support_id? `<span><b>Support ID</b> ${esc(meta.support_id)}</span>`:''}
                 <span><b>항목</b> ${items.length}건</span>
               </div>
+              ${groupContactsHtml(meta)}
             </div>
           </div>
           <div class="group-badges">
@@ -265,7 +287,7 @@ function render(){
           <table>
             <thead><tr>
               <th>장비 종류</th><th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
-              <th>IP</th><th>ID</th><th>PW</th><th>OS</th><th>담당(정/부)</th><th>고객사 담당자</th><th>비고</th><th>작업이력</th>
+              <th>IP</th><th>ID</th><th>PW</th><th>OS / 점검</th><th>비고</th><th>작업이력</th><th>관리</th>
             </tr></thead>
             <tbody>
               ${items.map(r=>rowHtml(r, meta.support_id)).join('')}
@@ -309,6 +331,18 @@ function render(){
       openWorkLogModal(btn.dataset.worklog);
     };
   });
+  document.querySelectorAll('[data-edit-asset]').forEach(btn=>{
+    btn.onclick = async (e) => {
+      e.stopPropagation();
+      await openEditAssetModal(btn.dataset.editAsset);
+    };
+  });
+  document.querySelectorAll('[data-delete-asset]').forEach(btn=>{
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      deleteAsset(btn.dataset.deleteAsset);
+    };
+  });
 
   updateStats();
   buildFilters();
@@ -326,14 +360,16 @@ function snLink(r, groupSupportId){
   return `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${sn}</a>`;
 }
 
-function managerCell(r){
-  const primary = esc(r.owner_primary);
-  const secondary = esc(r.owner_secondary);
-  const rows = [];
-  if (primary) rows.push(`<div>정: ${primary}</div>`);
-  if (secondary) rows.push(`<div>부: ${secondary}</div>`);
-  const body = rows.length ? rows.join('') : '—';
-  return `${body}${r.check_method? `<div style="color:var(--text-faint); font-size:11px; margin-top:2px;">${esc(r.check_method)}</div>`:''}`;
+function groupContactsHtml(meta){
+  const parts = [];
+  if (meta.owner_primary) parts.push(`<span><b>담당(정)</b> ${esc(meta.owner_primary)}</span>`);
+  if (meta.owner_secondary) parts.push(`<span><b>담당(부)</b> ${esc(meta.owner_secondary)}</span>`);
+  if (meta.cust_contact || meta.cust_phone || meta.cust_email){
+    const bits = [meta.cust_contact, meta.cust_phone, meta.cust_email].filter(Boolean).map(esc).join(' · ');
+    parts.push(`<span><b>고객사 담당자</b> ${bits}</span>`);
+  }
+  if (!parts.length) return '';
+  return `<div class="sub group-contacts">${parts.join('')}</div>`;
 }
 
 function rowHtml(r, groupSupportId){
@@ -356,16 +392,16 @@ function rowHtml(r, groupSupportId){
     <td data-label="IP">${maskedField(r,'ip')}</td>
     <td data-label="ID">${maskedField(r,'id')}</td>
     <td data-label="PW">${maskedField(r,'pw')}</td>
-    <td data-label="OS">${esc(r.os_ver)||'—'}</td>
-    <td data-label="담당(정/부)">${managerCell(r)}</td>
-    <td class="contact-cell" data-label="고객사 담당자">
-      <div class="who">${esc(r.cust_contact)||'—'}</div>
-      ${r.cust_phone? `<div>${esc(r.cust_phone)}</div>`:''}
-      ${r.cust_email? `<div class="mail">${esc(r.cust_email)}</div>`:''}
-    </td>
+    <td data-label="OS / 점검">${esc(r.os_ver)||'—'}${r.check_method? `<div style="color:var(--text-faint); font-size:11px; margin-top:2px;">${esc(r.check_method)}</div>`:''}</td>
     <td class="remarks-cell" data-label="비고"><div class="remarks-txt">${esc(r.remarks)||'—'}</div></td>
     <td data-label="작업이력">
       <button class="worklog-btn" data-worklog="${r.id}">이력 <span class="cnt">${logCount}</span></button>
+    </td>
+    <td data-label="관리">
+      <div style="display:flex; gap:6px;">
+        <button class="wl-action-btn" data-edit-asset="${r.id}">수정</button>
+        <button class="wl-action-btn danger" data-delete-asset="${r.id}">삭제</button>
+      </div>
     </td>
   </tr>`;
 }
@@ -437,28 +473,107 @@ document.getElementById('expandAllBtn').onclick = () => {
   render();
 };
 
-// ---------- add record ----------
-document.getElementById('addBtn').onclick = () => document.getElementById('addModal').classList.add('open');
-document.getElementById('cancelAddBtn').onclick = () => document.getElementById('addModal').classList.remove('open');
-document.getElementById('saveAddBtn').onclick = async () => {
-  if (viewOnly || !sessionKey){ alert('자산을 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-  const val = id => document.getElementById(id).value.trim();
-  const newId = Math.max(0,...records.map(r=>r.id)) + 1;
-  const gid = 'custom-' + newId;
-  const rec = {
-    id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', location:val('f_location'),
-    support_id:val('f_support'), device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), entitlement:'🔗', qty:val('f_qty'),
-    start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
-    mode:'', os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
-    cust_contact:val('f_cust'), cust_phone:'', cust_email:'', work_log:[],
-    ip_enc: await encryptField(val('f_ip')),
-    id_enc: await encryptField(val('f_id')),
-    pw_enc: await encryptField(val('f_pw')),
-  };
-  records.push(rec);
-  expandedGroups.add(gid);
+// ---------- add / edit / delete record ----------
+const ASSET_FORM_IDS = ['f_owner','f_location','f_support','f_device_type','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_owner_primary','f_owner_secondary','f_cust','f_remarks'];
+
+function clearAssetForm(){
+  ASSET_FORM_IDS.forEach(id=>document.getElementById(id).value='');
+}
+
+document.getElementById('addBtn').onclick = () => {
+  editingRecordId = null;
+  clearAssetForm();
+  document.getElementById('addModalTitle').textContent = '새 자산 항목 추가';
+  document.getElementById('saveAddBtn').textContent = '항목 저장';
+  document.getElementById('addModal').classList.add('open');
+};
+document.getElementById('cancelAddBtn').onclick = () => {
   document.getElementById('addModal').classList.remove('open');
-  ['f_owner','f_location','f_support','f_device_type','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_owner_primary','f_owner_secondary','f_cust','f_remarks'].forEach(id=>document.getElementById(id).value='');
+  editingRecordId = null;
+};
+
+async function openEditAssetModal(recId){
+  if (viewOnly || !sessionKey){ alert('자산을 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const rec = records.find(r=>String(r.id)===String(recId));
+  if (!rec) return;
+  editingRecordId = rec.id;
+  const set = (id,val) => document.getElementById(id).value = val || '';
+  set('f_owner', rec.owner==='(신규 항목)'?'':rec.owner);
+  set('f_location', rec.location);
+  set('f_support', rec.support_id);
+  set('f_device_type', rec.device_type);
+  set('f_sku', rec.sku);
+  set('f_sn', rec.sn);
+  set('f_qty', rec.qty || rec.entitlement);
+  set('f_start', rec.start);
+  set('f_end', rec.end);
+  set('f_os', rec.os_ver);
+  set('f_check', rec.check_method);
+  set('f_ip', rec.ip_enc ? await decryptField(rec.ip_enc) : '');
+  set('f_id', rec.id_enc ? await decryptField(rec.id_enc) : '');
+  set('f_pw', rec.pw_enc ? await decryptField(rec.pw_enc) : '');
+  set('f_owner_primary', rec.owner_primary);
+  set('f_owner_secondary', rec.owner_secondary);
+  set('f_cust', rec.cust_contact);
+  set('f_remarks', rec.remarks);
+  document.getElementById('addModalTitle').textContent = '자산 항목 수정';
+  document.getElementById('saveAddBtn').textContent = '변경사항 저장';
+  document.getElementById('addModal').classList.add('open');
+}
+
+function deleteAsset(recId){
+  const rec = records.find(r=>String(r.id)===String(recId));
+  if (!rec) return;
+  if (!confirm(`이 자산 항목을 삭제하시겠습니까?\n${rec.sku||''} ${rec.sn? '(S/N '+rec.sn+')':''}`)) return;
+  records = records.filter(r=>String(r.id)!==String(recId));
+  render();
+}
+
+document.getElementById('saveAddBtn').onclick = async () => {
+  if (viewOnly || !sessionKey){ alert('자산을 추가/수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const val = id => document.getElementById(id).value.trim();
+
+  if (editingRecordId){
+    const rec = records.find(r=>String(r.id)===String(editingRecordId));
+    if (!rec){ editingRecordId = null; document.getElementById('addModal').classList.remove('open'); return; }
+    rec.owner = val('f_owner')||'(신규 항목)';
+    rec.location = val('f_location');
+    rec.support_id = val('f_support');
+    rec.device_type = val('f_device_type');
+    rec.sku = val('f_sku');
+    rec.sn = val('f_sn');
+    rec.qty = val('f_qty');
+    rec.start = val('f_start');
+    rec.end = val('f_end');
+    rec.os_ver = val('f_os');
+    rec.check_method = val('f_check');
+    rec.owner_primary = val('f_owner_primary');
+    rec.owner_secondary = val('f_owner_secondary');
+    rec.cust_contact = val('f_cust');
+    rec.remarks = val('f_remarks');
+    rec.ip_enc = await encryptField(val('f_ip'));
+    rec.id_enc = await encryptField(val('f_id'));
+    rec.pw_enc = await encryptField(val('f_pw'));
+    editingRecordId = null;
+  } else {
+    const newId = Math.max(0,...records.map(r=>r.id)) + 1;
+    const gid = 'custom-' + newId;
+    const rec = {
+      id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', location:val('f_location'),
+      support_id:val('f_support'), device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), entitlement:'🔗', qty:val('f_qty'),
+      start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
+      mode:'', os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
+      cust_contact:val('f_cust'), cust_phone:'', cust_email:'', work_log:[],
+      ip_enc: await encryptField(val('f_ip')),
+      id_enc: await encryptField(val('f_id')),
+      pw_enc: await encryptField(val('f_pw')),
+    };
+    records.push(rec);
+    expandedGroups.add(gid);
+  }
+
+  document.getElementById('addModal').classList.remove('open');
+  clearAssetForm();
   render();
 };
 
@@ -569,6 +684,175 @@ document.getElementById('importFile').addEventListener('change', (e) => {
   };
   reader.readAsText(file);
 });
+
+// ---------- GitHub sync ----------
+const GITHUB_CONFIG_KEY = 'bcAssetGithubConfig';
+const GITHUB_TOKEN_KEY = 'bcAssetGithubToken';
+
+function loadGithubConfigFromStorage(){
+  try{ return JSON.parse(localStorage.getItem(GITHUB_CONFIG_KEY)); }catch(e){ return null; }
+}
+function saveGithubConfigToStorage(cfg){
+  try{ localStorage.setItem(GITHUB_CONFIG_KEY, JSON.stringify(cfg)); }catch(e){}
+}
+function loadRememberedToken(){
+  try{ return localStorage.getItem(GITHUB_TOKEN_KEY) || null; }catch(e){ return null; }
+}
+function saveRememberedToken(token){
+  try{ localStorage.setItem(GITHUB_TOKEN_KEY, token); }catch(e){}
+}
+function clearRememberedToken(){
+  try{ localStorage.removeItem(GITHUB_TOKEN_KEY); }catch(e){}
+}
+
+function b64EncodeUnicode(str){
+  return bufToB64(new TextEncoder().encode(str).buffer);
+}
+function b64DecodeUnicode(b64){
+  const clean = b64.replace(/\s/g,'');
+  return new TextDecoder('utf-8').decode(new Uint8Array(b64ToBuf(clean)));
+}
+
+function parseOwnerRepo(repoStr){
+  const parts = (repoStr||'').trim().split('/');
+  if (parts.length !== 2 || !parts[0] || !parts[1]) return null;
+  return { owner: parts[0], repo: parts[1] };
+}
+
+async function githubApiGet(cfg, token){
+  const or = parseOwnerRepo(cfg.repo);
+  if (!or) throw new Error('저장소는 owner/repo 형식으로 입력해 주세요.');
+  const branch = cfg.branch || 'main';
+  const path = cfg.path || 'data.json';
+  const url = `https://api.github.com/repos/${or.owner}/${or.repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
+  const res = await fetch(url, { headers: { 'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json' } });
+  if (res.status === 404){
+    const err = new Error('저장소에 해당 파일이 없습니다. "GitHub에 저장"을 누르면 새로 생성됩니다.');
+    err.notFound = true;
+    throw err;
+  }
+  if (!res.ok){
+    const body = await res.json().catch(()=>({}));
+    throw new Error(`GitHub 불러오기 실패: HTTP ${res.status}${body.message? ' - '+body.message : ''}`);
+  }
+  const data = await res.json();
+  const json = JSON.parse(b64DecodeUnicode(data.content));
+  return { json, sha: data.sha };
+}
+
+async function githubApiPut(cfg, token, jsonObj, sha, message){
+  const or = parseOwnerRepo(cfg.repo);
+  if (!or) throw new Error('저장소는 owner/repo 형식으로 입력해 주세요.');
+  const branch = cfg.branch || 'main';
+  const path = cfg.path || 'data.json';
+  const url = `https://api.github.com/repos/${or.owner}/${or.repo}/contents/${encodeURIComponent(path)}`;
+  const body = {
+    message: message || ('자산 데이터 업데이트 - ' + new Date().toLocaleString('ko-KR')),
+    content: b64EncodeUnicode(JSON.stringify(jsonObj, null, 2)),
+    branch
+  };
+  if (sha) body.sha = sha;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok){
+    const errBody = await res.json().catch(()=>({}));
+    throw new Error(`GitHub 저장 실패: HTTP ${res.status}${errBody.message? ' - '+errBody.message : ''}`);
+  }
+  const data = await res.json();
+  return data.content.sha;
+}
+
+function updateGithubButtonState(){
+  const connected = !!(githubConfig && githubConfig.repo && githubToken);
+  document.getElementById('githubConnectBtn').classList.toggle('on', connected);
+  document.getElementById('githubConnectBtn').textContent = connected ? `🐙 ${githubConfig.repo}` : '🐙 GitHub';
+}
+
+document.getElementById('githubConnectBtn').onclick = () => {
+  const cfg = githubConfig || loadGithubConfigFromStorage() || {};
+  document.getElementById('gh_repo').value = cfg.repo || '';
+  document.getElementById('gh_branch').value = cfg.branch || 'main';
+  document.getElementById('gh_path').value = cfg.path || 'data.json';
+  document.getElementById('gh_token').value = githubToken || loadRememberedToken() || '';
+  document.getElementById('gh_remember').checked = !!loadRememberedToken();
+  document.getElementById('githubError').textContent = '';
+  document.getElementById('githubModal').classList.add('open');
+};
+document.getElementById('cancelGithubBtn').onclick = () => {
+  document.getElementById('githubModal').classList.remove('open');
+};
+
+document.getElementById('githubConnectLoadBtn').onclick = async () => {
+  const errEl = document.getElementById('githubError');
+  const cfg = {
+    repo: document.getElementById('gh_repo').value.trim(),
+    branch: document.getElementById('gh_branch').value.trim() || 'main',
+    path: document.getElementById('gh_path').value.trim() || 'data.json',
+  };
+  const token = document.getElementById('gh_token').value.trim();
+  const remember = document.getElementById('gh_remember').checked;
+
+  if (!parseOwnerRepo(cfg.repo)){ errEl.textContent = '저장소는 owner/repo 형식으로 입력해 주세요.'; return; }
+  if (!token){ errEl.textContent = 'Personal Access Token을 입력해 주세요.'; return; }
+
+  errEl.textContent = 'GitHub에서 불러오는 중…';
+  try{
+    const { json, sha } = await githubApiGet(cfg, token);
+    ENC_STORE = json;
+    records = json.records.map(r=>({...r}));
+    githubConfig = cfg; githubToken = token; githubSha = sha;
+    saveGithubConfigToStorage(cfg);
+    if (remember) saveRememberedToken(token); else clearRememberedToken();
+    updateGithubButtonState();
+
+    sessionKey = null; viewOnly = true;
+    document.getElementById('githubModal').classList.remove('open');
+    alert('GitHub에서 데이터를 불러왔습니다. 민감정보를 보려면 이 데이터의 마스터 비밀번호로 다시 잠금 해제해 주세요.');
+    document.getElementById('lockOverlay').style.display = 'flex';
+    document.getElementById('app').classList.remove('ready');
+  }catch(e){
+    if (e.notFound){
+      // No file yet at this path — treat as a fresh connection; "GitHub에 저장" will create it.
+      githubConfig = cfg; githubToken = token; githubSha = null;
+      saveGithubConfigToStorage(cfg);
+      if (remember) saveRememberedToken(token); else clearRememberedToken();
+      updateGithubButtonState();
+      errEl.textContent = '';
+      document.getElementById('githubModal').classList.remove('open');
+      alert('연결되었습니다. 저장소에 아직 파일이 없어 "GitHub에 저장"을 누르면 현재 데이터로 새로 생성됩니다.');
+    } else {
+      errEl.textContent = e.message || 'GitHub 연결에 실패했습니다.';
+    }
+  }
+};
+
+document.getElementById('githubSaveBtn').onclick = async () => {
+  if (!githubConfig || !githubToken){
+    alert('먼저 "🐙 GitHub" 버튼으로 저장소에 연결해 주세요.');
+    document.getElementById('githubConnectBtn').click();
+    return;
+  }
+  const btn = document.getElementById('githubSaveBtn');
+  const originalText = btn.textContent;
+  btn.textContent = '저장 중…';
+  btn.disabled = true;
+  try{
+    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records };
+    const newSha = await githubApiPut(githubConfig, githubToken, payload, githubSha);
+    githubSha = newSha;
+    alert(`GitHub 저장소(${githubConfig.repo})에 저장되었습니다.`);
+  }catch(e){
+    alert(e.message || 'GitHub 저장에 실패했습니다.');
+  }finally{
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+};
+
+updateGithubButtonState();
 
 // ---------- work log ----------
 function openWorkLogModal(recId){
