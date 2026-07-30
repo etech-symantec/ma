@@ -129,6 +129,15 @@ header.topbar{
 .icon-btn:hover{ color:var(--text); border-color:#3a4a72; }
 .icon-btn.on{ color:var(--accent); border-color:var(--accent-dim); background:#0e2a27; }
 
+.sync-status{
+  font-size:11px; font-family:var(--mono); color:var(--text-faint);
+  white-space:nowrap; display:flex; align-items:center;
+}
+.sync-status.pending{ color:var(--text-dim); }
+.sync-status.syncing{ color:var(--accent); }
+.sync-status.synced{ color:var(--green); }
+.sync-status.error{ color:var(--red); }
+
 /* stat strip */
 .stats{
   display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
