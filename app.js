@@ -17,10 +17,11 @@ let sessionKey = null;      // CryptoKey, present only after unlock
 let viewOnly = false;
 let records = [];           // working array (mutable, in-memory)
 let expandedGroups = new Set();
-let activeStatusFilters = new Set(['ok','warn','crit','na']);
+let activeStatusFilters = new Set(['ok','warn','na']);
 let activeCountryFilter = null;
 let activeDeviceTypeFilter = null;
 let workLogRecordId = null; // which record's modal is currently open
+let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
 
 // ---------- device type ----------
 const DEVICE_COLORS = ['#31D8C9','#F2AE40','#EC5F4B','#7C9EFF','#C792EA','#48D48A','#FF8A65','#4FC3F7','#BA68C8','#AED581'];
@@ -267,7 +268,7 @@ function render(){
               <th>IP</th><th>ID</th><th>PW</th><th>OS</th><th>담당(정/부)</th><th>고객사 담당자</th><th>비고</th><th>작업이력</th>
             </tr></thead>
             <tbody>
-              ${items.map(r=>rowHtml(r)).join('')}
+              ${items.map(r=>rowHtml(r, meta.support_id)).join('')}
             </tbody>
           </table>
         </div>
@@ -316,11 +317,12 @@ function render(){
 function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료됨', na:'기간정보없음'}[s]; }
 function statusColorVar(s){ return {ok:'var(--green)', warn:'var(--amber)', crit:'var(--red)', na:'var(--text-faint)'}[s]; }
 
-function snLink(r){
+function snLink(r, groupSupportId){
   const sn = esc(r.sn);
   if (!sn) return '—';
-  if (!r.support_id || !r.sn) return sn;
-  const url = `https://support.broadcom.com/group/ecx/licensing?siteId=${encodeURIComponent(r.support_id)}&serialNumber=${encodeURIComponent(r.sn)}`;
+  const supportId = r.support_id || groupSupportId;
+  if (!supportId) return sn;
+  const url = `https://support.broadcom.com/group/ecx/licensing?siteId=${encodeURIComponent(supportId)}&serialNumber=${encodeURIComponent(r.sn)}`;
   return `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${sn}</a>`;
 }
 
@@ -334,7 +336,7 @@ function managerCell(r){
   return `${body}${r.check_method? `<div style="color:var(--text-faint); font-size:11px; margin-top:2px;">${esc(r.check_method)}</div>`:''}`;
 }
 
-function rowHtml(r){
+function rowHtml(r, groupSupportId){
   const status = licenseStatus(r);
   const pct = licenseBarPct(r);
   const logCount = (r.work_log||[]).length;
@@ -342,7 +344,7 @@ function rowHtml(r){
   <tr data-id="${r.id}">
     <td data-label="장비 종류">${deviceBadge(r)}</td>
     <td class="sku" data-label="SKU">${esc(r.sku)||'—'}</td>
-    <td class="sn" data-label="S/N">${snLink(r)}</td>
+    <td class="sn" data-label="S/N">${snLink(r, groupSupportId)}</td>
     <td data-label="수량">${esc(r.qty||r.entitlement)||'—'}</td>
     <td data-label="라이선스 기간">
       <div class="lic-bar-wrap">
@@ -579,8 +581,32 @@ function openWorkLogModal(recId){
   document.getElementById('wl_date').value = '';
   document.getElementById('wl_manager').value = '';
   document.getElementById('wl_note').value = '';
+  workLogEditId = null;
+  setWorkLogFormMode(false);
   renderWorkLogList();
   document.getElementById('workLogModal').classList.add('open');
+}
+
+function fmtDateDots(nativeVal){
+  // nativeVal is "YYYY-MM-DD" from <input type="date">
+  if (!nativeVal) return '';
+  const [y,m,d] = nativeVal.split('-').map(Number);
+  if (!y || !m || !d) return '';
+  return `${y}.${m}.${d}`;
+}
+
+document.getElementById('wl_date_pick_btn').onclick = () => {
+  const picker = document.getElementById('wl_date_picker');
+  if (picker.showPicker) picker.showPicker();
+  else picker.click();
+};
+document.getElementById('wl_date_picker').addEventListener('change', (e) => {
+  document.getElementById('wl_date').value = fmtDateDots(e.target.value);
+});
+
+function setWorkLogFormMode(isEditing){
+  document.getElementById('wlAddBtn').textContent = isEditing ? '수정 완료' : '이력 추가';
+  document.getElementById('wlCancelEditBtn').style.display = isEditing ? '' : 'none';
 }
 
 function renderWorkLogList(){
@@ -603,7 +629,41 @@ function renderWorkLogList(){
         <div class="wl-meta">${esc(entry.date)||'날짜 미기재'} · ${esc(entry.manager)||'담당자 미기재'}</div>
         <div class="wl-note">${esc(entry.note)||'—'}</div>
       </div>
+      <div class="wl-actions">
+        <button class="wl-action-btn" data-wl-edit="${entry.id}">수정</button>
+        <button class="wl-action-btn danger" data-wl-delete="${entry.id}">삭제</button>
+      </div>
     </div>`).join('');
+
+  listEl.querySelectorAll('[data-wl-edit]').forEach(btn=>{
+    btn.onclick = () => {
+      const entryId = btn.dataset.wlEdit;
+      const entry = (rec.work_log||[]).find(e=>String(e.id)===String(entryId));
+      if (!entry) return;
+      workLogEditId = entry.id;
+      document.getElementById('wl_type').value = entry.type;
+      document.getElementById('wl_date').value = entry.date;
+      document.getElementById('wl_manager').value = entry.manager;
+      document.getElementById('wl_note').value = entry.note;
+      setWorkLogFormMode(true);
+    };
+  });
+  listEl.querySelectorAll('[data-wl-delete]').forEach(btn=>{
+    btn.onclick = () => {
+      const entryId = btn.dataset.wlDelete;
+      if (!confirm('이 작업 이력을 삭제하시겠습니까?')) return;
+      rec.work_log = (rec.work_log||[]).filter(e=>String(e.id)!==String(entryId));
+      if (String(workLogEditId)===String(entryId)){
+        workLogEditId = null;
+        document.getElementById('wl_date').value = '';
+        document.getElementById('wl_manager').value = '';
+        document.getElementById('wl_note').value = '';
+        setWorkLogFormMode(false);
+      }
+      renderWorkLogList();
+      render();
+    };
+  });
 }
 
 document.getElementById('wlAddBtn').onclick = () => {
@@ -615,7 +675,15 @@ document.getElementById('wlAddBtn').onclick = () => {
   const note = document.getElementById('wl_note').value.trim();
   if (!date && !manager && !note){ alert('날짜, 담당자, 내용 중 하나 이상을 입력해 주세요.'); return; }
   if (!Array.isArray(rec.work_log)) rec.work_log = [];
-  rec.work_log.push({ id: Date.now(), type, date, manager, note });
+
+  if (workLogEditId){
+    const entry = rec.work_log.find(e=>String(e.id)===String(workLogEditId));
+    if (entry){ entry.type=type; entry.date=date; entry.manager=manager; entry.note=note; }
+    workLogEditId = null;
+    setWorkLogFormMode(false);
+  } else {
+    rec.work_log.push({ id: Date.now(), type, date, manager, note });
+  }
   document.getElementById('wl_date').value = '';
   document.getElementById('wl_manager').value = '';
   document.getElementById('wl_note').value = '';
@@ -623,7 +691,16 @@ document.getElementById('wlAddBtn').onclick = () => {
   render();
 };
 
+document.getElementById('wlCancelEditBtn').onclick = () => {
+  workLogEditId = null;
+  document.getElementById('wl_date').value = '';
+  document.getElementById('wl_manager').value = '';
+  document.getElementById('wl_note').value = '';
+  setWorkLogFormMode(false);
+};
+
 document.getElementById('wlCloseBtn').onclick = () => {
   document.getElementById('workLogModal').classList.remove('open');
   workLogRecordId = null;
+  workLogEditId = null;
 };
