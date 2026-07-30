@@ -163,6 +163,61 @@ function deviceBadge(r){
   </span>`;
 }
 
+// ---------- SKU category tags ----------
+// Rules are checked in order (first match wins) and grouped into color
+// "families" (related hues) for related prefixes — e.g. all ISG-* patterns
+// share a violet family, just at different shades, per spec.
+const SKU_CATEGORIES = [
+  // -- prefix rules --
+  { match:'prefix', value:'ISG-Pro',     color:'#A78BFA' }, // ISG family (violet)
+  { match:'prefix', value:'ISG-MA',      color:'#8B5CF6' }, // ISG family
+  { match:'prefix', value:'ISG-MC',      color:'#7C3AED' }, // ISG family
+  { match:'prefix', value:'MA-CAS',      color:'#2DD4BF' }, // CAS family (teal)
+  { match:'prefix', value:'CLD-',        color:'#60A5FA' }, // network/security family (blue)
+  { match:'prefix', value:'ASG-',        color:'#3B82F6' }, // network/security family
+  { match:'prefix', value:'SG-S',        color:'#D97706' }, // endpoint family (amber) — checked before generic SG-prefixed rules
+  { match:'prefix', value:'SG900',       color:'#22C55E' }, // misc hardware family (green)
+  { match:'prefix', value:'MC-',         color:'#FBBF24' }, // endpoint family
+  { match:'prefix', value:'IS-',         color:'#F59E0B' }, // endpoint family
+  { match:'prefix', value:'CPOS-',       color:'#F472B6' }, // POS/hardware family (pink)
+  { match:'prefix', value:'SW_Flash-',   color:'#EC4899' }, // POS/hardware family
+  { match:'prefix', value:'PS-S',        color:'#DB2777' }, // POS/hardware family
+  { match:'prefix', value:'VIP-',        color:'#4ADE80' }, // misc hardware family (green)
+  { match:'prefix', value:'ELK',         color:'#16A34A' }, // misc hardware family
+  // -- contains rules --
+  { match:'contains', value:'ISG-PR-',   color:'#6D28D9' }, // ISG family
+  { match:'contains', value:'ISG-CA',    color:'#5B21B6' }, // ISG family
+  { match:'contains', value:'CAS-',      color:'#14B8A6' }, // CAS family
+  { match:'contains', value:'FI-',       color:'#2563EB' }, // network/security family
+  { match:'contains', value:'RP-',       color:'#22D3EE' }, // RP/BC family (cyan)
+  { match:'contains', value:'BCWF',      color:'#06B6D4' }, // RP/BC family
+  { match:'contains', value:'SW-E-TAP',  color:'#0891B2' }, // RP/BC family
+  { match:'contains', value:'SSP-S',     color:'#FB7185' }, // SSP/WSS family (rose)
+  { match:'contains', value:'WSS',       color:'#F43F5E' }, // SSP/WSS family
+  { match:'contains', value:'CA-VA',     color:'#E11D48' }, // SSP/WSS family
+  // -- exact rules --
+  { match:'exact', value:'WEB-PROTECT-SUB', color:'#94A3B8' }, // standalone (slate)
+];
+
+function skuCategory(sku){
+  if (!sku) return null;
+  for (const c of SKU_CATEGORIES){
+    if (c.match==='prefix' && sku.startsWith(c.value)) return c;
+    if (c.match==='contains' && sku.includes(c.value)) return c;
+    if (c.match==='exact' && sku===c.value) return c;
+  }
+  return null;
+}
+function skuBadge(sku){
+  const label = esc(sku) || '—';
+  if (!sku) return label;
+  const cat = skuCategory(sku);
+  if (!cat) return label;
+  return `<span class="sku-tag" style="color:${cat.color}; border-color:${cat.color}55; background:${cat.color}1a;">
+    <span class="sku-dot" style="background:${cat.color}"></span>${label}
+  </span>`;
+}
+
 // ---------- crypto helpers ----------
 function b64ToBuf(b64){ return Uint8Array.from(atob(b64), c => c.charCodeAt(0)).buffer; }
 function bufToB64(buf){
@@ -389,10 +444,14 @@ function render(){
           <div class="group-head-left">
             <div class="group-title">
               <div class="title-row">
-                <h3 class="group-title-name" contenteditable="true" spellcheck="false" data-gid="${gid}" title="클릭하여 법인명 수정">${esc(meta.owner)}</h3>
+                <h3 class="group-title-name">${esc(meta.owner)}</h3>
+                <div class="group-title-actions">
+                  <button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/위치/Support ID/담당자/고객사 담당자)">${pencilSvg()}</button>
+                  <button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>
+                </div>
                 <div class="sub title-meta">
-                  <span class="editable-meta" contenteditable="true" spellcheck="false" data-gid="${gid}" data-field="location" data-placeholder="위치 입력" title="클릭하여 위치 수정">${esc(meta.location)||''}</span>
-                  <span><b>Support ID</b> <span class="editable-meta" contenteditable="true" spellcheck="false" data-gid="${gid}" data-field="support_id" data-placeholder="Support ID 입력" title="클릭하여 Support ID 수정">${esc(meta.support_id)||''}</span></span>
+                  <span>${esc(meta.location)||'위치 미입력'}</span>
+                  <span><b>Support ID</b> ${esc(meta.support_id)||'—'}</span>
                   <span><b>항목</b> ${items.length}건</span>
                 </div>
               </div>
@@ -407,7 +466,7 @@ function render(){
         <div class="items ${isOpen?'open':''}">
           <table>
             <thead><tr>
-              <th>장비 종류</th><th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
+              <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
               <th>IP</th><th>ID</th><th>PW</th><th>OS / 점검</th><th>비고</th><th>작업이력</th><th>관리</th>
             </tr></thead>
             <tbody>
@@ -428,56 +487,11 @@ function render(){
     };
   });
 
-  document.querySelectorAll('.group-title-name').forEach(el=>{
-    el.onclick = (e) => { e.stopPropagation(); };
-    el.onkeydown = (e) => {
-      if (e.key === 'Enter'){ e.preventDefault(); el.blur(); }
-      if (e.key === 'Escape'){ e.preventDefault(); el.textContent = el.dataset.orig || el.textContent; el.blur(); }
-    };
-    el.onfocus = () => { el.dataset.orig = el.textContent.trim(); };
-    el.onblur = () => {
-      const gid = el.dataset.gid;
-      const newName = el.textContent.trim();
-      const orig = el.dataset.orig !== undefined ? el.dataset.orig : newName;
-      if (newName === orig) return;
-      if (viewOnly || !sessionKey){
-        alert('법인명을 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.');
-        el.textContent = orig;
-        return;
-      }
-      if (!newName){
-        el.textContent = orig;
-        return;
-      }
-      records.forEach(r => { if (r.group === gid) r.owner = newName; });
-      render();
-      scheduleAutoSync();
-    };
+  document.querySelectorAll('[data-group-edit]').forEach(btn=>{
+    btn.onclick = (e) => { e.stopPropagation(); openGroupEditModal(btn.dataset.groupEdit); };
   });
-
-  const editableMetaLabels = { location: '위치', support_id: 'Support ID' };
-  document.querySelectorAll('.editable-meta').forEach(el=>{
-    el.onclick = (e) => { e.stopPropagation(); };
-    el.onkeydown = (e) => {
-      if (e.key === 'Enter'){ e.preventDefault(); el.blur(); }
-      if (e.key === 'Escape'){ e.preventDefault(); el.textContent = el.dataset.orig || ''; el.blur(); }
-    };
-    el.onfocus = () => { el.dataset.orig = el.textContent.trim(); };
-    el.onblur = () => {
-      const gid = el.dataset.gid;
-      const field = el.dataset.field;
-      const newVal = el.textContent.trim();
-      const orig = el.dataset.orig !== undefined ? el.dataset.orig : newVal;
-      if (newVal === orig) return;
-      if (viewOnly || !sessionKey){
-        alert(`${editableMetaLabels[field]||'값'}을(를) 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.`);
-        el.textContent = orig;
-        return;
-      }
-      records.forEach(r => { if (r.group === gid) r[field] = newVal; });
-      render();
-      scheduleAutoSync();
-    };
+  document.querySelectorAll('[data-group-delete]').forEach(btn=>{
+    btn.onclick = (e) => { e.stopPropagation(); deleteGroup(btn.dataset.groupDelete); };
   });
   document.querySelectorAll('.sec-toggle').forEach(btn=>{
     btn.onclick = async (e) => {
@@ -555,8 +569,7 @@ function rowHtml(r, groupSupportId){
   const logCount = (r.work_log||[]).length;
   return `
   <tr data-id="${r.id}">
-    <td data-label="장비 종류">${deviceBadge(r)}</td>
-    <td class="sku" data-label="SKU">${esc(r.sku)||'—'}</td>
+    <td class="sku" data-label="SKU / 제품">${skuBadge(r.sku)}</td>
     <td class="sn" data-label="S/N">${snLink(r, groupSupportId)}</td>
     <td data-label="수량">${esc(r.qty||r.entitlement)||'—'}</td>
     <td data-label="라이선스 기간">
@@ -755,6 +768,68 @@ document.getElementById('saveAddBtn').onclick = async () => {
   render();
   scheduleAutoSync();
 };
+
+// ---------- group (title bar) edit / delete ----------
+let groupEditId = null;
+
+function openGroupEditModal(gid){
+  if (viewOnly || !sessionKey){ alert('법인 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const items = records.filter(r=>r.group===gid);
+  if (!items.length) return;
+  const meta = groupMeta(items);
+  groupEditId = gid;
+  document.getElementById('ge_owner').value = meta.owner==='(법인명 미확인)' ? '' : meta.owner;
+  document.getElementById('ge_location').value = meta.location || '';
+  document.getElementById('ge_support').value = meta.support_id || '';
+  document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
+  document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
+  document.getElementById('ge_cust').value = meta.cust_contact || '';
+  document.getElementById('geError').textContent = '';
+  document.getElementById('groupEditModal').classList.add('open');
+}
+
+document.getElementById('cancelGeBtn').onclick = () => {
+  document.getElementById('groupEditModal').classList.remove('open');
+  groupEditId = null;
+};
+
+document.getElementById('saveGeBtn').onclick = () => {
+  if (!groupEditId) return;
+  const val = id => document.getElementById(id).value.trim();
+  const newOwner = val('ge_owner');
+  if (!newOwner){ document.getElementById('geError').textContent = '법인명을 입력해 주세요.'; return; }
+  const newLocation = val('ge_location');
+  const newSupport = val('ge_support');
+  const newPrimary = val('ge_owner_primary');
+  const newSecondary = val('ge_owner_secondary');
+  const newCust = val('ge_cust');
+  records.forEach(r => {
+    if (r.group === groupEditId){
+      r.owner = newOwner;
+      r.location = newLocation;
+      r.support_id = newSupport;
+      r.owner_primary = newPrimary;
+      r.owner_secondary = newSecondary;
+      r.cust_contact = newCust;
+    }
+  });
+  document.getElementById('groupEditModal').classList.remove('open');
+  groupEditId = null;
+  render();
+  scheduleAutoSync();
+};
+
+function deleteGroup(gid){
+  if (viewOnly || !sessionKey){ alert('법인 정보를 삭제하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const items = records.filter(r=>r.group===gid);
+  if (!items.length) return;
+  const meta = groupMeta(items);
+  if (!confirm(`"${meta.owner}" 법인의 자산 항목 ${items.length}건이 모두 삭제됩니다. 계속하시겠습니까?`)) return;
+  records = records.filter(r=>r.group!==gid);
+  expandedGroups.delete(gid);
+  render();
+  scheduleAutoSync();
+}
 
 // ---------- change master password ----------
 document.getElementById('changePassBtn').onclick = () => {
