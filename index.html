@@ -25,7 +25,7 @@
 <div id="lockOverlay">
   <div class="lock-card">
     <div class="lock-glyph">🔒</div>
-    <h1>SAMSUNG · Broadcom 자산 대장</h1>
+    <div class="lock-title">SAMSUNG · Broadcom 자산 대장</div>
     <p>계정 ID / 비밀번호 / IP 정보는 AES‑256‑GCM으로 암호화되어 저장되어 있습니다. 마스터 비밀번호를 입력하면 이번 세션 동안만 복호화하여 열람할 수 있습니다.</p>
     <input type="password" id="passInput" placeholder="마스터 비밀번호" autocomplete="off" />
     <div id="lockError"></div>
@@ -40,7 +40,7 @@
 </div>
 
 <div id="app">
-  <header class="topbar">
+  <div class="topbar">
     <div class="brand">
       <div class="brand-mark">BC</div>
       <div class="brand-text">
@@ -63,7 +63,7 @@
       <button class="icon-btn" id="importBtn">가져오기</button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
     </div>
-  </header>
+  </div>
 
   <div class="stats">
     <div class="stat"><div class="n" id="statTotal">0</div><div class="l">전체 자산 항목</div></div>
