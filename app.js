@@ -347,6 +347,9 @@ function maskedField(rec, kind){
     </span>`;
 }
 function eyeSvg(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>`; }
+function pencilSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`; }
+function trashSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`; }
+function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>`; }
 
 function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -384,13 +387,12 @@ function render(){
       <div class="group-card" data-gid="${gid}">
         <div class="group-head ${isOpen?'expanded':''}" data-toggle="${gid}">
           <div class="group-head-left">
-            <div class="group-flag">${esc(meta.flag)}</div>
             <div class="group-title">
               <div class="title-row">
                 <h3 class="group-title-name" contenteditable="true" spellcheck="false" data-gid="${gid}" title="클릭하여 법인명 수정">${esc(meta.owner)}</h3>
                 <div class="sub title-meta">
-                  <span>${esc(meta.location)||''}</span>
-                  ${meta.support_id? `<span><b>Support ID</b> ${esc(meta.support_id)}</span>`:''}
+                  <span class="editable-meta" contenteditable="true" spellcheck="false" data-gid="${gid}" data-field="location" data-placeholder="위치 입력" title="클릭하여 위치 수정">${esc(meta.location)||''}</span>
+                  <span><b>Support ID</b> <span class="editable-meta" contenteditable="true" spellcheck="false" data-gid="${gid}" data-field="support_id" data-placeholder="Support ID 입력" title="클릭하여 Support ID 수정">${esc(meta.support_id)||''}</span></span>
                   <span><b>항목</b> ${items.length}건</span>
                 </div>
               </div>
@@ -448,6 +450,31 @@ function render(){
         return;
       }
       records.forEach(r => { if (r.group === gid) r.owner = newName; });
+      render();
+      scheduleAutoSync();
+    };
+  });
+
+  const editableMetaLabels = { location: '위치', support_id: 'Support ID' };
+  document.querySelectorAll('.editable-meta').forEach(el=>{
+    el.onclick = (e) => { e.stopPropagation(); };
+    el.onkeydown = (e) => {
+      if (e.key === 'Enter'){ e.preventDefault(); el.blur(); }
+      if (e.key === 'Escape'){ e.preventDefault(); el.textContent = el.dataset.orig || ''; el.blur(); }
+    };
+    el.onfocus = () => { el.dataset.orig = el.textContent.trim(); };
+    el.onblur = () => {
+      const gid = el.dataset.gid;
+      const field = el.dataset.field;
+      const newVal = el.textContent.trim();
+      const orig = el.dataset.orig !== undefined ? el.dataset.orig : newVal;
+      if (newVal === orig) return;
+      if (viewOnly || !sessionKey){
+        alert(`${editableMetaLabels[field]||'값'}을(를) 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.`);
+        el.textContent = orig;
+        return;
+      }
+      records.forEach(r => { if (r.group === gid) r[field] = newVal; });
       render();
       scheduleAutoSync();
     };
@@ -545,12 +572,12 @@ function rowHtml(r, groupSupportId){
     <td data-label="OS / 점검">${esc(r.os_ver)||'—'}${r.check_method? `<div style="color:var(--text-faint); font-size:11px; margin-top:2px;">${esc(r.check_method)}</div>`:''}</td>
     <td class="remarks-cell" data-label="비고"><div class="remarks-txt">${esc(r.remarks)||'—'}</div></td>
     <td data-label="작업이력">
-      <button class="worklog-btn" data-worklog="${r.id}">이력 <span class="cnt">${logCount}</span></button>
+      <button class="worklog-btn" data-worklog="${r.id}" title="작업이력 (${logCount}건)">${clipboardSvg()}<span class="cnt">${logCount}</span></button>
     </td>
     <td data-label="관리">
       <div style="display:flex; gap:6px;">
-        <button class="wl-action-btn" data-edit-asset="${r.id}">수정</button>
-        <button class="wl-action-btn danger" data-delete-asset="${r.id}">삭제</button>
+        <button class="wl-action-btn icon-only" data-edit-asset="${r.id}" title="수정">${pencilSvg()}</button>
+        <button class="wl-action-btn icon-only danger" data-delete-asset="${r.id}" title="삭제">${trashSvg()}</button>
       </div>
     </td>
   </tr>`;
