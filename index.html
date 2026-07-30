@@ -44,6 +44,8 @@
       <button class="icon-btn" id="expandAllBtn">전체 펼치기</button>
       <button class="icon-btn" id="addBtn">＋ 자산 추가</button>
       <button class="icon-btn" id="changePassBtn">🔑 비밀번호 변경</button>
+      <button class="icon-btn" id="githubConnectBtn">🐙 GitHub</button>
+      <button class="icon-btn" id="githubSaveBtn">☁️ GitHub에 저장</button>
       <button class="icon-btn" id="exportBtn">내보내기</button>
       <button class="icon-btn" id="importBtn">가져오기</button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
@@ -83,7 +85,7 @@
 
 <div id="addModal">
   <div class="modal-card">
-    <h2>새 자산 항목 추가</h2>
+    <h2 id="addModalTitle">새 자산 항목 추가</h2>
     <p class="hint">비밀번호/ID/IP는 잠금 해제된 상태에서만 암호화되어 저장됩니다. 저장 후 반드시 <b>내보내기</b>로 파일을 저장해야 유지됩니다.</p>
     <div class="form-grid">
       <div><label>법인 (OWNER)</label><input id="f_owner" placeholder="예: 삼성전자 ○○법인"></div>
@@ -125,6 +127,28 @@
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancelCpBtn">취소</button>
       <button class="btn btn-primary" id="saveCpBtn">비밀번호 변경</button>
+    </div>
+  </div>
+</div>
+
+<div id="githubModal">
+  <div class="modal-card">
+    <h2>GitHub 연동</h2>
+    <p class="hint">자산 데이터를 GitHub 저장소의 파일과 직접 연동합니다. 연결 후 <b>불러오기</b>로 저장소의 최신 데이터를 가져오고, <b>GitHub에 저장</b> 버튼으로 변경사항을 저장소에 커밋할 수 있습니다. Personal Access Token은 해당 저장소에 대한 <b>contents 쓰기 권한</b>이 있어야 합니다.</p>
+    <div class="form-grid">
+      <div class="full"><label>저장소 (owner/repo)</label><input id="gh_repo" placeholder="예: my-org/broadcom-assets"></div>
+      <div><label>브랜치</label><input id="gh_branch" placeholder="main"></div>
+      <div><label>파일 경로</label><input id="gh_path" placeholder="data.json"></div>
+      <div class="full"><label>Personal Access Token</label><input type="password" id="gh_token" autocomplete="off" placeholder="ghp_… (contents 쓰기 권한 필요)"></div>
+    </div>
+    <label style="display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12.5px; color:var(--text-dim); cursor:pointer;">
+      <input type="checkbox" id="gh_remember" style="width:auto;">
+      이 브라우저에 토큰 저장 (공용 PC에서는 사용하지 마세요)
+    </label>
+    <div id="githubError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelGithubBtn">취소</button>
+      <button class="btn btn-primary" id="githubConnectLoadBtn">연결 · 불러오기</button>
     </div>
   </div>
 </div>
