@@ -52,9 +52,26 @@ async function decryptField(field){
 
 async function encryptField(plain){
   if (!plain) return null;
+  return encryptWithKey(plain, sessionKey);
+}
+
+// Key-parametrized variants (used for master-password rotation, where we need
+// to decrypt with the OLD key and encrypt with the NEW key in the same pass,
+// independent of whatever is currently sitting in the global sessionKey).
+async function decryptWithKey(field, key){
+  const iv = b64ToBuf(field.iv);
+  const ct = new Uint8Array(b64ToBuf(field.ct));
+  const tag = new Uint8Array(b64ToBuf(field.tag));
+  const combined = new Uint8Array(ct.length + tag.length);
+  combined.set(ct,0); combined.set(tag, ct.length);
+  const plainBuf = await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, combined.buffer);
+  return new TextDecoder().decode(plainBuf);
+}
+async function encryptWithKey(plain, key){
+  if (!plain) return null;
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const enc = new TextEncoder().encode(plain);
-  const buf = await crypto.subtle.encrypt({name:'AES-GCM', iv}, sessionKey, enc);
+  const buf = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, enc);
   const full = new Uint8Array(buf);
   const ct = full.slice(0, full.length-16);
   const tag = full.slice(full.length-16);
@@ -104,7 +121,7 @@ document.getElementById('viewOnlyBtn').onclick = async () => {
   viewOnly = true; sessionKey = null; boot();
 };
 document.getElementById('howBtn').onclick = () => {
-  alert('마스터 비밀번호는 이 페이지를 만들 때 채팅으로 전달된 문자열입니다. 안전한 곳(비밀번호 관리자 등)에 보관하고, 필요하다면 "자산 추가" 후 내보내기 전에 별도 절차로 비밀번호를 교체하는 기능을 요청하세요.');
+  alert('마스터 비밀번호는 이 페이지를 만들 때 채팅으로 전달된 문자열입니다. 안전한 곳(비밀번호 관리자 등)에 보관하세요. 비밀번호를 바꾸고 싶다면, 잠금 해제 후 상단의 "🔑 비밀번호 변경" 버튼을 이용하세요.');
 };
 
 function boot(){
@@ -391,6 +408,84 @@ document.getElementById('saveAddBtn').onclick = async () => {
   document.getElementById('addModal').classList.remove('open');
   ['f_owner','f_location','f_support','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_tag','f_cust','f_remarks'].forEach(id=>document.getElementById(id).value='');
   render();
+};
+
+// ---------- change master password ----------
+document.getElementById('changePassBtn').onclick = () => {
+  if (viewOnly || !sessionKey){
+    alert('비밀번호를 변경하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.');
+    return;
+  }
+  document.getElementById('cp_old').value = '';
+  document.getElementById('cp_new').value = '';
+  document.getElementById('cp_new2').value = '';
+  document.getElementById('cpError').textContent = '';
+  document.getElementById('changePassModal').classList.add('open');
+};
+document.getElementById('cancelCpBtn').onclick = () => {
+  document.getElementById('changePassModal').classList.remove('open');
+};
+
+document.getElementById('saveCpBtn').onclick = async () => {
+  const errEl = document.getElementById('cpError');
+  const oldPass = document.getElementById('cp_old').value;
+  const newPass = document.getElementById('cp_new').value;
+  const newPass2 = document.getElementById('cp_new2').value;
+
+  if (!oldPass || !newPass || !newPass2){ errEl.textContent = '모든 항목을 입력해 주세요.'; return; }
+  if (newPass !== newPass2){ errEl.textContent = '새 비밀번호가 일치하지 않습니다.'; return; }
+  if (newPass.length < 8){ errEl.textContent = '새 비밀번호는 8자 이상으로 설정해 주세요.'; return; }
+  if (newPass === oldPass){ errEl.textContent = '현재 비밀번호와 다른 비밀번호를 입력해 주세요.'; return; }
+
+  errEl.textContent = '현재 비밀번호 확인 중…';
+
+  const oldKey = await deriveKey(oldPass, ENC_STORE.salt, ENC_STORE.iterations);
+  const probe = records.find(r => r.ip_enc || r.id_enc || r.pw_enc);
+  if (probe){
+    const f = probe.ip_enc || probe.id_enc || probe.pw_enc;
+    try{ await decryptWithKey(f, oldKey); }
+    catch(e){ errEl.textContent = '현재 비밀번호가 올바르지 않습니다.'; return; }
+  }
+
+  errEl.textContent = '민감정보 재암호화 중… (항목이 많으면 몇 초 걸릴 수 있습니다)';
+
+  // Decrypt every sensitive field with the OLD key first. If anything fails
+  // partway through, bail out without touching any data.
+  let plainMap;
+  try{
+    plainMap = [];
+    for (const rec of records){
+      plainMap.push({
+        ip: rec.ip_enc ? await decryptWithKey(rec.ip_enc, oldKey) : null,
+        id: rec.id_enc ? await decryptWithKey(rec.id_enc, oldKey) : null,
+        pw: rec.pw_enc ? await decryptWithKey(rec.pw_enc, oldKey) : null,
+      });
+    }
+  }catch(e){
+    errEl.textContent = '기존 데이터 복호화에 실패했습니다. 비밀번호가 변경되지 않았습니다.';
+    return;
+  }
+
+  // Derive a brand-new key (new salt) from the new password, then re-encrypt.
+  const newSalt = bufToB64(crypto.getRandomValues(new Uint8Array(16)).buffer);
+  const newIterations = ENC_STORE.iterations || 250000;
+  const newKey = await deriveKey(newPass, newSalt, newIterations);
+
+  for (let i = 0; i < records.length; i++){
+    const rec = records[i], p = plainMap[i];
+    rec.ip_enc = p.ip ? await encryptWithKey(p.ip, newKey) : null;
+    rec.id_enc = p.id ? await encryptWithKey(p.id, newKey) : null;
+    rec.pw_enc = p.pw ? await encryptWithKey(p.pw, newKey) : null;
+  }
+
+  ENC_STORE.salt = newSalt;
+  ENC_STORE.iterations = newIterations;
+  sessionKey = newKey;
+
+  document.getElementById('changePassModal').classList.remove('open');
+  errEl.textContent = '';
+  render();
+  alert('비밀번호가 변경되었습니다.\n\n지금 바로 "내보내기"를 눌러 새 백업 파일을 저장한 뒤, 서버의 data.json을 그 파일로 교체해 주세요.\n교체하지 않으면 예전 비밀번호로 암호화된 data.json이 그대로 남아, 다음에 열 때는 여전히 예전 비밀번호가 필요합니다.');
 };
 
 // ---------- export / import ----------
