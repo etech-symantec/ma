@@ -1,3 +1,25 @@
+// ---------- global header offset ----------
+// header.js (loaded from etech-symantec.github.io) injects .header-wrap as the
+// first child of <body> on DOMContentLoaded — after its own listener runs
+// (registered before this script in the page). We measure its real rendered
+// height (varies with title length / line-wrap / font load) and expose it as
+// --global-header-h so our own sticky topbar/sidebar sit right below it
+// instead of overlapping it at a hardcoded pixel value.
+function syncGlobalHeaderHeight(){
+  const hw = document.querySelector('.header-wrap');
+  const h = hw ? Math.ceil(hw.getBoundingClientRect().height) : 0;
+  document.documentElement.style.setProperty('--global-header-h', h + 'px');
+}
+document.addEventListener('DOMContentLoaded', () => {
+  syncGlobalHeaderHeight();
+  requestAnimationFrame(syncGlobalHeaderHeight); // after layout settles
+});
+window.addEventListener('load', syncGlobalHeaderHeight);      // after images/fonts finish loading
+window.addEventListener('resize', syncGlobalHeaderHeight);
+if (document.fonts && document.fonts.ready){
+  document.fonts.ready.then(syncGlobalHeaderHeight).catch(()=>{}); // web font swap can change header height
+}
+
 // ---------- data loading (external JSON / GitHub) ----------
 let ENC_STORE = null;
 let githubConfig = null;   // {repo, branch, path} - non-sensitive, persisted in localStorage (set below to hardcoded defaults)
