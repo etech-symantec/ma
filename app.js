@@ -5,10 +5,20 @@
 // height (varies with title length / line-wrap / font load) and expose it as
 // --global-header-h so our own sticky topbar/sidebar sit right below it
 // instead of overlapping it at a hardcoded pixel value.
+//
+// This measurement has to stay correct for as long as the page lives, not
+// just once at load: if header.js injects its markup late, swaps it out, or
+// its height changes after fonts/logos finish loading, a stale
+// --global-header-h makes our sticky topbar think the header is shorter (or
+// taller) than it really is — so on scroll it either overlaps the header or
+// leaves a gap instead of sitting flush underneath it. A MutationObserver +
+// ResizeObserver keep it correct continuously instead of a handful of
+// one-shot checks.
 function syncGlobalHeaderHeight(){
   const hw = document.querySelector('.header-wrap');
   const h = hw ? Math.ceil(hw.getBoundingClientRect().height) : 0;
   document.documentElement.style.setProperty('--global-header-h', h + 'px');
+  return hw;
 }
 document.addEventListener('DOMContentLoaded', () => {
   syncGlobalHeaderHeight();
@@ -18,6 +28,20 @@ window.addEventListener('load', syncGlobalHeaderHeight);      // after images/fo
 window.addEventListener('resize', syncGlobalHeaderHeight);
 if (document.fonts && document.fonts.ready){
   document.fonts.ready.then(syncGlobalHeaderHeight).catch(()=>{}); // web font swap can change header height
+}
+if (window.ResizeObserver){
+  let headerSizeObserver = null;
+  const watchHeaderSize = () => {
+    const hw = syncGlobalHeaderHeight();
+    if (hw && !headerSizeObserver){
+      headerSizeObserver = new ResizeObserver(syncGlobalHeaderHeight);
+      headerSizeObserver.observe(hw);
+    }
+  };
+  watchHeaderSize();
+  // Catch header.js injecting/replacing .header-wrap at any point, including
+  // after DOMContentLoaded/load already fired.
+  new MutationObserver(watchHeaderSize).observe(document.body, { childList:true, subtree:true });
 }
 
 // ---------- data loading (external JSON / GitHub) ----------
