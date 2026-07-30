@@ -247,12 +247,13 @@ td.remarks-cell{ max-width:230px; }
 }
 .empty-state h3{ font-family:var(--display); color:var(--text-dim); margin-bottom:6px; font-size:16px;}
 
-/* add form */
-#addModal{
+/* add form / modals */
+#addModal, #changePassModal{
   position:fixed; inset:0; z-index:90; background:rgba(6,9,17,0.7); backdrop-filter:blur(3px);
   display:none; align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto;
 }
-#addModal.open{ display:flex; }
+#addModal.open, #changePassModal.open{ display:flex; }
+.cp-error{ color:var(--red); font-size:12.5px; margin-top:14px; min-height:16px; }
 .modal-card{
   width:100%; max-width:640px; background:var(--surface); border:1px solid var(--border-solid);
   border-radius:14px; padding:26px; margin-bottom:40px;
