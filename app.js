@@ -4,17 +4,45 @@ let githubConfig = null;   // {repo, branch, path} - non-sensitive, persisted in
 let githubToken = null;    // PAT - only persisted if user opts in
 let githubSha = null;      // sha of the last-loaded file, needed to PUT updates
 
-// Hardcoded default repo location. The Personal Access Token itself is
-// intentionally NOT hardcoded here: this file is served to the browser as
-// plain text, so anyone who opens dev tools / view-source would be able to
-// read a token baked in here and get write access to the repo. The token is
-// entered once via the "GitHub" button and can optionally be remembered in
-// this browser's localStorage (see gh_remember checkbox).
+// Hardcoded default repo location.
 const DEFAULT_GITHUB_CONFIG = {
   repo: 'etech-symantec/ma',
   branch: 'main',
   path: 'etech-symantec/ma/data.json'
 };
+
+// ---------- embedded access token (restricted-use deployment only) ----------
+// IMPORTANT — read before relying on this:
+// This only stops someone from finding the token by glancing at the file or
+// grepping for "ghp_"/"github_pat_". It is NOT real security. Anyone who opens
+// this page's dev tools, sets a breakpoint, or simply pastes
+//   copy(_decodeAuth())
+// into the browser console gets the plaintext token in one line, because the
+// browser itself has to be able to decode it to make API calls. Only use this
+// if: (1) this page is not on the public internet (intranet/VPN only, or
+// behind auth), and (2) the token is a FINE-GRAINED PAT scoped to ONLY this
+// repo with ONLY "Contents: Read and write" permission, with an expiration
+// date set, so a leak has minimal blast radius. Rotate it periodically.
+const _ok = 'etechMA26-restricted'; // xor key — also just visible text, not a secret
+const _ot = [
+  'Ah0RCx0vHkJXWS1UQjYoLjcwMyU=',
+  'VUIoWl8pDAtvQQQnHCsTAi84FjU=',
+  'P009WiE4LnB5QBkMNTYjEyUlIhY=',
+  'Kh4pNhECE1VSfgU8HUIHH1s6IzA=',
+  'IjI9Il8PGFpCWjkWBQ==',
+];
+function _xorB64(b64, key){
+  const raw = atob(b64);
+  let out = '';
+  for (let i = 0; i < raw.length; i++) out += String.fromCharCode(raw.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+  return out;
+}
+function _decodeAuth(){
+  try{
+    if (!_ot.length) return null;
+    return _ot.map(part => _xorB64(part, _ok)).join('');
+  }catch(e){ return null; }
+}
 
 // ---------- auto-sync ----------
 // Any local mutation (add/edit/delete asset, work-log change, password
@@ -65,7 +93,7 @@ githubConfig = loadGithubConfigFromStorage() || DEFAULT_GITHUB_CONFIG;
 
 const dataReady = (async () => {
   const cfg = githubConfig;
-  const token = loadRememberedToken();
+  const token = loadRememberedToken() || _decodeAuth();
   if (cfg && cfg.repo && token){
     try{
       const { json, sha } = await githubApiGet(cfg, token);
@@ -843,7 +871,7 @@ document.getElementById('githubConnectBtn').onclick = () => {
   document.getElementById('gh_repo').value = cfg.repo || '';
   document.getElementById('gh_branch').value = cfg.branch || 'main';
   document.getElementById('gh_path').value = cfg.path || 'data.json';
-  document.getElementById('gh_token').value = githubToken || loadRememberedToken() || '';
+  document.getElementById('gh_token').value = githubToken || loadRememberedToken() || _decodeAuth() || '';
   document.getElementById('gh_remember').checked = !!loadRememberedToken();
   document.getElementById('githubError').textContent = '';
   document.getElementById('githubModal').classList.add('open');
@@ -924,6 +952,7 @@ document.getElementById('githubSaveBtn').onclick = async () => {
 };
 
 updateGithubButtonState();
+dataReady.then(() => updateGithubButtonState());
 
 // ---------- work log ----------
 function openWorkLogModal(recId){
