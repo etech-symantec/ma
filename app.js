@@ -1,24 +1,25 @@
 // ---------- global header offset ----------
-// header.js (loaded from etech-symantec.github.io) injects .header-wrap as the
-// first child of <body> on DOMContentLoaded — after its own listener runs
-// (registered before this script in the page). We measure its real rendered
-// height (varies with title length / line-wrap / font load) and expose it as
-// --global-header-h so our own sticky topbar/sidebar sit right below it
-// instead of overlapping it at a hardcoded pixel value.
+// header.js (loaded from etech-symantec.github.io) injects its markup at the
+// top of <body>, before our #lockOverlay/#app. We need to know its total
+// rendered height so our own sticky topbar/stats/sidebar sit right below it
+// instead of overlapping it.
 //
-// This measurement has to stay correct for as long as the page lives, not
-// just once at load: if header.js injects its markup late, swaps it out, or
-// its height changes after fonts/logos finish loading, a stale
-// --global-header-h makes our sticky topbar think the header is shorter (or
-// taller) than it really is — so on scroll it either overlaps the header or
-// leaves a gap instead of sitting flush underneath it. A MutationObserver +
-// ResizeObserver keep it correct continuously instead of a handful of
-// one-shot checks.
+// Earlier this measured `.header-wrap` directly via getBoundingClientRect().
+// That undercounts the real header height whenever header.js renders extra
+// content as a SIBLING outside that wrapper (e.g. a separate title/version
+// bar next to the nav pills) — the result is our topbar/stats end up
+// positioned too high and get visually clipped behind the (higher z-index)
+// header. Instead we measure #app's natural in-flow offset from the top of
+// <body> (offsetTop): that number is, by definition, the combined height of
+// everything rendered above it in normal flow, no matter how many separate
+// elements header.js uses or what it names them. (#lockOverlay is
+// position:fixed and doesn't affect this.)
 function syncGlobalHeaderHeight(){
-  const hw = document.querySelector('.header-wrap');
-  const h = hw ? Math.ceil(hw.getBoundingClientRect().height) : 0;
+  const appEl = document.getElementById('app');
+  if (!appEl) return null;
+  const h = Math.max(0, Math.round(appEl.offsetTop));
   document.documentElement.style.setProperty('--global-header-h', h + 'px');
-  return hw;
+  return appEl;
 }
 document.addEventListener('DOMContentLoaded', () => {
   syncGlobalHeaderHeight();
@@ -30,19 +31,14 @@ if (document.fonts && document.fonts.ready){
   document.fonts.ready.then(syncGlobalHeaderHeight).catch(()=>{}); // web font swap can change header height
 }
 if (window.ResizeObserver){
-  let headerSizeObserver = null;
-  const watchHeaderSize = () => {
-    const hw = syncGlobalHeaderHeight();
-    if (hw && !headerSizeObserver){
-      headerSizeObserver = new ResizeObserver(syncGlobalHeaderHeight);
-      headerSizeObserver.observe(hw);
-    }
-  };
-  watchHeaderSize();
-  // Catch header.js injecting/replacing .header-wrap at any point, including
-  // after DOMContentLoaded/load already fired.
-  new MutationObserver(watchHeaderSize).observe(document.body, { childList:true, subtree:true });
+  // Watching <body> itself catches any size change anywhere above #app
+  // (header.js content loading late, wrapping differently, swapping fonts,
+  // etc.) without needing to know its internal structure.
+  new ResizeObserver(syncGlobalHeaderHeight).observe(document.body);
 }
+// Catch header.js injecting/replacing/resizing its markup at any point,
+// including after DOMContentLoaded/load already fired.
+new MutationObserver(syncGlobalHeaderHeight).observe(document.body, { childList:true, subtree:true });
 
 // ---------- sticky offsets: topbar + stats strip ----------
 // The stats strip renders directly under the sticky topbar and should stay
@@ -410,7 +406,7 @@ function boot(){
   document.getElementById('lockState').textContent = viewOnly ? '👁 보기 전용 (민감정보 숨김)' : '🔓 잠금 해제됨 · 이 세션 동안만 유지';
   updateGithubButtonState();
   render();
-  requestAnimationFrame(syncStickyOffsets);
+  requestAnimationFrame(() => { syncGlobalHeaderHeight(); syncStickyOffsets(); });
 }
 
 // ---------- date / status ----------
