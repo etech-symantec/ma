@@ -64,18 +64,15 @@
     </div>
   </header>
 
-  <div class="am-stats">
-    <div class="stat"><div class="n" id="statTotal">0</div><div class="l">전체 자산 항목</div></div>
-    <div class="stat ok"><div class="n" id="statOk">0</div><div class="l">정상 (90일 초과)</div></div>
-    <div class="stat warn"><div class="n" id="statWarn">0</div><div class="l">90일 이내 만료</div></div>
-    <div class="stat crit"><div class="n" id="statExpired">0</div><div class="l">만료됨</div></div>
-  </div>
-
   <div class="layout">
     <aside class="filters">
       <div class="filter-group">
         <h4>라이선스 상태</h4>
         <div id="statusFilters"></div>
+      </div>
+      <div class="filter-group">
+        <h4>필터 가능한 태그</h4>
+        <div id="skuKeywordFilters"></div>
       </div>
       <div class="filter-group">
         <h4>국가 / 법인</h4>
@@ -84,10 +81,6 @@
       <div class="filter-group">
         <h4>장비 종류</h4>
         <div id="deviceTypeFilters"></div>
-      </div>
-      <div class="filter-group">
-        <h4>SKU 키워드</h4>
-        <div id="skuKeywordFilters"></div>
       </div>
     </aside>
 
