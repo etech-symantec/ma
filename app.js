@@ -40,20 +40,16 @@ if (window.ResizeObserver){
 // including after DOMContentLoaded/load already fired.
 new MutationObserver(syncGlobalHeaderHeight).observe(document.body, { childList:true, subtree:true });
 
-// ---------- sticky offsets: topbar + stats strip ----------
-// The stats strip renders directly under the sticky topbar and should stay
-// pinned there while scrolling too. Its offset depends on the topbar's
-// *actual* rendered height, which can vary (button wrapping, font metrics,
-// responsive layout) — so, exactly like the global header height above, we
-// measure it live instead of hardcoding a pixel guess that goes stale.
-// The sidebar filter panel then stacks on top of both.
+// ---------- sticky offsets: topbar ----------
+// The sidebar filter panel stacks directly below the sticky topbar. Its
+// offset depends on the topbar's *actual* rendered height, which can vary
+// (button wrapping, font metrics, responsive layout) — so, exactly like the
+// global header height above, we measure it live instead of hardcoding a
+// pixel guess that goes stale.
 function syncStickyOffsets(){
   const topbar = document.querySelector('.am-topbar');
-  const stats = document.querySelector('.am-stats');
   const topbarH = topbar ? Math.ceil(topbar.getBoundingClientRect().height) : 0;
-  const statsH = stats ? Math.ceil(stats.getBoundingClientRect().height) : 0;
   document.documentElement.style.setProperty('--topbar-h', topbarH + 'px');
-  document.documentElement.style.setProperty('--stats-h', statsH + 'px');
 }
 document.addEventListener('DOMContentLoaded', () => {
   syncStickyOffsets();
@@ -66,10 +62,8 @@ if (document.fonts && document.fonts.ready){
 }
 if (window.ResizeObserver){
   const stickyResizeObserver = new ResizeObserver(syncStickyOffsets);
-  ['.am-topbar', '.am-stats'].forEach(sel => {
-    const el = document.querySelector(sel);
-    if (el) stickyResizeObserver.observe(el); // also fires when #app flips from display:none to visible
-  });
+  const topbarEl = document.querySelector('.am-topbar');
+  if (topbarEl) stickyResizeObserver.observe(topbarEl); // also fires when #app flips from display:none to visible
 }
 
 // ---------- data loading (external JSON / GitHub) ----------
@@ -272,15 +266,31 @@ function skuBadge(sku){
 }
 
 // ---------- SKU keyword tags (filterable/searchable) ----------
-// A second, independent tagging layer: any of these keywords found inside
+// A second, independent tagging layer: any of these rules matched against
 // the SKU string gets its own small tag rendered below the main SKU badge,
-// and doubles as a sidebar filter + search term.
-const SKU_KEYWORDS = ['ASG','MC','RP','ISG','SG','PS','SSP','VA','ELK','CLD','BCWF','WSS'];
+// and doubles as a sidebar filter + search term. Each rule's displayed
+// "key" can differ from the text it matches (e.g. SKUs starting with
+// "IS-" are labeled "BCIS" rather than "IS").
+const SKU_TAG_RULES = [
+  { key:'BCIS', test: sku => sku.toUpperCase().startsWith('IS-') },
+  { key:'ASG',  test: sku => sku.toUpperCase().includes('ASG') },
+  { key:'MC',   test: sku => sku.toUpperCase().includes('MC') },
+  { key:'RP',   test: sku => sku.toUpperCase().includes('RP') },
+  { key:'ISG',  test: sku => sku.toUpperCase().includes('ISG') },
+  { key:'SG',   test: sku => sku.toUpperCase().includes('SG') },
+  { key:'PS',   test: sku => sku.toUpperCase().includes('PS') },
+  { key:'SSP',  test: sku => sku.toUpperCase().includes('SSP') },
+  { key:'VA',   test: sku => sku.toUpperCase().includes('VA') },
+  { key:'ELK',  test: sku => sku.toUpperCase().includes('ELK') },
+  { key:'CLD',  test: sku => sku.toUpperCase().includes('CLD') },
+  { key:'BCWF', test: sku => sku.toUpperCase().includes('BCWF') },
+  { key:'WSS',  test: sku => sku.toUpperCase().includes('WSS') },
+];
+const SKU_TAG_KEYS = SKU_TAG_RULES.map(r => r.key);
 
 function skuKeywordMatches(sku){
   if (!sku) return [];
-  const upper = sku.toUpperCase();
-  return SKU_KEYWORDS.filter(k => upper.includes(k));
+  return SKU_TAG_RULES.filter(r => r.test(sku)).map(r => r.key);
 }
 
 function skuKeywordTagsHtml(sku){
@@ -625,7 +635,6 @@ function render(){
     };
   });
 
-  updateStats();
   buildFilters();
 }
 
@@ -694,13 +703,6 @@ function rowHtml(r, groupSupportId){
   </tr>`;
 }
 
-function updateStats(){
-  document.getElementById('statTotal').textContent = records.length;
-  document.getElementById('statOk').textContent = records.filter(r=>licenseStatus(r)==='ok').length;
-  document.getElementById('statWarn').textContent = records.filter(r=>licenseStatus(r)==='warn').length;
-  document.getElementById('statExpired').textContent = records.filter(r=>licenseStatus(r)==='crit').length;
-}
-
 function buildFilters(){
   const statusBox = document.getElementById('statusFilters');
   const statuses = [['ok','정상'],['warn','만료임박'],['crit','만료됨'],['na','기간없음']];
@@ -753,7 +755,7 @@ function buildFilters(){
   });
 
   const kwBox = document.getElementById('skuKeywordFilters');
-  kwBox.innerHTML = SKU_KEYWORDS.map(k=>{
+  kwBox.innerHTML = SKU_TAG_KEYS.map(k=>{
     const cnt = records.filter(r=>skuKeywordMatches(r.sku).includes(k)).length;
     return `
     <div class="filter-item ${activeSkuKeywordFilters.has(k)?'active':''}" data-skukw="${esc(k)}">
