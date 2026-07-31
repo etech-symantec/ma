@@ -99,8 +99,7 @@ a{color:var(--accent);}
    이 페이지에서도 동일하게 재확인 고정 — 혹시 모를 다른 규칙에 덮이지 않도록 방어적으로 추가. */
 .header-wrap{ position:sticky !important; top:0 !important; z-index:1000 !important; }
 
-/* NOTE: intentionally namespaced as .am-topbar / .am-stats (not the generic
-   .topbar / .stats) — the shared portal stylesheet above almost certainly
+/* NOTE: intentionally namespaced as .am-topbar (not the generic .topbar) — the shared portal stylesheet above almost certainly
    defines its own rules for such common class names with !important (same
    as it does for .header-wrap), which was silently clobbering our sticky
    positioning regardless of what offset we computed in JS. !important here
@@ -156,30 +155,14 @@ a{color:var(--accent);}
 .sync-status.synced{ color:var(--green); }
 .sync-status.error{ color:var(--red); }
 
-/* stat strip */
-.am-stats{
-  position:sticky !important; top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px)) !important; z-index:35 !important;
-  display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
-  background:var(--border-solid);
-  border-bottom:1px solid var(--border-solid);
-}
-.stat{
-  background:var(--surface); padding:16px 26px;
-}
-.stat .n{ font-family:var(--display); font-size:26px; font-weight:600; letter-spacing:-0.02em; }
-.stat .l{ font-size:11.5px; color:var(--text-faint); margin-top:2px; font-family:var(--mono); letter-spacing:.02em; text-transform:uppercase;}
-.stat.warn .n{ color:var(--amber); }
-.stat.crit .n{ color:var(--red); }
-.stat.ok .n{ color:var(--green); }
-
 .layout{ display:flex; align-items:flex-start; }
 
 /* sidebar */
 aside.filters{
   width:250px; flex-shrink:0;
   padding:22px 16px 60px;
-  position:sticky !important; top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px) + var(--stats-h, 0px)) !important;
-  max-height:calc(100vh - var(--global-header-h, 0px) - var(--topbar-h, 0px) - var(--stats-h, 0px)); overflow-y:auto;
+  position:sticky !important; top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px)) !important;
+  max-height:calc(100vh - var(--global-header-h, 0px) - var(--topbar-h, 0px)); overflow-y:auto;
 }
 .filter-group{ margin-bottom:22px; }
 .filter-group h4{
@@ -407,7 +390,6 @@ footer.foot{
 
 @media (max-width: 880px){
   aside.filters{ display:none; }
-  .am-stats{ grid-template-columns:repeat(2,1fr); }
   table, thead, tbody, tr, td{ display:block; }
   thead{ display:none; }
   tbody tr{ padding:12px; border-bottom:1px solid var(--border-solid); }
