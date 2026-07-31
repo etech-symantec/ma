@@ -48,8 +48,8 @@ new MutationObserver(syncGlobalHeaderHeight).observe(document.body, { childList:
 // measure it live instead of hardcoding a pixel guess that goes stale.
 // The sidebar filter panel then stacks on top of both.
 function syncStickyOffsets(){
-  const topbar = document.querySelector('.topbar');
-  const stats = document.querySelector('.stats');
+  const topbar = document.querySelector('.am-topbar');
+  const stats = document.querySelector('.am-stats');
   const topbarH = topbar ? Math.ceil(topbar.getBoundingClientRect().height) : 0;
   const statsH = stats ? Math.ceil(stats.getBoundingClientRect().height) : 0;
   document.documentElement.style.setProperty('--topbar-h', topbarH + 'px');
@@ -66,7 +66,7 @@ if (document.fonts && document.fonts.ready){
 }
 if (window.ResizeObserver){
   const stickyResizeObserver = new ResizeObserver(syncStickyOffsets);
-  ['.topbar', '.stats'].forEach(sel => {
+  ['.am-topbar', '.am-stats'].forEach(sel => {
     const el = document.querySelector(sel);
     if (el) stickyResizeObserver.observe(el); // also fires when #app flips from display:none to visible
   });
