@@ -1269,10 +1269,6 @@ function openWorkLogModal(recId){
 // a work-log entry. `sensitive` fields are encrypted and their value is
 // never persisted on the log entry itself (see applyFieldChanges below).
 const WL_FIELD_DEFS = [
-  { field:'device_type', label:'장비 종류', type:'text' },
-  { field:'sku',         label:'SKU / 제품', type:'text' },
-  { field:'sn',          label:'S/N', type:'text' },
-  { field:'qty',         label:'수량', type:'text' },
   { field:'start',       label:'라이선스 시작일', type:'text' },
   { field:'end',         label:'라이선스 종료일', type:'text' },
   { field:'os_ver',      label:'OS 버전', type:'text' },
