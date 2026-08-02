@@ -442,6 +442,22 @@ function licenseBarPct(rec){
   const pct = ((now-start)/(end-start))*100;
   return Math.max(0, Math.min(100, pct));
 }
+// 오늘(자정 기준)로부터 라이선스 종료일까지 남은 일수. 종료일이 없으면 null.
+function daysUntilEnd(rec){
+  const end = parseDate(rec.end);
+  if (!end) return null;
+  const now = new Date();
+  const endMid = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+  const nowMid = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((endMid - nowMid) / 86400000);
+}
+function daysLabel(rec){
+  const d = daysUntilEnd(rec);
+  if (d === null) return '';
+  if (d > 0) return `D-${d}`;
+  if (d === 0) return 'D-day';
+  return `D+${Math.abs(d)}`;
+}
 
 // ---------- rendering ----------
 function esc(s){
@@ -622,12 +638,6 @@ function render(){
       openWorkLogModal(btn.dataset.worklog);
     };
   });
-  document.querySelectorAll('[data-edit-asset]').forEach(btn=>{
-    btn.onclick = async (e) => {
-      e.stopPropagation();
-      await openEditAssetModal(btn.dataset.editAsset);
-    };
-  });
   document.querySelectorAll('[data-delete-asset]').forEach(btn=>{
     btn.onclick = (e) => {
       e.stopPropagation();
@@ -683,7 +693,7 @@ function rowHtml(r, groupSupportId){
       <div class="lic-bar-wrap">
         <div class="lic-dates">${esc(r.start)||'-'} → ${esc(r.end)||'-'}</div>
         <div class="lic-bar"><i style="width:${pct}%; background:${statusColorVar(status)}"></i></div>
-        <div class="lic-status ${status}">${statusLabel(status)}</div>
+        <div class="lic-status ${status}">${statusLabel(status)}${daysLabel(r)?` · ${daysLabel(r)}`:''}</div>
       </div>
     </td>
     <td data-label="IP">${maskedField(r,'ip')}</td>
@@ -696,7 +706,6 @@ function rowHtml(r, groupSupportId){
     </td>
     <td data-label="관리">
       <div style="display:flex; gap:6px;">
-        <button class="wl-action-btn icon-only" data-edit-asset="${r.id}" title="수정">${pencilSvg()}</button>
         <button class="wl-action-btn icon-only danger" data-delete-asset="${r.id}" title="삭제">${trashSvg()}</button>
       </div>
     </td>
@@ -798,35 +807,6 @@ document.getElementById('cancelAddBtn').onclick = () => {
   editingRecordId = null;
 };
 
-async function openEditAssetModal(recId){
-  if (viewOnly || !sessionKey){ alert('자산을 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-  const rec = records.find(r=>String(r.id)===String(recId));
-  if (!rec) return;
-  editingRecordId = rec.id;
-  const set = (id,val) => document.getElementById(id).value = val || '';
-  set('f_owner', rec.owner==='(신규 항목)'?'':rec.owner);
-  set('f_location', rec.location);
-  set('f_support', rec.support_id);
-  set('f_device_type', rec.device_type);
-  set('f_sku', rec.sku);
-  set('f_sn', rec.sn);
-  set('f_qty', rec.qty);
-  set('f_start', rec.start);
-  set('f_end', rec.end);
-  set('f_os', rec.os_ver);
-  set('f_check', rec.check_method);
-  set('f_ip', rec.ip_enc ? await decryptField(rec.ip_enc) : '');
-  set('f_id', rec.id_enc ? await decryptField(rec.id_enc) : '');
-  set('f_pw', rec.pw_enc ? await decryptField(rec.pw_enc) : '');
-  set('f_owner_primary', rec.owner_primary);
-  set('f_owner_secondary', rec.owner_secondary);
-  set('f_cust', rec.cust_contact);
-  set('f_remarks', rec.remarks);
-  document.getElementById('addModalTitle').textContent = '자산 항목 수정';
-  document.getElementById('saveAddBtn').textContent = '변경사항 저장';
-  document.getElementById('addModal').classList.add('open');
-}
-
 function deleteAsset(recId){
   const rec = records.find(r=>String(r.id)===String(recId));
   if (!rec) return;
@@ -837,47 +817,23 @@ function deleteAsset(recId){
 }
 
 document.getElementById('saveAddBtn').onclick = async () => {
-  if (viewOnly || !sessionKey){ alert('자산을 추가/수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  if (viewOnly || !sessionKey){ alert('자산을 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
   const val = id => document.getElementById(id).value.trim();
 
-  if (editingRecordId){
-    const rec = records.find(r=>String(r.id)===String(editingRecordId));
-    if (!rec){ editingRecordId = null; document.getElementById('addModal').classList.remove('open'); return; }
-    rec.owner = val('f_owner')||'(신규 항목)';
-    rec.location = val('f_location');
-    rec.support_id = val('f_support');
-    rec.device_type = val('f_device_type');
-    rec.sku = val('f_sku');
-    rec.sn = val('f_sn');
-    rec.qty = val('f_qty');
-    rec.start = val('f_start');
-    rec.end = val('f_end');
-    rec.os_ver = val('f_os');
-    rec.check_method = val('f_check');
-    rec.owner_primary = val('f_owner_primary');
-    rec.owner_secondary = val('f_owner_secondary');
-    rec.cust_contact = val('f_cust');
-    rec.remarks = val('f_remarks');
-    rec.ip_enc = await encryptField(val('f_ip'));
-    rec.id_enc = await encryptField(val('f_id'));
-    rec.pw_enc = await encryptField(val('f_pw'));
-    editingRecordId = null;
-  } else {
-    const newId = Math.max(0,...records.map(r=>r.id)) + 1;
-    const gid = 'custom-' + newId;
-    const rec = {
-      id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', location:val('f_location'),
-      support_id:val('f_support'), device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
-      start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
-      mode:'', os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
-      cust_contact:val('f_cust'), cust_phone:'', cust_email:'', work_log:[],
-      ip_enc: await encryptField(val('f_ip')),
-      id_enc: await encryptField(val('f_id')),
-      pw_enc: await encryptField(val('f_pw')),
-    };
-    records.push(rec);
-    expandedGroups.add(gid);
-  }
+  const newId = Math.max(0,...records.map(r=>r.id)) + 1;
+  const gid = 'custom-' + newId;
+  const rec = {
+    id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', location:val('f_location'),
+    support_id:val('f_support'), device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
+    start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
+    mode:'', os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
+    cust_contact:val('f_cust'), cust_phone:'', cust_email:'', work_log:[],
+    ip_enc: await encryptField(val('f_ip')),
+    id_enc: await encryptField(val('f_id')),
+    pw_enc: await encryptField(val('f_pw')),
+  };
+  records.push(rec);
+  expandedGroups.add(gid);
 
   document.getElementById('addModal').classList.remove('open');
   clearAssetForm();
@@ -1296,10 +1252,53 @@ function openWorkLogModal(recId){
   document.getElementById('wl_date').value = '';
   document.getElementById('wl_manager').value = '';
   document.getElementById('wl_note').value = '';
+  resetFieldChangeInputs();
   workLogEditId = null;
   setWorkLogFormMode(false);
   renderWorkLogList();
   document.getElementById('workLogModal').classList.add('open');
+}
+
+// ---------- work log: "apply changes to asset" section ----------
+const WL_FIELD_MAP = [
+  { input:'wl_new_start', field:'start', label:'라이선스 시작일' },
+  { input:'wl_new_end',   field:'end',   label:'라이선스 종료일' },
+  { input:'wl_new_os',    field:'os_ver', label:'OS 버전' },
+  { input:'wl_new_check', field:'check_method', label:'점검 방식' },
+];
+
+function resetFieldChangeInputs(){
+  document.getElementById('wl_apply_toggle').checked = false;
+  document.getElementById('wl_fieldchange_grid').style.display = 'none';
+  WL_FIELD_MAP.forEach(f => document.getElementById(f.input).value = '');
+}
+
+document.getElementById('wl_apply_toggle').addEventListener('change', (e) => {
+  document.getElementById('wl_fieldchange_grid').style.display = e.target.checked ? '' : 'none';
+});
+
+// Reads the optional "apply to asset" fields and, for any that were filled
+// in, applies them to the record and returns a small { field, label, from, to }
+// list describing what changed (used both to mutate the record and to leave
+// a readable trail on the work-log entry itself).
+function applyFieldChanges(rec){
+  const changes = [];
+  const fieldChanges = {};
+  WL_FIELD_MAP.forEach(f => {
+    const val = document.getElementById(f.input).value.trim();
+    if (!val) return;
+    const from = rec[f.field] || '—';
+    if (val === rec[f.field]) return;
+    changes.push({ field:f.field, label:f.label, from, to:val });
+    fieldChanges[f.field] = val;
+    rec[f.field] = val;
+  });
+  return { changes, fieldChanges };
+}
+
+function fieldChangesSummary(changes){
+  if (!changes || !changes.length) return '';
+  return changes.map(c => `${c.label}: ${c.from} → ${c.to}`).join(' · ');
 }
 
 function fmtDateDots(nativeVal){
@@ -1343,6 +1342,7 @@ function renderWorkLogList(){
       <div class="wl-body">
         <div class="wl-meta">${esc(entry.date)||'날짜 미기재'} · ${esc(entry.manager)||'담당자 미기재'}</div>
         <div class="wl-note">${esc(entry.note)||'—'}</div>
+        ${entry.change_summary ? `<div class="wl-changes">🔧 자산 정보 반영: ${esc(entry.change_summary)}</div>` : ''}
       </div>
       <div class="wl-actions">
         <button class="wl-action-btn" data-wl-edit="${entry.id}">수정</button>
@@ -1360,6 +1360,14 @@ function renderWorkLogList(){
       document.getElementById('wl_date').value = entry.date;
       document.getElementById('wl_manager').value = entry.manager;
       document.getElementById('wl_note').value = entry.note;
+      resetFieldChangeInputs();
+      if (entry.field_changes && Object.keys(entry.field_changes).length){
+        document.getElementById('wl_apply_toggle').checked = true;
+        document.getElementById('wl_fieldchange_grid').style.display = '';
+        WL_FIELD_MAP.forEach(f => {
+          if (entry.field_changes[f.field] !== undefined) document.getElementById(f.input).value = entry.field_changes[f.field];
+        });
+      }
       setWorkLogFormMode(true);
     };
   });
@@ -1392,17 +1400,36 @@ document.getElementById('wlAddBtn').onclick = () => {
   if (!date && !manager && !note){ alert('날짜, 담당자, 내용 중 하나 이상을 입력해 주세요.'); return; }
   if (!Array.isArray(rec.work_log)) rec.work_log = [];
 
+  const applyToggled = document.getElementById('wl_apply_toggle').checked;
+  let changeSummary = '', fieldChanges = {};
+  if (applyToggled){
+    const result = applyFieldChanges(rec);
+    if (!result.changes.length){
+      alert('자산 정보 변경을 선택했지만, 기존 값과 다른 내용이 입력되지 않았습니다.');
+      return;
+    }
+    changeSummary = fieldChangesSummary(result.changes);
+    fieldChanges = result.fieldChanges;
+  }
+
   if (workLogEditId){
     const entry = rec.work_log.find(e=>String(e.id)===String(workLogEditId));
-    if (entry){ entry.type=type; entry.date=date; entry.manager=manager; entry.note=note; }
+    if (entry){
+      entry.type=type; entry.date=date; entry.manager=manager; entry.note=note;
+      if (applyToggled){ entry.field_changes = fieldChanges; entry.change_summary = changeSummary; }
+      else { delete entry.field_changes; delete entry.change_summary; }
+    }
     workLogEditId = null;
     setWorkLogFormMode(false);
   } else {
-    rec.work_log.push({ id: Date.now(), type, date, manager, note });
+    const entry = { id: Date.now(), type, date, manager, note };
+    if (applyToggled){ entry.field_changes = fieldChanges; entry.change_summary = changeSummary; }
+    rec.work_log.push(entry);
   }
   document.getElementById('wl_date').value = '';
   document.getElementById('wl_manager').value = '';
   document.getElementById('wl_note').value = '';
+  resetFieldChangeInputs();
   renderWorkLogList();
   render();
   scheduleAutoSync();
@@ -1413,6 +1440,7 @@ document.getElementById('wlCancelEditBtn').onclick = () => {
   document.getElementById('wl_date').value = '';
   document.getElementById('wl_manager').value = '';
   document.getElementById('wl_note').value = '';
+  resetFieldChangeInputs();
   setWorkLogFormMode(false);
 };
 
