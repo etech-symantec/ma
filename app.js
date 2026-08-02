@@ -490,6 +490,7 @@ function groupMeta(items){
     owner: head.owner || '(법인명 미확인)',
     location: items.map(i=>i.location).find(Boolean) || '',
     support_id: items.map(i=>i.support_id).find(Boolean) || '',
+    check_method: items.map(i=>i.check_method).find(Boolean) || '',
     owner_primary: items.map(i=>i.owner_primary).find(Boolean) || '',
     owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
     cust_contacts: getGroupCustContacts(items),
@@ -529,7 +530,7 @@ function render(){
     }
     if (q){
       const custBits = (r.cust_contacts||[]).flatMap(c=>[c.name,c.phone,c.email]);
-      const hay = [r.owner,r.location,r.sku,r.sn,r.support_id,r.owner_primary,r.owner_secondary,r.cust_contact,...custBits,deviceTypeLabel(r),r.remarks,r.group_remarks,skuKeywordMatches(r.sku).join(' ')].join(' ').toLowerCase();
+      const hay = [r.owner,r.location,r.sku,r.sn,r.support_id,r.check_method,r.owner_primary,r.owner_secondary,r.cust_contact,...custBits,deviceTypeLabel(r),r.remarks,r.group_remarks,skuKeywordMatches(r.sku).join(' ')].join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -560,6 +561,7 @@ function render(){
                 <div class="sub title-meta">
                   <span>${esc(meta.location)||'위치 미입력'}</span>
                   <span><b>Support ID</b> ${esc(meta.support_id)||'—'}</span>
+                  <span><b>점검 방식</b> ${esc(meta.check_method)||'—'}</span>
                   <span><b>항목</b> ${items.length}건</span>
                 </div>
               </div>
@@ -579,7 +581,7 @@ function render(){
           <table>
             <thead><tr>
               <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
-              <th>IP</th><th>ID</th><th>PW</th><th>OS / 점검</th><th>비고</th><th>작업이력</th><th>관리</th>
+              <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
             </tr></thead>
             <tbody>
               ${items.map(r=>rowHtml(r, meta.support_id)).join('')}
@@ -699,7 +701,7 @@ function rowHtml(r, groupSupportId){
     <td data-label="IP">${maskedField(r,'ip')}</td>
     <td data-label="ID">${maskedField(r,'id')}</td>
     <td data-label="PW">${maskedField(r,'pw')}</td>
-    <td data-label="OS / 점검">${esc(r.os_ver)||'—'}${r.check_method? `<div style="color:var(--text-faint); font-size:11px; margin-top:2px;">${esc(r.check_method)}</div>`:''}</td>
+    <td data-label="OS 버전">${esc(r.os_ver)||'—'}</td>
     <td class="remarks-cell" data-label="비고"><div class="remarks-txt">${esc(r.remarks)||'—'}</div></td>
     <td data-label="작업이력">
       <button class="worklog-btn" data-worklog="${r.id}" title="작업이력 (${logCount}건)">${clipboardSvg()}<span class="cnt">${logCount}</span></button>
@@ -894,6 +896,7 @@ function openGroupEditModal(gid){
   document.getElementById('ge_owner').value = meta.owner==='(법인명 미확인)' ? '' : meta.owner;
   document.getElementById('ge_location').value = meta.location || '';
   document.getElementById('ge_support').value = meta.support_id || '';
+  document.getElementById('ge_check').value = meta.check_method || '';
   document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
   document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
@@ -918,6 +921,7 @@ document.getElementById('saveGeBtn').onclick = () => {
   if (!newOwner){ document.getElementById('geError').textContent = '법인명을 입력해 주세요.'; return; }
   const newLocation = val('ge_location');
   const newSupport = val('ge_support');
+  const newCheck = val('ge_check');
   const newPrimary = val('ge_owner_primary');
   const newSecondary = val('ge_owner_secondary');
   const newRemarks = val('ge_remarks');
@@ -928,6 +932,7 @@ document.getElementById('saveGeBtn').onclick = () => {
       r.owner = newOwner;
       r.location = newLocation;
       r.support_id = newSupport;
+      r.check_method = newCheck;
       r.owner_primary = newPrimary;
       r.owner_secondary = newSecondary;
       r.group_remarks = newRemarks;
@@ -1260,17 +1265,31 @@ function openWorkLogModal(recId){
 }
 
 // ---------- work log: "apply changes to asset" section ----------
+// Plain fields: old/new values are stored and shown as-is in the change trail.
 const WL_FIELD_MAP = [
-  { input:'wl_new_start', field:'start', label:'라이선스 시작일' },
-  { input:'wl_new_end',   field:'end',   label:'라이선스 종료일' },
-  { input:'wl_new_os',    field:'os_ver', label:'OS 버전' },
-  { input:'wl_new_check', field:'check_method', label:'점검 방식' },
+  { input:'wl_new_device_type', field:'device_type', label:'장비 종류' },
+  { input:'wl_new_sku',         field:'sku',          label:'SKU / 제품' },
+  { input:'wl_new_sn',          field:'sn',           label:'S/N' },
+  { input:'wl_new_qty',         field:'qty',          label:'수량' },
+  { input:'wl_new_start',       field:'start',        label:'라이선스 시작일' },
+  { input:'wl_new_end',         field:'end',          label:'라이선스 종료일' },
+  { input:'wl_new_os',          field:'os_ver',        label:'OS 버전' },
+  { input:'wl_new_remarks',     field:'remarks',      label:'비고' },
 ];
+// Sensitive/encrypted fields: never persist the plaintext value on the work-log
+// entry itself — only note that the field changed, to keep the masking model
+// (IP/ID/PW only ever visible via the 👁 toggle after unlocking) intact.
+const WL_SENSITIVE_MAP = [
+  { input:'wl_new_ip', field:'ip', encField:'ip_enc', label:'IP 주소' },
+  { input:'wl_new_id', field:'id', encField:'id_enc', label:'계정 ID' },
+  { input:'wl_new_pw', field:'pw', encField:'pw_enc', label:'비밀번호' },
+];
+const WL_ALL_INPUTS = [...WL_FIELD_MAP, ...WL_SENSITIVE_MAP];
 
 function resetFieldChangeInputs(){
   document.getElementById('wl_apply_toggle').checked = false;
   document.getElementById('wl_fieldchange_grid').style.display = 'none';
-  WL_FIELD_MAP.forEach(f => document.getElementById(f.input).value = '');
+  WL_ALL_INPUTS.forEach(f => document.getElementById(f.input).value = '');
 }
 
 document.getElementById('wl_apply_toggle').addEventListener('change', (e) => {
@@ -1278,10 +1297,11 @@ document.getElementById('wl_apply_toggle').addEventListener('change', (e) => {
 });
 
 // Reads the optional "apply to asset" fields and, for any that were filled
-// in, applies them to the record and returns a small { field, label, from, to }
-// list describing what changed (used both to mutate the record and to leave
-// a readable trail on the work-log entry itself).
-function applyFieldChanges(rec){
+// in, applies them to the record and returns a { changes, fieldChanges } pair:
+// - changes: readable list used to build the work-log change summary
+// - fieldChanges: what gets stored on the entry itself for later re-editing
+//   (plaintext for normal fields, just `true` for sensitive ones)
+async function applyFieldChanges(rec){
   const changes = [];
   const fieldChanges = {};
   WL_FIELD_MAP.forEach(f => {
@@ -1293,12 +1313,19 @@ function applyFieldChanges(rec){
     fieldChanges[f.field] = val;
     rec[f.field] = val;
   });
+  for (const f of WL_SENSITIVE_MAP){
+    const val = document.getElementById(f.input).value.trim();
+    if (!val) continue;
+    changes.push({ field:f.field, label:f.label, sensitive:true });
+    fieldChanges[f.field] = true;
+    rec[f.encField] = await encryptField(val);
+  }
   return { changes, fieldChanges };
 }
 
 function fieldChangesSummary(changes){
   if (!changes || !changes.length) return '';
-  return changes.map(c => `${c.label}: ${c.from} → ${c.to}`).join(' · ');
+  return changes.map(c => c.sensitive ? `${c.label} 변경됨` : `${c.label}: ${c.from} → ${c.to}`).join(' · ');
 }
 
 function fmtDateDots(nativeVal){
@@ -1390,7 +1417,7 @@ function renderWorkLogList(){
   });
 }
 
-document.getElementById('wlAddBtn').onclick = () => {
+document.getElementById('wlAddBtn').onclick = async () => {
   const rec = records.find(r=>String(r.id)===workLogRecordId);
   if (!rec) return;
   const type = document.getElementById('wl_type').value;
@@ -1403,7 +1430,12 @@ document.getElementById('wlAddBtn').onclick = () => {
   const applyToggled = document.getElementById('wl_apply_toggle').checked;
   let changeSummary = '', fieldChanges = {};
   if (applyToggled){
-    const result = applyFieldChanges(rec);
+    const sensitiveTouched = WL_SENSITIVE_MAP.some(f => document.getElementById(f.input).value.trim());
+    if (sensitiveTouched && (viewOnly || !sessionKey)){
+      alert('IP / 계정 ID / 비밀번호를 변경하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.');
+      return;
+    }
+    const result = await applyFieldChanges(rec);
     if (!result.changes.length){
       alert('자산 정보 변경을 선택했지만, 기존 값과 다른 내용이 입력되지 않았습니다.');
       return;
