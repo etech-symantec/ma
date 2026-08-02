@@ -143,11 +143,12 @@
 <div id="groupEditModal">
   <div class="modal-card">
     <h2>법인 정보 수정</h2>
-    <p class="hint">법인명 / 위치 / Support ID / 담당자 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다.</p>
+    <p class="hint">법인명 / 위치 / Support ID / 점검 방식 / 담당자 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다.</p>
     <div class="form-grid">
       <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
       <div><label>국가/위치 (LOCATION)</label><input id="ge_location" placeholder="예: 베트남"></div>
       <div><label>Support ID</label><input id="ge_support"></div>
+      <div><label>점검 방식</label><input id="ge_check" placeholder="원격 (RC)"></div>
       <div>
         <label>고객사 담당자 (최대 3명)</label>
         <div id="ge_cust_list" class="cust-contact-list"></div>
@@ -192,7 +193,7 @@
   <div class="modal-card">
     <h2>작업 이력</h2>
     <p class="hint" id="wlSubtitle">비고와 별도로, 이 장비에 대한 구축/제거/교체/OS 변경/PM 이력을 남길 수 있습니다.</p>
-    <p class="hint" style="margin-top:-14px;">등록된 자산 항목의 라이선스 기간 / OS 버전 / 점검 방식은 직접 수정할 수 없으며, 아래처럼 작업 이력을 남기면서만 변경할 수 있습니다. 변경 이력이 그대로 남으므로 누가 언제 무엇을 바꿨는지 추적할 수 있습니다.</p>
+    <p class="hint" style="margin-top:-14px;">등록된 자산 항목의 세부 정보(장비 종류/SKU/S·N/수량/라이선스 기간/OS 버전/IP/계정ID/비밀번호/비고)는 직접 수정할 수 없으며, 아래처럼 작업 이력을 남기면서만 변경할 수 있습니다. 변경 이력이 그대로 남으므로 누가 언제 무엇을 바꿨는지 추적할 수 있습니다. (점검 방식은 법인 단위 정보라 "법인 정보 수정"에서 변경합니다.)</p>
 
     <div class="form-grid">
       <div><label>작업 구분</label>
@@ -219,14 +220,22 @@
 
     <label class="wl-fieldchange-toggle">
       <input type="checkbox" id="wl_apply_toggle">
-      이 이력에 맞춰 자산 정보도 함께 변경 (라이선스 기간 / OS 버전 / 점검 방식)
+      이 이력에 맞춰 자산 정보도 함께 변경
     </label>
     <div class="form-grid" id="wl_fieldchange_grid" style="display:none;">
+      <div><label>새 장비 종류</label><input id="wl_new_device_type" placeholder="예: 방화벽, 스위치, 스토리지…"></div>
+      <div><label>새 SKU / 제품</label><input id="wl_new_sku"></div>
+      <div><label>새 S/N</label><input id="wl_new_sn"></div>
+      <div><label>새 수량</label><input id="wl_new_qty"></div>
       <div><label>새 라이선스 시작일</label><input id="wl_new_start" placeholder="2026.11.1"></div>
       <div><label>새 라이선스 종료일</label><input id="wl_new_end" placeholder="2027.10.31"></div>
-      <div><label>새 OS 버전</label><input id="wl_new_os" placeholder=""></div>
-      <div><label>새 점검 방식</label><input id="wl_new_check" placeholder="원격 (RC)"></div>
+      <div><label>새 OS 버전</label><input id="wl_new_os"></div>
+      <div><label>새 IP 주소</label><input id="wl_new_ip"></div>
+      <div><label>새 계정 ID</label><input id="wl_new_id"></div>
+      <div><label>새 비밀번호</label><input id="wl_new_pw"></div>
+      <div class="full"><label>새 비고</label><textarea id="wl_new_remarks"></textarea></div>
     </div>
+    <p class="hint" id="wlSensitiveHint" style="margin-top:10px; margin-bottom:0;">IP / 계정 ID / 비밀번호는 보안을 위해 변경된 실제 값이 이력에 표시되지 않고, "변경됨"으로만 기록됩니다. 실제 값은 자산 목록에서 잠금 해제 후 👁 로 확인하세요.</p>
 
     <div class="modal-actions">
       <button class="btn btn-ghost" id="wlCancelEditBtn" style="flex:none; display:none;">수정 취소</button>
