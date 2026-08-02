@@ -1265,60 +1265,111 @@ function openWorkLogModal(recId){
 }
 
 // ---------- work log: "apply changes to asset" section ----------
-// Plain fields: old/new values are stored and shown as-is in the change trail.
-const WL_FIELD_MAP = [
-  { input:'wl_new_device_type', field:'device_type', label:'장비 종류' },
-  { input:'wl_new_sku',         field:'sku',          label:'SKU / 제품' },
-  { input:'wl_new_sn',          field:'sn',           label:'S/N' },
-  { input:'wl_new_qty',         field:'qty',          label:'수량' },
-  { input:'wl_new_start',       field:'start',        label:'라이선스 시작일' },
-  { input:'wl_new_end',         field:'end',          label:'라이선스 종료일' },
-  { input:'wl_new_os',          field:'os_ver',        label:'OS 버전' },
-  { input:'wl_new_remarks',     field:'remarks',      label:'비고' },
+// Field metadata for every per-item asset attribute that can be changed via
+// a work-log entry. `sensitive` fields are encrypted and their value is
+// never persisted on the log entry itself (see applyFieldChanges below).
+const WL_FIELD_DEFS = [
+  { field:'device_type', label:'장비 종류', type:'text' },
+  { field:'sku',         label:'SKU / 제품', type:'text' },
+  { field:'sn',          label:'S/N', type:'text' },
+  { field:'qty',         label:'수량', type:'text' },
+  { field:'start',       label:'라이선스 시작일', type:'text' },
+  { field:'end',         label:'라이선스 종료일', type:'text' },
+  { field:'os_ver',      label:'OS 버전', type:'text' },
+  { field:'remarks',     label:'비고', type:'textarea' },
+  { field:'ip',  label:'IP 주소', type:'text', sensitive:true, encField:'ip_enc' },
+  { field:'id',  label:'계정 ID', type:'text', sensitive:true, encField:'id_enc' },
+  { field:'pw',  label:'비밀번호', type:'text', sensitive:true, encField:'pw_enc' },
 ];
-// Sensitive/encrypted fields: never persist the plaintext value on the work-log
-// entry itself — only note that the field changed, to keep the masking model
-// (IP/ID/PW only ever visible via the 👁 toggle after unlocking) intact.
-const WL_SENSITIVE_MAP = [
-  { input:'wl_new_ip', field:'ip', encField:'ip_enc', label:'IP 주소' },
-  { input:'wl_new_id', field:'id', encField:'id_enc', label:'계정 ID' },
-  { input:'wl_new_pw', field:'pw', encField:'pw_enc', label:'비밀번호' },
-];
-const WL_ALL_INPUTS = [...WL_FIELD_MAP, ...WL_SENSITIVE_MAP];
+function wlFieldDef(field){ return WL_FIELD_DEFS.find(d=>d.field===field); }
+
+// Working state while the modal is open: which fields the user has picked
+// to change, and whatever they've typed into each one so far.
+let wlChangeFields = [];
+let wlChangeValues = {};
+
+function renderWlFieldSelect(){
+  const sel = document.getElementById('wl_field_select');
+  const available = WL_FIELD_DEFS.filter(d => !wlChangeFields.includes(d.field));
+  sel.innerHTML = `<option value="">변경할 항목 선택…</option>` +
+    available.map(d=>`<option value="${d.field}">${esc(d.label)}${d.sensitive?' 🔒':''}</option>`).join('');
+}
+
+function renderWlChangeRows(){
+  const wrap = document.getElementById('wl_fieldchange_rows');
+  wrap.innerHTML = wlChangeFields.map(field=>{
+    const def = wlFieldDef(field);
+    if (!def) return '';
+    const val = esc(wlChangeValues[field]||'');
+    const inputHtml = def.type==='textarea'
+      ? `<textarea class="wl-fc-input" data-field="${field}">${val}</textarea>`
+      : `<input class="wl-fc-input" data-field="${field}" value="${val}">`;
+    return `
+    <div class="wl-fc-row">
+      <label>${esc(def.label)}${def.sensitive?' 🔒':''}</label>
+      ${inputHtml}
+      <button type="button" class="cc-remove-btn" data-remove="${field}" title="이 항목 제거">✕</button>
+    </div>`;
+  }).join('');
+  wrap.querySelectorAll('.wl-fc-input').forEach(el=>{
+    el.addEventListener('input', ()=>{ wlChangeValues[el.dataset.field] = el.value; });
+  });
+  wrap.querySelectorAll('[data-remove]').forEach(btn=>{
+    btn.onclick = () => {
+      const f = btn.dataset.remove;
+      wlChangeFields = wlChangeFields.filter(x=>x!==f);
+      delete wlChangeValues[f];
+      renderWlChangeRows();
+    };
+  });
+  renderWlFieldSelect();
+}
+
+document.getElementById('wl_field_add_btn').onclick = () => {
+  const sel = document.getElementById('wl_field_select');
+  const field = sel.value;
+  if (!field || wlChangeFields.includes(field)) return;
+  wlChangeFields.push(field);
+  if (wlChangeValues[field] === undefined) wlChangeValues[field] = '';
+  renderWlChangeRows();
+};
 
 function resetFieldChangeInputs(){
   document.getElementById('wl_apply_toggle').checked = false;
-  document.getElementById('wl_fieldchange_grid').style.display = 'none';
-  WL_ALL_INPUTS.forEach(f => document.getElementById(f.input).value = '');
+  document.getElementById('wl_fieldchange_section').style.display = 'none';
+  wlChangeFields = [];
+  wlChangeValues = {};
+  renderWlChangeRows();
 }
 
 document.getElementById('wl_apply_toggle').addEventListener('change', (e) => {
-  document.getElementById('wl_fieldchange_grid').style.display = e.target.checked ? '' : 'none';
+  document.getElementById('wl_fieldchange_section').style.display = e.target.checked ? '' : 'none';
 });
 
-// Reads the optional "apply to asset" fields and, for any that were filled
-// in, applies them to the record and returns a { changes, fieldChanges } pair:
+// Reads whichever fields the user picked and filled in, applies them to the
+// record, and returns a { changes, fieldChanges } pair:
 // - changes: readable list used to build the work-log change summary
 // - fieldChanges: what gets stored on the entry itself for later re-editing
 //   (plaintext for normal fields, just `true` for sensitive ones)
 async function applyFieldChanges(rec){
   const changes = [];
   const fieldChanges = {};
-  WL_FIELD_MAP.forEach(f => {
-    const val = document.getElementById(f.input).value.trim();
-    if (!val) return;
-    const from = rec[f.field] || '—';
-    if (val === rec[f.field]) return;
-    changes.push({ field:f.field, label:f.label, from, to:val });
-    fieldChanges[f.field] = val;
-    rec[f.field] = val;
-  });
-  for (const f of WL_SENSITIVE_MAP){
-    const val = document.getElementById(f.input).value.trim();
+  for (const field of wlChangeFields){
+    const def = wlFieldDef(field);
+    if (!def) continue;
+    const val = (wlChangeValues[field]||'').trim();
     if (!val) continue;
-    changes.push({ field:f.field, label:f.label, sensitive:true });
-    fieldChanges[f.field] = true;
-    rec[f.encField] = await encryptField(val);
+    if (def.sensitive){
+      changes.push({ field, label:def.label, sensitive:true });
+      fieldChanges[field] = true;
+      rec[def.encField] = await encryptField(val);
+    } else {
+      const from = rec[field] || '—';
+      if (val === rec[field]) continue;
+      changes.push({ field, label:def.label, from, to:val });
+      fieldChanges[field] = val;
+      rec[field] = val;
+    }
   }
   return { changes, fieldChanges };
 }
@@ -1390,10 +1441,16 @@ function renderWorkLogList(){
       resetFieldChangeInputs();
       if (entry.field_changes && Object.keys(entry.field_changes).length){
         document.getElementById('wl_apply_toggle').checked = true;
-        document.getElementById('wl_fieldchange_grid').style.display = '';
-        WL_FIELD_MAP.forEach(f => {
-          if (entry.field_changes[f.field] !== undefined) document.getElementById(f.input).value = entry.field_changes[f.field];
+        document.getElementById('wl_fieldchange_section').style.display = '';
+        Object.keys(entry.field_changes).forEach(field => {
+          const def = wlFieldDef(field);
+          if (!def) return;
+          wlChangeFields.push(field);
+          // Sensitive fields never had their plaintext stored on the entry —
+          // leave that row blank; re-enter a value only if changing it again.
+          wlChangeValues[field] = def.sensitive ? '' : entry.field_changes[field];
         });
+        renderWlChangeRows();
       }
       setWorkLogFormMode(true);
     };
@@ -1430,7 +1487,10 @@ document.getElementById('wlAddBtn').onclick = async () => {
   const applyToggled = document.getElementById('wl_apply_toggle').checked;
   let changeSummary = '', fieldChanges = {};
   if (applyToggled){
-    const sensitiveTouched = WL_SENSITIVE_MAP.some(f => document.getElementById(f.input).value.trim());
+    const sensitiveTouched = wlChangeFields.some(f => {
+      const def = wlFieldDef(f);
+      return def && def.sensitive && (wlChangeValues[f]||'').trim();
+    });
     if (sensitiveTouched && (viewOnly || !sessionKey)){
       alert('IP / 계정 ID / 비밀번호를 변경하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.');
       return;
