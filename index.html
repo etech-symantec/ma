@@ -222,20 +222,14 @@
       <input type="checkbox" id="wl_apply_toggle">
       이 이력에 맞춰 자산 정보도 함께 변경
     </label>
-    <div class="form-grid" id="wl_fieldchange_grid" style="display:none;">
-      <div><label>새 장비 종류</label><input id="wl_new_device_type" placeholder="예: 방화벽, 스위치, 스토리지…"></div>
-      <div><label>새 SKU / 제품</label><input id="wl_new_sku"></div>
-      <div><label>새 S/N</label><input id="wl_new_sn"></div>
-      <div><label>새 수량</label><input id="wl_new_qty"></div>
-      <div><label>새 라이선스 시작일</label><input id="wl_new_start" placeholder="2026.11.1"></div>
-      <div><label>새 라이선스 종료일</label><input id="wl_new_end" placeholder="2027.10.31"></div>
-      <div><label>새 OS 버전</label><input id="wl_new_os"></div>
-      <div><label>새 IP 주소</label><input id="wl_new_ip"></div>
-      <div><label>새 계정 ID</label><input id="wl_new_id"></div>
-      <div><label>새 비밀번호</label><input id="wl_new_pw"></div>
-      <div class="full"><label>새 비고</label><textarea id="wl_new_remarks"></textarea></div>
+    <div id="wl_fieldchange_section" style="display:none;">
+      <div class="wl-fieldchange-add">
+        <select id="wl_field_select"></select>
+        <button type="button" class="btn btn-ghost wl-fc-add-btn" id="wl_field_add_btn">＋ 항목 추가</button>
+      </div>
+      <div id="wl_fieldchange_rows" class="wl-fc-list"></div>
+      <p class="hint" id="wlSensitiveHint" style="margin-top:10px; margin-bottom:0;">IP / 계정 ID / 비밀번호(🔒)는 보안을 위해 변경된 실제 값이 이력에 표시되지 않고, "변경됨"으로만 기록됩니다. 실제 값은 자산 목록에서 잠금 해제 후 👁 로 확인하세요.</p>
     </div>
-    <p class="hint" id="wlSensitiveHint" style="margin-top:10px; margin-bottom:0;">IP / 계정 ID / 비밀번호는 보안을 위해 변경된 실제 값이 이력에 표시되지 않고, "변경됨"으로만 기록됩니다. 실제 값은 자산 목록에서 잠금 해제 후 👁 로 확인하세요.</p>
 
     <div class="modal-actions">
       <button class="btn btn-ghost" id="wlCancelEditBtn" style="flex:none; display:none;">수정 취소</button>
