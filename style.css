@@ -339,6 +339,25 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   color:var(--text-dim); cursor:pointer;
 }
 .wl-fieldchange-toggle input{ width:auto; }
+.wl-fieldchange-add{ display:flex; gap:8px; margin-top:12px; }
+.wl-fieldchange-add select{
+  flex:1; background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
+  padding:8px 9px; color:var(--text); font-size:12.3px; outline:none; font-family:var(--body);
+}
+.wl-fieldchange-add select:focus{ border-color:var(--accent); }
+.wl-fc-add-btn{ flex-shrink:0; width:auto; padding:8px 12px; font-size:12px; }
+.wl-fc-list{ display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.wl-fc-row{ display:flex; gap:8px; align-items:flex-start; }
+.wl-fc-row label{
+  flex-shrink:0; width:110px; padding-top:9px; font-size:11px; color:var(--text-faint);
+  font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em;
+}
+.wl-fc-row input, .wl-fc-row textarea{
+  flex:1; min-width:0; background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
+  padding:8px 9px; color:var(--text); font-size:12.3px; outline:none; font-family:var(--body);
+}
+.wl-fc-row textarea{ min-height:56px; resize:vertical; font-family:var(--mono); font-size:12px; }
+.wl-fc-row input:focus, .wl-fc-row textarea:focus{ border-color:var(--accent); }
 #wl_fieldchange_grid{ margin-top:12px; }
 
 /* add form / modals */
