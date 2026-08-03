@@ -53,6 +53,14 @@
       <input type="text" id="searchInput" placeholder="법인, 국가, SKU, S/N, 담당자로 검색…" />
     </div>
     <div class="am-topbar-actions">
+      <div class="activity-wrap">
+        <button class="icon-btn" id="recentActivityBtn">🔔 최근 이력<span id="raBadge" class="ra-badge" style="display:none;"></span></button>
+        <div class="recent-activity-dropdown" id="recentActivityDropdown">
+          <div class="ra-header">최근 작업 이력 (최대 10건)</div>
+          <div id="recentActivityList"></div>
+        </div>
+      </div>
+      <button class="icon-btn" id="userMgmtBtn">👤 사용자 선택</button>
       <button class="icon-btn" id="expandAllBtn">전체 펼치기</button>
       <button class="icon-btn" id="addBtn">＋ 자산 추가</button>
       <button class="icon-btn" id="changePassBtn">🔑 비밀번호 변경</button>
@@ -240,6 +248,21 @@
 
     <div class="modal-actions">
       <button class="btn btn-ghost" id="wlCloseBtn">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div id="userModal">
+  <div class="modal-card">
+    <h2>사용자 관리</h2>
+    <p class="hint">작업 이력을 등록할 때 어떤 사용자가 작성했는지 함께 기록하기 위한 사용자 목록입니다. 새 사용자를 등록한 뒤, 지금 이 브라우저에서 사용할 사용자를 선택하세요. (사용자 목록은 팀 전체에 공유되지만, "현재 사용자" 선택은 이 브라우저에만 저장됩니다.)</p>
+    <div class="user-add-row">
+      <input id="um_new_name" placeholder="새 사용자 이름 (예: 김철수)">
+      <button type="button" class="btn btn-ghost" id="um_add_btn">＋ 사용자 추가</button>
+    </div>
+    <div id="um_user_list" class="user-list"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="um_close_btn">닫기</button>
     </div>
   </div>
 </div>
