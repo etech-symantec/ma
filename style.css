@@ -155,6 +155,54 @@ a{color:var(--accent);}
 .sync-status.synced{ color:var(--green); }
 .sync-status.error{ color:var(--red); }
 
+/* 최근 작업 이력 알림 드롭다운 */
+.activity-wrap{ position:relative; }
+.ra-badge{
+  display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px;
+  padding:0 4px; margin-left:2px; border-radius:999px; background:var(--red); color:#fff;
+  font-size:10px; font-family:var(--mono); font-weight:700; line-height:1;
+}
+.recent-activity-dropdown{
+  display:none; position:absolute; top:calc(100% + 8px); right:0; width:340px; max-height:440px;
+  overflow-y:auto; background:var(--surface); border:1px solid var(--border-solid); border-radius:12px;
+  box-shadow:var(--shadow); z-index:200; padding:6px;
+}
+.recent-activity-dropdown.open{ display:block; }
+.ra-header{
+  font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-faint);
+  font-family:var(--mono); padding:8px 10px 6px;
+}
+.ra-empty{ font-size:12.5px; color:var(--text-faint); text-align:center; padding:24px 10px; }
+.ra-item{
+  padding:9px 10px; border-radius:8px; cursor:pointer;
+}
+.ra-item:hover{ background:var(--surface2); }
+.ra-item + .ra-item{ margin-top:2px; }
+.ra-top{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.ra-type{ font-size:12.5px; font-weight:700; color:var(--accent); }
+.ra-date{ font-size:11px; font-family:var(--mono); color:var(--text-faint); flex-shrink:0; }
+.ra-asset{ font-size:12px; color:var(--text-dim); margin-top:2px; }
+.ra-note{ font-size:11.8px; color:var(--text-faint); margin-top:3px; line-height:1.4; }
+.ra-author{ font-size:11px; color:var(--text-faint); margin-top:4px; font-family:var(--mono); }
+
+/* 사용자 관리 모달 */
+.user-add-row{ display:flex; gap:8px; margin-bottom:16px; }
+.user-add-row input{
+  flex:1; background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
+  padding:9px 11px; color:var(--text); font-size:13px; outline:none; font-family:var(--body);
+}
+.user-add-row input:focus{ border-color:var(--accent); }
+.user-add-row button{ flex-shrink:0; width:auto; }
+.user-list{ display:flex; flex-direction:column; gap:6px; max-height:320px; overflow-y:auto; }
+.user-list-empty{ font-size:12.5px; color:var(--text-faint); text-align:center; padding:24px 0; }
+.user-row{
+  display:flex; align-items:center; gap:10px; padding:9px 11px;
+  border:1px solid var(--border-solid); border-radius:9px;
+}
+.user-row.active{ border-color:var(--accent); background:#E6F4FD; }
+.user-name{ flex:1; font-size:13px; color:var(--text); }
+.user-current-tag{ font-size:11px; color:var(--accent); font-family:var(--mono); flex-shrink:0; }
+
 .layout{ display:flex; align-items:flex-start; }
 
 /* sidebar */
@@ -368,12 +416,12 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 #wl_fieldchange_grid{ margin-top:12px; }
 
 /* add form / modals */
-#addModal, #changePassModal, #workLogModal, #githubModal, #groupEditModal{
+#addModal, #changePassModal, #workLogModal, #githubModal, #groupEditModal, #userModal{
   position:fixed; inset:0; z-index:1200; background:rgba(15,23,42,0.45); backdrop-filter:blur(3px);
   display:none; align-items:flex-start; justify-content:center; overflow-y:auto;
   padding:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px) + 24px) 20px 40px;
 }
-#addModal.open, #changePassModal.open, #workLogModal.open, #githubModal.open, #groupEditModal.open{ display:flex; }
+#addModal.open, #changePassModal.open, #workLogModal.open, #githubModal.open, #groupEditModal.open, #userModal.open{ display:flex; }
 .cp-error{ color:var(--red); font-size:12.5px; margin-top:14px; min-height:16px; }
 .modal-card{
   width:100%; max-width:640px; background:var(--surface); border:1px solid var(--border-solid);
