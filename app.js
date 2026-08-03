@@ -877,12 +877,12 @@ function captureCustContactsFromDom(){
 
 function updateCustAddBtnState(){
   const btn = document.getElementById('ge_cust_add_btn');
-  btn.style.display = geCustContacts.length >= 3 ? 'none' : '';
+  btn.style.display = geCustContacts.length >= 5 ? 'none' : '';
 }
 
 document.getElementById('ge_cust_add_btn').onclick = () => {
   captureCustContactsFromDom();
-  if (geCustContacts.length >= 3) return;
+  if (geCustContacts.length >= 5) return;
   geCustContacts.push({name:'', phone:'', email:''});
   renderCustContactRows();
 };
@@ -901,7 +901,7 @@ function openGroupEditModal(gid){
   document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
-    ? meta.cust_contacts.slice(0,3)
+    ? meta.cust_contacts.slice(0,5)
     : [{name:'',phone:'',email:''}]
   ).map(c=>({...c}));
   renderCustContactRows();
@@ -926,7 +926,7 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newSecondary = val('ge_owner_secondary');
   const newRemarks = val('ge_remarks');
   captureCustContactsFromDom();
-  const newContacts = geCustContacts.filter(c => c.name || c.phone || c.email).slice(0,3);
+  const newContacts = geCustContacts.filter(c => c.name || c.phone || c.email).slice(0,5);
   records.forEach(r => {
     if (r.group === groupEditId){
       r.owner = newOwner;
