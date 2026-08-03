@@ -178,6 +178,13 @@ aside.filters{
 .filter-item .cnt{ font-family:var(--mono); font-size:11px; color:var(--text-faint); }
 .filter-item.active .cnt{ color:var(--accent); }
 
+/* 라이선스 상태 / 태그 필터는 2열로 배치 */
+#statusFilters, #skuKeywordFilters{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:2px 6px;
+}
+
 /* main content */
 main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 
