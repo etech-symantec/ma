@@ -144,7 +144,7 @@ async function runAutoSync(){
   autoSyncQueued = false;
   setSyncStatus('syncing');
   try{
-    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records };
+    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records, users };
     const newSha = await githubApiPut(githubConfig, githubToken, payload, githubSha, '자산 데이터 자동 동기화 - ' + new Date().toLocaleString('ko-KR'));
     githubSha = newSha;
     setSyncStatus('synced');
@@ -167,6 +167,7 @@ const dataReady = (async () => {
       const { json, sha } = await githubApiGet(cfg, token);
       ENC_STORE = json;
       records = ENC_STORE.records.map(r => ({...r}));
+      users = (ENC_STORE.users || []).map(u => ({...u}));
       githubConfig = cfg; githubToken = token; githubSha = sha;
       return;
     }catch(e){
@@ -178,6 +179,7 @@ const dataReady = (async () => {
   const json = await r.json();
   ENC_STORE = json;
   records = ENC_STORE.records.map(r => ({...r}));
+  users = (ENC_STORE.users || []).map(u => ({...u}));
 })().catch(err => {
   console.error('데이터 로드 실패:', err);
 });
@@ -185,6 +187,7 @@ const dataReady = (async () => {
 let sessionKey = null;      // CryptoKey, present only after unlock
 let viewOnly = false;
 let records = [];           // working array (mutable, in-memory)
+let users = [];              // registered users (working array, in-memory) — {id, name}
 let expandedGroups = new Set();
 let activeStatusFilters = new Set(['ok','warn','na']);
 let activeCountryFilter = null;
@@ -415,6 +418,7 @@ function boot(){
   document.getElementById('app').classList.add('ready');
   document.getElementById('lockState').textContent = viewOnly ? '👁 보기 전용 (민감정보 숨김)' : '🔓 잠금 해제됨 · 이 세션 동안만 유지';
   updateGithubButtonState();
+  updateUserBtnLabel();
   render();
   requestAnimationFrame(() => { syncGlobalHeaderHeight(); syncStickyOffsets(); });
 }
@@ -648,6 +652,7 @@ function render(){
   });
 
   buildFilters();
+  updateActivityBadge();
 }
 
 function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료됨', na:'기간정보없음'}[s]; }
@@ -959,6 +964,146 @@ function deleteGroup(gid){
   scheduleAutoSync();
 }
 
+// ---------- users (누가 작업 이력을 등록했는지 기록) ----------
+// `users` 목록 자체는 팀 전체가 공유하는 데이터라 records와 함께 GitHub에 동기화된다.
+// 반면 "지금 이 브라우저에서 나는 누구인가"는 로컬 전용 정보라 localStorage에만 저장한다.
+const CURRENT_USER_KEY = 'bcAssetCurrentUserId';
+let currentUserId = null;
+try{ currentUserId = localStorage.getItem(CURRENT_USER_KEY) || null; }catch(e){ currentUserId = null; }
+
+function saveCurrentUserId(id){
+  try{ if (id) localStorage.setItem(CURRENT_USER_KEY, id); else localStorage.removeItem(CURRENT_USER_KEY); }catch(e){}
+}
+function currentUserName(){
+  const u = users.find(x=>String(x.id)===String(currentUserId));
+  return u ? u.name : '';
+}
+function updateUserBtnLabel(){
+  const btn = document.getElementById('userMgmtBtn');
+  if (!btn) return;
+  const name = currentUserName();
+  btn.textContent = name ? `👤 ${name}` : '👤 사용자 선택';
+}
+
+function renderUserList(){
+  const wrap = document.getElementById('um_user_list');
+  if (!users.length){
+    wrap.innerHTML = `<div class="user-list-empty">등록된 사용자가 없습니다. 위에서 새 사용자를 추가하세요.</div>`;
+    return;
+  }
+  wrap.innerHTML = users.map(u => `
+    <div class="user-row ${String(u.id)===String(currentUserId)?'active':''}">
+      <span class="user-name">${esc(u.name)}</span>
+      ${String(u.id)===String(currentUserId)
+        ? `<span class="user-current-tag">현재 사용자</span>`
+        : `<button type="button" class="wl-action-btn" data-select-user="${u.id}">이 사용자로 전환</button>`}
+      <button type="button" class="wl-action-btn danger" data-delete-user="${u.id}" title="삭제">✕</button>
+    </div>`).join('');
+  wrap.querySelectorAll('[data-select-user]').forEach(btn=>{
+    btn.onclick = () => {
+      currentUserId = btn.dataset.selectUser;
+      saveCurrentUserId(currentUserId);
+      renderUserList();
+      updateUserBtnLabel();
+    };
+  });
+  wrap.querySelectorAll('[data-delete-user]').forEach(btn=>{
+    btn.onclick = () => {
+      if (viewOnly || !sessionKey){ alert('사용자 목록을 변경하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+      if (!confirm('이 사용자를 삭제할까요? 이미 남긴 작업 이력의 작성자 표시는 그대로 유지됩니다.')) return;
+      const uid = btn.dataset.deleteUser;
+      users = users.filter(u=>String(u.id)!==String(uid));
+      if (String(currentUserId)===String(uid)){ currentUserId = null; saveCurrentUserId(null); }
+      renderUserList();
+      updateUserBtnLabel();
+      scheduleAutoSync();
+    };
+  });
+}
+
+document.getElementById('um_add_btn').onclick = () => {
+  if (viewOnly || !sessionKey){ alert('사용자를 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const input = document.getElementById('um_new_name');
+  const name = input.value.trim();
+  if (!name) return;
+  const id = 'u' + Date.now();
+  users.push({ id, name });
+  input.value = '';
+  if (!currentUserId){ currentUserId = id; saveCurrentUserId(id); }
+  renderUserList();
+  updateUserBtnLabel();
+  scheduleAutoSync();
+};
+
+document.getElementById('userMgmtBtn').onclick = () => {
+  renderUserList();
+  document.getElementById('userModal').classList.add('open');
+};
+document.getElementById('um_close_btn').onclick = () => {
+  document.getElementById('userModal').classList.remove('open');
+};
+
+// ---------- recent activity (최근 작업 이력 알림) ----------
+function getRecentWorkLogEntries(limit){
+  const all = [];
+  records.forEach(r => {
+    (r.work_log||[]).forEach(entry => {
+      all.push({ entry, recId:r.id, recGroup:r.group, recOwner:r.owner, recLabel:r.sku || deviceTypeLabel(r) });
+    });
+  });
+  all.sort((a,b) => (b.entry.id||0) - (a.entry.id||0));
+  return all.slice(0, limit);
+}
+
+function updateActivityBadge(){
+  const badge = document.getElementById('raBadge');
+  if (!badge) return;
+  const total = records.reduce((sum,r)=> sum + (r.work_log?r.work_log.length:0), 0);
+  if (total > 0){ badge.textContent = total > 99 ? '99+' : String(total); badge.style.display = ''; }
+  else { badge.style.display = 'none'; }
+}
+
+function renderRecentActivity(){
+  const wrap = document.getElementById('recentActivityList');
+  const items = getRecentWorkLogEntries(10);
+  if (!items.length){
+    wrap.innerHTML = `<div class="ra-empty">아직 작업 이력이 없습니다.</div>`;
+    return;
+  }
+  wrap.innerHTML = items.map(({entry, recGroup, recOwner, recLabel}) => `
+    <div class="ra-item" data-jump-group="${esc(recGroup)}">
+      <div class="ra-top"><span class="ra-type">${esc(entry.type)}</span><span class="ra-date">${esc(entry.date)||''}</span></div>
+      <div class="ra-asset">${esc(recOwner)} · ${esc(recLabel)||'—'}</div>
+      <div class="ra-note">${esc(entry.note)||'—'}</div>
+      <div class="ra-author">작성: ${esc(entry.author)||'미상'}</div>
+    </div>`).join('');
+  wrap.querySelectorAll('[data-jump-group]').forEach(el=>{
+    el.onclick = () => {
+      const gid = el.dataset.jumpGroup;
+      expandedGroups.add(gid);
+      render();
+      document.getElementById('recentActivityDropdown').classList.remove('open');
+      requestAnimationFrame(()=>{
+        const card = document.querySelector(`.group-card[data-gid="${CSS.escape(gid)}"]`);
+        if (card) card.scrollIntoView({behavior:'smooth', block:'center'});
+      });
+    };
+  });
+}
+
+document.getElementById('recentActivityBtn').onclick = () => {
+  const dd = document.getElementById('recentActivityDropdown');
+  const opening = !dd.classList.contains('open');
+  if (opening) renderRecentActivity();
+  dd.classList.toggle('open', opening);
+};
+document.addEventListener('click', (e) => {
+  const dd = document.getElementById('recentActivityDropdown');
+  if (!dd || !dd.classList.contains('open')) return;
+  if (dd.contains(e.target) || e.target.closest('#recentActivityBtn')) return;
+  dd.classList.remove('open');
+});
+
 // ---------- change master password ----------
 document.getElementById('changePassBtn').onclick = () => {
   if (viewOnly || !sessionKey){
@@ -1044,7 +1189,7 @@ document.getElementById('saveCpBtn').onclick = async () => {
 
 // ---------- export / import ----------
 document.getElementById('exportBtn').onclick = () => {
-  const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records };
+  const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records, users };
   const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1063,6 +1208,7 @@ document.getElementById('importFile').addEventListener('change', (e) => {
       if (!data.records) throw new Error('invalid');
       ENC_STORE.salt = data.salt; ENC_STORE.iterations = data.iterations;
       records = data.records.map(r=>({...r}));
+      users = (data.users || []).map(u=>({...u}));
       sessionKey = null; viewOnly = true;
       alert('가져오기 완료. 민감정보를 보려면 이 파일을 만들 때 사용한 마스터 비밀번호로 다시 잠금 해제해 주세요.');
       document.getElementById('lockOverlay').style.display='flex';
@@ -1229,7 +1375,7 @@ document.getElementById('githubSaveBtn').onclick = async () => {
   clearTimeout(autoSyncTimer);
   setSyncStatus('syncing');
   try{
-    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records };
+    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records, users };
     const newSha = await githubApiPut(githubConfig, githubToken, payload, githubSha);
     githubSha = newSha;
     setSyncStatus('synced');
@@ -1414,7 +1560,7 @@ function renderWorkLogList(){
     <div class="worklog-item">
       <div class="wl-type">${esc(entry.type)}</div>
       <div class="wl-body">
-        <div class="wl-meta">${esc(entry.date)||'날짜 미기재'} · ${esc(entry.manager)||'담당자 미기재'}</div>
+        <div class="wl-meta">${esc(entry.date)||'날짜 미기재'} · ${esc(entry.manager)||'담당자 미기재'} · 작성 ${esc(entry.author)||'미상'}</div>
         <div class="wl-note">${esc(entry.note)||'—'}</div>
         ${entry.change_summary ? `<div class="wl-changes">🔧 자산 정보 반영: ${esc(entry.change_summary)}</div>` : ''}
       </div>
@@ -1510,7 +1656,10 @@ document.getElementById('wlAddBtn').onclick = async () => {
     workLogEditId = null;
     setWorkLogFormMode(false);
   } else {
-    const entry = { id: Date.now(), type, date, manager, note };
+    if (!currentUserId && !confirm('현재 선택된 사용자가 없어 이 이력의 작성자가 "미상"으로 표시됩니다.\n작성자 없이 계속 저장할까요?\n\n(취소를 누르면 저장하지 않습니다 — 상단의 "👤 사용자 선택"에서 먼저 사용자를 선택해 주세요.)')){
+      return;
+    }
+    const entry = { id: Date.now(), type, date, manager, note, author: currentUserName() };
     if (applyToggled){ entry.field_changes = fieldChanges; entry.change_summary = changeSummary; }
     rec.work_log.push(entry);
   }
