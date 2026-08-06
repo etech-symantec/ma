@@ -427,14 +427,12 @@ document.getElementById('viewOnlyBtn').onclick = async () => {
   viewOnly = true; sessionKey = null; boot();
 };
 document.getElementById('howBtn').onclick = () => {
-  alert('마스터 비밀번호는 이 페이지를 만들 때 채팅으로 전달된 문자열입니다. 안전한 곳(비밀번호 관리자 등)에 보관하세요. 비밀번호를 바꾸고 싶다면, 잠금 해제 후 상단의 "🔑 비밀번호 변경" 버튼을 이용하세요.');
+  alert('마스터 비밀번호는 이 페이지를 만들 때 채팅으로 전달된 문자열입니다. 안전한 곳(비밀번호 관리자 등)에 보관하세요.');
 };
 
 function boot(){
   document.getElementById('lockOverlay').style.display = 'none';
   document.getElementById('app').classList.add('ready');
-  document.getElementById('lockState').textContent = viewOnly ? '👁 보기 전용 (민감정보 숨김)' : '🔓 잠금 해제됨 · 이 세션 동안만 유지';
-  updateGithubButtonState();
   updateUserBtnLabel();
   render();
   requestAnimationFrame(() => { syncGlobalHeaderHeight(); syncStickyOffsets(); });
@@ -536,7 +534,7 @@ function trashSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fil
 function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>`; }
 
 function render(){
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const q = '';
   let list = records.filter(r => {
     if (!activeStatusFilters.has(licenseStatus(r))) return false;
     if (activeDeviceTypeFilter && deviceTypeLabel(r) !== activeDeviceTypeFilter) return false;
@@ -804,7 +802,6 @@ function buildFilters(){
   });
 }
 
-document.getElementById('searchInput').addEventListener('input', render);
 document.getElementById('expandAllBtn').onclick = () => {
   const allOpen = expandedGroups.size > 0;
   if (allOpen){ expandedGroups.clear(); }
@@ -985,11 +982,12 @@ function deleteGroup(gid){
 // `users` 목록(이름 + 비밀번호 해시)은 팀 전체가 공유하는 데이터라 records와 함께
 // GitHub에 동기화된다. 반면 "지금 이 브라우저에서 로그인되어 있는 사람"은 로컬 전용
 // 정보라 localStorage에만 저장한다 (다른 사람 계정으로 바꾸려면 그 사람의 비밀번호가
-// 필요하다).
+// 필요하다). 로그인은 앱 진입 전 첫 화면(계정 게이트)에서 이뤄지며, 로그인해야만
+// 다음 단계(마스터 비밀번호 잠금 해제 화면)로 넘어갈 수 있다.
 const CURRENT_USER_KEY = 'bcAssetCurrentUserId';
 let currentUserId = null;
 try{ currentUserId = localStorage.getItem(CURRENT_USER_KEY) || null; }catch(e){ currentUserId = null; }
-let loginPromptUserId = null; // 사용자 목록에서 지금 비밀번호 입력창이 펼쳐진 계정
+let agLoginPromptUserId = null; // 계정 게이트 목록에서 지금 비밀번호 입력창이 펼쳐진 계정
 
 function saveCurrentUserId(id){
   try{ if (id) localStorage.setItem(CURRENT_USER_KEY, id); else localStorage.removeItem(CURRENT_USER_KEY); }catch(e){}
@@ -998,111 +996,98 @@ function currentUserName(){
   const u = users.find(x=>String(x.id)===String(currentUserId));
   return u ? u.name : '';
 }
-function updateUserBtnLabel(){
-  const btn = document.getElementById('userMgmtBtn');
-  if (!btn) return;
-  const name = currentUserName();
-  btn.textContent = name ? `👤 ${name}` : '👤 로그인';
+function updateUserBtnLabel(){} // (상단 바가 없어져 더 이상 표시할 곳이 없다 — 호환을 위해 남겨둔 빈 함수)
+
+// ---------- 계정 게이트 (앱 진입 전 1단계 로그인 화면) ----------
+function showMasterGate(){
+  document.getElementById('accountGateCard').style.display = 'none';
+  const masterCard = document.getElementById('masterGateCard');
+  masterCard.style.display = 'block';
+  const p = document.getElementById('passInput');
+  if (p) p.focus();
 }
 
-function renderUserList(){
-  const wrap = document.getElementById('um_user_list');
+function renderAccountGateUserList(){
+  const wrap = document.getElementById('ag_user_list');
+  if (!wrap) return;
   if (!users.length){
-    wrap.innerHTML = `<div class="user-list-empty">등록된 계정이 없습니다. 위에서 새 계정을 만드세요.</div>`;
+    wrap.innerHTML = `<div class="user-list-empty">등록된 계정이 없습니다. 아래 "새 계정 만들기"에서 계정을 만드세요.</div>`;
     return;
   }
   wrap.innerHTML = users.map(u => {
-    const isCurrent = String(u.id)===String(currentUserId);
-    const isPrompting = String(u.id)===String(loginPromptUserId);
-    let rightHtml;
-    if (isCurrent){
-      rightHtml = `<span class="user-current-tag">현재 사용자</span><button type="button" class="wl-action-btn" data-logout-user="${u.id}">로그아웃</button>`;
-    } else if (isPrompting){
-      rightHtml = `<button type="button" class="wl-action-btn" data-cancel-login="${u.id}">취소</button>`;
-    } else {
-      rightHtml = `<button type="button" class="wl-action-btn" data-login-user="${u.id}">로그인</button>`;
-    }
+    const isPrompting = String(u.id)===String(agLoginPromptUserId);
     return `
-    <div class="user-row ${isCurrent?'active':''}">
+    <div class="user-row">
       <div class="user-row-main">
         <span class="user-name">${esc(u.name)}</span>
-        ${rightHtml}
-        <button type="button" class="wl-action-btn danger" data-delete-user="${u.id}" title="삭제">✕</button>
+        ${isPrompting
+          ? `<button type="button" class="wl-action-btn" data-ag-cancel="${u.id}">취소</button>`
+          : `<button type="button" class="wl-action-btn" data-ag-login="${u.id}">로그인</button>`}
       </div>
       ${isPrompting ? `
-      <form class="user-login-form" data-login-form="${u.id}">
+      <form class="user-login-form" data-ag-login-form="${u.id}">
         <input type="password" class="user-login-pass" placeholder="비밀번호" autocomplete="current-password">
         <button type="submit" class="btn btn-primary">확인</button>
       </form>
-      <div class="user-login-error" id="umLoginError_${u.id}"></div>` : ''}
+      <div class="user-login-error" id="agLoginError_${u.id}"></div>` : ''}
     </div>`;
   }).join('');
 
-  wrap.querySelectorAll('[data-login-user]').forEach(btn=>{
+  wrap.querySelectorAll('[data-ag-login]').forEach(btn=>{
     btn.onclick = () => {
-      loginPromptUserId = btn.dataset.loginUser;
-      renderUserList();
-      const form = wrap.querySelector(`[data-login-form="${CSS.escape(loginPromptUserId)}"]`);
+      agLoginPromptUserId = btn.dataset.agLogin;
+      renderAccountGateUserList();
+      const form = wrap.querySelector(`[data-ag-login-form="${CSS.escape(agLoginPromptUserId)}"]`);
       if (form) form.querySelector('.user-login-pass').focus();
     };
   });
-  wrap.querySelectorAll('[data-cancel-login]').forEach(btn=>{
-    btn.onclick = () => { loginPromptUserId = null; renderUserList(); };
+  wrap.querySelectorAll('[data-ag-cancel]').forEach(btn=>{
+    btn.onclick = () => { agLoginPromptUserId = null; renderAccountGateUserList(); };
   });
-  wrap.querySelectorAll('[data-logout-user]').forEach(btn=>{
-    btn.onclick = () => {
-      currentUserId = null;
-      saveCurrentUserId(null);
-      renderUserList();
-      updateUserBtnLabel();
-    };
-  });
-  wrap.querySelectorAll('[data-login-form]').forEach(form=>{
+  wrap.querySelectorAll('[data-ag-login-form]').forEach(form=>{
     form.onsubmit = async (e) => {
       e.preventDefault();
-      const uid = form.dataset.loginForm;
+      const uid = form.dataset.agLoginForm;
       const u = users.find(x=>String(x.id)===String(uid));
       const passInput = form.querySelector('.user-login-pass');
-      const errEl = document.getElementById('umLoginError_' + uid);
+      const errEl = document.getElementById('agLoginError_' + uid);
       const pass = passInput.value;
-      if (!u){ return; }
+      if (!u) return;
       if (!pass){ errEl.textContent = '비밀번호를 입력해 주세요.'; return; }
-      if (!u.pwHash){ errEl.textContent = '이 계정에는 비밀번호가 설정되어 있지 않습니다. 관리자에게 계정을 다시 만들어 달라고 요청하세요.'; return; }
+      if (!u.pwHash){ errEl.textContent = '이 계정에는 비밀번호가 설정되어 있지 않습니다.'; return; }
       errEl.textContent = '확인 중…';
       const hash = await hashPassword(pass, u.pwSalt, u.pwIterations);
       if (hash !== u.pwHash){ errEl.textContent = '비밀번호가 올바르지 않습니다.'; passInput.value=''; passInput.focus(); return; }
       currentUserId = uid;
       saveCurrentUserId(uid);
-      loginPromptUserId = null;
-      renderUserList();
-      updateUserBtnLabel();
-    };
-  });
-  wrap.querySelectorAll('[data-delete-user]').forEach(btn=>{
-    btn.onclick = () => {
-      if (viewOnly || !sessionKey){ alert('계정을 삭제하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-      if (!confirm('이 계정을 삭제할까요? 이미 남긴 작업 이력의 작성자 표시는 그대로 유지됩니다.')) return;
-      const uid = btn.dataset.deleteUser;
-      users = users.filter(u=>String(u.id)!==String(uid));
-      if (String(currentUserId)===String(uid)){ currentUserId = null; saveCurrentUserId(null); }
-      if (String(loginPromptUserId)===String(uid)){ loginPromptUserId = null; }
-      renderUserList();
-      updateUserBtnLabel();
-      scheduleAutoSync();
+      agLoginPromptUserId = null;
+      showMasterGate();
     };
   });
 }
 
-document.getElementById('um_add_btn').onclick = async () => {
-  if (viewOnly || !sessionKey){ alert('계정을 만들려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-  const errEl = document.getElementById('umAddError');
-  errEl.textContent = '';
-  const nameInput = document.getElementById('um_new_name');
-  const passInput = document.getElementById('um_new_pass');
-  const pass2Input = document.getElementById('um_new_pass2');
+document.getElementById('ag_toggle_btn').onclick = () => {
+  const loginView = document.getElementById('agLoginView');
+  const regView = document.getElementById('agRegisterView');
+  const goingToRegister = regView.style.display === 'none';
+  loginView.style.display = goingToRegister ? 'none' : 'block';
+  regView.style.display = goingToRegister ? 'block' : 'none';
+  document.getElementById('ag_toggle_btn').textContent = goingToRegister ? '이미 계정이 있어요' : '새 계정 만들기';
+  document.getElementById('agRegisterError').textContent = '';
+};
+
+document.getElementById('ag_register_btn').onclick = async () => {
+  const errEl = document.getElementById('agRegisterError');
+  errEl.textContent = '데이터 불러오는 중…';
+  await dataReady;
+  if (!ENC_STORE){ errEl.textContent = 'data.json을 불러오지 못했습니다. 로컬 웹서버로 열어주세요.'; return; }
+  const nameInput = document.getElementById('ag_reg_name');
+  const passInput = document.getElementById('ag_reg_pass');
+  const pass2Input = document.getElementById('ag_reg_pass2');
   const name = nameInput.value.trim();
   const pass = passInput.value;
   const pass2 = pass2Input.value;
+  errEl.textContent = '';
   if (!name){ errEl.textContent = '이름을 입력해 주세요.'; return; }
   if (users.some(u=>u.name===name)){ errEl.textContent = '이미 같은 이름의 계정이 있습니다.'; return; }
   if (!pass || pass.length < 4){ errEl.textContent = '비밀번호는 4자 이상으로 설정해 주세요.'; return; }
@@ -1115,29 +1100,36 @@ document.getElementById('um_add_btn').onclick = async () => {
   const pwHash = await hashPassword(pass, pwSalt, pwIterations);
   users.push({ id, name, pwSalt, pwIterations, pwHash });
 
-  nameInput.value = ''; passInput.value = ''; pass2Input.value = '';
-  errEl.textContent = '';
-
   // 계정을 막 만든 사람은 이미 방금 비밀번호를 입력해 본인임이 확인된 상태이므로
   // 바로 로그인 상태로 전환한다.
   currentUserId = id;
   saveCurrentUserId(id);
-  loginPromptUserId = null;
-
-  renderUserList();
-  updateUserBtnLabel();
   scheduleAutoSync();
+
+  nameInput.value = ''; passInput.value = ''; pass2Input.value = '';
+  errEl.textContent = '';
+  showMasterGate();
 };
 
-document.getElementById('userMgmtBtn').onclick = () => {
-  loginPromptUserId = null;
-  document.getElementById('umAddError').textContent = '';
-  renderUserList();
-  document.getElementById('userModal').classList.add('open');
+// 계정 목록은 비동기로 로드되므로, 로드되는 대로 게이트 화면에 그린다.
+document.getElementById('ag_user_list').innerHTML = `<div class="user-list-empty">계정 목록을 불러오는 중…</div>`;
+dataReady.then(renderAccountGateUserList);
+
+// 이미 이 브라우저에 로그인 기록이 있고(currentUserId) 그 계정이 실제로 존재하면,
+// 계정 게이트를 건너뛰고 바로 마스터 비밀번호 화면으로 넘어간다.
+dataReady.then(() => {
+  if (currentUserId && users.some(u=>String(u.id)===String(currentUserId))){
+    showMasterGate();
+  }
+});
+
+// ---------- 로그아웃 (좌측 패널) ----------
+document.getElementById('logoutBtn').onclick = () => {
+  if (!confirm('로그아웃할까요? 다시 사용하려면 계정 비밀번호로 로그인해야 합니다.')) return;
+  saveCurrentUserId(null);
+  location.reload();
 };
-document.getElementById('um_close_btn').onclick = () => {
-  document.getElementById('userModal').classList.remove('open');
-};
+
 
 // ---------- recent activity (최근 작업 이력 알림) ----------
 function getRecentWorkLogEntries(limit){
@@ -1210,119 +1202,7 @@ document.addEventListener('click', (e) => {
   dd.classList.remove('open');
 });
 
-// ---------- change master password ----------
-document.getElementById('changePassBtn').onclick = () => {
-  if (viewOnly || !sessionKey){
-    alert('비밀번호를 변경하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.');
-    return;
-  }
-  document.getElementById('cp_old').value = '';
-  document.getElementById('cp_new').value = '';
-  document.getElementById('cp_new2').value = '';
-  document.getElementById('cpError').textContent = '';
-  document.getElementById('changePassModal').classList.add('open');
-};
-document.getElementById('cancelCpBtn').onclick = () => {
-  document.getElementById('changePassModal').classList.remove('open');
-};
-
-document.getElementById('saveCpBtn').onclick = async () => {
-  const errEl = document.getElementById('cpError');
-  const oldPass = document.getElementById('cp_old').value;
-  const newPass = document.getElementById('cp_new').value;
-  const newPass2 = document.getElementById('cp_new2').value;
-
-  if (!oldPass || !newPass || !newPass2){ errEl.textContent = '모든 항목을 입력해 주세요.'; return; }
-  if (newPass !== newPass2){ errEl.textContent = '새 비밀번호가 일치하지 않습니다.'; return; }
-  if (newPass.length < 8){ errEl.textContent = '새 비밀번호는 8자 이상으로 설정해 주세요.'; return; }
-  if (newPass === oldPass){ errEl.textContent = '현재 비밀번호와 다른 비밀번호를 입력해 주세요.'; return; }
-
-  errEl.textContent = '현재 비밀번호 확인 중…';
-
-  const oldKey = await deriveKey(oldPass, ENC_STORE.salt, ENC_STORE.iterations);
-  const probe = records.find(r => r.ip_enc || r.id_enc || r.pw_enc);
-  if (probe){
-    const f = probe.ip_enc || probe.id_enc || probe.pw_enc;
-    try{ await decryptWithKey(f, oldKey); }
-    catch(e){ errEl.textContent = '현재 비밀번호가 올바르지 않습니다.'; return; }
-  }
-
-  errEl.textContent = '민감정보 재암호화 중… (항목이 많으면 몇 초 걸릴 수 있습니다)';
-
-  // Decrypt every sensitive field with the OLD key first. If anything fails
-  // partway through, bail out without touching any data.
-  let plainMap;
-  try{
-    plainMap = [];
-    for (const rec of records){
-      plainMap.push({
-        ip: rec.ip_enc ? await decryptWithKey(rec.ip_enc, oldKey) : null,
-        id: rec.id_enc ? await decryptWithKey(rec.id_enc, oldKey) : null,
-        pw: rec.pw_enc ? await decryptWithKey(rec.pw_enc, oldKey) : null,
-      });
-    }
-  }catch(e){
-    errEl.textContent = '기존 데이터 복호화에 실패했습니다. 비밀번호가 변경되지 않았습니다.';
-    return;
-  }
-
-  // Derive a brand-new key (new salt) from the new password, then re-encrypt.
-  const newSalt = bufToB64(crypto.getRandomValues(new Uint8Array(16)).buffer);
-  const newIterations = ENC_STORE.iterations || 250000;
-  const newKey = await deriveKey(newPass, newSalt, newIterations);
-
-  for (let i = 0; i < records.length; i++){
-    const rec = records[i], p = plainMap[i];
-    rec.ip_enc = p.ip ? await encryptWithKey(p.ip, newKey) : null;
-    rec.id_enc = p.id ? await encryptWithKey(p.id, newKey) : null;
-    rec.pw_enc = p.pw ? await encryptWithKey(p.pw, newKey) : null;
-  }
-
-  ENC_STORE.salt = newSalt;
-  ENC_STORE.iterations = newIterations;
-  sessionKey = newKey;
-
-  document.getElementById('changePassModal').classList.remove('open');
-  errEl.textContent = '';
-  render();
-  if (githubConfig && githubToken){
-    scheduleAutoSync();
-    alert('비밀번호가 변경되었습니다. GitHub에 연결되어 있으므로 잠시 후 저장소에 자동으로 동기화됩니다.');
-  } else {
-    alert('비밀번호가 변경되었습니다.\n\n지금 바로 "내보내기"를 눌러 새 백업 파일을 저장한 뒤, 서버의 data.json을 그 파일로 교체해 주세요.\n교체하지 않으면 예전 비밀번호로 암호화된 data.json이 그대로 남아, 다음에 열 때는 여전히 예전 비밀번호가 필요합니다.');
-  }
-};
-
-// ---------- export / import ----------
-document.getElementById('exportBtn').onclick = () => {
-  const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records, users };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  const d = new Date();
-  a.download = `broadcom-assets-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.json`;
-  a.click();
-};
-document.getElementById('importBtn').onclick = () => document.getElementById('importFile').click();
-document.getElementById('importFile').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    try{
-      const data = JSON.parse(reader.result);
-      if (!data.records) throw new Error('invalid');
-      ENC_STORE.salt = data.salt; ENC_STORE.iterations = data.iterations;
-      records = data.records.map(r=>({...r}));
-      users = (data.users || []).map(u=>({...u}));
-      sessionKey = null; viewOnly = true;
-      alert('가져오기 완료. 민감정보를 보려면 이 파일을 만들 때 사용한 마스터 비밀번호로 다시 잠금 해제해 주세요.');
-      document.getElementById('lockOverlay').style.display='flex';
-      document.getElementById('app').classList.remove('ready');
-    }catch(err){ alert('올바른 백업 파일이 아닙니다.'); }
-  };
-  reader.readAsText(file);
-});
+// 마스터 비밀번호 변경 / 내보내기 / 가져오기 UI는 더 이상 제공하지 않는다.
 
 // ---------- GitHub sync ----------
 const GITHUB_CONFIG_KEY = 'bcAssetGithubConfig';
@@ -1404,99 +1284,9 @@ async function githubApiPut(cfg, token, jsonObj, sha, message){
   return data.content.sha;
 }
 
-function updateGithubButtonState(){
-  const connected = !!(githubConfig && githubConfig.repo && githubToken);
-  if (!connected) setSyncStatus('offline');
-}
-
-function openGithubConnectModal(){
-  const cfg = githubConfig || loadGithubConfigFromStorage() || DEFAULT_GITHUB_CONFIG;
-  document.getElementById('gh_repo').value = cfg.repo || '';
-  document.getElementById('gh_branch').value = cfg.branch || 'main';
-  document.getElementById('gh_path').value = cfg.path || 'data.json';
-  document.getElementById('gh_token').value = githubToken || loadRememberedToken() || _decodeAuth() || '';
-  document.getElementById('gh_remember').checked = !!loadRememberedToken();
-  document.getElementById('githubError').textContent = '';
-  document.getElementById('githubModal').classList.add('open');
-}
-document.getElementById('githubSyncStatus').onclick = openGithubConnectModal;
-document.getElementById('cancelGithubBtn').onclick = () => {
-  document.getElementById('githubModal').classList.remove('open');
-};
-
-document.getElementById('githubConnectLoadBtn').onclick = async () => {
-  const errEl = document.getElementById('githubError');
-  const cfg = {
-    repo: document.getElementById('gh_repo').value.trim(),
-    branch: document.getElementById('gh_branch').value.trim() || 'main',
-    path: document.getElementById('gh_path').value.trim() || 'data.json',
-  };
-  const token = document.getElementById('gh_token').value.trim();
-  const remember = document.getElementById('gh_remember').checked;
-
-  if (!parseOwnerRepo(cfg.repo)){ errEl.textContent = '저장소는 owner/repo 형식으로 입력해 주세요.'; return; }
-  if (!token){ errEl.textContent = 'Personal Access Token을 입력해 주세요.'; return; }
-
-  errEl.textContent = 'GitHub에서 불러오는 중…';
-  try{
-    const { json, sha } = await githubApiGet(cfg, token);
-    ENC_STORE = json;
-    records = json.records.map(r=>({...r}));
-    githubConfig = cfg; githubToken = token; githubSha = sha;
-    saveGithubConfigToStorage(cfg);
-    if (remember) saveRememberedToken(token); else clearRememberedToken();
-    updateGithubButtonState();
-
-    sessionKey = null; viewOnly = true;
-    document.getElementById('githubModal').classList.remove('open');
-    alert('GitHub에서 데이터를 불러왔습니다. 민감정보를 보려면 이 데이터의 마스터 비밀번호로 다시 잠금 해제해 주세요.');
-    document.getElementById('lockOverlay').style.display = 'flex';
-    document.getElementById('app').classList.remove('ready');
-  }catch(e){
-    if (e.notFound){
-      // No file yet at this path — treat as a fresh connection; "GitHub에 저장" will create it.
-      githubConfig = cfg; githubToken = token; githubSha = null;
-      saveGithubConfigToStorage(cfg);
-      if (remember) saveRememberedToken(token); else clearRememberedToken();
-      updateGithubButtonState();
-      errEl.textContent = '';
-      document.getElementById('githubModal').classList.remove('open');
-      alert('연결되었습니다. 저장소에 아직 파일이 없어 "GitHub에 저장"을 누르면 현재 데이터로 새로 생성됩니다.');
-    } else {
-      errEl.textContent = e.message || 'GitHub 연결에 실패했습니다.';
-    }
-  }
-};
-
-document.getElementById('githubSaveBtn').onclick = async () => {
-  if (!githubConfig || !githubToken){
-    alert('먼저 GitHub 저장소에 연결해 주세요.');
-    openGithubConnectModal();
-    return;
-  }
-  const btn = document.getElementById('githubSaveBtn');
-  const originalText = btn.textContent;
-  btn.textContent = '저장 중…';
-  btn.disabled = true;
-  clearTimeout(autoSyncTimer);
-  setSyncStatus('syncing');
-  try{
-    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records, users };
-    const newSha = await githubApiPut(githubConfig, githubToken, payload, githubSha);
-    githubSha = newSha;
-    setSyncStatus('synced');
-    alert(`GitHub 저장소(${githubConfig.repo})에 저장되었습니다.`);
-  }catch(e){
-    setSyncStatus('error', e.message);
-    alert(e.message || 'GitHub 저장에 실패했습니다.');
-  }finally{
-    btn.textContent = originalText;
-    btn.disabled = false;
-  }
-};
-
-updateGithubButtonState();
-dataReady.then(() => updateGithubButtonState());
+// GitHub UI(연결 설정 모달/수동 저장 버튼)는 더 이상 노출하지 않는다. 배경 동기화는
+// dataReady 시점에 내장된 접근 토큰으로 자동 연결되고, 이후 변경사항은
+// scheduleAutoSync()/runAutoSync()가 계속 자동으로 저장소에 반영한다.
 
 // ---------- work log ----------
 function openWorkLogModal(recId){
