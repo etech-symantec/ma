@@ -2425,8 +2425,8 @@
     {
       "group": "mx-samex-srt",
       "flag": "＠",
-      "owner": "[US] SAMEX SRT NW MA 2020(SM1)",
-      "location": "삼성전자 멕시코 (SAMEX SRT)",
+      "owner": "SAMEX SRT",
+      "location": "멕시코 티후아나",
       "support_id": "2065519",
       "sku": "SSP-S210-10",
       "sn": "4524710004",
@@ -2442,9 +2442,9 @@
       "owner_primary": "강성준",
       "owner_secondary": "홍진영",
       "check_method": "원격 (RC)",
-      "cust_contact": "Raul Espinoza / Dong Yob Kim / Arturo Juarez",
-      "cust_phone": "52-664-188-1999 / 1-619-403-1803",
-      "cust_email": "raul.espinoza@samsung.com; dongyob.kim@samsung.com; ar.juarez@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "X",
       "tag_note": "삼성전자 멕시코 (SAMEX SRT)",
       "id": 57,
@@ -2458,14 +2458,32 @@
         "ct": "XUG5snk=",
         "tag": "ttqZMkKhO+aPNfHpK4YhiQ=="
       },
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Raul Espinoza",
+          "phone": "52-664-188-1999 / 1-619-403-1803",
+          "email": "raul.espinoza@samsung.com"
+        },
+        {
+          "name": "Dong Yob Kim",
+          "phone": "",
+          "email": "dongyob.kim@samsung.com"
+        },
+        {
+          "name": "Arturo Juarez",
+          "phone": "",
+          "email": "ar.juarez@samsung.com"
+        }
+      ]
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "SAMEX SRT",
+      "location": "멕시코 티후아나",
+      "support_id": "2065519",
       "sku": "ISG-Proxy",
       "sn": "91991640",
       "entitlement": "🔗",
@@ -2477,9 +2495,9 @@
       "deploy_log": "",
       "mode": "Explicit",
       "os_ver": "7.4.15.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2500,14 +2518,32 @@
         "iv": "ZQqkcbBhCPiAxezk",
         "ct": "wdjnAAbMQFw=",
         "tag": "gatKE44O0ExbfjPPKkp6Ew=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Raul Espinoza",
+          "phone": "52-664-188-1999 / 1-619-403-1803",
+          "email": "raul.espinoza@samsung.com"
+        },
+        {
+          "name": "Dong Yob Kim",
+          "phone": "",
+          "email": "dongyob.kim@samsung.com"
+        },
+        {
+          "name": "Arturo Juarez",
+          "phone": "",
+          "email": "ar.juarez@samsung.com"
+        }
+      ]
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "SAMEX SRT",
+      "location": "멕시코 티후아나",
+      "support_id": "2065519",
       "sku": "IS-AWAA-SWG-100-250-1Y",
       "sn": "50691099-2-1",
       "entitlement": "🔗",
@@ -2519,9 +2555,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2530,14 +2566,32 @@
       "id": 59,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Raul Espinoza",
+          "phone": "52-664-188-1999 / 1-619-403-1803",
+          "email": "raul.espinoza@samsung.com"
+        },
+        {
+          "name": "Dong Yob Kim",
+          "phone": "",
+          "email": "dongyob.kim@samsung.com"
+        },
+        {
+          "name": "Arturo Juarez",
+          "phone": "",
+          "email": "ar.juarez@samsung.com"
+        }
+      ]
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "4050417",
+      "owner": "SAMEX SRT",
+      "location": "멕시코 티후아나",
+      "support_id": "2065519",
       "sku": "MC-S400-20-100",
       "sn": "1419320060",
       "entitlement": "🔗",
@@ -2549,9 +2603,9 @@
       "deploy_log": "22.07.01 신호근",
       "mode": "",
       "os_ver": "3.3.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2572,14 +2626,32 @@
         "iv": "yQRkqctXOtOhFWCf",
         "ct": "cksQViFlRhSZih33Tdg6VrSo9hFunvmE",
         "tag": "SY8R7WrJILeYxm+KGc5Htw=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Raul Espinoza",
+          "phone": "52-664-188-1999 / 1-619-403-1803",
+          "email": "raul.espinoza@samsung.com"
+        },
+        {
+          "name": "Dong Yob Kim",
+          "phone": "",
+          "email": "dongyob.kim@samsung.com"
+        },
+        {
+          "name": "Arturo Juarez",
+          "phone": "",
+          "email": "ar.juarez@samsung.com"
+        }
+      ]
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "SAMEX SRT",
+      "location": "멕시코 티후아나",
+      "support_id": "2065519",
       "sku": "WEB-PROTECT-SUB",
       "sn": "53304946-1-1",
       "entitlement": "🔗",
@@ -2591,9 +2663,9 @@
       "deploy_log": "22.07.01 신호근",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2610,14 +2682,32 @@
         "iv": "cYPeVsBj1C6krFMN",
         "ct": "c/GpB8VSbGQO",
         "tag": "OzfvAHdMoFvOrN/lKdicog=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Raul Espinoza",
+          "phone": "52-664-188-1999 / 1-619-403-1803",
+          "email": "raul.espinoza@samsung.com"
+        },
+        {
+          "name": "Dong Yob Kim",
+          "phone": "",
+          "email": "dongyob.kim@samsung.com"
+        },
+        {
+          "name": "Arturo Juarez",
+          "phone": "",
+          "email": "ar.juarez@samsung.com"
+        }
+      ]
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "SAMEX SRT",
+      "location": "멕시코 티후아나",
+      "support_id": "2065519",
       "sku": "CLD-RPT-SUB",
       "sn": "52437994-1-1",
       "entitlement": "🔗",
@@ -2629,9 +2719,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2640,7 +2730,25 @@
       "id": 62,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "Raul Espinoza",
+          "phone": "52-664-188-1999 / 1-619-403-1803",
+          "email": "raul.espinoza@samsung.com"
+        },
+        {
+          "name": "Dong Yob Kim",
+          "phone": "",
+          "email": "dongyob.kim@samsung.com"
+        },
+        {
+          "name": "Arturo Juarez",
+          "phone": "",
+          "email": "ar.juarez@samsung.com"
+        }
+      ]
     },
     {
       "group": "mx-samex",
