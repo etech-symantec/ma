@@ -908,7 +908,7 @@
       "group": "in-shi",
       "flag": "",
       "owner": "인도중공업 SHI",
-      "location": "인도중공업(SHI)",
+      "location": "인도",
       "support_id": "4050417",
       "sku": "SG-S200-20",
       "sn": "4816330064",
@@ -924,9 +924,9 @@
       "owner_primary": "강성준",
       "owner_secondary": "김상문",
       "check_method": "원격 (RC)",
-      "cust_contact": "송혜영 프로 / Sandeep",
+      "cust_contact": "",
       "cust_phone": "",
-      "cust_email": "hlindsy.song@samsung.com; s.bharti@samsung.com",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "인도중공업(SHI)",
       "id": 20,
@@ -944,14 +944,27 @@
         "iv": "bPGW8cDIBEDbDk1G",
         "ct": "BLT8T0qkw10DLQ==",
         "tag": "XNkCO6UOPLz7c+qtM7C2FQ=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "송혜영 프로",
+          "phone": "",
+          "email": "hlindsy.song@samsung.com"
+        },
+        {
+          "name": "Sandeep",
+          "phone": "",
+          "email": "s.bharti@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-shi",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "인도중공업 SHI",
+      "location": "인도",
+      "support_id": "4050417",
       "sku": "IS-SWSA-SWG-100-250-1Y",
       "sn": "50672413-2-1",
       "entitlement": "🔗",
@@ -963,9 +976,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "김상문",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -974,7 +987,20 @@
       "id": 21,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "송혜영 프로",
+          "phone": "",
+          "email": "hlindsy.song@samsung.com"
+        },
+        {
+          "name": "Sandeep",
+          "phone": "",
+          "email": "s.bharti@samsung.com"
+        }
+      ]
     },
     {
       "group": "th-tse",
