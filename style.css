@@ -90,6 +90,11 @@ a{color:var(--accent);}
 .lock-meta button{ font-size:12.5px; color:var(--text-faint); background:none; border:none; cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
 .lock-meta button:hover{ color:var(--text-dim); }
 
+/* 계정 로그인 게이트 (앱 진입 전 1단계) */
+.ag-reg-fields{ display:flex; flex-direction:column; gap:10px; margin-bottom:4px; }
+#agRegisterView .cp-error{ margin-top:12px; }
+#ag_user_list.user-list{ margin-top:0; }
+
 /* ---------- App shell ---------- */
 #app{ display:none; }
 #app.ready{ display:block; }
@@ -99,40 +104,11 @@ a{color:var(--accent);}
    이 페이지에서도 동일하게 재확인 고정 — 혹시 모를 다른 규칙에 덮이지 않도록 방어적으로 추가. */
 .header-wrap{ position:sticky !important; top:0 !important; z-index:1000 !important; }
 
-/* NOTE: intentionally namespaced as .am-topbar (not the generic .topbar) — the shared portal stylesheet above almost certainly
+/* NOTE: intentionally namespaced (not the generic .topbar) — the shared portal stylesheet above almost certainly
    defines its own rules for such common class names with !important (same
    as it does for .header-wrap), which was silently clobbering our sticky
    positioning regardless of what offset we computed in JS. !important here
    too, defensively, in case anything else still collides. */
-.am-topbar{
-  position:sticky !important; top:var(--global-header-h, 0px) !important; z-index:40 !important;
-  display:flex; align-items:center; gap:18px;
-  padding:16px 26px;
-  background:rgba(255,255,255,0.86); backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--border-solid);
-}
-.brand{ display:flex; align-items:center; gap:11px; }
-.brand-mark{
-  width:34px; height:34px; border-radius:9px;
-  background:linear-gradient(145deg,var(--brand),var(--accent));
-  border:1px solid var(--border-solid);
-  display:flex; align-items:center; justify-content:center;
-  color:#fff; font-family:var(--mono); font-weight:700; font-size:13px;
-}
-.brand-text h2{ font-family:var(--display); font-size:15.5px; font-weight:600; }
-.brand-text span{ font-size:11px; color:var(--text-faint); font-family:var(--mono); letter-spacing:.03em;}
-
-.searchbox{
-  flex:1; max-width:420px; display:flex; align-items:center; gap:9px;
-  background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px;
-  padding:9px 13px;
-}
-.searchbox input{
-  flex:1; background:none; border:none; outline:none; color:var(--text); font-size:13.5px;
-}
-.searchbox svg{ color:var(--text-faint); flex-shrink:0; }
-
-.am-topbar-actions{ display:flex; align-items:center; gap:8px; margin-left:auto; }
 .icon-btn{
   display:flex; align-items:center; gap:6px;
   background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px;
@@ -141,19 +117,6 @@ a{color:var(--accent);}
 }
 .icon-btn:hover{ color:var(--text); border-color:#C7CFDC; }
 .icon-btn.on{ color:var(--accent); border-color:var(--accent); background:#E6F4FD; }
-
-.sync-status{
-  font-size:11px; font-family:var(--mono); color:var(--text-faint);
-  white-space:nowrap; display:flex; align-items:center;
-  cursor:pointer; padding:3px 6px; border-radius:5px;
-}
-.sync-status:hover{ background:var(--surface2); }
-.sync-status:empty{ cursor:default; }
-.sync-status:empty:hover{ background:none; }
-.sync-status.pending{ color:var(--text-dim); }
-.sync-status.syncing{ color:var(--accent); }
-.sync-status.synced{ color:var(--green); }
-.sync-status.error{ color:var(--red); }
 
 /* 최근 작업 이력 알림 드롭다운 */
 .activity-wrap{ position:relative; }
@@ -437,12 +400,12 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 #wl_fieldchange_grid{ margin-top:12px; }
 
 /* add form / modals */
-#addModal, #changePassModal, #workLogModal, #githubModal, #groupEditModal, #userModal{
+#addModal, #workLogModal, #groupEditModal{
   position:fixed; inset:0; z-index:1200; background:rgba(15,23,42,0.45); backdrop-filter:blur(3px);
   display:none; align-items:flex-start; justify-content:center; overflow-y:auto;
-  padding:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px) + 24px) 20px 40px;
+  padding:calc(var(--global-header-h, 0px) + 24px) 20px 40px;
 }
-#addModal.open, #changePassModal.open, #workLogModal.open, #githubModal.open, #groupEditModal.open, #userModal.open{ display:flex; }
+#addModal.open, #workLogModal.open, #groupEditModal.open{ display:flex; }
 .cp-error{ color:var(--red); font-size:12.5px; margin-top:14px; min-height:16px; }
 .modal-card{
   width:100%; max-width:640px; background:var(--surface); border:1px solid var(--border-solid);
