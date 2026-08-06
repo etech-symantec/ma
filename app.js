@@ -1091,10 +1091,20 @@ function renderRecentActivity(){
   });
 }
 
-document.getElementById('recentActivityBtn').onclick = () => {
+document.getElementById('recentActivityBtn').onclick = (e) => {
   const dd = document.getElementById('recentActivityDropdown');
   const opening = !dd.classList.contains('open');
-  if (opening) renderRecentActivity();
+  if (opening){
+    renderRecentActivity();
+    const btnRect = e.currentTarget.getBoundingClientRect();
+    const ddWidth = 340;
+    let left = btnRect.left;
+    if (left + ddWidth > window.innerWidth - 12) left = window.innerWidth - ddWidth - 12;
+    if (left < 12) left = 12;
+    dd.style.left = left + 'px';
+    dd.style.top = (btnRect.bottom + 8) + 'px';
+    dd.style.maxHeight = Math.min(440, window.innerHeight - btnRect.bottom - 24) + 'px';
+  }
   dd.classList.toggle('open', opening);
 };
 document.addEventListener('click', (e) => {
