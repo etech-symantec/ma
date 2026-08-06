@@ -1402,7 +1402,7 @@
       "group": "uk-seuk",
       "flag": "",
       "owner": "SEUK",
-      "location": "SEUK (영국)",
+      "location": "영국 런던",
       "support_id": "15688885",
       "sku": "SSP-S410-20B",
       "sn": "625700032",
@@ -1418,9 +1418,9 @@
       "owner_primary": "신호근",
       "owner_secondary": "윤태리",
       "check_method": "원격 (RC)",
-      "cust_contact": "이재혁 프로 / Roger Alphonso / 김응원 프로",
-      "cust_phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
-      "cust_email": "jay7.lee@partner.samsung.com; r.alphonso@partner.samsung.com; e.kymm@partner.samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "SEUK (영국)",
       "id": 32,
@@ -1438,14 +1438,32 @@
         "iv": "g+b64c6ZxVgHiN/Y",
         "ct": "t7UiOyQpUSuBYFm3klyJEcPTiZe9bnFJIEXl3SHY",
         "tag": "jrpQti5tGdYwjy2teKOvKA=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "이재혁 프로",
+          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
+          "email": "jay7.lee@partner.samsung.com"
+        },
+        {
+          "name": "Roger Alphonso",
+          "phone": "",
+          "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "name": "김응원 프로",
+          "phone": "",
+          "email": "e.kymm@partner.samsung.com"
+        }
+      ]
     },
     {
       "group": "uk-seuk",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "SEUK",
+      "location": "영국 런던",
+      "support_id": "15688885",
       "sku": "ISG-Proxy",
       "sn": "90999124",
       "entitlement": "🔗",
@@ -1457,9 +1475,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.4.13.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "신호근",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1480,14 +1498,32 @@
         "iv": "Zo7EUonAJ3pD7WFD",
         "ct": "FYb3YfxaZ1rzVS25cFEEUPOx+4Ix9vZsFsevRaGj",
         "tag": "jmsxJ1DYrF8QEFom2sKTdQ=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "이재혁 프로",
+          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
+          "email": "jay7.lee@partner.samsung.com"
+        },
+        {
+          "name": "Roger Alphonso",
+          "phone": "",
+          "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "name": "김응원 프로",
+          "phone": "",
+          "email": "e.kymm@partner.samsung.com"
+        }
+      ]
     },
     {
       "group": "uk-seuk",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "SEUK",
+      "location": "영국 런던",
+      "support_id": "15688885",
       "sku": "MC-VA",
       "sn": "2674419234",
       "entitlement": "🔗",
@@ -1499,9 +1535,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "4.1.3.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "신호근",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1522,14 +1558,32 @@
         "iv": "+pqopm+S7+pYlSSL",
         "ct": "jjFK7M2HEjFa",
         "tag": "EC9PFundXaod0sHvAiTW2w=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "이재혁 프로",
+          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
+          "email": "jay7.lee@partner.samsung.com"
+        },
+        {
+          "name": "Roger Alphonso",
+          "phone": "",
+          "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "name": "김응원 프로",
+          "phone": "",
+          "email": "e.kymm@partner.samsung.com"
+        }
+      ]
     },
     {
       "group": "uk-seuk",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "SEUK",
+      "location": "영국 런던",
+      "support_id": "15688885",
       "sku": "ELK",
       "sn": "-",
       "entitlement": "🔗",
@@ -1541,9 +1595,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "8.19.10",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "신호근",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1564,14 +1618,32 @@
         "iv": "xb3Ae964IGuLnWZu",
         "ct": "TveE9Qz1lC9X",
         "tag": "b9IAFPGVjANSS90ZWzx2ig=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "이재혁 프로",
+          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
+          "email": "jay7.lee@partner.samsung.com"
+        },
+        {
+          "name": "Roger Alphonso",
+          "phone": "",
+          "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "name": "김응원 프로",
+          "phone": "",
+          "email": "e.kymm@partner.samsung.com"
+        }
+      ]
     },
     {
       "group": "uk-seuk",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "SEUK",
+      "location": "영국 런던",
+      "support_id": "15688885",
       "sku": "WEB-PROTECT-SUB",
       "sn": "53256864-1-1",
       "entitlement": "🔗",
@@ -1583,9 +1655,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "신호근",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1594,7 +1666,25 @@
       "id": 36,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "이재혁 프로",
+          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
+          "email": "jay7.lee@partner.samsung.com"
+        },
+        {
+          "name": "Roger Alphonso",
+          "phone": "",
+          "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "name": "김응원 프로",
+          "phone": "",
+          "email": "e.kymm@partner.samsung.com"
+        }
+      ]
     },
     {
       "group": "vn-sdv-old",
