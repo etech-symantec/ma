@@ -186,22 +186,31 @@ a{color:var(--accent);}
 .ra-author{ font-size:11px; color:var(--text-faint); margin-top:4px; font-family:var(--mono); }
 
 /* 사용자 관리 모달 */
-.user-add-row{ display:flex; gap:8px; margin-bottom:16px; }
+.user-add-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
 .user-add-row input{
-  flex:1; background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
+  flex:1; min-width:120px; background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
   padding:9px 11px; color:var(--text); font-size:13px; outline:none; font-family:var(--body);
 }
 .user-add-row input:focus{ border-color:var(--accent); }
 .user-add-row button{ flex-shrink:0; width:auto; }
-.user-list{ display:flex; flex-direction:column; gap:6px; max-height:320px; overflow-y:auto; }
+.user-list{ display:flex; flex-direction:column; gap:6px; max-height:320px; overflow-y:auto; margin-top:16px; }
 .user-list-empty{ font-size:12.5px; color:var(--text-faint); text-align:center; padding:24px 0; }
 .user-row{
-  display:flex; align-items:center; gap:10px; padding:9px 11px;
+  padding:9px 11px;
   border:1px solid var(--border-solid); border-radius:9px;
 }
 .user-row.active{ border-color:var(--accent); background:#E6F4FD; }
+.user-row-main{ display:flex; align-items:center; gap:10px; }
 .user-name{ flex:1; font-size:13px; color:var(--text); }
 .user-current-tag{ font-size:11px; color:var(--accent); font-family:var(--mono); flex-shrink:0; }
+.user-login-form{ display:flex; gap:8px; margin-top:9px; }
+.user-login-form input{
+  flex:1; background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
+  padding:8px 10px; color:var(--text); font-size:12.8px; outline:none; font-family:var(--body);
+}
+.user-login-form input:focus{ border-color:var(--accent); }
+.user-login-form button{ flex-shrink:0; width:auto; padding:8px 14px; font-size:12.5px; }
+.user-login-error{ color:var(--red); font-size:11.8px; margin-top:6px; min-height:14px; }
 
 .layout{ display:flex; align-items:flex-start; }
 
