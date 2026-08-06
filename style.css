@@ -213,16 +213,27 @@ aside.filters{
 }
 .profile-logout-btn:hover{ color:var(--red); border-color:#F3B4B4; background:#fff; }
 
-/* 좌측 패널 상단으로 옮겨진 액션 버튼 (최근 이력 / 전체 펼치기 / 자산 추가) */
+/* 좌측 패널 검색창 */
+.sidebar-search{
+  display:flex; align-items:center; gap:8px;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:10px;
+  padding:9px 11px; margin-bottom:16px;
+}
+.sidebar-search svg{ color:var(--text-faint); flex-shrink:0; }
+.sidebar-search input{
+  flex:1; min-width:0; background:none; border:none; outline:none; color:var(--text); font-size:12.8px; font-family:var(--body);
+}
+
+/* 좌측 패널 상단으로 옮겨진 액션 버튼 (최근 이력 / 전체 펼치기 / 자산 추가 / 마스킹 전체 해제) */
 .panel-top-actions{
-  display:flex; flex-direction:row; gap:8px;
+  display:flex; flex-direction:row; gap:6px;
   margin-bottom:18px; padding-bottom:18px;
   border-bottom:1px solid var(--border-solid);
 }
 .panel-top-actions .activity-wrap{ flex:1; }
 .panel-top-actions .icon-btn{ width:100%; }
 .icon-btn.icon-only{
-  justify-content:center; padding:9px 0; font-size:15px; line-height:1;
+  justify-content:center; padding:9px 0; font-size:14.5px; line-height:1;
 }
 
 /* 내가 담당자인 자산만 보기 토글 */
@@ -260,6 +271,16 @@ aside.filters{
 .filter-item.active{ background:#E6F4FD; color:var(--accent-dim); border-color:#BFE4F8; font-weight:600; }
 .filter-item .cnt{ font-family:var(--mono); font-size:10.5px; color:var(--text-faint); }
 .filter-item.active .cnt{ color:var(--accent); }
+
+/* 국가/법인 필터 — 즐겨찾기 별 */
+.country-filter-item{ justify-content:flex-start; }
+.country-filter-item .country-name{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.fav-star{
+  flex-shrink:0; background:none; border:none; cursor:pointer; padding:0 2px 0 0;
+  font-size:13px; line-height:1; color:var(--text-faint); transition:color .12s, transform .12s;
+}
+.fav-star:hover{ color:var(--amber); transform:scale(1.15); }
+.fav-star.active{ color:var(--amber); }
 
 /* 라이선스 상태 / 태그 필터는 2열로 배치 */
 #statusFilters, #skuKeywordFilters{
@@ -304,6 +325,7 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .group-title .title-meta{ margin-top:0; }
 .group-title .sub.group-remarks{ margin-top:4px; color:var(--text-faint); font-style:italic; white-space:pre-wrap; }
 .group-title .sub.group-contacts{ margin-top:6px; display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+.group-title .sub.group-cust-contacts{ margin-top:8px; flex-direction:column; align-items:flex-start; gap:5px; }
 .mgr-names{ display:inline-flex; align-items:center; gap:12px; }
 .mgr-tag{
   font-family:var(--mono); font-size:9.5px; font-weight:700; color:var(--text-faint);
@@ -317,13 +339,21 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .mgr-secondary{
   font-weight:500; font-size:12px; color:var(--text-dim);
 }
+.cust-contact-chips{ display:flex; flex-direction:column; gap:5px; width:100%; }
+.cust-contact-chip{
+  display:inline-flex; align-items:center; gap:0; width:fit-content; max-width:100%;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
+  padding:4px 10px 4px 4px;
+}
+.cust-contact-text{ font-size:12px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .cust-role-tag{
   display:inline-block; font-family:var(--mono); font-size:9.5px; font-weight:700;
-  padding:1.5px 6px; border-radius:4px; margin-right:5px; letter-spacing:.02em;
+  padding:1.5px 6px; border-radius:4px; margin-right:7px; letter-spacing:.02em;
   background:var(--surface2); color:var(--text-faint); border:1px solid var(--border-solid);
 }
 .cust-role-tag[data-role="운용"]{ color:var(--accent-dim); background:#E6F4FD; border-color:#BFE4F8; }
 .cust-role-tag[data-role="영업"]{ color:#B45309; background:#FEF3C7; border-color:#FDE4A8; }
+.cust-role-tag.cust-role-none{ color:var(--text-faint); background:var(--surface); border-style:dashed; }
 
 .group-badges{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
 .badge{
