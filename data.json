@@ -14865,5 +14865,14 @@
       "id_enc": null,
       "pw_enc": null
     }
+  ],
+  "users": [
+    {
+      "id": "u1785998373100",
+      "name": "신호근",
+      "pwSalt": "kKVfQPiGCu/4G79R/1qd9Q==",
+      "pwIterations": 150000,
+      "pwHash": "+xc9TTRRqo3fIsncWGslP4QPu3rHwZIMabRzIRj+x2Q="
+    }
   ]
 }
