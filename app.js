@@ -193,7 +193,8 @@ let activeStatusFilters = new Set(['ok','warn','na']);
 let activeCountryFilter = null;
 let activeDeviceTypeFilter = null;
 let activeSkuKeywordFilters = new Set();
-let activeMyAssetsFilter = false; // 로그인한 사용자가 담당자(정/부)인 자산만 보기
+let activeMyAssetsFilter = false; // 로그인한 사용자가 담당자(정)인 자산만 보기
+let revealAllActive = false; // 마스킹된 IP/ID/비밀번호를 전체 해제해서 보여주는 중인지
 let workLogRecordId = null; // which record's modal is currently open
 let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
 let editingRecordId = null; // asset record id currently being edited via addModal (null = adding new)
@@ -535,7 +536,7 @@ function trashSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fil
 function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>`; }
 
 function render(){
-  const q = '';
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
   let list = records.filter(r => {
     if (!activeStatusFilters.has(licenseStatus(r))) return false;
     if (activeDeviceTypeFilter && deviceTypeLabel(r) !== activeDeviceTypeFilter) return false;
@@ -673,6 +674,10 @@ function render(){
 
   buildFilters();
   updateActivityBadge();
+  updateRevealAllBtnState();
+  if (revealAllActive && sessionKey && !viewOnly){
+    revealAllVisibleSecrets();
+  }
 }
 
 function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료됨', na:'기간정보없음'}[s]; }
@@ -688,26 +693,26 @@ function snLink(r, groupSupportId){
 }
 
 function groupContactsHtml(meta){
-  const parts = [];
+  let html = '';
   if (meta.owner_primary || meta.owner_secondary){
     const names = [];
     if (meta.owner_primary) names.push(`<span class="mgr-primary"><span class="mgr-tag">정</span>${esc(meta.owner_primary)}</span>`);
     if (meta.owner_secondary) names.push(`<span class="mgr-secondary"><span class="mgr-tag">부</span>${esc(meta.owner_secondary)}</span>`);
-    parts.push(`<span class="mgr-names">${names.join(' ')}</span>`);
+    html += `<div class="sub group-contacts"><span class="mgr-names">${names.join(' ')}</span></div>`;
   }
   if (meta.cust_contacts && meta.cust_contacts.length){
-    const people = meta.cust_contacts
-      .map(c => {
-        const bits = [c.name, c.phone, c.email].filter(Boolean).map(esc).join(' · ');
-        if (!bits) return '';
-        const roleTag = c.role ? `<span class="cust-role-tag" data-role="${esc(c.role)}">${esc(c.role)}</span>` : '';
-        return `${roleTag}${bits}`;
-      })
-      .filter(Boolean);
-    if (people.length) parts.push(`<span><b>고객사 담당자</b> ${people.join(' / ')}</span>`);
+    const chips = meta.cust_contacts.map(c => {
+      const bits = [c.name, c.phone, c.email].filter(Boolean).map(esc).join(' · ');
+      if (!bits) return '';
+      const roleTag = c.role
+        ? `<span class="cust-role-tag" data-role="${esc(c.role)}">${esc(c.role)}</span>`
+        : `<span class="cust-role-tag cust-role-none">미지정</span>`;
+      return `<span class="cust-contact-chip">${roleTag}<span class="cust-contact-text">${bits}</span></span>`;
+    }).filter(Boolean);
+    if (chips.length){
+      html += `<div class="sub group-cust-contacts"><b>고객사 담당자</b><div class="cust-contact-chips">${chips.join('')}</div></div>`;
+    }
   }
-  let html = '';
-  if (parts.length) html += `<div class="sub group-contacts">${parts.join('')}</div>`;
   if (meta.group_remarks) html += `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
   return html;
 }
@@ -744,6 +749,22 @@ function rowHtml(r, groupSupportId){
   </tr>`;
 }
 
+// 국가/법인 즐겨찾기 — 로그인한 사용자별로 이 브라우저에만 저장 (팀 공유 데이터 아님)
+function favCountriesKey(){
+  return 'bcAssetFavCountries_' + (currentUserId || 'anon');
+}
+function getFavCountries(){
+  try{
+    const raw = localStorage.getItem(favCountriesKey());
+    return new Set(raw ? JSON.parse(raw) : []);
+  }catch(e){ return new Set(); }
+}
+function toggleFavCountry(name){
+  const set = getFavCountries();
+  if (set.has(name)) set.delete(name); else set.add(name);
+  try{ localStorage.setItem(favCountriesKey(), JSON.stringify([...set])); }catch(e){}
+}
+
 function buildFilters(){
   const statusBox = document.getElementById('statusFilters');
   const statuses = [['ok','정상'],['warn','만료임박'],['crit','만료됨'],['na','기간없음']];
@@ -760,17 +781,35 @@ function buildFilters(){
   });
 
   const countryBox = document.getElementById('countryFilters');
+  const favSet = getFavCountries();
   const owners = [...new Map(records.map(r=>{
     const grp = records.filter(x=>x.group===r.group);
     const meta = groupMeta(grp);
     return [meta.owner, meta];
-  })).values()];
-  countryBox.innerHTML = owners.map(m=>`
-    <div class="filter-item ${activeCountryFilter===m.owner?'active':''}" data-owner="${esc(m.owner)}">
-      <span>${esc(m.owner)}</span>
-    </div>`).join('');
+  })).values()].sort((a,b)=>{
+    const af = favSet.has(a.owner) ? 0 : 1;
+    const bf = favSet.has(b.owner) ? 0 : 1;
+    if (af !== bf) return af - bf;
+    return a.owner.localeCompare(b.owner, 'ko');
+  });
+  countryBox.innerHTML = owners.map(m=>{
+    const isFav = favSet.has(m.owner);
+    return `
+    <div class="filter-item country-filter-item ${activeCountryFilter===m.owner?'active':''}" data-owner="${esc(m.owner)}">
+      <button type="button" class="fav-star ${isFav?'active':''}" data-fav="${esc(m.owner)}" title="즐겨찾기">${isFav?'★':'☆'}</button>
+      <span class="country-name">${esc(m.owner)}</span>
+    </div>`;
+  }).join('');
+  countryBox.querySelectorAll('[data-fav]').forEach(btn=>{
+    btn.onclick = (e)=>{
+      e.stopPropagation();
+      toggleFavCountry(btn.dataset.fav);
+      buildFilters();
+    };
+  });
   countryBox.querySelectorAll('[data-owner]').forEach(el=>{
-    el.onclick = ()=>{
+    el.onclick = (e)=>{
+      if (e.target.closest('[data-fav]')) return;
       const v = el.dataset.owner;
       activeCountryFilter = activeCountryFilter===v ? null : v;
       render();
@@ -838,6 +877,40 @@ document.getElementById('filtersResetBtn').onclick = () => {
   activeDeviceTypeFilter = null;
   activeSkuKeywordFilters = new Set();
   activeMyAssetsFilter = false;
+  render();
+};
+
+document.getElementById('searchInput').addEventListener('input', render);
+
+async function revealAllVisibleSecrets(){
+  const toggles = Array.from(document.querySelectorAll('.sec-toggle'));
+  for (const btn of toggles){
+    const id = btn.dataset.id, kind = btn.dataset.kind;
+    const dispEl = document.getElementById(`disp_${id}_${kind}`);
+    if (!dispEl || !dispEl.classList.contains('masked')) continue;
+    const rec = records.find(r=>String(r.id)===String(id));
+    if (!rec) continue;
+    const val = await decryptField(rec[kind+'_enc']);
+    dispEl.textContent = val;
+    dispEl.classList.remove('masked');
+  }
+}
+
+function updateRevealAllBtnState(){
+  const btn = document.getElementById('revealAllBtn');
+  if (!btn) return;
+  btn.classList.toggle('on', revealAllActive);
+  btn.textContent = revealAllActive ? '🙈' : '🔓';
+  btn.title = revealAllActive ? '민감정보 전체 가리기' : '마스킹된 정보 전체 해제';
+}
+
+document.getElementById('revealAllBtn').onclick = () => {
+  if (viewOnly || !sessionKey){ alert('민감정보를 보려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  revealAllActive = !revealAllActive;
+  if (revealAllActive){
+    // 접혀 있는 그룹은 테이블 자체가 그려지지 않으므로, 전부 펼쳐서 보이게 한 뒤 해제한다.
+    records.forEach(r => expandedGroups.add(r.group));
+  }
   render();
 };
 
