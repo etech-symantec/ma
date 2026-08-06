@@ -261,9 +261,9 @@
       "owner_primary": "윤태리",
       "owner_secondary": "김상문",
       "check_method": "원격 (RC)",
-      "cust_contact": "김한섭 프로 / 임진섭 프로(SDS)<담당 / Calvin Wang / Jacky Chen",
-      "cust_phone": "02-6155-1192 / 010-8719-1132",
-      "cust_email": "hanseob.kim@samsung.com; jinsup.lim@samsung.com; calvin.wang@samsung.com; jacky.chen@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "대만",
       "id": 6,
@@ -281,14 +281,37 @@
         "iv": "lXUIeaQtr1KDHkV/",
         "ct": "PmMTDYJZdQ==",
         "tag": "lLpYMRnAg6G95HXVunXi+A=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "김한섭 프로",
+          "phone": "02-6155-1192 / 010-8719-1132",
+          "email": "hanseob.kim@samsung.com; jinsup.lim@samsung.com; calvin.wang@samsung.com; jacky.chen@samsung.com"
+        },
+        {
+          "name": "임진섭 프로(SDS)",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "name": "Calvin Wang",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "name": "Jacky Chen",
+          "phone": "",
+          "email": ""
+        }
+      ]
     },
     {
       "group": "tw-ds",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성전자 대만 반도체 SET (DS) 법인",
+      "location": "대만",
+      "support_id": "490047",
       "sku": "IS-SWSA-SWG-100-250-1Y",
       "sn": "50691101-1-1",
       "entitlement": "🔗",
@@ -300,9 +323,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "김상문",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -311,14 +334,37 @@
       "id": 7,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "김한섭 프로",
+          "phone": "02-6155-1192 / 010-8719-1132",
+          "email": "hanseob.kim@samsung.com; jinsup.lim@samsung.com; calvin.wang@samsung.com; jacky.chen@samsung.com"
+        },
+        {
+          "name": "임진섭 프로(SDS)",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "name": "Calvin Wang",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "name": "Jacky Chen",
+          "phone": "",
+          "email": ""
+        }
+      ]
     },
     {
       "group": "tw-ds",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성전자 대만 반도체 SET (DS) 법인",
+      "location": "대만",
+      "support_id": "490047",
       "sku": "RP-V50-1Y",
       "sn": "27480040",
       "entitlement": "🔗",
@@ -330,9 +376,9 @@
       "deploy_log": "신호근",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "김상문",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -353,7 +399,30 @@
         "iv": "6zoNhmcmQDrPI68Z",
         "ct": "fx+CXD27Kej0",
         "tag": "rNt4tz/p8ldczWlTmWOiJg=="
-      }
+      },
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "name": "김한섭 프로",
+          "phone": "02-6155-1192 / 010-8719-1132",
+          "email": "hanseob.kim@samsung.com; jinsup.lim@samsung.com; calvin.wang@samsung.com; jacky.chen@samsung.com"
+        },
+        {
+          "name": "임진섭 프로(SDS)",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "name": "Calvin Wang",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "name": "Jacky Chen",
+          "phone": "",
+          "email": ""
+        }
+      ]
     },
     {
       "group": "in-sdn-cama",
