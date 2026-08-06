@@ -53,16 +53,7 @@
       <input type="text" id="searchInput" placeholder="법인, 국가, SKU, S/N, 담당자로 검색…" />
     </div>
     <div class="am-topbar-actions">
-      <div class="activity-wrap">
-        <button class="icon-btn" id="recentActivityBtn">🔔 최근 이력<span id="raBadge" class="ra-badge" style="display:none;"></span></button>
-        <div class="recent-activity-dropdown" id="recentActivityDropdown">
-          <div class="ra-header">최근 작업 이력 (최대 10건)</div>
-          <div id="recentActivityList"></div>
-        </div>
-      </div>
       <button class="icon-btn" id="userMgmtBtn">👤 사용자 선택</button>
-      <button class="icon-btn" id="expandAllBtn">전체 펼치기</button>
-      <button class="icon-btn" id="addBtn">＋ 자산 추가</button>
       <button class="icon-btn" id="changePassBtn">🔑 비밀번호 변경</button>
       <button class="icon-btn" id="githubSaveBtn">☁️ GitHub에 저장</button>
       <span id="githubSyncStatus" class="sync-status" title="클릭하면 GitHub 연동 설정을 열 수 있습니다"></span>
@@ -74,6 +65,17 @@
 
   <div class="layout">
     <aside class="filters">
+      <div class="panel-top-actions">
+        <div class="activity-wrap">
+          <button class="icon-btn" id="recentActivityBtn">🔔 최근 이력<span id="raBadge" class="ra-badge" style="display:none;"></span></button>
+          <div class="recent-activity-dropdown" id="recentActivityDropdown">
+            <div class="ra-header">최근 작업 이력 (최대 10건)</div>
+            <div id="recentActivityList"></div>
+          </div>
+        </div>
+        <button class="icon-btn" id="expandAllBtn">전체 펼치기</button>
+        <button class="icon-btn" id="addBtn">＋ 자산 추가</button>
+      </div>
       <div class="filter-group">
         <h4>라이선스 상태</h4>
         <div id="statusFilters"></div>
