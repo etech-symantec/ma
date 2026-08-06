@@ -193,6 +193,7 @@ let activeStatusFilters = new Set(['ok','warn','na']);
 let activeCountryFilter = null;
 let activeDeviceTypeFilter = null;
 let activeSkuKeywordFilters = new Set();
+let activeMyAssetsFilter = false; // 로그인한 사용자가 담당자(정/부)인 자산만 보기
 let workLogRecordId = null; // which record's modal is currently open
 let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
 let editingRecordId = null; // asset record id currently being edited via addModal (null = adding new)
@@ -547,6 +548,10 @@ function render(){
       const meta = groupMeta(grpItems);
       if (meta.owner !== activeCountryFilter) return false;
     }
+    if (activeMyAssetsFilter){
+      const me = currentUserName();
+      if (!me || !(r.owner_primary === me || r.owner_secondary === me)) return false;
+    }
     if (q){
       const custBits = (r.cust_contacts||[]).flatMap(c=>[c.name,c.phone,c.email]);
       const hay = [r.owner,r.location,r.sku,r.sn,r.support_id,r.check_method,r.owner_primary,r.owner_secondary,r.cust_contact,...custBits,deviceTypeLabel(r),r.remarks,r.group_remarks,skuKeywordMatches(r.sku).join(' ')].join(' ').toLowerCase();
@@ -800,7 +805,36 @@ function buildFilters(){
       render();
     };
   });
+
+  updateMyAssetsToggle();
 }
+
+function updateMyAssetsToggle(){
+  const btn = document.getElementById('myAssetsToggle');
+  const cntEl = document.getElementById('myAssetsCount');
+  if (!btn || !cntEl) return;
+  const me = currentUserName();
+  const cnt = me ? records.filter(r=>r.owner_primary===me || r.owner_secondary===me).length : 0;
+  cntEl.textContent = cnt;
+  btn.classList.toggle('active', activeMyAssetsFilter);
+  btn.disabled = !me;
+  btn.title = me ? '' : '로그인이 필요합니다.';
+}
+
+document.getElementById('myAssetsToggle').onclick = () => {
+  if (!currentUserName()) return;
+  activeMyAssetsFilter = !activeMyAssetsFilter;
+  render();
+};
+
+document.getElementById('filtersResetBtn').onclick = () => {
+  activeStatusFilters = new Set(['ok','warn','na']);
+  activeCountryFilter = null;
+  activeDeviceTypeFilter = null;
+  activeSkuKeywordFilters = new Set();
+  activeMyAssetsFilter = false;
+  render();
+};
 
 document.getElementById('expandAllBtn').onclick = () => {
   const allOpen = expandedGroups.size > 0;
@@ -996,7 +1030,15 @@ function currentUserName(){
   const u = users.find(x=>String(x.id)===String(currentUserId));
   return u ? u.name : '';
 }
-function updateUserBtnLabel(){} // (상단 바가 없어져 더 이상 표시할 곳이 없다 — 호환을 위해 남겨둔 빈 함수)
+function updateSidebarProfile(){
+  const nameEl = document.getElementById('profileName');
+  const avatarEl = document.getElementById('profileAvatar');
+  if (!nameEl || !avatarEl) return;
+  const name = currentUserName();
+  nameEl.textContent = name || '로그인 필요';
+  avatarEl.textContent = name ? name.trim().charAt(0) : '?';
+}
+function updateUserBtnLabel(){ updateSidebarProfile(); } // (이전 이름 호환용 별칭)
 
 // ---------- 계정 게이트 (앱 진입 전 1단계 로그인 화면) ----------
 function showMasterGate(){
