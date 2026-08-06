@@ -163,9 +163,9 @@ a{color:var(--accent);}
   font-size:10px; font-family:var(--mono); font-weight:700; line-height:1;
 }
 .recent-activity-dropdown{
-  display:none; position:absolute; top:calc(100% + 8px); right:0; width:340px; max-height:440px;
+  display:none; position:fixed; width:340px; max-height:440px;
   overflow-y:auto; background:var(--surface); border:1px solid var(--border-solid); border-radius:12px;
-  box-shadow:var(--shadow); z-index:200; padding:6px;
+  box-shadow:var(--shadow); z-index:500; padding:6px;
 }
 .recent-activity-dropdown.open{ display:block; }
 .ra-header{
@@ -212,6 +212,18 @@ aside.filters{
   position:sticky !important; top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px)) !important;
   max-height:calc(100vh - var(--global-header-h, 0px) - var(--topbar-h, 0px)); overflow-y:auto;
 }
+/* 좌측 패널 상단으로 옮겨진 액션 버튼 (최근 이력 / 전체 펼치기 / 자산 추가) */
+.panel-top-actions{
+  display:flex; flex-direction:column; gap:8px;
+  margin-bottom:24px; padding-bottom:22px;
+  border-bottom:1px solid var(--border-solid);
+}
+.panel-top-actions .icon-btn,
+.panel-top-actions .activity-wrap{ width:100%; }
+.panel-top-actions .icon-btn{
+  width:100%; justify-content:flex-start;
+}
+
 .filter-group{ margin-bottom:22px; }
 .filter-group h4{
   font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-faint);
@@ -474,7 +486,14 @@ footer.foot{
 }
 
 @media (max-width: 880px){
-  aside.filters{ display:none; }
+  aside.filters{
+    display:block; width:100%; position:static !important; max-height:none;
+    padding:14px 16px; border-bottom:1px solid var(--border-solid);
+  }
+  aside.filters .filter-group{ display:none; }
+  .panel-top-actions{ flex-direction:row; flex-wrap:wrap; margin-bottom:0; padding-bottom:0; border-bottom:none; }
+  .panel-top-actions .icon-btn{ width:auto; }
+  .panel-top-actions .activity-wrap{ width:auto; }
   table, thead, tbody, tr, td{ display:block; }
   thead{ display:none; }
   tbody tr{ padding:12px; border-bottom:1px solid var(--border-solid); }
