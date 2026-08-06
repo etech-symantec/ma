@@ -214,14 +214,14 @@ aside.filters{
 }
 /* 좌측 패널 상단으로 옮겨진 액션 버튼 (최근 이력 / 전체 펼치기 / 자산 추가) */
 .panel-top-actions{
-  display:flex; flex-direction:column; gap:8px;
+  display:flex; flex-direction:row; gap:8px;
   margin-bottom:24px; padding-bottom:22px;
   border-bottom:1px solid var(--border-solid);
 }
-.panel-top-actions .icon-btn,
-.panel-top-actions .activity-wrap{ width:100%; }
-.panel-top-actions .icon-btn{
-  width:100%; justify-content:flex-start;
+.panel-top-actions .activity-wrap{ flex:1; }
+.panel-top-actions .icon-btn{ width:100%; }
+.icon-btn.icon-only{
+  justify-content:center; padding:9px 0; font-size:15px; line-height:1;
 }
 
 .filter-group{ margin-bottom:22px; }
@@ -491,9 +491,7 @@ footer.foot{
     padding:14px 16px; border-bottom:1px solid var(--border-solid);
   }
   aside.filters .filter-group{ display:none; }
-  .panel-top-actions{ flex-direction:row; flex-wrap:wrap; margin-bottom:0; padding-bottom:0; border-bottom:none; }
-  .panel-top-actions .icon-btn{ width:auto; }
-  .panel-top-actions .activity-wrap{ width:auto; }
+  .panel-top-actions{ margin-bottom:0; padding-bottom:0; border-bottom:none; max-width:220px; }
   table, thead, tbody, tr, td{ display:block; }
   thead{ display:none; }
   tbody tr{ padding:12px; border-bottom:1px solid var(--border-solid); }
