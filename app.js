@@ -326,6 +326,23 @@ async function deriveKey(passphrase, saltB64, iterations){
   );
 }
 
+// 개인 계정 로그인 비밀번호 해시 (마스터 비밀번호와는 별개 — 민감정보 암호화 키가 아니라
+// "이 브라우저에서 누가 로그인했는지"를 검증하기 위한 용도). PBKDF2로 늘린 해시값만
+// 저장하고 원문 비밀번호는 저장/전송하지 않는다.
+// 주의: 이 앱은 서버가 없는 정적 페이지이므로, 개발자 도구를 여는 사람은 이 해시 비교
+// 로직 자체를 우회할 수 있다. 즉 "같은 브라우저를 쓰는 팀원끼리 계정을 구분"하는 용도의
+// 보호이며, 악의적인 공격자를 막는 진짜 보안 경계는 아니다.
+async function hashPassword(password, saltB64, iterations){
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
+  const bits = await crypto.subtle.deriveBits(
+    { name:'PBKDF2', salt: b64ToBuf(saltB64), iterations, hash:'SHA-256' },
+    baseKey,
+    256
+  );
+  return bufToB64(bits);
+}
+
 async function decryptField(field){
   if (!field || !sessionKey) return '';
   try{
@@ -964,12 +981,15 @@ function deleteGroup(gid){
   scheduleAutoSync();
 }
 
-// ---------- users (누가 작업 이력을 등록했는지 기록) ----------
-// `users` 목록 자체는 팀 전체가 공유하는 데이터라 records와 함께 GitHub에 동기화된다.
-// 반면 "지금 이 브라우저에서 나는 누구인가"는 로컬 전용 정보라 localStorage에만 저장한다.
+// ---------- users (각자 계정으로 로그인해서 작업 이력 작성자를 기록) ----------
+// `users` 목록(이름 + 비밀번호 해시)은 팀 전체가 공유하는 데이터라 records와 함께
+// GitHub에 동기화된다. 반면 "지금 이 브라우저에서 로그인되어 있는 사람"은 로컬 전용
+// 정보라 localStorage에만 저장한다 (다른 사람 계정으로 바꾸려면 그 사람의 비밀번호가
+// 필요하다).
 const CURRENT_USER_KEY = 'bcAssetCurrentUserId';
 let currentUserId = null;
 try{ currentUserId = localStorage.getItem(CURRENT_USER_KEY) || null; }catch(e){ currentUserId = null; }
+let loginPromptUserId = null; // 사용자 목록에서 지금 비밀번호 입력창이 펼쳐진 계정
 
 function saveCurrentUserId(id){
   try{ if (id) localStorage.setItem(CURRENT_USER_KEY, id); else localStorage.removeItem(CURRENT_USER_KEY); }catch(e){}
@@ -982,38 +1002,90 @@ function updateUserBtnLabel(){
   const btn = document.getElementById('userMgmtBtn');
   if (!btn) return;
   const name = currentUserName();
-  btn.textContent = name ? `👤 ${name}` : '👤 사용자 선택';
+  btn.textContent = name ? `👤 ${name}` : '👤 로그인';
 }
 
 function renderUserList(){
   const wrap = document.getElementById('um_user_list');
   if (!users.length){
-    wrap.innerHTML = `<div class="user-list-empty">등록된 사용자가 없습니다. 위에서 새 사용자를 추가하세요.</div>`;
+    wrap.innerHTML = `<div class="user-list-empty">등록된 계정이 없습니다. 위에서 새 계정을 만드세요.</div>`;
     return;
   }
-  wrap.innerHTML = users.map(u => `
-    <div class="user-row ${String(u.id)===String(currentUserId)?'active':''}">
-      <span class="user-name">${esc(u.name)}</span>
-      ${String(u.id)===String(currentUserId)
-        ? `<span class="user-current-tag">현재 사용자</span>`
-        : `<button type="button" class="wl-action-btn" data-select-user="${u.id}">이 사용자로 전환</button>`}
-      <button type="button" class="wl-action-btn danger" data-delete-user="${u.id}" title="삭제">✕</button>
-    </div>`).join('');
-  wrap.querySelectorAll('[data-select-user]').forEach(btn=>{
+  wrap.innerHTML = users.map(u => {
+    const isCurrent = String(u.id)===String(currentUserId);
+    const isPrompting = String(u.id)===String(loginPromptUserId);
+    let rightHtml;
+    if (isCurrent){
+      rightHtml = `<span class="user-current-tag">현재 사용자</span><button type="button" class="wl-action-btn" data-logout-user="${u.id}">로그아웃</button>`;
+    } else if (isPrompting){
+      rightHtml = `<button type="button" class="wl-action-btn" data-cancel-login="${u.id}">취소</button>`;
+    } else {
+      rightHtml = `<button type="button" class="wl-action-btn" data-login-user="${u.id}">로그인</button>`;
+    }
+    return `
+    <div class="user-row ${isCurrent?'active':''}">
+      <div class="user-row-main">
+        <span class="user-name">${esc(u.name)}</span>
+        ${rightHtml}
+        <button type="button" class="wl-action-btn danger" data-delete-user="${u.id}" title="삭제">✕</button>
+      </div>
+      ${isPrompting ? `
+      <form class="user-login-form" data-login-form="${u.id}">
+        <input type="password" class="user-login-pass" placeholder="비밀번호" autocomplete="current-password">
+        <button type="submit" class="btn btn-primary">확인</button>
+      </form>
+      <div class="user-login-error" id="umLoginError_${u.id}"></div>` : ''}
+    </div>`;
+  }).join('');
+
+  wrap.querySelectorAll('[data-login-user]').forEach(btn=>{
     btn.onclick = () => {
-      currentUserId = btn.dataset.selectUser;
-      saveCurrentUserId(currentUserId);
+      loginPromptUserId = btn.dataset.loginUser;
+      renderUserList();
+      const form = wrap.querySelector(`[data-login-form="${CSS.escape(loginPromptUserId)}"]`);
+      if (form) form.querySelector('.user-login-pass').focus();
+    };
+  });
+  wrap.querySelectorAll('[data-cancel-login]').forEach(btn=>{
+    btn.onclick = () => { loginPromptUserId = null; renderUserList(); };
+  });
+  wrap.querySelectorAll('[data-logout-user]').forEach(btn=>{
+    btn.onclick = () => {
+      currentUserId = null;
+      saveCurrentUserId(null);
+      renderUserList();
+      updateUserBtnLabel();
+    };
+  });
+  wrap.querySelectorAll('[data-login-form]').forEach(form=>{
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const uid = form.dataset.loginForm;
+      const u = users.find(x=>String(x.id)===String(uid));
+      const passInput = form.querySelector('.user-login-pass');
+      const errEl = document.getElementById('umLoginError_' + uid);
+      const pass = passInput.value;
+      if (!u){ return; }
+      if (!pass){ errEl.textContent = '비밀번호를 입력해 주세요.'; return; }
+      if (!u.pwHash){ errEl.textContent = '이 계정에는 비밀번호가 설정되어 있지 않습니다. 관리자에게 계정을 다시 만들어 달라고 요청하세요.'; return; }
+      errEl.textContent = '확인 중…';
+      const hash = await hashPassword(pass, u.pwSalt, u.pwIterations);
+      if (hash !== u.pwHash){ errEl.textContent = '비밀번호가 올바르지 않습니다.'; passInput.value=''; passInput.focus(); return; }
+      currentUserId = uid;
+      saveCurrentUserId(uid);
+      loginPromptUserId = null;
       renderUserList();
       updateUserBtnLabel();
     };
   });
   wrap.querySelectorAll('[data-delete-user]').forEach(btn=>{
     btn.onclick = () => {
-      if (viewOnly || !sessionKey){ alert('사용자 목록을 변경하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-      if (!confirm('이 사용자를 삭제할까요? 이미 남긴 작업 이력의 작성자 표시는 그대로 유지됩니다.')) return;
+      if (viewOnly || !sessionKey){ alert('계정을 삭제하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+      if (!confirm('이 계정을 삭제할까요? 이미 남긴 작업 이력의 작성자 표시는 그대로 유지됩니다.')) return;
       const uid = btn.dataset.deleteUser;
       users = users.filter(u=>String(u.id)!==String(uid));
       if (String(currentUserId)===String(uid)){ currentUserId = null; saveCurrentUserId(null); }
+      if (String(loginPromptUserId)===String(uid)){ loginPromptUserId = null; }
       renderUserList();
       updateUserBtnLabel();
       scheduleAutoSync();
@@ -1021,21 +1093,45 @@ function renderUserList(){
   });
 }
 
-document.getElementById('um_add_btn').onclick = () => {
-  if (viewOnly || !sessionKey){ alert('사용자를 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-  const input = document.getElementById('um_new_name');
-  const name = input.value.trim();
-  if (!name) return;
+document.getElementById('um_add_btn').onclick = async () => {
+  if (viewOnly || !sessionKey){ alert('계정을 만들려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const errEl = document.getElementById('umAddError');
+  errEl.textContent = '';
+  const nameInput = document.getElementById('um_new_name');
+  const passInput = document.getElementById('um_new_pass');
+  const pass2Input = document.getElementById('um_new_pass2');
+  const name = nameInput.value.trim();
+  const pass = passInput.value;
+  const pass2 = pass2Input.value;
+  if (!name){ errEl.textContent = '이름을 입력해 주세요.'; return; }
+  if (users.some(u=>u.name===name)){ errEl.textContent = '이미 같은 이름의 계정이 있습니다.'; return; }
+  if (!pass || pass.length < 4){ errEl.textContent = '비밀번호는 4자 이상으로 설정해 주세요.'; return; }
+  if (pass !== pass2){ errEl.textContent = '비밀번호가 일치하지 않습니다.'; return; }
+
+  errEl.textContent = '계정 생성 중…';
   const id = 'u' + Date.now();
-  users.push({ id, name });
-  input.value = '';
-  if (!currentUserId){ currentUserId = id; saveCurrentUserId(id); }
+  const pwSalt = bufToB64(crypto.getRandomValues(new Uint8Array(16)).buffer);
+  const pwIterations = 150000;
+  const pwHash = await hashPassword(pass, pwSalt, pwIterations);
+  users.push({ id, name, pwSalt, pwIterations, pwHash });
+
+  nameInput.value = ''; passInput.value = ''; pass2Input.value = '';
+  errEl.textContent = '';
+
+  // 계정을 막 만든 사람은 이미 방금 비밀번호를 입력해 본인임이 확인된 상태이므로
+  // 바로 로그인 상태로 전환한다.
+  currentUserId = id;
+  saveCurrentUserId(id);
+  loginPromptUserId = null;
+
   renderUserList();
   updateUserBtnLabel();
   scheduleAutoSync();
 };
 
 document.getElementById('userMgmtBtn').onclick = () => {
+  loginPromptUserId = null;
+  document.getElementById('umAddError').textContent = '';
   renderUserList();
   document.getElementById('userModal').classList.add('open');
 };
@@ -1666,7 +1762,7 @@ document.getElementById('wlAddBtn').onclick = async () => {
     workLogEditId = null;
     setWorkLogFormMode(false);
   } else {
-    if (!currentUserId && !confirm('현재 선택된 사용자가 없어 이 이력의 작성자가 "미상"으로 표시됩니다.\n작성자 없이 계속 저장할까요?\n\n(취소를 누르면 저장하지 않습니다 — 상단의 "👤 사용자 선택"에서 먼저 사용자를 선택해 주세요.)')){
+    if (!currentUserId && !confirm('현재 로그인된 사용자가 없어 이 이력의 작성자가 "미상"으로 표시됩니다.\n로그인 없이 계속 저장할까요?\n\n(취소를 누르면 저장하지 않습니다 — 상단의 "👤 로그인"에서 먼저 본인 계정으로 로그인해 주세요.)')){
       return;
     }
     const entry = { id: Date.now(), type, date, manager, note, author: currentUserName() };
