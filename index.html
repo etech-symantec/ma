@@ -68,6 +68,15 @@
 <div id="app">
   <div class="layout">
     <aside class="filters">
+      <div class="panel-profile">
+        <div class="profile-avatar" id="profileAvatar">?</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">-</div>
+          <div class="profile-sub">로그인됨</div>
+        </div>
+        <button type="button" class="profile-logout-btn" id="logoutBtn" title="로그아웃">🚪</button>
+      </div>
+
       <div class="panel-top-actions">
         <div class="activity-wrap">
           <button class="icon-btn icon-only" id="recentActivityBtn" title="최근 이력">🔔<span id="raBadge" class="ra-badge" style="display:none;"></span></button>
@@ -78,8 +87,14 @@
         </div>
         <button class="icon-btn icon-only" id="expandAllBtn" title="전체 펼치기">⛶</button>
         <button class="icon-btn icon-only" id="addBtn" title="자산 추가">＋</button>
-        <button class="icon-btn icon-only" id="logoutBtn" title="로그아웃">🚪</button>
       </div>
+
+      <button type="button" class="my-assets-toggle" id="myAssetsToggle">
+        <span class="mat-icon">🙋</span>
+        <span class="mat-label">내가 담당자인 자산만</span>
+        <span class="mat-count" id="myAssetsCount">0</span>
+      </button>
+
       <div class="filter-group">
         <h4>라이선스 상태</h4>
         <div id="statusFilters"></div>
@@ -96,6 +111,8 @@
         <h4>장비 종류</h4>
         <div id="deviceTypeFilters"></div>
       </div>
+
+      <button type="button" class="filters-reset-btn" id="filtersResetBtn">필터 초기화</button>
     </aside>
 
     <main class="content" id="content">
