@@ -550,7 +550,7 @@ function render(){
     }
     if (activeMyAssetsFilter){
       const me = currentUserName();
-      if (!me || !(r.owner_primary === me || r.owner_secondary === me)) return false;
+      if (!me || r.owner_primary !== me) return false;
     }
     if (q){
       const custBits = (r.cust_contacts||[]).flatMap(c=>[c.name,c.phone,c.email]);
@@ -691,13 +691,18 @@ function groupContactsHtml(meta){
   const parts = [];
   if (meta.owner_primary || meta.owner_secondary){
     const names = [];
-    if (meta.owner_primary) names.push(`<span class="mgr-primary">${esc(meta.owner_primary)}</span>`);
-    if (meta.owner_secondary) names.push(esc(meta.owner_secondary));
-    parts.push(`<span><b>담당자</b> ${names.join(' ')}</span>`);
+    if (meta.owner_primary) names.push(`<span class="mgr-primary"><span class="mgr-tag">정</span>${esc(meta.owner_primary)}</span>`);
+    if (meta.owner_secondary) names.push(`<span class="mgr-secondary"><span class="mgr-tag">부</span>${esc(meta.owner_secondary)}</span>`);
+    parts.push(`<span class="mgr-names">${names.join(' ')}</span>`);
   }
   if (meta.cust_contacts && meta.cust_contacts.length){
     const people = meta.cust_contacts
-      .map(c => [c.name, c.phone, c.email].filter(Boolean).map(esc).join(' · '))
+      .map(c => {
+        const bits = [c.name, c.phone, c.email].filter(Boolean).map(esc).join(' · ');
+        if (!bits) return '';
+        const roleTag = c.role ? `<span class="cust-role-tag" data-role="${esc(c.role)}">${esc(c.role)}</span>` : '';
+        return `${roleTag}${bits}`;
+      })
       .filter(Boolean);
     if (people.length) parts.push(`<span><b>고객사 담당자</b> ${people.join(' / ')}</span>`);
   }
@@ -814,7 +819,7 @@ function updateMyAssetsToggle(){
   const cntEl = document.getElementById('myAssetsCount');
   if (!btn || !cntEl) return;
   const me = currentUserName();
-  const cnt = me ? records.filter(r=>r.owner_primary===me || r.owner_secondary===me).length : 0;
+  const cnt = me ? records.filter(r=>r.owner_primary===me).length : 0;
   cntEl.textContent = cnt;
   btn.classList.toggle('active', activeMyAssetsFilter);
   btn.disabled = !me;
@@ -902,8 +907,12 @@ let geCustContacts = []; // working copy of {name,phone,email} rows while modal 
 
 function renderCustContactRows(){
   const wrap = document.getElementById('ge_cust_list');
+  const roleOptions = ['', '운용', '영업'];
   wrap.innerHTML = geCustContacts.map((c,idx)=>`
     <div class="cust-contact-row" data-idx="${idx}">
+      <select class="cc-role">
+        ${roleOptions.map(r=>`<option value="${esc(r)}" ${c.role===r?'selected':''}>${r?esc(r):'구분'}</option>`).join('')}
+      </select>
       <input class="cc-name" placeholder="이름" value="${esc(c.name||'')}">
       <input class="cc-phone" placeholder="연락처" value="${esc(c.phone||'')}">
       <input class="cc-email" placeholder="이메일" value="${esc(c.email||'')}">
@@ -922,6 +931,7 @@ function renderCustContactRows(){
 function captureCustContactsFromDom(){
   const rows = document.querySelectorAll('#ge_cust_list .cust-contact-row');
   geCustContacts = Array.from(rows).map(row=>({
+    role: row.querySelector('.cc-role').value,
     name: row.querySelector('.cc-name').value.trim(),
     phone: row.querySelector('.cc-phone').value.trim(),
     email: row.querySelector('.cc-email').value.trim(),
@@ -936,7 +946,7 @@ function updateCustAddBtnState(){
 document.getElementById('ge_cust_add_btn').onclick = () => {
   captureCustContactsFromDom();
   if (geCustContacts.length >= 5) return;
-  geCustContacts.push({name:'', phone:'', email:''});
+  geCustContacts.push({role:'', name:'', phone:'', email:''});
   renderCustContactRows();
 };
 
@@ -955,7 +965,7 @@ function openGroupEditModal(gid){
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
     ? meta.cust_contacts.slice(0,5)
-    : [{name:'',phone:'',email:''}]
+    : [{role:'',name:'',phone:'',email:''}]
   ).map(c=>({...c}));
   renderCustContactRows();
   document.getElementById('geError').textContent = '';
