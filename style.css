@@ -303,11 +303,28 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .group-title .sub b{ color:var(--text-faint); font-weight:500; font-family:var(--mono); }
 .group-title .title-meta{ margin-top:0; }
 .group-title .sub.group-remarks{ margin-top:4px; color:var(--text-faint); font-style:italic; white-space:pre-wrap; }
-.group-title .sub.group-contacts{ margin-top:6px; display:flex; gap:16px; flex-wrap:wrap; }
-.mgr-primary{
-  font-weight:700; color:var(--accent-dim);
-  background:#E6F4FD; padding:0 5px; border-radius:4px;
+.group-title .sub.group-contacts{ margin-top:6px; display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+.mgr-names{ display:inline-flex; align-items:center; gap:12px; }
+.mgr-tag{
+  font-family:var(--mono); font-size:9.5px; font-weight:700; color:var(--text-faint);
+  margin-right:4px; letter-spacing:.02em;
 }
+.mgr-primary{
+  font-weight:700; font-size:14.5px; color:var(--accent-dim);
+  background:#E6F4FD; padding:2px 8px; border-radius:5px;
+}
+.mgr-primary .mgr-tag{ color:var(--accent-dim); }
+.mgr-secondary{
+  font-weight:500; font-size:12px; color:var(--text-dim);
+}
+.cust-role-tag{
+  display:inline-block; font-family:var(--mono); font-size:9.5px; font-weight:700;
+  padding:1.5px 6px; border-radius:4px; margin-right:5px; letter-spacing:.02em;
+  background:var(--surface2); color:var(--text-faint); border:1px solid var(--border-solid);
+}
+.cust-role-tag[data-role="운용"]{ color:var(--accent-dim); background:#E6F4FD; border-color:#BFE4F8; }
+.cust-role-tag[data-role="영업"]{ color:#B45309; background:#FEF3C7; border-color:#FDE4A8; }
+
 .group-badges{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
 .badge{
   font-size:10.5px; font-family:var(--mono); padding:3px 8px; border-radius:6px;
@@ -501,6 +518,11 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   padding:8px 9px; color:var(--text); font-size:12.3px; outline:none; font-family:var(--body);
 }
 .cust-contact-row input:focus{ border-color:var(--accent); }
+.cust-contact-row .cc-role{
+  flex:0 0 66px; min-width:0; background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
+  padding:8px 5px; color:var(--text-dim); font-size:11.8px; outline:none; font-family:var(--body); cursor:pointer;
+}
+.cust-contact-row .cc-role:focus{ border-color:var(--accent); }
 .cc-remove-btn{
   flex-shrink:0; width:26px; height:26px; border-radius:6px; border:1px solid var(--border-solid);
   background:none; color:var(--text-faint); cursor:pointer; font-size:12px; line-height:1;
