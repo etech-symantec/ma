@@ -193,7 +193,7 @@ let activeStatusFilters = new Set(['ok','warn','na']);
 let activeCountryFilter = null;
 let activeDeviceTypeFilter = null;
 let activeSkuKeywordFilters = new Set();
-let activeMyAssetsFilter = false; // 로그인한 사용자가 담당자(정)인 자산만 보기
+let activeMyAssetsFilter = false; // 로그인한 사용자가 정 담당자인 사이트(법인)만 보기
 let workLogRecordId = null; // which record's modal is currently open
 let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
 let editingRecordId = null; // asset record id currently being edited via addModal (null = adding new)
@@ -575,7 +575,10 @@ function render(){
     }
     if (activeMyAssetsFilter){
       const me = currentUserName();
-      if (!me || r.owner_primary !== me) return false;
+      if (!me) return false;
+      const grpItems = records.filter(x=>x.group===r.group);
+      const meta = groupMeta(grpItems);
+      if (meta.owner_primary !== me) return false;
     }
     if (q){
       const custBits = (r.cust_contacts||[]).flatMap(c=>[c.name,c.phone,c.email]);
@@ -914,7 +917,16 @@ function updateMyAssetsToggle(){
   const cntEl = document.getElementById('myAssetsCount');
   if (!btn || !cntEl) return;
   const me = currentUserName();
-  const cnt = me ? records.filter(r=>r.owner_primary===me).length : 0;
+  let cnt = 0;
+  if (me){
+    const seenGroups = new Set();
+    records.forEach(r=>{
+      if (seenGroups.has(r.group)) return;
+      seenGroups.add(r.group);
+      const meta = groupMeta(records.filter(x=>x.group===r.group));
+      if (meta.owner_primary === me) cnt++;
+    });
+  }
   cntEl.textContent = cnt;
   btn.classList.toggle('active', activeMyAssetsFilter);
   btn.disabled = !me;
