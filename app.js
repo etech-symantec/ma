@@ -1176,12 +1176,10 @@ function isCurrentUserAdmin(){
 }
 function updateSidebarProfile(){
   const nameEl = document.getElementById('profileName');
-  const avatarEl = document.getElementById('profileAvatar');
   const subEl = document.getElementById('profileSub');
-  if (!nameEl || !avatarEl) return;
+  if (!nameEl) return;
   const name = currentUserName();
   nameEl.textContent = name || '로그인 필요';
-  avatarEl.textContent = name ? name.trim().charAt(0) : '?';
   if (subEl) subEl.textContent = isCurrentUserAdmin() ? '👑 마스터 관리자' : '로그인됨';
 }
 function updateUserBtnLabel(){ updateSidebarProfile(); } // (이전 이름 호환용 별칭)
