@@ -339,17 +339,35 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .dash-row-count{
   flex:0 0 28px; text-align:right; font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--text-faint);
 }
-.dash-more{ font-size:11px; color:var(--text-faint); margin-top:4px; }
 .dash-empty{ font-size:12px; color:var(--text-faint); padding:8px 0; }
-.dash-more-details{ margin-top:10px; }
-.dash-more-details summary{
-  cursor:pointer; font-size:11.5px; font-weight:700; color:var(--accent-dim);
-  list-style:none; font-family:var(--mono);
+
+/* OS 버전 / SKU 처럼 클릭해서 사용 법인 목록을 펼쳐볼 수 있는 행 */
+.dash-row-clickable{ cursor:pointer; margin-bottom:4px; padding:5px 6px; border-radius:7px; transition:background .12s; }
+.dash-row-clickable:hover{ background:var(--surface2); }
+.dash-row-caret{
+  flex:0 0 12px; font-size:9px; color:var(--text-faint); transition:transform .15s;
 }
-.dash-more-details summary::-webkit-details-marker{ display:none; }
-.dash-more-details summary::before{ content:'▸ '; }
-.dash-more-details[open] summary::before{ content:'▾ '; }
-.dash-more-details .dash-more-rows{ margin-top:10px; }
+.dash-row-clickable.open .dash-row-caret{ transform:rotate(180deg); color:var(--accent-dim); }
+.dash-row-detail{
+  margin:2px 0 10px 8px; padding:8px 10px; background:var(--surface2); border-radius:8px;
+  border-left:2px solid var(--border-solid);
+}
+.dash-company-list{ list-style:none; display:flex; flex-direction:column; gap:5px; }
+.dash-company-list li{
+  display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:11.5px;
+}
+.dash-company-name{ color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.dash-company-count{ flex-shrink:0; font-family:var(--mono); font-size:11px; color:var(--text-faint); }
+
+/* "더보기" — 펼쳐질 행들을 버튼보다 앞(위)에 두고 버튼 자체는 항상 카드 맨 아래에 위치시킨다 */
+.dash-more-rows{ margin-top:2px; }
+.dash-more-btn{
+  display:block; width:100%; margin-top:10px; padding:7px 0; text-align:center;
+  background:none; border:1px dashed var(--border-solid); border-radius:8px; cursor:pointer;
+  font-size:11.5px; font-weight:700; color:var(--accent-dim); font-family:var(--mono);
+  transition:all .15s;
+}
+.dash-more-btn:hover{ background:var(--surface2); border-color:#C7CFDC; }
 
 .group-card{
   background:var(--surface);
