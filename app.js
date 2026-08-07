@@ -511,14 +511,19 @@ function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24"
 // ---------- 대시보드 (OS 버전별 / 장비 종류별 / 위치별 / 국가별 / SKU별 현황 한눈에 보기) ----------
 let dashboardMode = false;
 
-function bucketCount(arr, keyFn){
+// keyFn으로 묶은 뒤, 각 그룹에 해당하는 원본 항목 배열도 함께 반환한다.
+// (건수만 필요한 곳은 count만 쓰고, 클릭 시 상세 법인 목록이 필요한 곳은 items를 쓴다.)
+function bucketGroups(arr, keyFn){
   const map = new Map();
   arr.forEach(item => {
     const raw = keyFn(item);
     const k = (raw && String(raw).trim()) ? String(raw).trim() : '미상';
-    map.set(k, (map.get(k)||0) + 1);
+    if (!map.has(k)) map.set(k, []);
+    map.get(k).push(item);
   });
-  return [...map.entries()].sort((a,b) => b[1]-a[1]);
+  return [...map.entries()]
+    .map(([label, items]) => [label, items.length, items])
+    .sort((a,b) => b[1]-a[1]);
 }
 
 // LOCATION 필드는 "국가" 또는 "국가 도시" 형태로 입력되어 있어 별도 국가 필드가 없다.
@@ -541,27 +546,46 @@ function osVersionTag(osVer){
 
 const DASH_VISIBLE_ROWS = 16; // 대시보드 각 카드에 기본으로 보이는 행 수 (기존 8행의 2배)
 
-function dashboardSectionHtml(title, colorClass, data){
+// 특정 OS 버전 / SKU 항목을 클릭했을 때 그 아래에 펼쳐 보여줄 "사용 법인 목록".
+function dashboardCompanyListHtml(items){
+  const owners = bucketGroups(items, r => r.owner).map(([owner,count]) => [owner, count]);
+  if (!owners.length) return `<div class="dash-empty">법인 정보가 없습니다.</div>`;
+  return `<ul class="dash-company-list">${owners.map(([owner,count]) =>
+    `<li><span class="dash-company-name">${esc(owner)}</span><span class="dash-company-count">${count}건</span></li>`
+  ).join('')}</ul>`;
+}
+
+function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable){
   const max = data.length ? data[0][1] : 1;
-  const rowHtml = ([label, count]) => `
-    <div class="dash-row">
+  const rowsHtml = data.map(([label, count, items], idx) => {
+    const detailId = `dashDetail_${sectionKey}_${idx}`;
+    const row = `
+    <div class="dash-row${clickable?' dash-row-clickable':''}"${clickable?` data-dash-toggle="${detailId}"`:''}>
       <span class="dash-row-label" title="${esc(label)}">${esc(label)}</span>
       <div class="dash-bar-track"><div class="dash-bar-fill ${colorClass}" style="width:${Math.max(5, Math.round(count/max*100))}%"></div></div>
       <span class="dash-row-count">${count}</span>
+      ${clickable?'<span class="dash-row-caret">▾</span>':''}
     </div>`;
-  const top = data.slice(0, DASH_VISIBLE_ROWS);
-  const rest = data.slice(DASH_VISIBLE_ROWS);
-  const rows = top.map(rowHtml).join('');
-  const moreHtml = rest.length ? `
-    <details class="dash-more-details">
-      <summary>외 ${rest.length}개 더보기</summary>
-      <div class="dash-more-rows">${rest.map(rowHtml).join('')}</div>
-    </details>` : '';
+    const detail = clickable ? `<div class="dash-row-detail" id="${detailId}" style="display:none;">${dashboardCompanyListHtml(items)}</div>` : '';
+    return row + detail;
+  });
+
+  const top = rowsHtml.slice(0, DASH_VISIBLE_ROWS).join('');
+  const rest = rowsHtml.slice(DASH_VISIBLE_ROWS);
+  let restHtml = '', moreBtnHtml = '';
+  if (rest.length){
+    const restId = `dashRest_${sectionKey}`;
+    // "더보기"로 펼쳐질 행들을 버튼보다 먼저(위에) 배치하고, 버튼은 그 아래에 둬서
+    // 펼친 뒤에도 "더보기" 버튼이 항상 카드 맨 아래에 위치하도록 한다.
+    restHtml = `<div class="dash-more-rows" id="${restId}" style="display:none;">${rest.join('')}</div>`;
+    moreBtnHtml = `<button type="button" class="dash-more-btn" data-dash-more-toggle="${restId}" data-more-label="외 ${rest.length}개 더보기" data-less-label="접기">외 ${rest.length}개 더보기</button>`;
+  }
   return `
     <div class="dash-card">
       <h4>${esc(title)}</h4>
-      ${rows || '<div class="dash-empty">데이터가 없습니다.</div>'}
-      ${moreHtml}
+      ${top || '<div class="dash-empty">데이터가 없습니다.</div>'}
+      ${restHtml}
+      ${moreBtnHtml}
     </div>`;
 }
 
@@ -571,11 +595,11 @@ function renderDashboard(){
   const total = records.length;
   const groupCount = new Set(records.map(r=>r.group)).size;
 
-  const byOs = bucketCount(records.filter(r => osVersionTag(r.os_ver)), r => osVersionTag(r.os_ver));
-  const byType = bucketCount(records, r => deviceTypeLabel(r));
-  const byLocation = bucketCount(records, r => r.location);
-  const byCountry = bucketCount(records, r => countryOf(r.location));
-  const bySku = bucketCount(records, r => r.sku);
+  const byOs = bucketGroups(records.filter(r => osVersionTag(r.os_ver)), r => osVersionTag(r.os_ver));
+  const byType = bucketGroups(records, r => deviceTypeLabel(r));
+  const byLocation = bucketGroups(records, r => r.location);
+  const byCountry = bucketGroups(records, r => countryOf(r.location));
+  const bySku = bucketGroups(records, r => r.sku);
 
   wrap.innerHTML = `
     <div class="dash-header">
@@ -583,11 +607,11 @@ function renderDashboard(){
       <p class="dash-sub">전체 자산 ${total}건 · ${groupCount}개 법인 기준</p>
     </div>
     <div class="dash-grid">
-      ${dashboardSectionHtml('OS 버전별 (버전 정보 있는 항목만)', 'dash-c1', byOs)}
-      ${dashboardSectionHtml('장비 종류별', 'dash-c2', byType)}
-      ${dashboardSectionHtml('위치별', 'dash-c3', byLocation)}
-      ${dashboardSectionHtml('국가별', 'dash-c4', byCountry)}
-      ${dashboardSectionHtml('SKU별', 'dash-c5', bySku)}
+      ${dashboardSectionHtml('os', 'OS 버전별 (버전 정보 있는 항목만) · 클릭하면 사용 법인 표시', 'dash-c1', byOs, true)}
+      ${dashboardSectionHtml('type', '장비 종류별', 'dash-c2', byType, false)}
+      ${dashboardSectionHtml('location', '위치별', 'dash-c3', byLocation, false)}
+      ${dashboardSectionHtml('country', '국가별', 'dash-c4', byCountry, false)}
+      ${dashboardSectionHtml('sku', 'SKU별 · 클릭하면 사용 법인 표시', 'dash-c5', bySku, true)}
     </div>
   `;
 }
@@ -604,6 +628,30 @@ function setDashboardMode(on){
 }
 
 document.getElementById('dashboardToggle').onclick = () => setDashboardMode(!dashboardMode);
+
+// 대시보드는 매번 innerHTML을 통째로 새로 그리므로, 개별 행/버튼에 onclick을 직접 붙이지 않고
+// 컨테이너 하나에 위임(delegation)으로 클릭을 처리한다.
+document.getElementById('dashboardView').addEventListener('click', (e) => {
+  const toggleRow = e.target.closest('[data-dash-toggle]');
+  if (toggleRow){
+    const detail = document.getElementById(toggleRow.dataset.dashToggle);
+    if (detail){
+      const opening = detail.style.display === 'none';
+      detail.style.display = opening ? 'block' : 'none';
+      toggleRow.classList.toggle('open', opening);
+    }
+    return;
+  }
+  const moreBtn = e.target.closest('[data-dash-more-toggle]');
+  if (moreBtn){
+    const restEl = document.getElementById(moreBtn.dataset.dashMoreToggle);
+    if (restEl){
+      const opening = restEl.style.display === 'none';
+      restEl.style.display = opening ? 'block' : 'none';
+      moreBtn.textContent = opening ? moreBtn.dataset.lessLabel : moreBtn.dataset.moreLabel;
+    }
+  }
+});
 
 function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
