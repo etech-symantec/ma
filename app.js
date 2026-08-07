@@ -508,6 +508,86 @@ function pencilSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fi
 function trashSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`; }
 function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>`; }
 
+// ---------- 대시보드 (OS 버전별 / 장비 종류별 / 위치별 / 국가별 / SKU별 현황 한눈에 보기) ----------
+let dashboardMode = false;
+
+function bucketCount(arr, keyFn){
+  const map = new Map();
+  arr.forEach(item => {
+    const raw = keyFn(item);
+    const k = (raw && String(raw).trim()) ? String(raw).trim() : '미상';
+    map.set(k, (map.get(k)||0) + 1);
+  });
+  return [...map.entries()].sort((a,b) => b[1]-a[1]);
+}
+
+// LOCATION 필드는 "국가" 또는 "국가 도시" 형태로 입력되어 있어 별도 국가 필드가 없다.
+// 대략적인 국가 구분을 위해 공백 앞의 첫 단어를 국가명으로 취급한다. (예: "인도 노이다" → "인도")
+function countryOf(loc){
+  const s = (loc||'').trim();
+  if (!s) return '';
+  return s.split(/\s+/)[0];
+}
+
+function dashboardSectionHtml(title, colorClass, data){
+  const max = data.length ? data[0][1] : 1;
+  const top = data.slice(0, 8);
+  const rows = top.map(([label, count]) => `
+    <div class="dash-row">
+      <span class="dash-row-label" title="${esc(label)}">${esc(label)}</span>
+      <div class="dash-bar-track"><div class="dash-bar-fill ${colorClass}" style="width:${Math.max(5, Math.round(count/max*100))}%"></div></div>
+      <span class="dash-row-count">${count}</span>
+    </div>`).join('');
+  const restCount = data.length - top.length;
+  const more = restCount > 0 ? `<div class="dash-more">외 ${restCount}개 더</div>` : '';
+  return `
+    <div class="dash-card">
+      <h4>${esc(title)}</h4>
+      ${rows || '<div class="dash-empty">데이터가 없습니다.</div>'}
+      ${more}
+    </div>`;
+}
+
+function renderDashboard(){
+  const wrap = document.getElementById('dashboardView');
+  if (!wrap) return;
+  const total = records.length;
+  const groupCount = new Set(records.map(r=>r.group)).size;
+
+  const byOs = bucketCount(records, r => r.os_ver);
+  const byType = bucketCount(records, r => deviceTypeLabel(r));
+  const byLocation = bucketCount(records, r => r.location);
+  const byCountry = bucketCount(records, r => countryOf(r.location));
+  const bySku = bucketCount(records, r => r.sku);
+
+  wrap.innerHTML = `
+    <div class="dash-header">
+      <h2>자산 현황 대시보드</h2>
+      <p class="dash-sub">전체 자산 ${total}건 · ${groupCount}개 법인 기준</p>
+    </div>
+    <div class="dash-grid">
+      ${dashboardSectionHtml('OS 버전별', 'dash-c1', byOs)}
+      ${dashboardSectionHtml('장비 종류별', 'dash-c2', byType)}
+      ${dashboardSectionHtml('위치별', 'dash-c3', byLocation)}
+      ${dashboardSectionHtml('국가별', 'dash-c4', byCountry)}
+      ${dashboardSectionHtml('SKU별', 'dash-c5', bySku)}
+    </div>
+  `;
+}
+
+function setDashboardMode(on){
+  dashboardMode = on;
+  const btn = document.getElementById('dashboardToggle');
+  const contentEl = document.getElementById('content');
+  const dashEl = document.getElementById('dashboardView');
+  if (btn) btn.classList.toggle('on', on);
+  if (contentEl) contentEl.style.display = on ? 'none' : '';
+  if (dashEl) dashEl.style.display = on ? '' : 'none';
+  if (on) renderDashboard();
+}
+
+document.getElementById('dashboardToggle').onclick = () => setDashboardMode(!dashboardMode);
+
 function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const mySiteGroupIds = getMySiteGroupIds();
@@ -557,10 +637,10 @@ function render(){
               <div class="title-row">
                 <h3 class="group-title-name">${esc(meta.owner)}</h3>
                 <div class="sub title-meta">
-                  <span class="meta-chip"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
-                  <span class="meta-chip"><span class="meta-label">Support ID</span><span class="meta-value">${esc(meta.support_id)||'—'}</span></span>
-                  <span class="meta-chip"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
-                  <span class="meta-chip"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
+                  <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
+                  <span class="meta-chip meta-chip-support"><span class="meta-label">Support ID</span><span class="meta-value">${esc(meta.support_id)||'—'}</span></span>
+                  <span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
+                  <span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
                   <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
                   ${managerNamesInlineHtml(meta)}
                   ${custContactsSummaryHtml(gid, meta)}
@@ -1185,7 +1265,7 @@ function updateSidebarProfile(){
   if (!nameEl) return;
   const name = currentUserName();
   nameEl.textContent = name || '로그인 필요';
-  if (subEl) subEl.textContent = isCurrentUserAdmin() ? '👑 마스터 관리자' : '로그인됨';
+  if (subEl) subEl.textContent = isCurrentUserAdmin() ? '👑 마스터' : '로그인됨';
 }
 function updateUserBtnLabel(){ updateSidebarProfile(); } // (이전 이름 호환용 별칭)
 
