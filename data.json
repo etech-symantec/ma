@@ -62,7 +62,9 @@
       "group_remarks": "용현짜응~~☆\n테스트\nㅋㅋㅋ\n히히히",
       "cust_contacts": [
         {
-          "name": "김용현 차장 (전자 일본 법인)",
+          "role": "",
+          "name": "김용현 차장",
+          "org": "전자 일본 법인",
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
@@ -104,7 +106,9 @@
       "group_remarks": "용현짜응~~☆\n테스트\nㅋㅋㅋ\n히히히",
       "cust_contacts": [
         {
-          "name": "김용현 차장 (전자 일본 법인)",
+          "role": "",
+          "name": "김용현 차장",
+          "org": "전자 일본 법인",
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
@@ -143,7 +147,9 @@
       "group_remarks": "용현짜응~~☆\n테스트\nㅋㅋㅋ\n히히히",
       "cust_contacts": [
         {
-          "name": "김용현 차장 (전자 일본 법인)",
+          "role": "",
+          "name": "김용현 차장",
+          "org": "전자 일본 법인",
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
@@ -193,7 +199,9 @@
       "group_remarks": "용현짜응~~☆\n테스트\nㅋㅋㅋ\n히히히",
       "cust_contacts": [
         {
-          "name": "김용현 차장 (전자 일본 법인)",
+          "role": "",
+          "name": "김용현 차장",
+          "org": "전자 일본 법인",
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
@@ -235,7 +243,9 @@
       "group_remarks": "용현짜응~~☆\n테스트\nㅋㅋㅋ\n히히히",
       "cust_contacts": [
         {
-          "name": "김용현 차장 (전자 일본 법인)",
+          "role": "",
+          "name": "김용현 차장",
+          "org": "전자 일본 법인",
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
