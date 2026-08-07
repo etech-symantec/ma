@@ -15,9 +15,9 @@
   --red:#EF4444;
   --green:#10B981;
   --shadow:0 6px 22px rgba(0,0,0,.08);
-  --mono:'IBM Plex Mono', monospace;
-  --display:'Space Grotesk', sans-serif;
-  --body:'Inter', sans-serif;
+  --mono:'Nanum Gothic Coding', monospace;
+  --display:'Nanum Gothic', sans-serif;
+  --body:'Nanum Gothic', sans-serif;
 }
 *{box-sizing:border-box; margin:0; padding:0;}
 html{ height:100%; }
