@@ -15313,5 +15313,14 @@
       "pw_enc": null
     }
   ],
-  "users": []
+  "users": [
+    {
+      "id": "u1786085321715",
+      "name": "신호근",
+      "pwSalt": "Lu8kunmGXkzPNNLe94gYeQ==",
+      "pwIterations": 150000,
+      "pwHash": "ZHRILQpJla5MpOcU0reIUV+4ie4EqHz0g1BYaIPDDAI=",
+      "isAdmin": true
+    }
+  ]
 }
