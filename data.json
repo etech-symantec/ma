@@ -697,7 +697,8 @@
           "phone": "",
           "email": "ajay3.kumar@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "in-sdn-proxy",
@@ -756,7 +757,8 @@
           "phone": "",
           "email": "ajay3.kumar@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "in-sdn-proxy",
@@ -815,7 +817,8 @@
           "phone": "",
           "email": "ajay3.kumar@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "in-sdn-proxy",
@@ -862,7 +865,8 @@
           "phone": "",
           "email": "ajay3.kumar@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "in-sdn-proxy",
@@ -921,7 +925,8 @@
           "phone": "",
           "email": "ajay3.kumar@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "in-sdn-proxy",
@@ -968,7 +973,8 @@
           "phone": "",
           "email": "ajay3.kumar@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "in-shi",
