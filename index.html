@@ -72,7 +72,7 @@
         <div class="profile-avatar" id="profileAvatar">?</div>
         <div class="profile-info">
           <div class="profile-name" id="profileName">-</div>
-          <div class="profile-sub">로그인됨</div>
+          <div class="profile-sub" id="profileSub">로그인됨</div>
         </div>
         <div class="activity-wrap">
           <button class="icon-btn icon-only" id="recentActivityBtn" title="최근 이력">🔔<span id="raBadge" class="ra-badge" style="display:none;"></span></button>
@@ -94,29 +94,29 @@
         <button class="icon-btn icon-only" id="addBtn" title="자산 추가">＋</button>
         <button type="button" class="my-assets-toggle" id="myAssetsToggle">
           <span class="mat-icon">🙋</span>
-          <span class="mat-label">내 사이트만</span>
+          <span class="mat-label">My</span>
           <span class="mat-count" id="myAssetsCount">0</span>
         </button>
       </div>
 
-      <div class="filter-group">
-        <h4>라이선스 상태</h4>
+      <div id="filtersResetSlot"></div>
+
+      <div class="filter-group filter-group--status">
+        <h4><span class="fg-dot"></span>라이선스 상태</h4>
         <div id="statusFilters"></div>
       </div>
-      <div class="filter-group">
-        <h4>필터 가능한 태그</h4>
+      <div class="filter-group filter-group--tags">
+        <h4><span class="fg-dot"></span>필터 가능한 태그</h4>
         <div id="skuKeywordFilters"></div>
       </div>
-      <div class="filter-group">
-        <h4>국가 / 법인</h4>
+      <div class="filter-group filter-group--country">
+        <h4><span class="fg-dot"></span>국가 / 법인</h4>
         <div id="countryFilters"></div>
       </div>
-      <div class="filter-group">
-        <h4>장비 종류</h4>
+      <div class="filter-group filter-group--device">
+        <h4><span class="fg-dot"></span>장비 종류</h4>
         <div id="deviceTypeFilters"></div>
       </div>
-
-      <button type="button" class="filters-reset-btn" id="filtersResetBtn">필터 초기화</button>
     </aside>
 
     <main class="content" id="content">
