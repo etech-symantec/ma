@@ -2473,7 +2473,7 @@
     {
       "group": "mx-samex-srt",
       "flag": "＠",
-      "owner": "SAMEX SRT",
+      "owner": "삼성전자 SAMEX SRT",
       "location": "멕시코 티후아나",
       "support_id": "2065519",
       "sku": "SSP-S210-10",
@@ -2510,17 +2510,23 @@
       "group_remarks": "",
       "cust_contacts": [
         {
+          "role": "",
           "name": "Raul Espinoza",
+          "org": "",
           "phone": "52-664-188-1999 / 1-619-403-1803",
           "email": "raul.espinoza@samsung.com"
         },
         {
+          "role": "",
           "name": "Dong Yob Kim",
+          "org": "",
           "phone": "",
           "email": "dongyob.kim@samsung.com"
         },
         {
+          "role": "",
           "name": "Arturo Juarez",
+          "org": "",
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
@@ -2529,7 +2535,7 @@
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "SAMEX SRT",
+      "owner": "삼성전자 SAMEX SRT",
       "location": "멕시코 티후아나",
       "support_id": "2065519",
       "sku": "ISG-Proxy",
@@ -2570,17 +2576,23 @@
       "group_remarks": "",
       "cust_contacts": [
         {
+          "role": "",
           "name": "Raul Espinoza",
+          "org": "",
           "phone": "52-664-188-1999 / 1-619-403-1803",
           "email": "raul.espinoza@samsung.com"
         },
         {
+          "role": "",
           "name": "Dong Yob Kim",
+          "org": "",
           "phone": "",
           "email": "dongyob.kim@samsung.com"
         },
         {
+          "role": "",
           "name": "Arturo Juarez",
+          "org": "",
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
@@ -2589,7 +2601,7 @@
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "SAMEX SRT",
+      "owner": "삼성전자 SAMEX SRT",
       "location": "멕시코 티후아나",
       "support_id": "2065519",
       "sku": "IS-AWAA-SWG-100-250-1Y",
@@ -2618,17 +2630,23 @@
       "group_remarks": "",
       "cust_contacts": [
         {
+          "role": "",
           "name": "Raul Espinoza",
+          "org": "",
           "phone": "52-664-188-1999 / 1-619-403-1803",
           "email": "raul.espinoza@samsung.com"
         },
         {
+          "role": "",
           "name": "Dong Yob Kim",
+          "org": "",
           "phone": "",
           "email": "dongyob.kim@samsung.com"
         },
         {
+          "role": "",
           "name": "Arturo Juarez",
+          "org": "",
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
@@ -2637,7 +2655,7 @@
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "SAMEX SRT",
+      "owner": "삼성전자 SAMEX SRT",
       "location": "멕시코 티후아나",
       "support_id": "2065519",
       "sku": "MC-S400-20-100",
@@ -2678,17 +2696,23 @@
       "group_remarks": "",
       "cust_contacts": [
         {
+          "role": "",
           "name": "Raul Espinoza",
+          "org": "",
           "phone": "52-664-188-1999 / 1-619-403-1803",
           "email": "raul.espinoza@samsung.com"
         },
         {
+          "role": "",
           "name": "Dong Yob Kim",
+          "org": "",
           "phone": "",
           "email": "dongyob.kim@samsung.com"
         },
         {
+          "role": "",
           "name": "Arturo Juarez",
+          "org": "",
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
@@ -2697,7 +2721,7 @@
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "SAMEX SRT",
+      "owner": "삼성전자 SAMEX SRT",
       "location": "멕시코 티후아나",
       "support_id": "2065519",
       "sku": "WEB-PROTECT-SUB",
@@ -2734,17 +2758,23 @@
       "group_remarks": "",
       "cust_contacts": [
         {
+          "role": "",
           "name": "Raul Espinoza",
+          "org": "",
           "phone": "52-664-188-1999 / 1-619-403-1803",
           "email": "raul.espinoza@samsung.com"
         },
         {
+          "role": "",
           "name": "Dong Yob Kim",
+          "org": "",
           "phone": "",
           "email": "dongyob.kim@samsung.com"
         },
         {
+          "role": "",
           "name": "Arturo Juarez",
+          "org": "",
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
@@ -2753,7 +2783,7 @@
     {
       "group": "mx-samex-srt",
       "flag": "",
-      "owner": "SAMEX SRT",
+      "owner": "삼성전자 SAMEX SRT",
       "location": "멕시코 티후아나",
       "support_id": "2065519",
       "sku": "CLD-RPT-SUB",
@@ -2782,17 +2812,23 @@
       "group_remarks": "",
       "cust_contacts": [
         {
+          "role": "",
           "name": "Raul Espinoza",
+          "org": "",
           "phone": "52-664-188-1999 / 1-619-403-1803",
           "email": "raul.espinoza@samsung.com"
         },
         {
+          "role": "",
           "name": "Dong Yob Kim",
+          "org": "",
           "phone": "",
           "email": "dongyob.kim@samsung.com"
         },
         {
+          "role": "",
           "name": "Arturo Juarez",
+          "org": "",
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
