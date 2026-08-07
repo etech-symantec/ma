@@ -311,6 +311,37 @@ aside.filters{
 /* main content */
 main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 
+/* ---------- 대시보드 ---------- */
+.dash-header{ margin-bottom:20px; }
+.dash-header h2{ font-family:var(--display); font-size:20px; color:var(--text); }
+.dash-sub{ font-size:12.5px; color:var(--text-faint); margin-top:4px; font-family:var(--mono); }
+.dash-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;
+}
+.dash-card{
+  background:var(--surface); border:1px solid var(--border-solid); border-radius:13px;
+  padding:16px 18px; box-shadow:var(--shadow);
+}
+.dash-card h4{
+  font-size:13px; color:var(--text); margin-bottom:14px; font-family:var(--display); font-weight:400;
+}
+.dash-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.dash-row-label{
+  flex:0 0 96px; font-size:11.8px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.dash-bar-track{ flex:1; min-width:0; height:9px; background:var(--surface2); border-radius:999px; overflow:hidden; }
+.dash-bar-fill{ height:100%; border-radius:999px; }
+.dash-c1{ background:#5B84C4; }
+.dash-c2{ background:#8B6BC9; }
+.dash-c3{ background:#4CA36A; }
+.dash-c4{ background:#C8933A; }
+.dash-c5{ background:#C46B8A; }
+.dash-row-count{
+  flex:0 0 28px; text-align:right; font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--text-faint);
+}
+.dash-more{ font-size:11px; color:var(--text-faint); margin-top:4px; }
+.dash-empty{ font-size:12px; color:var(--text-faint); padding:8px 0; }
+
 .group-card{
   background:var(--surface);
   border:1px solid var(--border-solid);
@@ -337,7 +368,8 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .group-title .sub.group-remarks{ margin-top:6px; color:var(--text-faint); font-style:italic; white-space:pre-wrap; }
 
 /* 법인 카드 상단 메타 정보 — 위치 / Support ID / 점검 방식 / 항목 / 담당 엔지니어 / 고객사 담당자를
-   각각 라벨이 붙은 칩으로 명확하게 구분해서 보여준다. */
+   각각 라벨이 붙은 칩으로 명확하게 구분해서 보여준다. 칩마다 은은한 고유 색을 줘서
+   (너무 알록달록하지 않게 채도를 낮춰서) 항목을 구분하기 쉽게 한다. */
 .meta-chip{
   display:inline-flex; align-items:center; gap:6px;
   background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
@@ -348,6 +380,14 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
   text-transform:uppercase; letter-spacing:.03em; white-space:nowrap;
 }
 .meta-value{ font-size:12px; color:var(--text-dim); white-space:nowrap; }
+.meta-chip-location{ background:#EFF5FF; border-color:#D9E6FA; }
+.meta-chip-location .meta-label{ color:#5B84C4; }
+.meta-chip-support{ background:#F6F1FC; border-color:#E4D8F5; }
+.meta-chip-support .meta-label{ color:#8B6BC9; }
+.meta-chip-check{ background:#EFFAF3; border-color:#D6EEDC; }
+.meta-chip-check .meta-label{ color:#4CA36A; }
+.meta-chip-config{ background:#FFF8EC; border-color:#F6E5C3; }
+.meta-chip-config .meta-label{ color:#C8933A; }
 .meta-chip-mgr{ background:#F4FAFD; border-color:#DCEEF8; }
 .mgr-primary{
   font-weight:700; font-size:13.5px; color:var(--accent-dim);
@@ -355,8 +395,9 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .mgr-secondary{
   font-weight:500; font-size:12px; color:var(--text-dim); margin-left:8px;
 }
-.meta-chip-cust{ cursor:pointer; transition:all .15s; }
-.meta-chip-cust:hover{ border-color:#C7CFDC; background:var(--surface); }
+.meta-chip-cust{ cursor:pointer; transition:all .15s; background:#FDF3F6; border-color:#F4D9E3; }
+.meta-chip-cust .meta-label{ color:#C46B8A; }
+.meta-chip-cust:hover{ border-color:#EBC0D2; background:#FBEAF0; }
 .meta-value-link{ color:var(--accent-dim); font-weight:600; text-decoration:underline; text-underline-offset:2px; }
 
 /* 고객사 담당자 전체보기 모달 */
