@@ -318,6 +318,11 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .dash-grid{
   display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:16px;
 }
+.dash-section-title{
+  font-size:12px; font-weight:700; color:var(--text-dim); font-family:var(--mono);
+  text-transform:uppercase; letter-spacing:.03em; margin:4px 0 10px;
+}
+.dash-grid-os{ margin-bottom:4px; }
 .dash-card{
   background:var(--surface); border:1px solid var(--border-solid); border-radius:13px;
   padding:16px 18px; box-shadow:var(--shadow);
