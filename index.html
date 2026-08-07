@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Broadcom 유지보수 자산</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Nanum+Gothic+Coding:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -74,6 +74,13 @@
           <div class="profile-name" id="profileName">-</div>
           <div class="profile-sub">로그인됨</div>
         </div>
+        <div class="activity-wrap">
+          <button class="icon-btn icon-only" id="recentActivityBtn" title="최근 이력">🔔<span id="raBadge" class="ra-badge" style="display:none;"></span></button>
+          <div class="recent-activity-dropdown" id="recentActivityDropdown">
+            <div class="ra-header">최근 작업 이력 (최대 10건)</div>
+            <div id="recentActivityList"></div>
+          </div>
+        </div>
         <button type="button" class="profile-logout-btn" id="logoutBtn" title="로그아웃">🚪</button>
       </div>
 
@@ -83,22 +90,14 @@
       </div>
 
       <div class="panel-top-actions">
-        <div class="activity-wrap">
-          <button class="icon-btn icon-only" id="recentActivityBtn" title="최근 이력">🔔<span id="raBadge" class="ra-badge" style="display:none;"></span></button>
-          <div class="recent-activity-dropdown" id="recentActivityDropdown">
-            <div class="ra-header">최근 작업 이력 (최대 10건)</div>
-            <div id="recentActivityList"></div>
-          </div>
-        </div>
         <button class="icon-btn icon-only" id="expandAllBtn" title="전체 펼치기">⛶</button>
         <button class="icon-btn icon-only" id="addBtn" title="자산 추가">＋</button>
+        <button type="button" class="my-assets-toggle" id="myAssetsToggle">
+          <span class="mat-icon">🙋</span>
+          <span class="mat-label">내 사이트만</span>
+          <span class="mat-count" id="myAssetsCount">0</span>
+        </button>
       </div>
-
-      <button type="button" class="my-assets-toggle" id="myAssetsToggle">
-        <span class="mat-icon">🙋</span>
-        <span class="mat-label">내가 정 담당자인 자산만</span>
-        <span class="mat-count" id="myAssetsCount">0</span>
-      </button>
 
       <div class="filter-group">
         <h4>라이선스 상태</h4>
