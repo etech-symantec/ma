@@ -69,7 +69,6 @@
   <div class="layout">
     <aside class="filters">
       <div class="panel-profile">
-        <div class="profile-avatar" id="profileAvatar">?</div>
         <div class="profile-info">
           <div class="profile-name" id="profileName">-</div>
           <div class="profile-sub" id="profileSub">로그인됨</div>
@@ -84,19 +83,18 @@
         <button type="button" class="profile-logout-btn" id="logoutBtn" title="로그아웃">🚪</button>
       </div>
 
-      <div class="sidebar-search">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="searchInput" placeholder="법인, 국가, SKU, S/N, 담당자로 검색…" />
-      </div>
-
       <div class="panel-top-actions">
-        <button class="icon-btn icon-only" id="expandAllBtn" title="전체 펼치기">⛶</button>
-        <button class="icon-btn icon-only" id="addBtn" title="자산 추가">＋</button>
         <button type="button" class="my-assets-toggle" id="myAssetsToggle">
-          <span class="mat-icon">🙋</span>
           <span class="mat-label">My</span>
           <span class="mat-count" id="myAssetsCount">0</span>
         </button>
+        <button class="icon-btn icon-only" id="expandAllBtn" title="전체 펼치기">⛶</button>
+        <button class="icon-btn icon-only" id="addBtn" title="자산 추가">＋</button>
+      </div>
+
+      <div class="sidebar-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="searchInput" placeholder="법인, 국가, SKU, S/N, 담당자로 검색…" />
       </div>
 
       <div id="filtersResetSlot"></div>
