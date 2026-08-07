@@ -595,7 +595,22 @@ function renderDashboard(){
   const total = records.length;
   const groupCount = new Set(records.map(r=>r.group)).size;
 
-  const byOs = bucketGroups(records.filter(r => osVersionTag(r.os_ver)), r => osVersionTag(r.os_ver));
+  // OS 버전별: 장비(SKU) 태그별로 나눠서, 같은 태그가 붙은 장비들의 버전만 모아서 보여준다.
+  // (예: MC 태그가 붙은 장비들의 버전 모음, ISG 태그가 붙은 장비들의 버전 모음 …)
+  const validOsRecords = records.filter(r => osVersionTag(r.os_ver));
+  const osTagGroups = SKU_TAG_KEYS
+    .map(tag => ({ tag, items: validOsRecords.filter(r => skuKeywordMatches(r.sku).includes(tag)) }))
+    .filter(g => g.items.length > 0)
+    .sort((a,b) => b.items.length - a.items.length);
+  const osNoTagItems = validOsRecords.filter(r => skuKeywordMatches(r.sku).length === 0);
+
+  const osTagCardsHtml = osTagGroups.map(g =>
+    dashboardSectionHtml(`os_${g.tag}`, `${g.tag} 태그 · 버전별`, 'dash-c1', bucketGroups(g.items, r => osVersionTag(r.os_ver)), true)
+  ).join('');
+  const osNoTagCardHtml = osNoTagItems.length
+    ? dashboardSectionHtml('os_none', '태그 없음 · 버전별', 'dash-c1', bucketGroups(osNoTagItems, r => osVersionTag(r.os_ver)), true)
+    : '';
+
   const byType = bucketGroups(records, r => deviceTypeLabel(r));
   const byLocation = bucketGroups(records, r => r.location);
   const byCountry = bucketGroups(records, r => countryOf(r.location));
@@ -606,8 +621,14 @@ function renderDashboard(){
       <h2>자산 현황 대시보드</h2>
       <p class="dash-sub">전체 자산 ${total}건 · ${groupCount}개 법인 기준</p>
     </div>
-    <div class="dash-grid">
-      ${dashboardSectionHtml('os', 'OS 버전별 (버전 정보 있는 항목만) · 클릭하면 사용 법인 표시', 'dash-c1', byOs, true)}
+
+    <div class="dash-section-title">OS 버전별 (장비 태그별 · 버전 정보 있는 항목만) · 클릭하면 사용 법인 표시</div>
+    <div class="dash-grid dash-grid-os">
+      ${osTagCardsHtml || '<div class="dash-empty">태그가 붙은 장비 중 버전 정보가 있는 항목이 없습니다.</div>'}
+      ${osNoTagCardHtml}
+    </div>
+
+    <div class="dash-grid" style="margin-top:16px;">
       ${dashboardSectionHtml('type', '장비 종류별', 'dash-c2', byType, false)}
       ${dashboardSectionHtml('location', '위치별', 'dash-c3', byLocation, false)}
       ${dashboardSectionHtml('country', '국가별', 'dash-c4', byCountry, false)}
