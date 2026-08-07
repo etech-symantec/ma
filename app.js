@@ -498,7 +498,7 @@ function getGroupCustContacts(items){
   // Prefer the new multi-contact array field; fall back to legacy single
   // cust_contact/cust_phone/cust_email fields for older data.
   const withArr = items.find(i => Array.isArray(i.cust_contacts) && i.cust_contacts.length);
-  if (withArr) return withArr.cust_contacts.slice(0,3);
+  if (withArr) return withArr.cust_contacts.slice(0,5);
   const legacy = items.map(i => ({name:i.cust_contact||'', phone:i.cust_phone||'', email:i.cust_email||''}))
     .find(c => c.name || c.phone || c.email);
   return legacy ? [legacy] : [];
@@ -588,6 +588,7 @@ function render(){
                   <span><b>Support ID</b> ${esc(meta.support_id)||'—'}</span>
                   <span><b>점검 방식</b> ${esc(meta.check_method)||'—'}</span>
                   <span><b>항목</b> ${items.length}건</span>
+                  ${managerNamesInlineHtml(meta)}
                 </div>
               </div>
               ${groupContactsHtml(meta)}
@@ -692,22 +693,26 @@ function snLink(r, groupSupportId){
   return `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${sn}</a>`;
 }
 
+function managerNamesInlineHtml(meta){
+  if (!meta.owner_primary && !meta.owner_secondary) return '';
+  const names = [];
+  if (meta.owner_primary) names.push(`<span class="mgr-primary">${esc(meta.owner_primary)}</span>`);
+  if (meta.owner_secondary) names.push(`<span class="mgr-secondary">${esc(meta.owner_secondary)}</span>`);
+  return `<span class="mgr-names-inline">${names.join(' ')}</span>`;
+}
+
 function groupContactsHtml(meta){
   let html = '';
-  if (meta.owner_primary || meta.owner_secondary){
-    const names = [];
-    if (meta.owner_primary) names.push(`<span class="mgr-primary"><span class="mgr-tag">정</span>${esc(meta.owner_primary)}</span>`);
-    if (meta.owner_secondary) names.push(`<span class="mgr-secondary"><span class="mgr-tag">부</span>${esc(meta.owner_secondary)}</span>`);
-    html += `<div class="sub group-contacts"><span class="mgr-names">${names.join(' ')}</span></div>`;
-  }
   if (meta.cust_contacts && meta.cust_contacts.length){
     const chips = meta.cust_contacts.map(c => {
-      const bits = [c.name, c.phone, c.email].filter(Boolean).map(esc).join(' · ');
-      if (!bits) return '';
+      if (!(c.name || c.org || c.phone || c.email)) return '';
       const roleTag = c.role
         ? `<span class="cust-role-tag" data-role="${esc(c.role)}">${esc(c.role)}</span>`
         : `<span class="cust-role-tag cust-role-none">미지정</span>`;
-      return `<span class="cust-contact-chip">${roleTag}<span class="cust-contact-text">${bits}</span></span>`;
+      const nameText = c.name ? esc(c.name) : '(이름 미입력)';
+      const detailBits = [c.org, c.phone, c.email].filter(Boolean).map(esc).join(' · ');
+      const details = detailBits ? `<span class="cust-contact-hidden">${detailBits}</span>` : '';
+      return `<span class="cust-contact-chip">${roleTag}<span class="cust-contact-text">${nameText}</span>${details}</span>`;
     }).filter(Boolean);
     if (chips.length){
       html += `<div class="sub group-cust-contacts"><b>고객사 담당자</b><div class="cust-contact-chips">${chips.join('')}</div></div>`;
@@ -983,13 +988,18 @@ function renderCustContactRows(){
   const roleOptions = ['', '운용', '영업'];
   wrap.innerHTML = geCustContacts.map((c,idx)=>`
     <div class="cust-contact-row" data-idx="${idx}">
-      <select class="cc-role">
-        ${roleOptions.map(r=>`<option value="${esc(r)}" ${c.role===r?'selected':''}>${r?esc(r):'구분'}</option>`).join('')}
-      </select>
-      <input class="cc-name" placeholder="이름" value="${esc(c.name||'')}">
-      <input class="cc-phone" placeholder="연락처" value="${esc(c.phone||'')}">
-      <input class="cc-email" placeholder="이메일" value="${esc(c.email||'')}">
-      <button type="button" class="cc-remove-btn" data-remove="${idx}" title="이 담당자 삭제">✕</button>
+      <div class="cc-row-top">
+        <select class="cc-role">
+          ${roleOptions.map(r=>`<option value="${esc(r)}" ${c.role===r?'selected':''}>${r?esc(r):'구분'}</option>`).join('')}
+        </select>
+        <input class="cc-name" placeholder="이름" value="${esc(c.name||'')}">
+        <button type="button" class="cc-remove-btn" data-remove="${idx}" title="이 담당자 삭제">✕</button>
+      </div>
+      <div class="cc-row-bottom">
+        <input class="cc-org" placeholder="소속" value="${esc(c.org||'')}">
+        <input class="cc-phone" placeholder="연락처" value="${esc(c.phone||'')}">
+        <input class="cc-email" placeholder="이메일" value="${esc(c.email||'')}">
+      </div>
     </div>`).join('');
   wrap.querySelectorAll('[data-remove]').forEach(btn=>{
     btn.onclick = () => {
@@ -1006,6 +1016,7 @@ function captureCustContactsFromDom(){
   geCustContacts = Array.from(rows).map(row=>({
     role: row.querySelector('.cc-role').value,
     name: row.querySelector('.cc-name').value.trim(),
+    org: row.querySelector('.cc-org').value.trim(),
     phone: row.querySelector('.cc-phone').value.trim(),
     email: row.querySelector('.cc-email').value.trim(),
   }));
@@ -1019,7 +1030,7 @@ function updateCustAddBtnState(){
 document.getElementById('ge_cust_add_btn').onclick = () => {
   captureCustContactsFromDom();
   if (geCustContacts.length >= 5) return;
-  geCustContacts.push({role:'', name:'', phone:'', email:''});
+  geCustContacts.push({role:'', name:'', org:'', phone:'', email:''});
   renderCustContactRows();
 };
 
@@ -1038,7 +1049,7 @@ function openGroupEditModal(gid){
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
     ? meta.cust_contacts.slice(0,5)
-    : [{role:'',name:'',phone:'',email:''}]
+    : [{role:'',name:'',org:'',phone:'',email:''}]
   ).map(c=>({...c}));
   renderCustContactRows();
   document.getElementById('geError').textContent = '';
@@ -1062,7 +1073,7 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newSecondary = val('ge_owner_secondary');
   const newRemarks = val('ge_remarks');
   captureCustContactsFromDom();
-  const newContacts = geCustContacts.filter(c => c.name || c.phone || c.email).slice(0,5);
+  const newContacts = geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
   records.forEach(r => {
     if (r.group === groupEditId){
       r.owner = newOwner;
