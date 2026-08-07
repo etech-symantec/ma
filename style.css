@@ -320,35 +320,48 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .group-title .title-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .group-title h3{ font-family:var(--display); font-size:15px; font-weight:600; line-height:1.3;}
 .group-title-actions{ display:flex; align-items:center; gap:4px; padding-right:6px; margin-right:2px; border-right:1px solid var(--border-solid); }
-.group-title .sub{ font-size:12px; color:var(--text-dim); margin-top:3px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.group-title .sub{ font-size:12px; color:var(--text-dim); margin-top:3px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
 .group-title .sub b{ color:var(--text-faint); font-weight:500; font-family:var(--mono); }
-.group-title .title-meta{ margin-top:0; }
-.group-title .sub.group-remarks{ margin-top:4px; color:var(--text-faint); font-style:italic; white-space:pre-wrap; }
-.group-title .sub.group-cust-contacts{ margin-top:8px; flex-direction:column; align-items:flex-start; gap:5px; }
-.mgr-names-inline{ display:inline-flex; align-items:center; gap:8px; }
+.group-title .title-meta{ margin-top:6px; }
+.group-title .sub.group-remarks{ margin-top:6px; color:var(--text-faint); font-style:italic; white-space:pre-wrap; }
+
+/* 법인 카드 상단 메타 정보 — 위치 / Support ID / 점검 방식 / 항목 / 담당 엔지니어 / 고객사 담당자를
+   각각 라벨이 붙은 칩으로 명확하게 구분해서 보여준다. */
+.meta-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
+  padding:4px 10px;
+}
+.meta-label{
+  font-family:var(--mono); font-size:9px; font-weight:700; color:var(--text-faint);
+  text-transform:uppercase; letter-spacing:.03em; white-space:nowrap;
+}
+.meta-value{ font-size:12px; color:var(--text-dim); white-space:nowrap; }
+.meta-chip-mgr{ background:#F4FAFD; border-color:#DCEEF8; }
 .mgr-primary{
-  font-weight:700; font-size:14px; color:var(--accent-dim);
-  background:#E6F4FD; padding:2px 8px; border-radius:5px;
+  font-weight:700; font-size:13.5px; color:var(--accent-dim);
 }
 .mgr-secondary{
-  font-weight:500; font-size:12px; color:var(--text-dim);
+  font-weight:500; font-size:12px; color:var(--text-dim); margin-left:8px;
 }
-.cust-contact-chips{ display:flex; flex-direction:column; gap:5px; width:100%; }
-.cust-contact-chip{
-  display:inline-flex; align-items:center; gap:0; width:fit-content; max-width:100%;
-  background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
-  padding:4px 10px 4px 4px; cursor:default;
+.meta-chip-cust{ cursor:pointer; transition:all .15s; }
+.meta-chip-cust:hover{ border-color:#C7CFDC; background:var(--surface); }
+.meta-value-link{ color:var(--accent-dim); font-weight:600; text-decoration:underline; text-underline-offset:2px; }
+
+/* 고객사 담당자 전체보기 모달 */
+.ccm-list{ display:flex; flex-direction:column; gap:8px; max-height:400px; overflow-y:auto; }
+.ccm-card{
+  padding:10px 12px; background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px;
 }
-.cust-contact-text{ font-size:12px; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.cust-contact-hidden{
-  display:inline-block; max-width:0; opacity:0; overflow:hidden; white-space:nowrap;
-  font-size:11.3px; color:var(--text-faint); vertical-align:middle; margin-left:0;
-  transition:max-width .2s ease, opacity .15s ease, margin-left .2s ease;
-}
-.cust-contact-chip:hover .cust-contact-hidden{ max-width:280px; opacity:1; margin-left:8px; }
+.ccm-head{ display:flex; align-items:center; gap:8px; }
+.ccm-name{ font-size:13.5px; font-weight:700; color:var(--text); }
+.ccm-details{ display:flex; flex-direction:column; gap:3px; margin-top:7px; padding-top:7px; border-top:1px solid var(--border-solid); }
+.ccm-field{ font-size:12px; color:var(--text-dim); }
+.ccm-field b{ color:var(--text-faint); font-weight:500; font-family:var(--mono); margin-right:5px; }
+
 .cust-role-tag{
   display:inline-block; font-family:var(--mono); font-size:9.5px; font-weight:700;
-  padding:1.5px 6px; border-radius:4px; margin-right:7px; letter-spacing:.02em;
+  padding:1.5px 6px; border-radius:4px; letter-spacing:.02em;
   background:var(--surface2); color:var(--text-faint); border:1px solid var(--border-solid);
 }
 .cust-role-tag[data-role="운용"]{ color:var(--accent-dim); background:#E6F4FD; border-color:#BFE4F8; }
@@ -506,12 +519,12 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 #wl_fieldchange_grid{ margin-top:12px; }
 
 /* add form / modals */
-#addModal, #workLogModal, #groupEditModal{
+#addModal, #workLogModal, #groupEditModal, #custContactsModal{
   position:fixed; inset:0; z-index:1200; background:rgba(15,23,42,0.45); backdrop-filter:blur(3px);
   display:none; align-items:flex-start; justify-content:center; overflow-y:auto;
   padding:calc(var(--global-header-h, 0px) + 24px) 20px 40px;
 }
-#addModal.open, #workLogModal.open, #groupEditModal.open{ display:flex; }
+#addModal.open, #workLogModal.open, #groupEditModal.open, #custContactsModal.open{ display:flex; }
 .cp-error{ color:var(--red); font-size:12.5px; margin-top:14px; min-height:16px; }
 .modal-card{
   width:100%; max-width:640px; background:var(--surface); border:1px solid var(--border-solid);
