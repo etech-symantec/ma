@@ -529,22 +529,39 @@ function countryOf(loc){
   return s.split(/\s+/)[0];
 }
 
+// OS 버전 필드는 자유 입력이라 "CentOS 7.4", "Windows Server 2016", 혹은 버전 표기가
+// 전혀 없는 값(제품명만 적혀 있거나 공란)이 섞여 있다. 대시보드에서는 실제 버전 번호를
+// 태그처럼 뽑아낼 수 있는 값만 모아서 보여주고, 버전 정보가 없는 값은 제외한다.
+function osVersionTag(osVer){
+  const s = (osVer||'').trim();
+  if (!s) return null;
+  const m = s.match(/\d+(?:\.\d+){0,3}/);
+  return m ? m[0] : null;
+}
+
+const DASH_VISIBLE_ROWS = 16; // 대시보드 각 카드에 기본으로 보이는 행 수 (기존 8행의 2배)
+
 function dashboardSectionHtml(title, colorClass, data){
   const max = data.length ? data[0][1] : 1;
-  const top = data.slice(0, 8);
-  const rows = top.map(([label, count]) => `
+  const rowHtml = ([label, count]) => `
     <div class="dash-row">
       <span class="dash-row-label" title="${esc(label)}">${esc(label)}</span>
       <div class="dash-bar-track"><div class="dash-bar-fill ${colorClass}" style="width:${Math.max(5, Math.round(count/max*100))}%"></div></div>
       <span class="dash-row-count">${count}</span>
-    </div>`).join('');
-  const restCount = data.length - top.length;
-  const more = restCount > 0 ? `<div class="dash-more">외 ${restCount}개 더</div>` : '';
+    </div>`;
+  const top = data.slice(0, DASH_VISIBLE_ROWS);
+  const rest = data.slice(DASH_VISIBLE_ROWS);
+  const rows = top.map(rowHtml).join('');
+  const moreHtml = rest.length ? `
+    <details class="dash-more-details">
+      <summary>외 ${rest.length}개 더보기</summary>
+      <div class="dash-more-rows">${rest.map(rowHtml).join('')}</div>
+    </details>` : '';
   return `
     <div class="dash-card">
       <h4>${esc(title)}</h4>
       ${rows || '<div class="dash-empty">데이터가 없습니다.</div>'}
-      ${more}
+      ${moreHtml}
     </div>`;
 }
 
@@ -554,7 +571,7 @@ function renderDashboard(){
   const total = records.length;
   const groupCount = new Set(records.map(r=>r.group)).size;
 
-  const byOs = bucketCount(records, r => r.os_ver);
+  const byOs = bucketCount(records.filter(r => osVersionTag(r.os_ver)), r => osVersionTag(r.os_ver));
   const byType = bucketCount(records, r => deviceTypeLabel(r));
   const byLocation = bucketCount(records, r => r.location);
   const byCountry = bucketCount(records, r => countryOf(r.location));
@@ -566,7 +583,7 @@ function renderDashboard(){
       <p class="dash-sub">전체 자산 ${total}건 · ${groupCount}개 법인 기준</p>
     </div>
     <div class="dash-grid">
-      ${dashboardSectionHtml('OS 버전별', 'dash-c1', byOs)}
+      ${dashboardSectionHtml('OS 버전별 (버전 정보 있는 항목만)', 'dash-c1', byOs)}
       ${dashboardSectionHtml('장비 종류별', 'dash-c2', byType)}
       ${dashboardSectionHtml('위치별', 'dash-c3', byLocation)}
       ${dashboardSectionHtml('국가별', 'dash-c4', byCountry)}
