@@ -1161,6 +1161,7 @@ const CURRENT_USER_KEY = 'bcAssetCurrentUserId';
 let currentUserId = null;
 try{ currentUserId = localStorage.getItem(CURRENT_USER_KEY) || null; }catch(e){ currentUserId = null; }
 let agLoginPromptUserId = null; // 계정 게이트 목록에서 지금 비밀번호 입력창이 펼쳐진 계정
+let agLoginPromptMode = 'login'; // 'login' | 'delete' — 펼쳐진 비밀번호 입력창이 로그인용인지 삭제 확인용인지
 
 function saveCurrentUserId(id){
   try{ if (id) localStorage.setItem(CURRENT_USER_KEY, id); else localStorage.removeItem(CURRENT_USER_KEY); }catch(e){}
@@ -1203,18 +1204,21 @@ function renderAccountGateUserList(){
   }
   wrap.innerHTML = users.map(u => {
     const isPrompting = String(u.id)===String(agLoginPromptUserId);
+    const isDeleteMode = isPrompting && agLoginPromptMode === 'delete';
     return `
     <div class="user-row">
       <div class="user-row-main">
         <span class="user-name">${esc(u.name)}</span>
         ${isPrompting
           ? `<button type="button" class="wl-action-btn" data-ag-cancel="${u.id}">취소</button>`
-          : `<button type="button" class="wl-action-btn" data-ag-login="${u.id}">로그인</button>`}
+          : `<button type="button" class="wl-action-btn" data-ag-login="${u.id}">로그인</button>
+             <button type="button" class="wl-action-btn danger" data-ag-delete="${u.id}" title="이 계정 삭제">삭제</button>`}
       </div>
       ${isPrompting ? `
+      ${isDeleteMode ? `<p class="user-delete-hint">계정을 삭제하려면 본인 비밀번호를 입력해 확인하세요. 이 작업은 되돌릴 수 없습니다.</p>` : ''}
       <form class="user-login-form" data-ag-login-form="${u.id}">
         <input type="password" class="user-login-pass" placeholder="비밀번호" autocomplete="current-password">
-        <button type="submit" class="btn btn-primary">확인</button>
+        <button type="submit" class="btn ${isDeleteMode ? 'btn-danger' : 'btn-primary'}">${isDeleteMode ? '삭제 확인' : '확인'}</button>
       </form>
       <div class="user-login-error" id="agLoginError_${u.id}"></div>` : ''}
     </div>`;
@@ -1223,13 +1227,23 @@ function renderAccountGateUserList(){
   wrap.querySelectorAll('[data-ag-login]').forEach(btn=>{
     btn.onclick = () => {
       agLoginPromptUserId = btn.dataset.agLogin;
+      agLoginPromptMode = 'login';
+      renderAccountGateUserList();
+      const form = wrap.querySelector(`[data-ag-login-form="${CSS.escape(agLoginPromptUserId)}"]`);
+      if (form) form.querySelector('.user-login-pass').focus();
+    };
+  });
+  wrap.querySelectorAll('[data-ag-delete]').forEach(btn=>{
+    btn.onclick = () => {
+      agLoginPromptUserId = btn.dataset.agDelete;
+      agLoginPromptMode = 'delete';
       renderAccountGateUserList();
       const form = wrap.querySelector(`[data-ag-login-form="${CSS.escape(agLoginPromptUserId)}"]`);
       if (form) form.querySelector('.user-login-pass').focus();
     };
   });
   wrap.querySelectorAll('[data-ag-cancel]').forEach(btn=>{
-    btn.onclick = () => { agLoginPromptUserId = null; renderAccountGateUserList(); };
+    btn.onclick = () => { agLoginPromptUserId = null; agLoginPromptMode = 'login'; renderAccountGateUserList(); };
   });
   wrap.querySelectorAll('[data-ag-login-form]').forEach(form=>{
     form.onsubmit = async (e) => {
@@ -1245,12 +1259,38 @@ function renderAccountGateUserList(){
       errEl.textContent = '확인 중…';
       const hash = await hashPassword(pass, u.pwSalt, u.pwIterations);
       if (hash !== u.pwHash){ errEl.textContent = '비밀번호가 올바르지 않습니다.'; passInput.value=''; passInput.focus(); return; }
+
+      if (agLoginPromptMode === 'delete'){
+        const isLastAdmin = u.isAdmin && users.filter(x=>x.isAdmin).length <= 1;
+        const warnMsg = isLastAdmin
+          ? `"${u.name}" 계정은 마지막 남은 관리자 계정입니다. 그래도 삭제할까요?\n삭제 후에는 이 계정으로 남긴 작업 이력에 작성자 이름만 기록으로 남고, 다시 로그인할 수 없습니다.`
+          : `"${u.name}" 계정을 삭제할까요?\n삭제 후에는 이 계정으로 남긴 작업 이력에 작성자 이름만 기록으로 남고, 다시 로그인할 수 없습니다.`;
+        if (!confirm(warnMsg)){ passInput.value=''; return; }
+        deleteAccount(uid);
+        return;
+      }
+
       currentUserId = uid;
       saveCurrentUserId(uid);
       agLoginPromptUserId = null;
       showMasterGate();
     };
   });
+}
+
+// 계정 삭제: 비밀번호로 본인 확인이 끝난 뒤 호출됨.
+// 자산/작업이력 데이터 자체는 건드리지 않고 로그인용 계정 정보만 제거한다.
+function deleteAccount(uid){
+  users = users.filter(x=>String(x.id)!==String(uid));
+  if (String(currentUserId)===String(uid)){
+    currentUserId = null;
+    saveCurrentUserId(null);
+  }
+  agLoginPromptUserId = null;
+  agLoginPromptMode = 'login';
+  scheduleAutoSync();
+  renderAccountGateUserList();
+  updateSidebarProfile();
 }
 
 document.getElementById('ag_toggle_btn').onclick = () => {
