@@ -68,7 +68,8 @@
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "jp-sds",
@@ -112,7 +113,8 @@
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "jp-sds",
@@ -153,7 +155,8 @@
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "jp-sds",
@@ -205,7 +208,8 @@
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "jp-sds",
@@ -249,7 +253,8 @@
           "phone": "+81-80-5470-5302 / +81-3-6369-6336",
           "email": "yhyun2.kim@samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "tw-ds",
