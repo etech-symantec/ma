@@ -194,7 +194,6 @@ let activeCountryFilter = null;
 let activeDeviceTypeFilter = null;
 let activeSkuKeywordFilters = new Set();
 let activeMyAssetsFilter = false; // 로그인한 사용자가 담당자(정)인 자산만 보기
-let revealAllActive = false; // 마스킹된 IP/ID/비밀번호를 전체 해제해서 보여주는 중인지
 let workLogRecordId = null; // which record's modal is currently open
 let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
 let editingRecordId = null; // asset record id currently being edited via addModal (null = adding new)
@@ -519,18 +518,43 @@ function groupMeta(items){
   };
 }
 
-function maskedField(rec, kind){
+function secretField(rec, kind){
   const encKey = kind+'_enc';
-  const hasVal = !!rec[encKey];
-  if (!hasVal) return `<span class="sec-val masked">—</span>`;
+  if (!rec[encKey]) return `<span class="sec-val empty">—</span>`;
   const id = rec.id + '_' + kind;
-  return `
-    <span class="sec-field">
-      <span class="sec-val masked" id="disp_${id}">••••••••</span>
-      <button class="sec-toggle" data-id="${rec.id}" data-kind="${kind}" title="표시/숨기기">${eyeSvg()}</button>
-    </span>`;
+  return `<span class="sec-val" id="disp_${id}" data-copy-id="${rec.id}" data-copy-kind="${kind}" title="클릭하여 복사">…</span>`;
 }
-function eyeSvg(){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>`; }
+
+function flashCopied(el){
+  const original = el.textContent;
+  el.classList.add('copied');
+  el.textContent = '✓ 복사됨';
+  setTimeout(()=>{
+    if (el.isConnected){ el.textContent = original; el.classList.remove('copied'); }
+  }, 1000);
+}
+
+// 화면에 그려진 모든 IP/ID/비밀번호 칸을 복호화해서 바로 보여준다 (더 이상 마스킹하지 않음).
+// 잠금 해제되어 있지 않으면 🔒 로 표시하고, 클릭 시 잠금 해제를 안내한다.
+async function populateSecretFields(){
+  const spans = Array.from(document.querySelectorAll('.sec-val[data-copy-id]'));
+  for (const el of spans){
+    if (viewOnly || !sessionKey){
+      el.textContent = '🔒';
+      el.classList.add('locked');
+      el.title = '마스터 비밀번호로 잠금을 해제하면 볼 수 있습니다.';
+      continue;
+    }
+    const id = el.dataset.copyId, kind = el.dataset.copyKind;
+    const rec = records.find(r=>String(r.id)===String(id));
+    if (!rec) continue;
+    const val = await decryptField(rec[kind+'_enc']);
+    el.textContent = val;
+    el.dataset.plain = val;
+    el.classList.remove('locked');
+    el.title = '클릭하여 복사';
+  }
+}
 function pencilSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`; }
 function trashSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`; }
 function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>`; }
@@ -645,21 +669,23 @@ function render(){
       render();
     };
   });
-  document.querySelectorAll('.sec-toggle').forEach(btn=>{
-    btn.onclick = async (e) => {
+  document.querySelectorAll('.sec-val[data-copy-id]').forEach(el=>{
+    el.onclick = async (e) => {
       e.stopPropagation();
-      const id = btn.dataset.id, kind = btn.dataset.kind;
-      const rec = records.find(r=>String(r.id)===String(id));
-      const dispEl = document.getElementById(`disp_${id}_${kind}`);
-      if (!dispEl) return;
-      if (dispEl.classList.contains('masked')){
-        if (viewOnly || !sessionKey){ alert('민감정보를 보려면 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-        const val = await decryptField(rec[kind+'_enc']);
-        dispEl.textContent = val;
-        dispEl.classList.remove('masked');
-      } else {
-        dispEl.textContent = '••••••••';
-        dispEl.classList.add('masked');
+      if (viewOnly || !sessionKey){ alert('민감정보를 보려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+      let text = el.dataset.plain;
+      if (text === undefined){
+        const id = el.dataset.copyId, kind = el.dataset.copyKind;
+        const rec = records.find(r=>String(r.id)===String(id));
+        text = rec ? await decryptField(rec[kind+'_enc']) : '';
+        el.dataset.plain = text;
+      }
+      if (!text) return;
+      try{
+        await navigator.clipboard.writeText(text);
+        flashCopied(el);
+      }catch(err){
+        alert('클립보드 복사에 실패했습니다. 브라우저 권한을 확인해 주세요.');
       }
     };
   });
@@ -679,10 +705,7 @@ function render(){
 
   buildFilters();
   updateActivityBadge();
-  updateRevealAllBtnState();
-  if (revealAllActive && sessionKey && !viewOnly){
-    revealAllVisibleSecrets();
-  }
+  populateSecretFields();
 }
 
 function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료됨', na:'기간정보없음'}[s]; }
@@ -766,9 +789,9 @@ function rowHtml(r, groupSupportId){
         <div class="lic-status ${status}">${statusLabel(status)}${daysLabel(r)?` · ${daysLabel(r)}`:''}</div>
       </div>
     </td>
-    <td data-label="IP">${maskedField(r,'ip')}</td>
-    <td data-label="ID">${maskedField(r,'id')}</td>
-    <td data-label="PW">${maskedField(r,'pw')}</td>
+    <td data-label="IP">${secretField(r,'ip')}</td>
+    <td data-label="ID">${secretField(r,'id')}</td>
+    <td data-label="PW">${secretField(r,'pw')}</td>
     <td data-label="OS 버전">${esc(r.os_ver)||'—'}</td>
     <td class="remarks-cell" data-label="비고"><div class="remarks-txt">${esc(r.remarks)||'—'}</div></td>
     <td data-label="작업이력">
@@ -914,38 +937,6 @@ document.getElementById('filtersResetBtn').onclick = () => {
 };
 
 document.getElementById('searchInput').addEventListener('input', render);
-
-async function revealAllVisibleSecrets(){
-  const toggles = Array.from(document.querySelectorAll('.sec-toggle'));
-  for (const btn of toggles){
-    const id = btn.dataset.id, kind = btn.dataset.kind;
-    const dispEl = document.getElementById(`disp_${id}_${kind}`);
-    if (!dispEl || !dispEl.classList.contains('masked')) continue;
-    const rec = records.find(r=>String(r.id)===String(id));
-    if (!rec) continue;
-    const val = await decryptField(rec[kind+'_enc']);
-    dispEl.textContent = val;
-    dispEl.classList.remove('masked');
-  }
-}
-
-function updateRevealAllBtnState(){
-  const btn = document.getElementById('revealAllBtn');
-  if (!btn) return;
-  btn.classList.toggle('on', revealAllActive);
-  btn.textContent = revealAllActive ? '🙈' : '🔓';
-  btn.title = revealAllActive ? '민감정보 전체 가리기' : '마스킹된 정보 전체 해제';
-}
-
-document.getElementById('revealAllBtn').onclick = () => {
-  if (viewOnly || !sessionKey){ alert('민감정보를 보려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-  revealAllActive = !revealAllActive;
-  if (revealAllActive){
-    // 접혀 있는 그룹은 테이블 자체가 그려지지 않으므로, 전부 펼쳐서 보이게 한 뒤 해제한다.
-    records.forEach(r => expandedGroups.add(r.group));
-  }
-  render();
-};
 
 document.getElementById('expandAllBtn').onclick = () => {
   const allOpen = expandedGroups.size > 0;
