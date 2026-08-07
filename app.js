@@ -461,6 +461,7 @@ function groupMeta(items){
     location: items.map(i=>i.location).find(Boolean) || '',
     support_id: items.map(i=>i.support_id).find(Boolean) || '',
     check_method: items.map(i=>i.check_method).find(Boolean) || '',
+    config_mode: items.map(i=>i.config_mode).find(Boolean) || '',
     owner_primary: items.map(i=>i.owner_primary).find(Boolean) || '',
     owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
     cust_contacts: getGroupCustContacts(items),
@@ -559,6 +560,7 @@ function render(){
                   <span class="meta-chip"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
                   <span class="meta-chip"><span class="meta-label">Support ID</span><span class="meta-value">${esc(meta.support_id)||'—'}</span></span>
                   <span class="meta-chip"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
+                  <span class="meta-chip"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
                   <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
                   ${managerNamesInlineHtml(meta)}
                   ${custContactsSummaryHtml(gid, meta)}
@@ -1094,6 +1096,7 @@ function openGroupEditModal(gid){
   document.getElementById('ge_location').value = meta.location || '';
   document.getElementById('ge_support').value = meta.support_id || '';
   document.getElementById('ge_check').value = meta.check_method || '';
+  document.getElementById('ge_config_mode').value = meta.config_mode || '';
   document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
   document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
@@ -1119,6 +1122,7 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newLocation = val('ge_location');
   const newSupport = val('ge_support');
   const newCheck = val('ge_check');
+  const newConfigMode = val('ge_config_mode');
   const newPrimary = val('ge_owner_primary');
   const newSecondary = val('ge_owner_secondary');
   const newRemarks = val('ge_remarks');
@@ -1130,6 +1134,7 @@ document.getElementById('saveGeBtn').onclick = () => {
       r.location = newLocation;
       r.support_id = newSupport;
       r.check_method = newCheck;
+      r.config_mode = newConfigMode;
       r.owner_primary = newPrimary;
       r.owner_secondary = newSecondary;
       r.group_remarks = newRemarks;
