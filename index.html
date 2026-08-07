@@ -75,10 +75,6 @@
         </div>
         <div class="activity-wrap">
           <button class="icon-btn icon-only" id="recentActivityBtn" title="최근 이력">🔔<span id="raBadge" class="ra-badge" style="display:none;"></span></button>
-          <div class="recent-activity-dropdown" id="recentActivityDropdown">
-            <div class="ra-header">최근 작업 이력 (최대 10건)</div>
-            <div id="recentActivityList"></div>
-          </div>
         </div>
         <button type="button" class="profile-logout-btn" id="logoutBtn" title="로그아웃">🚪</button>
       </div>
@@ -159,12 +155,21 @@
 <div id="groupEditModal">
   <div class="modal-card">
     <h2>법인 정보 수정</h2>
-    <p class="hint">법인명 / 위치 / Support ID / 점검 방식 / 담당자 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다.</p>
+    <p class="hint">법인명 / 위치 / Support ID / 점검 방식 / 구성방식 / 담당자 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다.</p>
     <div class="form-grid">
       <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
       <div><label>국가/위치 (LOCATION)</label><input id="ge_location" placeholder="예: 베트남"></div>
       <div><label>Support ID</label><input id="ge_support"></div>
       <div><label>점검 방식</label><input id="ge_check" placeholder="원격 (RC)"></div>
+      <div><label>구성방식</label>
+        <select id="ge_config_mode">
+          <option value="">선택 안 함</option>
+          <option value="Explicit">Explicit</option>
+          <option value="Inline">Inline</option>
+          <option value="Virtual Inline">Virtual Inline</option>
+          <option value="Transparent">Transparent</option>
+        </select>
+      </div>
       <div class="full">
         <label>고객사 담당자 (최대 5명)</label>
         <div id="ge_cust_list" class="cust-contact-list"></div>
@@ -246,6 +251,11 @@
       <button class="btn btn-ghost" id="wlCloseBtn">닫기</button>
     </div>
   </div>
+</div>
+
+<div class="recent-activity-dropdown" id="recentActivityDropdown">
+  <div class="ra-header">최근 작업 이력 (최대 10건)</div>
+  <div id="recentActivityList"></div>
 </div>
 
 <script src="app.js"></script>
