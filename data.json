@@ -3069,8 +3069,8 @@
     {
       "group": "ng",
       "flag": "",
-      "owner": "나이지리아",
-      "location": "나이지리아(SHI-MCI Fze)",
+      "owner": "삼성중공업 SHI-MCI",
+      "location": "나이지리아",
       "support_id": "277422",
       "sku": "ASG-S400-20",
       "sn": "5216320027",
@@ -3086,9 +3086,9 @@
       "owner_primary": "신호근",
       "owner_secondary": "김상문",
       "check_method": "원격 (RC)",
-      "cust_contact": "최지훈 프로 / 공기덕 프로<신규담당자",
-      "cust_phone": "카톡",
-      "cust_email": "jiym.choi@samsung.com; gideok.gong@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "나이지리아(SHI-MCI Fze)",
       "id": 71,
@@ -3102,14 +3102,24 @@
         "ct": "Ehf7IFAcHLZMig==",
         "tag": "KSioDvbz2f76qSNz+Pdi7Q=="
       },
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "공기덕 프로",
+          "org": "SHI",
+          "phone": "",
+          "email": "gideok.gong@samsung.com"
+        }
+      ]
     },
     {
       "group": "ng",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성중공업 SHI-MCI",
+      "location": "나이지리아",
+      "support_id": "277422",
       "sku": "BCWF",
       "sn": "QLZMB-9Z4V8",
       "entitlement": "🔗",
@@ -3121,9 +3131,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "신호근",
+      "owner_secondary": "김상문",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3132,14 +3142,24 @@
       "id": 72,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "공기덕 프로",
+          "org": "SHI",
+          "phone": "",
+          "email": "gideok.gong@samsung.com"
+        }
+      ]
     },
     {
       "group": "ng",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성중공업 SHI-MCI",
+      "location": "나이지리아",
+      "support_id": "277422",
       "sku": "BCWF",
       "sn": "QE23T-JZWSP",
       "entitlement": "🔗",
@@ -3151,9 +3171,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "신호근",
+      "owner_secondary": "김상문",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3162,7 +3182,17 @@
       "id": 73,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "공기덕 프로",
+          "org": "SHI",
+          "phone": "",
+          "email": "gideok.gong@samsung.com"
+        }
+      ]
     },
     {
       "group": "au-ccc",
