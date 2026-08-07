@@ -127,13 +127,13 @@ a{color:var(--accent);}
 .activity-wrap{ position:relative; }
 .ra-badge{
   display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px;
-  padding:0 4px; margin-left:2px; border-radius:999px; background:var(--red); color:#fff;
+  padding:0 4px; border-radius:999px; background:var(--red); color:#fff;
   font-size:10px; font-family:var(--mono); font-weight:700; line-height:1;
 }
 .recent-activity-dropdown{
   display:none; position:fixed; width:340px; max-height:440px;
   overflow-y:auto; background:var(--surface); border:1px solid var(--border-solid); border-radius:12px;
-  box-shadow:var(--shadow); z-index:500; padding:6px;
+  box-shadow:var(--shadow); z-index:1100; padding:6px;
 }
 .recent-activity-dropdown.open{ display:block; }
 .ra-header{
@@ -205,7 +205,7 @@ aside.filters{
 .profile-sub{ font-size:11px; color:var(--text-faint); font-family:var(--mono); letter-spacing:.03em; margin-top:2px; }
 .panel-profile .activity-wrap{ flex-shrink:0; }
 .panel-profile .activity-wrap .icon-btn.icon-only{
-  width:34px; height:34px; padding:0; border-radius:9px; font-size:16px;
+  width:auto; min-width:34px; height:34px; padding:0 10px; border-radius:9px; font-size:16px; gap:4px;
   background:rgba(255,255,255,0.7);
 }
 .profile-logout-btn{
