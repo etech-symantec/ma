@@ -561,6 +561,7 @@ function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24"
 
 function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const mySiteGroupIds = getMySiteGroupIds();
   let list = records.filter(r => {
     if (!activeStatusFilters.has(licenseStatus(r))) return false;
     if (activeDeviceTypeFilter && deviceTypeLabel(r) !== activeDeviceTypeFilter) return false;
@@ -574,11 +575,7 @@ function render(){
       if (meta.owner !== activeCountryFilter) return false;
     }
     if (activeMyAssetsFilter){
-      const me = currentUserName();
-      if (!me) return false;
-      const grpItems = records.filter(x=>x.group===r.group);
-      const meta = groupMeta(grpItems);
-      if (meta.owner_primary !== me) return false;
+      if (!mySiteGroupIds.has(r.group)) return false;
     }
     if (q){
       const custBits = (r.cust_contacts||[]).flatMap(c=>[c.name,c.phone,c.email]);
@@ -705,6 +702,12 @@ function render(){
       deleteAsset(btn.dataset.deleteAsset);
     };
   });
+  document.querySelectorAll('[data-direct-edit]').forEach(btn=>{
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      openDirectEditModal(btn.dataset.directEdit);
+    };
+  });
 
   buildFilters();
   updateActivityBadge();
@@ -802,6 +805,7 @@ function rowHtml(r, groupSupportId){
     </td>
     <td data-label="관리">
       <div style="display:flex; gap:6px;">
+        ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-direct-edit="${r.id}" title="관리자 직접 수정 (작업이력 없이 바로 저장)">${pencilSvg()}</button>` : ''}
         <button class="wl-action-btn icon-only danger" data-delete-asset="${r.id}" title="삭제">${trashSvg()}</button>
       </div>
     </td>
@@ -825,6 +829,8 @@ function toggleFavCountry(name){
 }
 
 function buildFilters(){
+  renderFiltersResetSlot();
+
   const statusBox = document.getElementById('statusFilters');
   const statuses = [['ok','정상'],['warn','만료임박'],['crit','만료됨'],['na','기간없음']];
   statusBox.innerHTML = statuses.map(([k,l])=>`
@@ -912,39 +918,59 @@ function buildFilters(){
   updateMyAssetsToggle();
 }
 
+// 로그인한 사용자가 정 담당자인 "사이트(법인/그룹)"의 group id 집합.
+// 자산(레코드) 단위가 아니라 사이트 단위로 세기 위해 필터·배지 카운트가 공용으로 쓴다.
+function getMySiteGroupIds(){
+  const ids = new Set();
+  const me = currentUserName();
+  if (!me) return ids;
+  const seenGroups = new Set();
+  records.forEach(r=>{
+    if (seenGroups.has(r.group)) return;
+    seenGroups.add(r.group);
+    const meta = groupMeta(records.filter(x=>x.group===r.group));
+    if (meta.owner_primary === me) ids.add(r.group);
+  });
+  return ids;
+}
+
 function updateMyAssetsToggle(){
   const btn = document.getElementById('myAssetsToggle');
   const cntEl = document.getElementById('myAssetsCount');
   if (!btn || !cntEl) return;
   const me = currentUserName();
-  let cnt = 0;
-  if (me){
-    const seenGroups = new Set();
-    records.forEach(r=>{
-      if (seenGroups.has(r.group)) return;
-      seenGroups.add(r.group);
-      const meta = groupMeta(records.filter(x=>x.group===r.group));
-      if (meta.owner_primary === me) cnt++;
-    });
-  }
-  cntEl.textContent = cnt;
+  cntEl.textContent = getMySiteGroupIds().size;
   btn.classList.toggle('active', activeMyAssetsFilter);
   btn.disabled = !me;
-  btn.title = me ? '' : '로그인이 필요합니다.';
+  btn.title = me ? '내가 정 담당자인 사이트만 보기' : '로그인이 필요합니다.';
+}
+
+function renderFiltersResetSlot(){
+  const slot = document.getElementById('filtersResetSlot');
+  if (!slot) return;
+  const defaultStatus = ['ok','warn','na'];
+  const isDefaultStatus = activeStatusFilters.size === defaultStatus.length && defaultStatus.every(s=>activeStatusFilters.has(s));
+  const searchInput = document.getElementById('searchInput');
+  const hasQuery = !!(searchInput && searchInput.value.trim());
+  const hasActiveFilters = !isDefaultStatus || !!activeCountryFilter || !!activeDeviceTypeFilter
+    || activeSkuKeywordFilters.size > 0 || activeMyAssetsFilter || hasQuery;
+
+  if (!hasActiveFilters){ slot.innerHTML = ''; return; }
+  slot.innerHTML = `<button type="button" class="filters-reset-btn" id="filtersResetBtn">✕ 필터 초기화</button>`;
+  document.getElementById('filtersResetBtn').onclick = () => {
+    activeStatusFilters = new Set(['ok','warn','na']);
+    activeCountryFilter = null;
+    activeDeviceTypeFilter = null;
+    activeSkuKeywordFilters = new Set();
+    activeMyAssetsFilter = false;
+    if (searchInput) searchInput.value = '';
+    render();
+  };
 }
 
 document.getElementById('myAssetsToggle').onclick = () => {
   if (!currentUserName()) return;
   activeMyAssetsFilter = !activeMyAssetsFilter;
-  render();
-};
-
-document.getElementById('filtersResetBtn').onclick = () => {
-  activeStatusFilters = new Set(['ok','warn','na']);
-  activeCountryFilter = null;
-  activeDeviceTypeFilter = null;
-  activeSkuKeywordFilters = new Set();
-  activeMyAssetsFilter = false;
   render();
 };
 
@@ -976,6 +1002,30 @@ document.getElementById('cancelAddBtn').onclick = () => {
   editingRecordId = null;
 };
 
+// 마스터 관리자 전용: 작업이력을 남기지 않고 자산의 모든 필드를 바로 수정한다.
+async function openDirectEditModal(recId){
+  if (!isCurrentUserAdmin()){ alert('마스터 관리자만 직접 수정할 수 있습니다.'); return; }
+  if (viewOnly || !sessionKey){ alert('먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const rec = records.find(r=>String(r.id)===String(recId));
+  if (!rec) return;
+
+  editingRecordId = recId;
+  clearAssetForm();
+  const set = (id, v) => { document.getElementById(id).value = v || ''; };
+  set('f_owner', rec.owner); set('f_location', rec.location); set('f_support', rec.support_id);
+  set('f_device_type', rec.device_type); set('f_sku', rec.sku); set('f_sn', rec.sn); set('f_qty', rec.qty);
+  set('f_start', rec.start); set('f_end', rec.end); set('f_os', rec.os_ver); set('f_check', rec.check_method);
+  set('f_owner_primary', rec.owner_primary); set('f_owner_secondary', rec.owner_secondary);
+  set('f_cust', rec.cust_contact); set('f_remarks', rec.remarks);
+  set('f_ip', rec.ip_enc ? await decryptField(rec.ip_enc) : '');
+  set('f_id', rec.id_enc ? await decryptField(rec.id_enc) : '');
+  set('f_pw', rec.pw_enc ? await decryptField(rec.pw_enc) : '');
+
+  document.getElementById('addModalTitle').textContent = '자산 정보 직접 수정 (관리자)';
+  document.getElementById('saveAddBtn').textContent = '수정 저장 (작업이력 없이)';
+  document.getElementById('addModal').classList.add('open');
+}
+
 function deleteAsset(recId){
   const rec = records.find(r=>String(r.id)===String(recId));
   if (!rec) return;
@@ -986,8 +1036,31 @@ function deleteAsset(recId){
 }
 
 document.getElementById('saveAddBtn').onclick = async () => {
-  if (viewOnly || !sessionKey){ alert('자산을 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  if (viewOnly || !sessionKey){ alert('자산을 추가/수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
   const val = id => document.getElementById(id).value.trim();
+
+  if (editingRecordId){
+    // 관리자 직접 수정: 작업이력을 남기지 않고 기존 레코드를 그대로 덮어쓴다.
+    if (!isCurrentUserAdmin()){ alert('마스터 관리자만 직접 수정할 수 있습니다.'); return; }
+    const rec = records.find(r=>String(r.id)===String(editingRecordId));
+    if (!rec){ editingRecordId = null; document.getElementById('addModal').classList.remove('open'); return; }
+    Object.assign(rec, {
+      owner: val('f_owner')||rec.owner, location:val('f_location'), support_id:val('f_support'),
+      device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
+      start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'),
+      os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
+      cust_contact:val('f_cust'),
+      ip_enc: await encryptField(val('f_ip')),
+      id_enc: await encryptField(val('f_id')),
+      pw_enc: await encryptField(val('f_pw')),
+    });
+    editingRecordId = null;
+    document.getElementById('addModal').classList.remove('open');
+    clearAssetForm();
+    render();
+    scheduleAutoSync();
+    return;
+  }
 
   const newId = Math.max(0,...records.map(r=>r.id)) + 1;
   const gid = 'custom-' + newId;
@@ -1155,13 +1228,19 @@ function currentUserName(){
   const u = users.find(x=>String(x.id)===String(currentUserId));
   return u ? u.name : '';
 }
+function isCurrentUserAdmin(){
+  const u = users.find(x=>String(x.id)===String(currentUserId));
+  return !!(u && u.isAdmin);
+}
 function updateSidebarProfile(){
   const nameEl = document.getElementById('profileName');
   const avatarEl = document.getElementById('profileAvatar');
+  const subEl = document.getElementById('profileSub');
   if (!nameEl || !avatarEl) return;
   const name = currentUserName();
   nameEl.textContent = name || '로그인 필요';
   avatarEl.textContent = name ? name.trim().charAt(0) : '?';
+  if (subEl) subEl.textContent = isCurrentUserAdmin() ? '👑 마스터 관리자' : '로그인됨';
 }
 function updateUserBtnLabel(){ updateSidebarProfile(); } // (이전 이름 호환용 별칭)
 
@@ -1265,7 +1344,10 @@ document.getElementById('ag_register_btn').onclick = async () => {
   const pwSalt = bufToB64(crypto.getRandomValues(new Uint8Array(16)).buffer);
   const pwIterations = 150000;
   const pwHash = await hashPassword(pass, pwSalt, pwIterations);
-  users.push({ id, name, pwSalt, pwIterations, pwHash });
+  // 이 시스템에 처음 만들어지는 계정은 자동으로 마스터 관리자 권한을 갖는다
+  // (팀에서 가장 먼저 계정을 만든 사람 = 관리자를 지정해 줄 사람이 아직 없으므로).
+  const isAdmin = users.length === 0;
+  users.push({ id, name, pwSalt, pwIterations, pwHash, isAdmin });
 
   // 계정을 막 만든 사람은 이미 방금 비밀번호를 입력해 본인임이 확인된 상태이므로
   // 바로 로그인 상태로 전환한다.
