@@ -224,7 +224,7 @@ aside.filters{
   flex:1; min-width:0; background:none; border:none; outline:none; color:var(--text); font-size:12.8px; font-family:var(--body);
 }
 
-/* 좌측 패널 상단으로 옮겨진 액션 버튼 (최근 이력 / 전체 펼치기 / 자산 추가 / 마스킹 전체 해제) */
+/* 좌측 패널 상단으로 옮겨진 액션 버튼 (최근 이력 / 전체 펼치기 / 자산 추가) */
 .panel-top-actions{
   display:flex; flex-direction:row; gap:6px;
   margin-bottom:18px; padding-bottom:18px;
@@ -406,14 +406,16 @@ td.remarks-cell{ max-width:230px; }
 .lic-status{ font-size:10.5px; margin-top:4px; font-family:var(--mono); }
 .lic-status.ok{ color:var(--green); } .lic-status.warn{ color:var(--amber); } .lic-status.crit{ color:var(--red); } .lic-status.na{ color:var(--text-faint); }
 
-.sec-field{ display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:12px; }
-.sec-val{ letter-spacing:0.02em; }
-.sec-val.masked{ color:var(--text-faint); letter-spacing:0.14em; }
-.sec-toggle{
-  background:none; border:none; cursor:pointer; color:var(--text-faint); padding:2px; flex-shrink:0;
-  display:flex; align-items:center;
+.sec-val{
+  letter-spacing:0.02em; font-family:var(--mono); font-size:12px;
+  cursor:pointer; border-radius:4px; padding:2px 5px; margin:-2px -5px;
+  transition:background .12s, color .12s;
 }
-.sec-toggle:hover{ color:var(--accent); }
+.sec-val:hover{ background:var(--surface2); color:var(--accent-dim); }
+.sec-val.empty{ cursor:default; color:var(--text-faint); }
+.sec-val.empty:hover{ background:none; color:var(--text-faint); }
+.sec-val.locked{ cursor:pointer; color:var(--text-faint); }
+.sec-val.copied{ background:#E8F7EE; color:var(--green); font-weight:600; }
 
 .contact-cell{ font-size:11.8px; line-height:1.5; }
 .contact-cell .who{ color:var(--text); }
