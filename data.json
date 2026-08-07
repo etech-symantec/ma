@@ -244,7 +244,7 @@
     {
       "group": "tw-ds",
       "flag": "※",
-      "owner": "삼성전자 대만 반도체 SET (DS) 법인",
+      "owner": "삼성전자 SET",
       "location": "대만",
       "support_id": "490047",
       "sku": "SG-S200-30-PR",
@@ -287,24 +287,28 @@
         {
           "role": "영업",
           "name": "김한섭 프로",
+          "org": "",
           "phone": "02-6155-1192 / 010-8719-1132",
           "email": "hanseob.kim@samsung.com"
         },
         {
           "role": "영업",
           "name": "임진섭 프로(SDS)",
+          "org": "",
           "phone": "",
           "email": "jinsup.lim@samsung.com"
         },
         {
           "role": "운용",
           "name": "Calvin Wang",
+          "org": "",
           "phone": "",
           "email": "calvin.wang@samsung.com"
         },
         {
           "role": "",
           "name": "dasdf",
+          "org": "",
           "phone": "",
           "email": "sadf"
         }
@@ -313,7 +317,7 @@
     {
       "group": "tw-ds",
       "flag": "",
-      "owner": "삼성전자 대만 반도체 SET (DS) 법인",
+      "owner": "삼성전자 SET",
       "location": "대만",
       "support_id": "490047",
       "sku": "IS-SWSA-SWG-100-250-1Y",
@@ -344,24 +348,28 @@
         {
           "role": "영업",
           "name": "김한섭 프로",
+          "org": "",
           "phone": "02-6155-1192 / 010-8719-1132",
           "email": "hanseob.kim@samsung.com"
         },
         {
           "role": "영업",
           "name": "임진섭 프로(SDS)",
+          "org": "",
           "phone": "",
           "email": "jinsup.lim@samsung.com"
         },
         {
           "role": "운용",
           "name": "Calvin Wang",
+          "org": "",
           "phone": "",
           "email": "calvin.wang@samsung.com"
         },
         {
           "role": "",
           "name": "dasdf",
+          "org": "",
           "phone": "",
           "email": "sadf"
         }
@@ -370,7 +378,7 @@
     {
       "group": "tw-ds",
       "flag": "",
-      "owner": "삼성전자 대만 반도체 SET (DS) 법인",
+      "owner": "삼성전자 SET",
       "location": "대만",
       "support_id": "490047",
       "sku": "RP-V50-1Y",
@@ -413,24 +421,28 @@
         {
           "role": "영업",
           "name": "김한섭 프로",
+          "org": "",
           "phone": "02-6155-1192 / 010-8719-1132",
           "email": "hanseob.kim@samsung.com"
         },
         {
           "role": "영업",
           "name": "임진섭 프로(SDS)",
+          "org": "",
           "phone": "",
           "email": "jinsup.lim@samsung.com"
         },
         {
           "role": "운용",
           "name": "Calvin Wang",
+          "org": "",
           "phone": "",
           "email": "calvin.wang@samsung.com"
         },
         {
           "role": "",
           "name": "dasdf",
+          "org": "",
           "phone": "",
           "email": "sadf"
         }
