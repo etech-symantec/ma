@@ -1,19 +1,3 @@
-// ---------- global header offset ----------
-// header.js (loaded from etech-symantec.github.io) injects its markup at the
-// top of <body>, before our #lockOverlay/#app. We need to know its total
-// rendered height so our own sticky topbar/stats/sidebar sit right below it
-// instead of overlapping it.
-//
-// Earlier this measured `.header-wrap` directly via getBoundingClientRect().
-// That undercounts the real header height whenever header.js renders extra
-// content as a SIBLING outside that wrapper (e.g. a separate title/version
-// bar next to the nav pills) — the result is our topbar/stats end up
-// positioned too high and get visually clipped behind the (higher z-index)
-// header. Instead we measure #app's natural in-flow offset from the top of
-// <body> (offsetTop): that number is, by definition, the combined height of
-// everything rendered above it in normal flow, no matter how many separate
-// elements header.js uses or what it names them. (#lockOverlay is
-// position:fixed and doesn't affect this.)
 function syncGlobalHeaderHeight(){
   const appEl = document.getElementById('app');
   if (!appEl) return null;
@@ -40,12 +24,6 @@ if (window.ResizeObserver){
 // including after DOMContentLoaded/load already fired.
 new MutationObserver(syncGlobalHeaderHeight).observe(document.body, { childList:true, subtree:true });
 
-// ---------- sticky offsets: topbar ----------
-// The sidebar filter panel stacks directly below the sticky topbar. Its
-// offset depends on the topbar's *actual* rendered height, which can vary
-// (button wrapping, font metrics, responsive layout) — so, exactly like the
-// global header height above, we measure it live instead of hardcoding a
-// pixel guess that goes stale.
 function syncStickyOffsets(){
   const topbar = document.querySelector('.am-topbar');
   const topbarH = topbar ? Math.ceil(topbar.getBoundingClientRect().height) : 0;
@@ -79,18 +57,6 @@ const DEFAULT_GITHUB_CONFIG = {
   path: 'data.json'
 };
 
-// ---------- embedded access token (restricted-use deployment only) ----------
-// IMPORTANT — read before relying on this:
-// This only stops someone from finding the token by glancing at the file or
-// grepping for "ghp_"/"github_pat_". It is NOT real security. Anyone who opens
-// this page's dev tools, sets a breakpoint, or simply pastes
-//   copy(_decodeAuth())
-// into the browser console gets the plaintext token in one line, because the
-// browser itself has to be able to decode it to make API calls. Only use this
-// if: (1) this page is not on the public internet (intranet/VPN only, or
-// behind auth), and (2) the token is a FINE-GRAINED PAT scoped to ONLY this
-// repo with ONLY "Contents: Read and write" permission, with an expiration
-// date set, so a leak has minimal blast radius. Rotate it periodically.
 const _ok = 'etechMA26-restricted'; // xor key — also just visible text, not a secret
 const _ot = [
   'Ah0RCx0vHkJXWS1UQjYoLjcwMyU=',
@@ -112,10 +78,6 @@ function _decodeAuth(){
   }catch(e){ return null; }
 }
 
-// ---------- auto-sync ----------
-// Any local mutation (add/edit/delete asset, work-log change, password
-// change) schedules a debounced push to GitHub so the repo file stays in
-// sync automatically, as long as a token is available for this session.
 let autoSyncTimer = null;
 let autoSyncInFlight = false;
 let autoSyncQueued = false;
@@ -215,9 +177,6 @@ function deviceBadge(r){
 }
 
 // ---------- SKU category tags ----------
-// Rules are checked in order (first match wins) and grouped into color
-// "families" (related hues) for related prefixes — e.g. all ISG-* patterns
-// share a violet family, just at different shades, per spec.
 const SKU_CATEGORIES = [
   // -- prefix rules --
   { match:'prefix', value:'ISG-Pro',     color:'#A78BFA' }, // ISG family (violet)
@@ -327,12 +286,6 @@ async function deriveKey(passphrase, saltB64, iterations){
   );
 }
 
-// 개인 계정 로그인 비밀번호 해시 (마스터 비밀번호와는 별개 — 민감정보 암호화 키가 아니라
-// "이 브라우저에서 누가 로그인했는지"를 검증하기 위한 용도). PBKDF2로 늘린 해시값만
-// 저장하고 원문 비밀번호는 저장/전송하지 않는다.
-// 주의: 이 앱은 서버가 없는 정적 페이지이므로, 개발자 도구를 여는 사람은 이 해시 비교
-// 로직 자체를 우회할 수 있다. 즉 "같은 브라우저를 쓰는 팀원끼리 계정을 구분"하는 용도의
-// 보호이며, 악의적인 공격자를 막는 진짜 보안 경계는 아니다.
 async function hashPassword(password, saltB64, iterations){
   const enc = new TextEncoder();
   const baseKey = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveBits']);
@@ -362,9 +315,6 @@ async function encryptField(plain){
   return encryptWithKey(plain, sessionKey);
 }
 
-// Key-parametrized variants (used for master-password rotation, where we need
-// to decrypt with the OLD key and encrypt with the NEW key in the same pass,
-// independent of whatever is currently sitting in the global sessionKey).
 async function decryptWithKey(field, key){
   const iv = b64ToBuf(field.iv);
   const ct = new Uint8Array(b64ToBuf(field.ct));
@@ -534,8 +484,6 @@ function flashCopied(el){
   }, 1000);
 }
 
-// 화면에 그려진 모든 IP/ID/비밀번호 칸을 복호화해서 바로 보여준다 (더 이상 마스킹하지 않음).
-// 잠금 해제되어 있지 않으면 🔒 로 표시하고, 클릭 시 잠금 해제를 안내한다.
 async function populateSecretFields(){
   const spans = Array.from(document.querySelectorAll('.sec-val[data-copy-id]'));
   for (const el of spans){
@@ -918,8 +866,6 @@ function buildFilters(){
   updateMyAssetsToggle();
 }
 
-// 로그인한 사용자가 정 담당자인 "사이트(법인/그룹)"의 group id 집합.
-// 자산(레코드) 단위가 아니라 사이트 단위로 세기 위해 필터·배지 카운트가 공용으로 쓴다.
 function getMySiteGroupIds(){
   const ids = new Set();
   const me = currentUserName();
@@ -1211,11 +1157,6 @@ function deleteGroup(gid){
 }
 
 // ---------- users (각자 계정으로 로그인해서 작업 이력 작성자를 기록) ----------
-// `users` 목록(이름 + 비밀번호 해시)은 팀 전체가 공유하는 데이터라 records와 함께
-// GitHub에 동기화된다. 반면 "지금 이 브라우저에서 로그인되어 있는 사람"은 로컬 전용
-// 정보라 localStorage에만 저장한다 (다른 사람 계정으로 바꾸려면 그 사람의 비밀번호가
-// 필요하다). 로그인은 앱 진입 전 첫 화면(계정 게이트)에서 이뤄지며, 로그인해야만
-// 다음 단계(마스터 비밀번호 잠금 해제 화면)로 넘어갈 수 있다.
 const CURRENT_USER_KEY = 'bcAssetCurrentUserId';
 let currentUserId = null;
 try{ currentUserId = localStorage.getItem(CURRENT_USER_KEY) || null; }catch(e){ currentUserId = null; }
@@ -1451,8 +1392,6 @@ document.addEventListener('click', (e) => {
   dd.classList.remove('open');
 });
 
-// 마스터 비밀번호 변경 / 내보내기 / 가져오기 UI는 더 이상 제공하지 않는다.
-
 // ---------- GitHub sync ----------
 const GITHUB_CONFIG_KEY = 'bcAssetGithubConfig';
 const GITHUB_TOKEN_KEY = 'bcAssetGithubToken';
@@ -1533,10 +1472,6 @@ async function githubApiPut(cfg, token, jsonObj, sha, message){
   return data.content.sha;
 }
 
-// GitHub UI(연결 설정 모달/수동 저장 버튼)는 더 이상 노출하지 않는다. 배경 동기화는
-// dataReady 시점에 내장된 접근 토큰으로 자동 연결되고, 이후 변경사항은
-// scheduleAutoSync()/runAutoSync()가 계속 자동으로 저장소에 반영한다.
-
 // ---------- work log ----------
 function openWorkLogModal(recId){
   workLogRecordId = String(recId);
@@ -1556,9 +1491,6 @@ function openWorkLogModal(recId){
 }
 
 // ---------- work log: "apply changes to asset" section ----------
-// Field metadata for every per-item asset attribute that can be changed via
-// a work-log entry. `sensitive` fields are encrypted and their value is
-// never persisted on the log entry itself (see applyFieldChanges below).
 const WL_FIELD_DEFS = [
   { field:'start',       label:'라이선스 시작일', type:'text' },
   { field:'end',         label:'라이선스 종료일', type:'text' },
@@ -1633,11 +1565,6 @@ document.getElementById('wl_apply_toggle').addEventListener('change', (e) => {
   document.getElementById('wl_fieldchange_section').style.display = e.target.checked ? '' : 'none';
 });
 
-// Reads whichever fields the user picked and filled in, applies them to the
-// record, and returns a { changes, fieldChanges } pair:
-// - changes: readable list used to build the work-log change summary
-// - fieldChanges: what gets stored on the entry itself for later re-editing
-//   (plaintext for normal fields, just `true` for sensitive ones)
 async function applyFieldChanges(rec){
   const changes = [];
   const fieldChanges = {};
