@@ -584,14 +584,15 @@ function render(){
               <div class="title-row">
                 <h3 class="group-title-name">${esc(meta.owner)}</h3>
                 <div class="sub title-meta">
-                  <span>${esc(meta.location)||'위치 미입력'}</span>
-                  <span><b>Support ID</b> ${esc(meta.support_id)||'—'}</span>
-                  <span><b>점검 방식</b> ${esc(meta.check_method)||'—'}</span>
-                  <span><b>항목</b> ${items.length}건</span>
+                  <span class="meta-chip"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
+                  <span class="meta-chip"><span class="meta-label">Support ID</span><span class="meta-value">${esc(meta.support_id)||'—'}</span></span>
+                  <span class="meta-chip"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
+                  <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
                   ${managerNamesInlineHtml(meta)}
+                  ${custContactsSummaryHtml(gid, meta)}
                 </div>
               </div>
-              ${groupContactsHtml(meta)}
+              ${groupRemarksHtml(meta)}
             </div>
           </div>
           <div class="group-badges">
@@ -632,6 +633,9 @@ function render(){
   });
   document.querySelectorAll('[data-group-delete]').forEach(btn=>{
     btn.onclick = (e) => { e.stopPropagation(); deleteGroup(btn.dataset.groupDelete); };
+  });
+  document.querySelectorAll('[data-cust-summary]').forEach(el=>{
+    el.onclick = (e) => { e.stopPropagation(); openCustContactsModal(el.dataset.custSummary); };
   });
   document.querySelectorAll('[data-kwtag]').forEach(tag=>{
     tag.onclick = (e) => {
@@ -698,28 +702,52 @@ function managerNamesInlineHtml(meta){
   const names = [];
   if (meta.owner_primary) names.push(`<span class="mgr-primary">${esc(meta.owner_primary)}</span>`);
   if (meta.owner_secondary) names.push(`<span class="mgr-secondary">${esc(meta.owner_secondary)}</span>`);
-  return `<span class="mgr-names-inline">${names.join(' ')}</span>`;
+  return `<span class="meta-chip meta-chip-mgr">
+    <span class="meta-label">담당 엔지니어</span>
+    <span class="meta-value">${names.join(' ')}</span>
+  </span>`;
 }
 
-function groupContactsHtml(meta){
-  let html = '';
-  if (meta.cust_contacts && meta.cust_contacts.length){
-    const chips = meta.cust_contacts.map(c => {
-      if (!(c.name || c.org || c.phone || c.email)) return '';
-      const roleTag = c.role
-        ? `<span class="cust-role-tag" data-role="${esc(c.role)}">${esc(c.role)}</span>`
-        : `<span class="cust-role-tag cust-role-none">미지정</span>`;
-      const nameText = c.name ? esc(c.name) : '(이름 미입력)';
-      const detailBits = [c.org, c.phone, c.email].filter(Boolean).map(esc).join(' · ');
-      const details = detailBits ? `<span class="cust-contact-hidden">${detailBits}</span>` : '';
-      return `<span class="cust-contact-chip">${roleTag}<span class="cust-contact-text">${nameText}</span>${details}</span>`;
-    }).filter(Boolean);
-    if (chips.length){
-      html += `<div class="sub group-cust-contacts"><b>고객사 담당자</b><div class="cust-contact-chips">${chips.join('')}</div></div>`;
-    }
-  }
-  if (meta.group_remarks) html += `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
-  return html;
+function custContactsSummaryHtml(gid, meta){
+  const list = (meta.cust_contacts||[]).filter(c=>c.name||c.org||c.phone||c.email);
+  if (!list.length) return '';
+  const firstName = list[0].name ? esc(list[0].name) : '(이름 미입력)';
+  const label = list.length > 1 ? `${firstName} 외 ${list.length-1}명` : firstName;
+  return `<span class="meta-chip meta-chip-cust" data-cust-summary="${esc(gid)}" title="클릭하면 전체 고객사 담당자 정보를 볼 수 있습니다">
+    <span class="meta-label">고객사 담당자</span>
+    <span class="meta-value meta-value-link">${label}</span>
+  </span>`;
+}
+
+function openCustContactsModal(gid){
+  const items = records.filter(r=>r.group===gid);
+  if (!items.length) return;
+  const meta = groupMeta(items);
+  const list = (meta.cust_contacts||[]).filter(c=>c.name||c.org||c.phone||c.email);
+  document.getElementById('custContactsModalTitle').textContent = `${meta.owner} · 고객사 담당자 (${list.length}명)`;
+  const wrap = document.getElementById('custContactsModalList');
+  wrap.innerHTML = list.map(c=>{
+    const roleTag = c.role
+      ? `<span class="cust-role-tag" data-role="${esc(c.role)}">${esc(c.role)}</span>`
+      : `<span class="cust-role-tag cust-role-none">미지정</span>`;
+    const rows = [];
+    if (c.org) rows.push(`<span class="ccm-field"><b>소속</b> ${esc(c.org)}</span>`);
+    if (c.phone) rows.push(`<span class="ccm-field"><b>연락처</b> ${esc(c.phone)}</span>`);
+    if (c.email) rows.push(`<span class="ccm-field"><b>이메일</b> ${esc(c.email)}</span>`);
+    return `<div class="ccm-card">
+      <div class="ccm-head">${roleTag}<span class="ccm-name">${esc(c.name||'(이름 미입력)')}</span></div>
+      ${rows.length ? `<div class="ccm-details">${rows.join('')}</div>` : ''}
+    </div>`;
+  }).join('') || `<div class="user-list-empty">등록된 담당자가 없습니다.</div>`;
+  document.getElementById('custContactsModal').classList.add('open');
+}
+document.getElementById('custContactsModalCloseBtn').onclick = () => {
+  document.getElementById('custContactsModal').classList.remove('open');
+};
+
+function groupRemarksHtml(meta){
+  if (!meta.group_remarks) return '';
+  return `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
 }
 
 function rowHtml(r, groupSupportId){
