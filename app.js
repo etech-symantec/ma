@@ -706,16 +706,16 @@ function custContactNamesOf(r){
 
 function topFilterBarHtml(){
   const fields = [
-    { key:'country',      label:'국가',        values: uniqueValues(records, r=>r.country) },
-    { key:'location',     label:'위치',        values: uniqueValues(records, r=>r.location) },
-    { key:'support_id',   label:'Support ID',  values: uniqueValues(records, r=>r.support_id) },
-    { key:'check_method', label:'점검 방식',   values: uniqueValues(records, r=>r.check_method) },
-    { key:'config_mode',  label:'구성방식',    values: uniqueValues(records, r=>r.config_mode) },
-    { key:'engineer',     label:'담당 엔지니어', values: uniqueValuesMulti(records, r=>[r.owner_primary, r.owner_secondary]) },
-    { key:'cust_contact', label:'고객사 담당자', values: uniqueValuesMulti(records, r=>custContactNamesOf(r)) },
+    { key:'country',      label:'국가',          cls:'tf-country',  values: uniqueValues(records, r=>r.country) },
+    { key:'location',     label:'위치',          cls:'tf-location', values: uniqueValues(records, r=>r.location) },
+    { key:'support_id',   label:'Support ID',    cls:'tf-support',  values: uniqueValues(records, r=>r.support_id) },
+    { key:'check_method', label:'점검 방식',     cls:'tf-check',    values: uniqueValues(records, r=>r.check_method) },
+    { key:'config_mode',  label:'구성방식',      cls:'tf-config',   values: uniqueValues(records, r=>r.config_mode) },
+    { key:'engineer',     label:'담당 엔지니어', cls:'tf-engineer', values: uniqueValuesMulti(records, r=>[r.owner_primary, r.owner_secondary]) },
+    { key:'cust_contact', label:'고객사 담당자', cls:'tf-cust',     values: uniqueValuesMulti(records, r=>custContactNamesOf(r)) },
   ];
   const selectsHtml = fields.map(f => `
-    <div class="tf-field">
+    <div class="tf-field ${f.cls}">
       <label>${esc(f.label)}</label>
       <select data-topfilter="${f.key}">
         <option value="">전체</option>
@@ -1234,6 +1234,7 @@ function deleteAsset(recId){
   if (!confirm(`이 자산 항목을 삭제하시겠습니까?\n${rec.sku||''} ${rec.sn? '(S/N '+rec.sn+')':''}`)) return;
   records = records.filter(r=>String(r.id)!==String(recId));
   render();
+  buildFilters();
   scheduleAutoSync();
 }
 
@@ -1260,6 +1261,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
     document.getElementById('addModal').classList.remove('open');
     clearAssetForm();
     render();
+    buildFilters();
     scheduleAutoSync();
     return;
   }
@@ -1282,6 +1284,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
   document.getElementById('addModal').classList.remove('open');
   clearAssetForm();
   render();
+  buildFilters();
   scheduleAutoSync();
 };
 
@@ -1403,6 +1406,7 @@ document.getElementById('saveGeBtn').onclick = () => {
   document.getElementById('groupEditModal').classList.remove('open');
   groupEditId = null;
   render();
+  buildFilters();
   scheduleAutoSync();
 };
 
@@ -1415,6 +1419,7 @@ function deleteGroup(gid){
   records = records.filter(r=>r.group!==gid);
   expandedGroups.delete(gid);
   render();
+  buildFilters();
   scheduleAutoSync();
 }
 
@@ -1448,6 +1453,7 @@ function duplicateGroup(gid){
   expandedGroups.add(newGid);
 
   render();
+  buildFilters();
   scheduleAutoSync();
 
   if (!viewOnly && sessionKey){
