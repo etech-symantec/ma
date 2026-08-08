@@ -1109,7 +1109,7 @@
         }
       ],
       "country": "인도",
-      "config_mode": ""
+      "config_mode": "Explicit"
     },
     {
       "group": "in-shi",
@@ -1158,7 +1158,7 @@
         }
       ],
       "country": "인도",
-      "config_mode": ""
+      "config_mode": "Explicit"
     },
     {
       "group": "th-tse",
