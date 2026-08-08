@@ -4654,8 +4654,8 @@
     {
       "group": "us-003",
       "flag": "",
-      "owner": "RP (뉴저지 : 동부)*",
-      "location": "미국 동부(SEARP)",
+      "owner": "삼성전자 SEARP",
+      "location": "뉴저지",
       "support_id": "",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
       "sn": "2717320090",
@@ -4691,13 +4691,17 @@
         "iv": "XEvAegvfHHi6Ayz7",
         "ct": "1o4D3PjIjZGrEHH6Z5A=",
         "tag": "3ouiYrBp2a+ZGsJUzSBncA=="
-      }
+      },
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": []
     },
     {
       "group": "us-003",
       "flag": "",
-      "owner": "",
-      "location": "",
+      "owner": "삼성전자 SEARP",
+      "location": "뉴저지",
       "support_id": "",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
       "sn": "3517320115",
@@ -4710,9 +4714,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.18.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4733,13 +4737,17 @@
         "iv": "CKd/3u8F8zimDymm",
         "ct": "wbYDA7XS+UxZlbu5zgE=",
         "tag": "JtWYfH15hNDcciARqlzdAA=="
-      }
+      },
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": []
     },
     {
       "group": "us-003",
       "flag": "",
-      "owner": "",
-      "location": "",
+      "owner": "삼성전자 SEARP",
+      "location": "뉴저지",
       "support_id": "",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
       "sn": "3518320132",
@@ -4752,9 +4760,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.18.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4775,7 +4783,11 @@
         "iv": "w9iRYd23kcx1qdy0",
         "ct": "DCX+CEBuGfU8lLtBv9s=",
         "tag": "qBhRhIRGMokWLeJxyJsckg=="
-      }
+      },
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": []
     },
     {
       "group": "us-004",
