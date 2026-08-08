@@ -523,6 +523,14 @@ tbody td{
 }
 tbody tr:last-child td{ border-bottom:none; }
 tbody tr:hover{ background:#F3F6FA; }
+
+/* 최근 작업 이력 알림에서 클릭해 이동했을 때, 해당 행/카드를 한 번 강조해서 보여준다 */
+@keyframes activityFlash{
+  0%{ background-color:#FEF3C7; }
+  100%{ background-color:transparent; }
+}
+.activity-highlight-flash{ animation:activityFlash 1.8s ease; }
+
 td.sku{ color:var(--text); font-family:var(--mono); font-size:12.3px; font-weight:500; }
 td.sn{ font-family:var(--mono); font-size:11.8px; color:var(--text-faint); }
 td.remarks-cell{ max-width:230px; }
