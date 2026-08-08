@@ -265,7 +265,7 @@
       "group": "tw-ds",
       "flag": "※",
       "owner": "삼성전자 SET",
-      "location": "대만",
+      "location": "SET",
       "support_id": "490047",
       "sku": "SG-S200-30-PR",
       "sn": "3919330046",
@@ -333,13 +333,14 @@
           "email": "sadf"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "대만"
     },
     {
       "group": "tw-ds",
       "flag": "",
       "owner": "삼성전자 SET",
-      "location": "대만",
+      "location": "SET",
       "support_id": "490047",
       "sku": "IS-SWSA-SWG-100-250-1Y",
       "sn": "50691101-1-1",
@@ -395,13 +396,14 @@
           "email": "sadf"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "대만"
     },
     {
       "group": "tw-ds",
       "flag": "",
       "owner": "삼성전자 SET",
-      "location": "대만",
+      "location": "SET",
       "support_id": "490047",
       "sku": "RP-V50-1Y",
       "sn": "27480040",
@@ -469,7 +471,8 @@
           "email": "sadf"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "대만"
     },
     {
       "group": "in-sdn-cama",
