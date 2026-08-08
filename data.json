@@ -3716,7 +3716,7 @@
       "group": "seha",
       "flag": "",
       "owner": "삼성전자 SEHA",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "356307",
       "sku": "SSP-S210-10",
       "sn": "924710022",
@@ -3754,13 +3754,15 @@
         "tag": "gBtWXEQcaVi6Sliz91WZsw=="
       },
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국",
+      "config_mode": "Inline"
     },
     {
       "group": "seha",
       "flag": "",
       "owner": "삼성전자 SEHA",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "356307",
       "sku": "SSP-S210-10",
       "sn": "2422710023",
@@ -3790,13 +3792,15 @@
       "id_enc": null,
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국",
+      "config_mode": "Inline"
     },
     {
       "group": "seha",
       "flag": "",
       "owner": "삼성전자 SEHA",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "356307",
       "sku": "ISG-Proxy",
       "sn": "79999244",
@@ -3834,13 +3838,15 @@
         "tag": "MJWPeQASetzXhKdecBabRg=="
       },
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국",
+      "config_mode": "Inline"
     },
     {
       "group": "seha",
       "flag": "",
       "owner": "삼성전자 SEHA",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "356307",
       "sku": "ISG-Proxy",
       "sn": "79999244",
@@ -3870,13 +3876,15 @@
       "id_enc": null,
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국",
+      "config_mode": "Inline"
     },
     {
       "group": "seha",
       "flag": "",
       "owner": "삼성전자 SEHA",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "356307",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52579113-1-1",
@@ -3902,13 +3910,15 @@
       "id_enc": null,
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국",
+      "config_mode": "Inline"
     },
     {
       "group": "seha",
       "flag": "",
       "owner": "삼성전자 SEHA",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "356307",
       "sku": "MC-S400-20-100",
       "sn": "920320043",
@@ -3946,13 +3956,15 @@
         "tag": "fkZLl2+sl9qYJwVgPpQZqQ=="
       },
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국",
+      "config_mode": "Inline"
     },
     {
       "group": "seha",
       "flag": "",
       "owner": "삼성전자 SEHA",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "356307",
       "sku": "RP-V100",
       "sn": "74485847",
@@ -3990,7 +4002,9 @@
         "tag": "WNbNb5yzIQvJg0qxdbE8wA=="
       },
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국",
+      "config_mode": "Inline"
     },
     {
       "group": "us-001",
