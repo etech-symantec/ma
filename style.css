@@ -217,14 +217,14 @@ aside.filters{
 }
 .profile-logout-btn:hover{ color:var(--red); border-color:#F3B4B4; background:#fff; }
 
-/* 좌측 패널 검색창 */
-.sidebar-search{
+/* 상단 필터행 맨 앞의 검색창 */
+.tf-search{
   display:flex; align-items:center; gap:8px;
-  background:var(--surface2); border:1px solid var(--border-solid); border-radius:10px;
-  padding:9px 11px; margin-bottom:16px;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px;
+  padding:7px 12px; flex:0 0 240px;
 }
-.sidebar-search svg{ color:var(--text-faint); flex-shrink:0; }
-.sidebar-search input{
+.tf-search svg{ color:var(--text-faint); flex-shrink:0; }
+.tf-search input{
   flex:1; min-width:0; background:none; border:none; outline:none; color:var(--text); font-size:12.8px; font-family:var(--body);
 }
 
@@ -311,10 +311,13 @@ aside.filters{
 /* main content */
 main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 
-/* 페이지 상단 필드별 드롭다운 필터 */
-.top-filter-bar{
+/* 페이지 상단 필터행 — 검색창(맨 앞) + 필드별 드롭다운 필터 */
+.top-filter-row{
   display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:18px; padding-bottom:16px;
   border-bottom:1px solid var(--border-solid);
+}
+.top-filter-bar{
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; flex:1; min-width:0;
 }
 .tf-field{
   display:flex; flex-direction:row; align-items:center; gap:8px;
