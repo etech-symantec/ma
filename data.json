@@ -1473,7 +1473,7 @@
     {
       "group": "uk-seuk",
       "flag": "",
-      "owner": "SEUK",
+      "owner": "삼성전자 SEUK",
       "location": "영국 런던",
       "support_id": "15688885",
       "sku": "SSP-S410-20B",
@@ -1514,26 +1514,19 @@
       "group_remarks": "",
       "cust_contacts": [
         {
-          "name": "이재혁 프로",
-          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
-          "email": "jay7.lee@partner.samsung.com"
-        },
-        {
+          "role": "",
           "name": "Roger Alphonso",
+          "org": "",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
-        },
-        {
-          "name": "김응원 프로",
-          "phone": "",
-          "email": "e.kymm@partner.samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "uk-seuk",
       "flag": "",
-      "owner": "SEUK",
+      "owner": "삼성전자 SEUK",
       "location": "영국 런던",
       "support_id": "15688885",
       "sku": "ISG-Proxy",
@@ -1574,26 +1567,19 @@
       "group_remarks": "",
       "cust_contacts": [
         {
-          "name": "이재혁 프로",
-          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
-          "email": "jay7.lee@partner.samsung.com"
-        },
-        {
+          "role": "",
           "name": "Roger Alphonso",
+          "org": "",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
-        },
-        {
-          "name": "김응원 프로",
-          "phone": "",
-          "email": "e.kymm@partner.samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "uk-seuk",
       "flag": "",
-      "owner": "SEUK",
+      "owner": "삼성전자 SEUK",
       "location": "영국 런던",
       "support_id": "15688885",
       "sku": "MC-VA",
@@ -1634,26 +1620,19 @@
       "group_remarks": "",
       "cust_contacts": [
         {
-          "name": "이재혁 프로",
-          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
-          "email": "jay7.lee@partner.samsung.com"
-        },
-        {
+          "role": "",
           "name": "Roger Alphonso",
+          "org": "",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
-        },
-        {
-          "name": "김응원 프로",
-          "phone": "",
-          "email": "e.kymm@partner.samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "uk-seuk",
       "flag": "",
-      "owner": "SEUK",
+      "owner": "삼성전자 SEUK",
       "location": "영국 런던",
       "support_id": "15688885",
       "sku": "ELK",
@@ -1694,26 +1673,19 @@
       "group_remarks": "",
       "cust_contacts": [
         {
-          "name": "이재혁 프로",
-          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
-          "email": "jay7.lee@partner.samsung.com"
-        },
-        {
+          "role": "",
           "name": "Roger Alphonso",
+          "org": "",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
-        },
-        {
-          "name": "김응원 프로",
-          "phone": "",
-          "email": "e.kymm@partner.samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "uk-seuk",
       "flag": "",
-      "owner": "SEUK",
+      "owner": "삼성전자 SEUK",
       "location": "영국 런던",
       "support_id": "15688885",
       "sku": "WEB-PROTECT-SUB",
@@ -1742,21 +1714,14 @@
       "group_remarks": "",
       "cust_contacts": [
         {
-          "name": "이재혁 프로",
-          "phone": "07432.096333 / 44(0)1932 454133(Whatsapp)",
-          "email": "jay7.lee@partner.samsung.com"
-        },
-        {
+          "role": "",
           "name": "Roger Alphonso",
+          "org": "",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
-        },
-        {
-          "name": "김응원 프로",
-          "phone": "",
-          "email": "e.kymm@partner.samsung.com"
         }
-      ]
+      ],
+      "config_mode": "Explicit"
     },
     {
       "group": "vn-sdv-old",
