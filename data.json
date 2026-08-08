@@ -20763,7 +20763,7 @@
       "group": "kr-025",
       "flag": "미국",
       "owner": "한화큐셀 Module",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "SSP-S410-40B",
       "sn": "623700086",
@@ -20802,13 +20802,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "kr-025",
       "flag": "",
       "owner": "한화큐셀 Module",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "SSP-S410-40B",
       "sn": "623700104",
@@ -20847,13 +20848,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "kr-025",
       "flag": "",
       "owner": "한화큐셀 Module",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "ISG-Proxy",
       "sn": "76996539",
@@ -20892,13 +20894,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "kr-025",
       "flag": "",
       "owner": "한화큐셀 Module",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "ISG-Proxy",
       "sn": "76996539",
@@ -20937,13 +20940,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "kr-025",
       "flag": "",
       "owner": "한화큐셀 Module",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "MC-VA",
       "sn": "2664417824",
@@ -20982,13 +20986,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "kr-025",
       "flag": "",
       "owner": "한화큐셀 Module",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "RP-VA",
       "sn": "73482285",
@@ -21027,13 +21032,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "kr-025",
       "flag": "",
       "owner": "한화큐셀 Module",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "CA-VA",
       "sn": "76996541",
@@ -21072,13 +21078,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "kr-025",
       "flag": "",
       "owner": "한화큐셀 Module",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "ISG-MA",
       "sn": "76996518",
@@ -21117,13 +21124,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "kr-025",
       "flag": "",
       "owner": "한화큐셀 Module",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52387281-7-1",
@@ -21150,7 +21158,8 @@
       "pw_enc": null,
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "dup-425",
