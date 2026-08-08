@@ -659,12 +659,12 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 #wl_fieldchange_grid{ margin-top:12px; }
 
 /* add form / modals */
-#addModal, #workLogModal, #groupEditModal, #custContactsModal{
+#addModal, #workLogModal, #groupEditModal, #custContactsModal, #moveAssetModal{
   position:fixed; inset:0; z-index:1200; background:rgba(15,23,42,0.45); backdrop-filter:blur(3px);
   display:none; align-items:flex-start; justify-content:center; overflow-y:auto;
   padding:calc(var(--global-header-h, 0px) + 24px) 20px 40px;
 }
-#addModal.open, #workLogModal.open, #groupEditModal.open, #custContactsModal.open{ display:flex; }
+#addModal.open, #workLogModal.open, #groupEditModal.open, #custContactsModal.open, #moveAssetModal.open{ display:flex; }
 .cp-error{ color:var(--red); font-size:12.5px; margin-top:14px; min-height:16px; }
 .modal-card{
   width:100%; max-width:640px; background:var(--surface); border:1px solid var(--border-solid);
