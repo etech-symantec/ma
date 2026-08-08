@@ -679,24 +679,52 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
   }
 });
 
-// 페이지 상단 법인명 빠른 필터 — 좌측 사이드바의 "국가 / 법인" 목록과 같은 상태(activeCountryFilter)를
-// 공유하는 칩 형태의 단축 필터. 자산 목록 맨 위에서 바로 법인을 눌러 필터링할 수 있게 한다.
-function companyFilterBarHtml(){
-  const favSet = getFavCountries();
-  const owners = [...new Map(records.map(r=>{
-    const grp = records.filter(x=>x.group===r.group);
-    const meta = groupMeta(grp);
-    return [meta.owner, meta];
-  })).values()].sort((a,b)=>{
-    const af = favSet.has(a.owner) ? 0 : 1;
-    const bf = favSet.has(b.owner) ? 0 : 1;
-    if (af !== bf) return af - bf;
-    return a.owner.localeCompare(b.owner, 'ko');
+// 페이지 상단 필드별 드롭다운 필터 — 국가 / 위치 / Support ID / 점검 방식 / 구성방식 /
+// 담당 엔지니어 / 고객사 담당자 각각에 대해, 실제 등록된 값들을 옵션으로 보여주고
+// 하나를 고르면 그 값과 일치하는 자산만 남긴다.
+let topFieldFilters = { country:'', location:'', support_id:'', check_method:'', config_mode:'', engineer:'', cust_contact:'' };
+
+function uniqueValues(arr, keyFn){
+  const set = new Set();
+  arr.forEach(item => {
+    const v = keyFn(item);
+    if (v && String(v).trim()) set.add(String(v).trim());
   });
-  if (!owners.length) return '';
-  const chips = owners.map(m => `<button type="button" class="company-chip${activeCountryFilter===m.owner?' active':''}" data-owner="${esc(m.owner)}">${esc(m.owner)}</button>`).join('');
-  const clearBtn = activeCountryFilter ? `<button type="button" class="company-chip company-chip-clear" data-owner-clear="1">✕ 필터 해제</button>` : '';
-  return `<div class="company-filter-bar" id="companyFilterBar">${chips}${clearBtn}</div>`;
+  return [...set].sort((a,b)=>a.localeCompare(b,'ko'));
+}
+function uniqueValuesMulti(arr, keyFn){
+  const set = new Set();
+  arr.forEach(item => {
+    (keyFn(item)||[]).forEach(v => { if (v && String(v).trim()) set.add(String(v).trim()); });
+  });
+  return [...set].sort((a,b)=>a.localeCompare(b,'ko'));
+}
+function custContactNamesOf(r){
+  if (r.cust_contacts && r.cust_contacts.length) return r.cust_contacts.map(c=>c.name);
+  return r.cust_contact ? [r.cust_contact] : [];
+}
+
+function topFilterBarHtml(){
+  const fields = [
+    { key:'country',      label:'국가',        values: uniqueValues(records, r=>r.country) },
+    { key:'location',     label:'위치',        values: uniqueValues(records, r=>r.location) },
+    { key:'support_id',   label:'Support ID',  values: uniqueValues(records, r=>r.support_id) },
+    { key:'check_method', label:'점검 방식',   values: uniqueValues(records, r=>r.check_method) },
+    { key:'config_mode',  label:'구성방식',    values: uniqueValues(records, r=>r.config_mode) },
+    { key:'engineer',     label:'담당 엔지니어', values: uniqueValuesMulti(records, r=>[r.owner_primary, r.owner_secondary]) },
+    { key:'cust_contact', label:'고객사 담당자', values: uniqueValuesMulti(records, r=>custContactNamesOf(r)) },
+  ];
+  const selectsHtml = fields.map(f => `
+    <div class="tf-field">
+      <label>${esc(f.label)}</label>
+      <select data-topfilter="${f.key}">
+        <option value="">전체</option>
+        ${f.values.map(v => `<option value="${esc(v)}" ${topFieldFilters[f.key]===v?'selected':''}>${esc(v)}</option>`).join('')}
+      </select>
+    </div>`).join('');
+  const hasActive = Object.values(topFieldFilters).some(Boolean);
+  const resetBtn = hasActive ? `<button type="button" class="tf-reset-btn" id="tfResetBtn">필터 초기화</button>` : '';
+  return `<div class="top-filter-bar" id="topFilterBar">${selectsHtml}${resetBtn}</div>`;
 }
 
 function render(){
@@ -709,13 +737,26 @@ function render(){
       const kws = skuKeywordMatches(r.sku);
       if (!kws.some(k => activeSkuKeywordFilters.has(k))) return false;
     }
+    if (activeMyAssetsFilter){
+      if (!mySiteGroupIds.has(r.group)) return false;
+    }
     if (activeCountryFilter){
       const grpItems = records.filter(x=>x.group===r.group);
       const meta = groupMeta(grpItems);
       if (meta.owner !== activeCountryFilter) return false;
     }
-    if (activeMyAssetsFilter){
-      if (!mySiteGroupIds.has(r.group)) return false;
+    if (topFieldFilters.country && (r.country||'').trim() !== topFieldFilters.country) return false;
+    if (topFieldFilters.location && (r.location||'').trim() !== topFieldFilters.location) return false;
+    if (topFieldFilters.support_id && (r.support_id||'').trim() !== topFieldFilters.support_id) return false;
+    if (topFieldFilters.check_method && (r.check_method||'').trim() !== topFieldFilters.check_method) return false;
+    if (topFieldFilters.config_mode && (r.config_mode||'').trim() !== topFieldFilters.config_mode) return false;
+    if (topFieldFilters.engineer){
+      const eng = topFieldFilters.engineer;
+      if ((r.owner_primary||'').trim() !== eng && (r.owner_secondary||'').trim() !== eng) return false;
+    }
+    if (topFieldFilters.cust_contact){
+      const names = custContactNamesOf(r).map(n=>(n||'').trim());
+      if (!names.includes(topFieldFilters.cust_contact)) return false;
     }
     if (q){
       const custBits = (r.cust_contacts||[]).flatMap(c=>[c.name,c.phone,c.email]);
@@ -727,12 +768,12 @@ function render(){
 
   const groups = groupRecords(list);
   const content = document.getElementById('content');
-  const companyBarHtml = companyFilterBarHtml();
+  const topBarHtml = topFilterBarHtml();
 
   if (groups.size === 0){
-    content.innerHTML = companyBarHtml + `<div class="empty-state"><h3>조건에 맞는 자산이 없습니다</h3><p>검색어나 필터를 조정해 보세요.</p></div>`;
+    content.innerHTML = topBarHtml + `<div class="empty-state"><h3>조건에 맞는 자산이 없습니다</h3><p>검색어나 필터를 조정해 보세요.</p></div>`;
   } else {
-    let html = companyBarHtml;
+    let html = topBarHtml;
     for (const [gid, items] of groups){
       const meta = groupMeta(items);
       const isOpen = expandedGroups.has(gid);
@@ -788,16 +829,19 @@ function render(){
     content.innerHTML = html;
   }
 
-  document.querySelectorAll('#companyFilterBar [data-owner]').forEach(btn=>{
-    btn.onclick = () => {
-      const v = btn.dataset.owner;
-      activeCountryFilter = activeCountryFilter===v ? null : v;
+  document.querySelectorAll('#topFilterBar [data-topfilter]').forEach(sel=>{
+    sel.onchange = () => {
+      topFieldFilters[sel.dataset.topfilter] = sel.value;
       render();
     };
   });
-  document.querySelectorAll('#companyFilterBar [data-owner-clear]').forEach(btn=>{
-    btn.onclick = () => { activeCountryFilter = null; render(); };
-  });
+  const tfResetBtn = document.getElementById('tfResetBtn');
+  if (tfResetBtn){
+    tfResetBtn.onclick = () => {
+      Object.keys(topFieldFilters).forEach(k => topFieldFilters[k] = '');
+      render();
+    };
+  }
 
   document.querySelectorAll('[data-toggle]').forEach(el=>{
     el.onclick = () => {
@@ -1108,8 +1152,9 @@ function renderFiltersResetSlot(){
   const isDefaultStatus = activeStatusFilters.size === defaultStatus.length && defaultStatus.every(s=>activeStatusFilters.has(s));
   const searchInput = document.getElementById('searchInput');
   const hasQuery = !!(searchInput && searchInput.value.trim());
+  const hasTopFieldFilters = Object.values(topFieldFilters).some(Boolean);
   const hasActiveFilters = !isDefaultStatus || !!activeCountryFilter || !!activeDeviceTypeFilter
-    || activeSkuKeywordFilters.size > 0 || activeMyAssetsFilter || hasQuery;
+    || activeSkuKeywordFilters.size > 0 || activeMyAssetsFilter || hasQuery || hasTopFieldFilters;
 
   if (!hasActiveFilters){ slot.innerHTML = ''; return; }
   slot.innerHTML = `<button type="button" class="filters-reset-btn" id="filtersResetBtn">✕ 필터 초기화</button>`;
@@ -1119,6 +1164,7 @@ function renderFiltersResetSlot(){
     activeDeviceTypeFilter = null;
     activeSkuKeywordFilters = new Set();
     activeMyAssetsFilter = false;
+    Object.keys(topFieldFilters).forEach(k => topFieldFilters[k] = '');
     if (searchInput) searchInput.value = '';
     render();
   };
