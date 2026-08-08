@@ -3346,7 +3346,7 @@
       "group": "ng",
       "flag": "",
       "owner": "삼성중공업 SHI-MCI",
-      "location": "나이지리아",
+      "location": "",
       "support_id": "277422",
       "sku": "ASG-S400-20",
       "sn": "5216320027",
@@ -3388,13 +3388,15 @@
           "phone": "",
           "email": "gideok.gong@samsung.com"
         }
-      ]
+      ],
+      "country": "나이지리아",
+      "config_mode": "Explicit"
     },
     {
       "group": "ng",
       "flag": "",
       "owner": "삼성중공업 SHI-MCI",
-      "location": "나이지리아",
+      "location": "",
       "support_id": "277422",
       "sku": "BCWF",
       "sn": "QLZMB-9Z4V8",
@@ -3428,13 +3430,15 @@
           "phone": "",
           "email": "gideok.gong@samsung.com"
         }
-      ]
+      ],
+      "country": "나이지리아",
+      "config_mode": "Explicit"
     },
     {
       "group": "ng",
       "flag": "",
       "owner": "삼성중공업 SHI-MCI",
-      "location": "나이지리아",
+      "location": "",
       "support_id": "277422",
       "sku": "BCWF",
       "sn": "QE23T-JZWSP",
@@ -3468,7 +3472,9 @@
           "phone": "",
           "email": "gideok.gong@samsung.com"
         }
-      ]
+      ],
+      "country": "나이지리아",
+      "config_mode": "Explicit"
     },
     {
       "group": "au-ccc",
