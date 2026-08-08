@@ -313,21 +313,40 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 
 /* 페이지 상단 필드별 드롭다운 필터 */
 .top-filter-bar{
-  display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px 14px; margin-bottom:18px; padding-bottom:16px;
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:18px; padding-bottom:16px;
   border-bottom:1px solid var(--border-solid);
 }
-.tf-field{ display:flex; flex-direction:column; gap:5px; min-width:140px; }
+.tf-field{
+  display:flex; flex-direction:row; align-items:center; gap:8px;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px;
+  padding:6px 10px 6px 12px;
+}
 .tf-field label{
-  font-size:10px; font-weight:700; color:var(--text-faint); font-family:var(--mono);
-  text-transform:uppercase; letter-spacing:.03em;
+  font-size:10.5px; font-weight:700; color:var(--text-faint); font-family:var(--mono);
+  text-transform:uppercase; letter-spacing:.03em; white-space:nowrap; flex-shrink:0;
 }
 .tf-field select{
-  padding:7px 10px; border:1px solid var(--border-solid); border-radius:8px; background:var(--surface);
-  font-size:12.5px; color:var(--text-dim); font-family:var(--body); cursor:pointer; max-width:220px;
+  padding:3px 6px; border:none; background:transparent;
+  font-size:12.5px; color:var(--text-dim); font-family:var(--body); cursor:pointer; max-width:170px;
 }
-.tf-field select:focus{ border-color:var(--accent); }
+.tf-field select:focus{ outline:none; }
+/* 법인 카드 상단 메타 칩과 동일한 색상 팔레트를 적용해서 항목을 구분하기 쉽게 한다 */
+.tf-field.tf-country{ background:#EEF0FE; border-color:#DBDEF9; }
+.tf-field.tf-country label{ color:#6C72C7; }
+.tf-field.tf-location{ background:#EFF5FF; border-color:#D9E6FA; }
+.tf-field.tf-location label{ color:#5B84C4; }
+.tf-field.tf-support{ background:#F6F1FC; border-color:#E4D8F5; }
+.tf-field.tf-support label{ color:#8B6BC9; }
+.tf-field.tf-check{ background:#EFFAF3; border-color:#D6EEDC; }
+.tf-field.tf-check label{ color:#4CA36A; }
+.tf-field.tf-config{ background:#FFF8EC; border-color:#F6E5C3; }
+.tf-field.tf-config label{ color:#C8933A; }
+.tf-field.tf-engineer{ background:#F4FAFD; border-color:#DCEEF8; }
+.tf-field.tf-engineer label{ color:var(--accent-dim); }
+.tf-field.tf-cust{ background:#FDF3F6; border-color:#F4D9E3; }
+.tf-field.tf-cust label{ color:#C46B8A; }
 .tf-reset-btn{
-  align-self:flex-end; padding:7px 14px; background:#FEF2F2; border:1px solid #FBD5D5; border-radius:8px;
+  padding:7px 14px; background:#FEF2F2; border:1px solid #FBD5D5; border-radius:8px;
   color:#B91C1C; font-size:12px; font-family:var(--body); font-weight:700; cursor:pointer; transition:all .15s;
 }
 .tf-reset-btn:hover{ background:#FEE2E2; border-color:#F3B4B4; }
