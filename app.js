@@ -724,7 +724,7 @@ function topFilterBarHtml(){
     </div>`).join('');
   const hasActive = Object.values(topFieldFilters).some(Boolean);
   const resetBtn = hasActive ? `<button type="button" class="tf-reset-btn" id="tfResetBtn">필터 초기화</button>` : '';
-  return `<div class="top-filter-bar" id="topFilterBar">${selectsHtml}${resetBtn}</div>`;
+  return selectsHtml + resetBtn;
 }
 
 function render(){
@@ -767,13 +767,14 @@ function render(){
   });
 
   const groups = groupRecords(list);
-  const content = document.getElementById('content');
-  const topBarHtml = topFilterBarHtml();
+  const listArea = document.getElementById('assetListArea');
+  const topFilterBarEl = document.getElementById('topFilterBar');
+  if (topFilterBarEl) topFilterBarEl.innerHTML = topFilterBarHtml();
 
   if (groups.size === 0){
-    content.innerHTML = topBarHtml + `<div class="empty-state"><h3>조건에 맞는 자산이 없습니다</h3><p>검색어나 필터를 조정해 보세요.</p></div>`;
+    listArea.innerHTML = `<div class="empty-state"><h3>조건에 맞는 자산이 없습니다</h3><p>검색어나 필터를 조정해 보세요.</p></div>`;
   } else {
-    let html = topBarHtml;
+    let html = '';
     for (const [gid, items] of groups){
       const meta = groupMeta(items);
       const isOpen = expandedGroups.has(gid);
@@ -826,7 +827,7 @@ function render(){
         </div>
       </div>`;
     }
-    content.innerHTML = html;
+    listArea.innerHTML = html;
   }
 
   document.querySelectorAll('#topFilterBar [data-topfilter]').forEach(sel=>{
