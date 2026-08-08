@@ -477,8 +477,8 @@
     {
       "group": "in-sdn-cama",
       "flag": "◎",
-      "owner": "삼성 디스플레이 인도 Noida 법인",
-      "location": "SDN(CA/MA)",
+      "owner": "삼성디스플레이 SDN",
+      "location": "노이다",
       "support_id": "379966",
       "sku": "CAS-S400-A3",
       "sn": "4718320053",
@@ -494,9 +494,9 @@
       "owner_primary": "최원석",
       "owner_secondary": "윤태리",
       "check_method": "원격 (RC)",
-      "cust_contact": "최원석 프로(PM) / 서상철<",
-      "cust_phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-      "cust_email": "wonsukc@samsung.com; sc2470.seo@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "SDN(CA/MA)",
       "id": 9,
@@ -514,14 +514,26 @@
         "iv": "h0neQYaolSZjstyz",
         "ct": "PbJL5fxcOFupiyaH/Mjbat58Xfw=",
         "tag": "I2ExHCeP77UdUWoWbcls4A=="
-      }
+      },
+      "country": "인도",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "최원석 프로(PM) / 서상철<",
+          "org": "",
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
+          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-cama",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDN",
+      "location": "노이다",
+      "support_id": "379966",
       "sku": "CAS-S400-A3",
       "sn": "4118320045",
       "entitlement": "🔗",
@@ -533,9 +545,9 @@
       "deploy_log": "KSD/HWC, 25.03.29 윤태리 2.4.1.1>3.0.1.1 / 25.04.02 윤태리 3.0.1.1>3.1.7.0 >3.2.1.1 (평판 unknown)",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "최원석",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -556,14 +568,26 @@
         "iv": "EjC6XrefSz6rX4OR",
         "ct": "czQp5AjrzpVJ",
         "tag": "1xE54f9eJ8cFPtItdRz5qg=="
-      }
+      },
+      "country": "인도",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "최원석 프로(PM) / 서상철<",
+          "org": "",
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
+          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-cama",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDN",
+      "location": "노이다",
+      "support_id": "379966",
       "sku": "FI-SYMC-500-999-1YR",
       "sn": "51409264-1-1",
       "entitlement": "🔗",
@@ -575,9 +599,9 @@
       "deploy_log": "KSD/HWC",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "최원석",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -586,14 +610,26 @@
       "id": 11,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "인도",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "최원석 프로(PM) / 서상철<",
+          "org": "",
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
+          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-cama",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDN",
+      "location": "노이다",
+      "support_id": "379966",
       "sku": "MA-CAS-S400-A3-1YR",
       "sn": "50607102-2-1",
       "entitlement": "🔗",
@@ -605,9 +641,9 @@
       "deploy_log": "KSD/HWC",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "최원석",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -616,14 +652,26 @@
       "id": 12,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "인도",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "최원석 프로(PM) / 서상철<",
+          "org": "",
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
+          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-cama",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDN",
+      "location": "노이다",
+      "support_id": "379966",
       "sku": "WEB-PROTECT-SUB",
       "sn": "51409264-3-1",
       "entitlement": "🔗",
@@ -635,9 +683,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "최원석",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -646,7 +694,19 @@
       "id": 13,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "인도",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "최원석 프로(PM) / 서상철<",
+          "org": "",
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
+          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+        }
+      ]
     },
     {
       "group": "in-sdn-proxy",
