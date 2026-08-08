@@ -4949,8 +4949,8 @@
     {
       "group": "sg-001",
       "flag": "★★★★★ 🌙",
-      "owner": "삼성 싱가폴 SAPL 유지보수",
-      "location": "싱가폴 (SDSAP)",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
       "support_id": "2065519",
       "sku": "SG-S400-30-PR-ONSITEADV",
       "sn": "2914320060",
@@ -4966,9 +4966,9 @@
       "owner_primary": "김상문",
       "owner_secondary": "박동석",
       "check_method": "원격 (RC)",
-      "cust_contact": "Syera / 한정훈",
-      "cust_phone": "Whatsapp",
-      "cust_email": "k.han@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "싱가폴 (SDSAP)",
       "id": 119,
@@ -4986,14 +4986,32 @@
         "iv": "c3oOMcv/FLFrr/lU",
         "ct": "+swrSSb8ACE=",
         "tag": "iOGsrqWOg899dUHFNRxbZg=="
-      }
+      },
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "SG-S400-30-PR-ONSITEADV",
       "sn": "1118320034",
       "entitlement": "🔗",
@@ -5005,9 +5023,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.18.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5024,14 +5042,32 @@
         "iv": "DU3a6sXC3WTvTG1G",
         "ct": "44us/OYBuiE=",
         "tag": "yiKxZ5IcCd8RgxQxhDpU7g=="
-      }
+      },
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "SG-S400-30-PR-ONSITEADV",
       "sn": "714320355",
       "entitlement": "🔗",
@@ -5043,9 +5079,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.18.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5062,13 +5098,31 @@
         "iv": "UfR4EWPNBA4H+AOj",
         "ct": "d5P0mUBVPKo=",
         "tag": "7IXmkFPPHvPDD/Fzoql53g=="
-      }
+      },
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "싱가폴 (SDSAP)",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
       "support_id": "2065519",
       "sku": "SSP-S410-20B",
       "sn": "4624700032",
@@ -5084,9 +5138,9 @@
       "owner_primary": "김상문",
       "owner_secondary": "박동석",
       "check_method": "원격 (RC)",
-      "cust_contact": "Syera / 한정훈",
-      "cust_phone": "Whatsapp",
-      "cust_email": "k.han@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "싱가폴 (SDSAP)",
       "id": 122,
@@ -5104,14 +5158,32 @@
         "iv": "OjIh8h/+XTx1TAz0",
         "ct": "FbMpEKqXYQNS",
         "tag": "CFQLbTFpB+6bYHRvjz067A=="
-      }
+      },
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "ISG-Proxy 1",
       "sn": "0081995894",
       "entitlement": "🔗",
@@ -5123,9 +5195,9 @@
       "deploy_log": "신호근",
       "mode": "",
       "os_ver": "7.3.24.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5146,14 +5218,32 @@
         "iv": "o+1m/UXBYUPWPH6s",
         "ct": "mp0PHyB3oKnRMjJ9bHNrKsuLKw==",
         "tag": "qY9Wj19j5l14A4IhTnEnGw=="
-      }
+      },
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "SSP-S410-20B",
       "sn": "4624700035",
       "entitlement": "🔗",
@@ -5165,9 +5255,9 @@
       "deploy_log": "신호근 / 26.03.14 김상문 2.5.1.1 > 2.5.4.1",
       "mode": "",
       "os_ver": "2.5.4.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5188,14 +5278,32 @@
         "iv": "lSB1R0H5u3H85qg6",
         "ct": "D+NOplMVYPJw",
         "tag": "Pszn2oJX8k4b7gn/Is2jIw=="
-      }
+      },
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "ISG-Proxy 2",
       "sn": "0081995894",
       "entitlement": "🔗",
@@ -5207,9 +5315,9 @@
       "deploy_log": "신호근",
       "mode": "",
       "os_ver": "7.3.24.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5230,14 +5338,32 @@
         "iv": "gJ8+k3iL5dGVEWM4",
         "ct": "hwULex115g6dswQPOHXau6ukbQ==",
         "tag": "AX1h57ubWU7INJed0jK99A=="
-      }
+      },
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52861964-1-1",
       "entitlement": "🔗",
@@ -5249,9 +5375,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5260,14 +5386,32 @@
       "id": 126,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "MC-S400-20-100-ONSITEADV",
       "sn": "1318320048",
       "entitlement": "🔗",
@@ -5279,9 +5423,9 @@
       "deploy_log": "24.11.01 : 3.3.5.2 > 4.1.3.1",
       "mode": "",
       "os_ver": "4.1.3.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5302,14 +5446,32 @@
         "iv": "klanZiYpXkuKk4pv",
         "ct": "SB749iktCC0S",
         "tag": "kG3K2xpBjKphCUokUBDxGA=="
-      }
+      },
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "RP-S500-20-ONSITEADV",
       "sn": "3517470043",
       "entitlement": "🔗",
@@ -5321,9 +5483,9 @@
       "deploy_log": "24.11.01 : 10.6.2.1 > 11.0.2.1",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5344,14 +5506,32 @@
         "iv": "wAhwHS9kXc5BnTMY",
         "ct": "0OIhFknlobG5",
         "tag": "UAq6wiN6Hu2jckzGgP9/SA=="
-      }
+      },
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "BCWF-S-20000-49999-1YR",
       "sn": "QQLXF-EZ7C6",
       "entitlement": "🔗",
@@ -5363,9 +5543,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "XM7R47KNO9",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5374,14 +5554,32 @@
       "id": 129,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "SW-E-TAP-SG-S400",
       "sn": "51193875-1-1",
       "entitlement": "🔗",
@@ -5393,9 +5591,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "5119387551193875-1-116412667812651",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5404,14 +5602,32 @@
       "id": 130,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "SW-E-TAP-SG-S400",
       "sn": "51193875-1-2",
       "entitlement": "🔗",
@@ -5423,9 +5639,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "5119387551193875-1-216412667831831",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5434,14 +5650,32 @@
       "id": 131,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "SW-E-TAP-SG-S400",
       "sn": "51193875-1-3",
       "entitlement": "🔗",
@@ -5453,9 +5687,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "5119387551193875-1-316412667822761",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5464,14 +5698,32 @@
       "id": 132,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "sg-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성SDS 싱가포르 SDSAP",
+      "location": "싱가포르",
+      "support_id": "2065519",
       "sku": "WEB-PROTECT-SUB",
       "sn": "",
       "entitlement": "🔗",
@@ -5483,9 +5735,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5494,7 +5746,25 @@
       "id": 133,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "Syera",
+          "org": "",
+          "phone": "Whatsapp",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "한정훈",
+          "org": "",
+          "phone": "",
+          "email": "k.han@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
