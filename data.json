@@ -21165,7 +21165,7 @@
       "group": "dup-425",
       "flag": "",
       "owner": "한화큐셀 Ingot",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "SSP-S410-40B",
       "sn": "1623700048",
@@ -21204,13 +21204,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "dup-425",
       "flag": "",
       "owner": "한화큐셀 Ingot",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "SSP-S410-40B",
       "sn": "1623700018",
@@ -21249,13 +21250,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "dup-425",
       "flag": "",
       "owner": "한화큐셀 Ingot",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "ISG-Proxy",
       "sn": "81995134",
@@ -21294,13 +21296,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "dup-425",
       "flag": "",
       "owner": "한화큐셀 Ingot",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "ISG-Proxy",
       "sn": "81995134",
@@ -21339,13 +21342,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "dup-425",
       "flag": "",
       "owner": "한화큐셀 Ingot",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "CA-VA",
       "sn": "81995147",
@@ -21384,13 +21388,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "dup-425",
       "flag": "",
       "owner": "한화큐셀 Ingot",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "ISG-MA",
       "sn": "81995110",
@@ -21429,13 +21434,14 @@
       },
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     },
     {
       "group": "dup-425",
       "flag": "",
       "owner": "한화큐셀 Ingot",
-      "location": "미국 조지아",
+      "location": "조지아",
       "support_id": "2432586",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52854172-7-1",
@@ -21462,7 +21468,8 @@
       "pw_enc": null,
       "config_mode": "Inline",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "미국"
     }
   ],
   "users": [
