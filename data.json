@@ -4516,8 +4516,8 @@
     {
       "group": "us-002",
       "flag": "",
-      "owner": "SJ (San Jose : 서부)",
-      "location": "미국 서부(SJDRT)",
+      "owner": "삼성전자 SJDRT",
+      "location": "캘리포니아 산 호세",
       "support_id": "",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
       "sn": "3317320164",
@@ -4553,13 +4553,17 @@
         "iv": "kUt506kRXeWUFi6k",
         "ct": "RobZzB8jnw+4/XeTxpc=",
         "tag": "tWGA48Vp9kobJb604I2TqQ=="
-      }
+      },
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": []
     },
     {
       "group": "us-002",
       "flag": "",
-      "owner": "",
-      "location": "",
+      "owner": "삼성전자 SJDRT",
+      "location": "캘리포니아 산 호세",
       "support_id": "",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
       "sn": "3517320125",
@@ -4572,9 +4576,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.18.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4595,13 +4599,17 @@
         "iv": "Hf1t7Jorms4qxoai",
         "ct": "Z5jMjL6yo7y2XrqpYOo=",
         "tag": "dimnTMSgslw3nfIQZoZFQQ=="
-      }
+      },
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": []
     },
     {
       "group": "us-002",
       "flag": "",
-      "owner": "",
-      "location": "",
+      "owner": "삼성전자 SJDRT",
+      "location": "캘리포니아 산 호세",
       "support_id": "",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
       "sn": "3317320162",
@@ -4614,9 +4622,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.18.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4637,7 +4645,11 @@
         "iv": "pWowUvcSWJW47kZb",
         "ct": "pRo8q8B1sOgOMq9nqmY=",
         "tag": "7Basfcr8dX6DudSCpIrTqA=="
-      }
+      },
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": []
     },
     {
       "group": "us-003",
