@@ -1958,8 +1958,8 @@
     {
       "group": "vn-sdv-old",
       "flag": "★",
-      "owner": "삼성 디스플레이 베트남 SDV NW MA(SM1)",
-      "location": "베트남 디스플레이 (SDV) (구)",
+      "owner": "삼성디스플레이 SDV",
+      "location": "하노이",
       "support_id": "209916",
       "sku": "BCWF-ADD-1-49",
       "sn": "QQ32F-VZ79K'",
@@ -1972,25 +1972,51 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "-",
+      "owner_primary": "윤태리",
       "owner_secondary": "홍진영",
       "check_method": "원격 (RC)",
-      "cust_contact": "Ngo Van Tuong / Pham The Thao / Le Minh Diep",
-      "cust_phone": "84-222-390-5145,+84-985-479-311 / 84-222-390-5999,+84-97-397-0461 / 84-222-390-5588,+84-96-583-2699(카톡)",
-      "cust_email": "tuongnv.93@samsung.com; lt.dat@samsung.com; minhdiep.le@samsung.com; cc.sdv.itsec@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "X",
       "tag_note": "베트남 디스플레이 (SDV) (구)",
       "id": 37,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "베트남",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Ngo Van Tuong",
+          "org": "",
+          "phone": "+84-222-390-5145, +84-985-479-311",
+          "email": "tuongnv.93@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Pham The Thao",
+          "org": "",
+          "phone": "+84-222-390-5999, +84-97-397-0461",
+          "email": "lt.dat@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Le Minh Diep",
+          "org": "",
+          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
+          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
+        }
+      ]
     },
     {
       "group": "vn-sdv-old",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDV",
+      "location": "하노이",
+      "support_id": "209916",
       "sku": "MA-CAS-S400-A4",
       "sn": "50689926-18-1",
       "entitlement": "🔗",
@@ -2002,9 +2028,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2013,14 +2039,40 @@
       "id": 38,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "베트남",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Ngo Van Tuong",
+          "org": "",
+          "phone": "+84-222-390-5145, +84-985-479-311",
+          "email": "tuongnv.93@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Pham The Thao",
+          "org": "",
+          "phone": "+84-222-390-5999, +84-97-397-0461",
+          "email": "lt.dat@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Le Minh Diep",
+          "org": "",
+          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
+          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
+        }
+      ]
     },
     {
       "group": "vn-sdv-old",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDV",
+      "location": "하노이",
+      "support_id": "209916",
       "sku": "WEB-PROTECT-SUB",
       "sn": "51196072-2-1",
       "entitlement": "🔗",
@@ -2032,9 +2084,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2043,14 +2095,40 @@
       "id": 39,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "베트남",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Ngo Van Tuong",
+          "org": "",
+          "phone": "+84-222-390-5145, +84-985-479-311",
+          "email": "tuongnv.93@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Pham The Thao",
+          "org": "",
+          "phone": "+84-222-390-5999, +84-97-397-0461",
+          "email": "lt.dat@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Le Minh Diep",
+          "org": "",
+          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
+          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
+        }
+      ]
     },
     {
       "group": "vn-sdv-old",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDV",
+      "location": "하노이",
+      "support_id": "209916",
       "sku": "FI-SYMC-SUB",
       "sn": "51196072-1-1",
       "entitlement": "🔗",
@@ -2062,9 +2140,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2073,14 +2151,40 @@
       "id": 40,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "베트남",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Ngo Van Tuong",
+          "org": "",
+          "phone": "+84-222-390-5145, +84-985-479-311",
+          "email": "tuongnv.93@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Pham The Thao",
+          "org": "",
+          "phone": "+84-222-390-5999, +84-97-397-0461",
+          "email": "lt.dat@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Le Minh Diep",
+          "org": "",
+          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
+          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
+        }
+      ]
     },
     {
       "group": "vn-sdv-old",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDV",
+      "location": "하노이",
+      "support_id": "209916",
       "sku": "CAS-S400-A3-Onsite ADV",
       "sn": "4615320266",
       "entitlement": "🔗",
@@ -2092,9 +2196,9 @@
       "deploy_log": "25.03.22 윤태리 3.1.2.4>3.2.1.1 (평판 unknown)",
       "mode": "",
       "os_ver": "3.2.1.1 (CAS)",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2115,14 +2219,40 @@
         "iv": "DA3gFjnXHTDq6PhA",
         "ct": "6GsnrDI1SofIwgE=",
         "tag": "LZYF+/v0jirEUqSojIx6bQ=="
-      }
+      },
+      "country": "베트남",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Ngo Van Tuong",
+          "org": "",
+          "phone": "+84-222-390-5145, +84-985-479-311",
+          "email": "tuongnv.93@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Pham The Thao",
+          "org": "",
+          "phone": "+84-222-390-5999, +84-97-397-0461",
+          "email": "lt.dat@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Le Minh Diep",
+          "org": "",
+          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
+          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
+        }
+      ]
     },
     {
       "group": "vn-sdv-old",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDV",
+      "location": "하노이",
+      "support_id": "209916",
       "sku": "CAS-S400-A4-Onsite ADV",
       "sn": "4915320134",
       "entitlement": "🔗",
@@ -2134,9 +2264,9 @@
       "deploy_log": "24.06.20 윤태리 3.1.2.4>3.1.7.0 (cpu high) / 25.03.20 윤태리 3.1.7.0>3.2.1.1 (평판 unknown)",
       "mode": "",
       "os_ver": "3.2.1.1 (MAA)",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2157,14 +2287,40 @@
         "iv": "yNaUcMFfS/YS78Pa",
         "ct": "9ZL5i784t9NVvo8=",
         "tag": "UgnAyekLgpBc6M9iMbSk2w=="
-      }
+      },
+      "country": "베트남",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Ngo Van Tuong",
+          "org": "",
+          "phone": "+84-222-390-5145, +84-985-479-311",
+          "email": "tuongnv.93@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Pham The Thao",
+          "org": "",
+          "phone": "+84-222-390-5999, +84-97-397-0461",
+          "email": "lt.dat@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Le Minh Diep",
+          "org": "",
+          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
+          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
+        }
+      ]
     },
     {
       "group": "vn-sdv-old",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 SDV",
+      "location": "하노이",
+      "support_id": "209916",
       "sku": "BCWF-ADD-1-49",
       "sn": "QQ32F-VZ79K",
       "entitlement": "🔗",
@@ -2176,9 +2332,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "홍진영",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2187,7 +2343,33 @@
       "id": 43,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "베트남",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Ngo Van Tuong",
+          "org": "",
+          "phone": "+84-222-390-5145, +84-985-479-311",
+          "email": "tuongnv.93@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Pham The Thao",
+          "org": "",
+          "phone": "+84-222-390-5999, +84-97-397-0461",
+          "email": "lt.dat@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "Le Minh Diep",
+          "org": "",
+          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
+          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
+        }
+      ]
     },
     {
       "group": "vn-sdv-new",
