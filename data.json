@@ -6339,8 +6339,8 @@
     {
       "group": "kr-002",
       "flag": "아산",
-      "owner": "23년 SDC PROXY 유지보수",
-      "location": "삼성디스플레이",
+      "owner": "삼성디스플레이",
+      "location": "아산",
       "support_id": "743737",
       "sku": "SSP-S410-20-STANDARD-PLUS",
       "sn": "3424700002",
@@ -6355,7 +6355,7 @@
       "os_ver": "2.4.10.1",
       "owner_primary": "홍진영",
       "owner_secondary": "김상문",
-      "check_method": "방문 / ※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6376,14 +6376,25 @@
         "iv": "THwH3j/sXLpJ2DRe",
         "ct": "8uUsT/zsfjUd",
         "tag": "ngUDCgjyK5T25xvJFe5N/A=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "ISG-Proxy 1",
       "sn": "0081993685",
       "entitlement": "🔗",
@@ -6395,9 +6406,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6418,14 +6429,25 @@
         "iv": "6YUdXnzBRkOut16q",
         "ct": "sKWk+9VsMeWT",
         "tag": "1WRCxliWktmbz5kie5gkdA=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "SSP-S410-20-STANDARD-PLUS",
       "sn": "3424700003",
       "entitlement": "🔗",
@@ -6437,9 +6459,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6460,14 +6482,25 @@
         "iv": "HCbHwLl5UGTewJaW",
         "ct": "4JizAgU/Ll+h",
         "tag": "7qdWW/umpAy9KUDc8IgA1g=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "ISG-Proxy 2",
       "sn": "0081993685",
       "entitlement": "🔗",
@@ -6479,9 +6512,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6502,14 +6535,25 @@
         "iv": "HRW6j/C7ru89zHfi",
         "ct": "h21vaF1/VBNj",
         "tag": "rDUvrmxb/LETCGcNWb1D7Q=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "SSP-S410-20-STANDARD-PLUS",
       "sn": "3424700006",
       "entitlement": "🔗",
@@ -6521,9 +6565,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6544,14 +6588,25 @@
         "iv": "N6BJIrf9mDuZY9QT",
         "ct": "V57lgTNBswma",
         "tag": "ZeNrSsXcPAg/FZXiivKXdg=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "ISG-Proxy 3",
       "sn": "0081993685",
       "entitlement": "🔗",
@@ -6563,9 +6618,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6586,14 +6641,25 @@
         "iv": "c4zLQg9+cVNai5oB",
         "ct": "kGq7utTZjb+0",
         "tag": "fV/aD4U80RK1GjkSEligFg=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "SSP-S410-20-STANDARD-PLUS",
       "sn": "3424700007",
       "entitlement": "🔗",
@@ -6605,9 +6671,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6628,14 +6694,25 @@
         "iv": "UyM91dEyqKZ8xW70",
         "ct": "e70v8EkpfekO",
         "tag": "+1LPmEopJ4Sx2A8Gbzs5vA=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "ISG-Proxy 4",
       "sn": "0081993685",
       "entitlement": "🔗",
@@ -6647,9 +6724,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6670,14 +6747,25 @@
         "iv": "Gi0HjU8aTPyk/erf",
         "ct": "4hXGZ2eoJAoQ",
         "tag": "4OqXlfyoT5CrYCo2yHUEFA=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "SSP-S410-20-STANDARD-PLUS",
       "sn": "3424700008",
       "entitlement": "🔗",
@@ -6689,9 +6777,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6712,14 +6800,25 @@
         "iv": "sbIadWpUsz0laKmr",
         "ct": "8f0ZD3/2k59j",
         "tag": "ddolnemC2GihpAlBpmrskw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "ISG-CA#1",
       "sn": "0081993692",
       "entitlement": "🔗",
@@ -6731,9 +6830,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.2.1.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6754,14 +6853,25 @@
         "iv": "cY3X/1QuPSpj5/Hv",
         "ct": "zmgT9FJJC5Ge",
         "tag": "dfJzLk8A6y76qyD8ctXrXg=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "SSP-S410-20-STANDARD-PLUS",
       "sn": "3424700009",
       "entitlement": "🔗",
@@ -6773,9 +6883,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6796,14 +6906,25 @@
         "iv": "xF+LZbJzkxJ7Uy6a",
         "ct": "LS+CHeVZstaT",
         "tag": "O4bGkvRL0V0ckU6Uu7y9uw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "ISG-MA#1",
       "sn": "0081993637",
       "entitlement": "🔗",
@@ -6815,9 +6936,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.2.1.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6838,14 +6959,25 @@
         "iv": "ILFxjJHTsFW60Xjt",
         "ct": "OECLnooCdl2b",
         "tag": "e7H09usMD8h9x0Hd/PUTtQ=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "SSP-S410-20-STANDARD-PLUS",
       "sn": "3424700010",
       "entitlement": "🔗",
@@ -6857,9 +6989,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6880,14 +7012,25 @@
         "iv": "NEUI2Bt/pLeWl9+D",
         "ct": "wb+jmQFzOGl7",
         "tag": "aIDROtrKW110EEgRSEqDag=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "ISG-CA#2",
       "sn": "0081993692",
       "entitlement": "🔗",
@@ -6899,9 +7042,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.2.1.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6922,14 +7065,25 @@
         "iv": "qO0FWz90R0h3b+bN",
         "ct": "WkAO1S+8DnJE",
         "tag": "+GA1iQjvauhtQntV3VmxCg=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "SSP-S410-20-STANDARD-PLUS",
       "sn": "3424700013",
       "entitlement": "🔗",
@@ -6941,9 +7095,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6964,14 +7118,25 @@
         "iv": "vtBaJP3XQAIXvE4s",
         "ct": "wqWGlg843wmM",
         "tag": "ocpQxnJfj+CEECJyt1hQtw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "ISG-MA#2",
       "sn": "0081993637",
       "entitlement": "🔗",
@@ -6983,9 +7148,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.2.1.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7006,14 +7171,25 @@
         "iv": "JCoLL0pinG+PjNIX",
         "ct": "6xAKXjwQYTuj",
         "tag": "Wiff86cuBG7XekRTTTX3LA=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52828136-1-1",
       "entitlement": "🔗",
@@ -7025,9 +7201,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7036,14 +7212,25 @@
       "id": 174,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "2065519",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "SG-S500-10-PR (STANDARD)",
       "sn": "3713300095",
       "entitlement": "🔗",
@@ -7055,9 +7242,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.11.3",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7066,14 +7253,25 @@
       "id": 175,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "CAS-S500-A1 (STANDARD)",
       "sn": "0114300038",
       "entitlement": "🔗",
@@ -7085,9 +7283,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.1.2.4",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7096,14 +7294,25 @@
       "id": 176,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "CAS-S500-A1-STANDARD",
       "sn": "2414300041",
       "entitlement": "🔗",
@@ -7115,9 +7324,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.1.2.4",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7126,14 +7335,25 @@
       "id": 177,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "IS-AWAA-SWG-10K-25K-1Y",
       "sn": "QQXKF-5Z76W",
       "entitlement": "🔗",
@@ -7145,9 +7365,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7156,14 +7376,25 @@
       "id": 178,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이",
+      "location": "아산",
+      "support_id": "743737",
       "sku": "IS-AWAA-SWG-10K-25K-1Y",
       "sn": "QAHWM-PZSTZ",
       "entitlement": "🔗",
@@ -7175,9 +7406,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7186,7 +7417,18 @@
       "id": 179,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "반석",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
