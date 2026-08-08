@@ -11681,8 +11681,8 @@
     {
       "group": "kr-010",
       "flag": "강남",
-      "owner": "2021년 멀티캠퍼스 비업무 Proxy 유지보수",
-      "location": "삼성 멀티캠퍼스",
+      "owner": "삼성 멀티캠퍼스",
+      "location": "강남",
       "support_id": "2487172",
       "sku": "SG-S400-30-PR-STANDARD",
       "sn": "1419320082",
@@ -11697,10 +11697,10 @@
       "os_ver": "7.3.21.1",
       "owner_primary": "윤태리",
       "owner_secondary": "강성준",
-      "check_method": "원격 / 연초,연말 정전작업 / (연 1~4회) / 상록회관 15층 / 방문신청 메일",
-      "cust_contact": "김명준 프로",
-      "cust_phone": "010-2052-7330",
-      "cust_email": "mj1212.kim@multicampus.com",
+      "check_method": "원격",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "삼성 멀티캠퍼스",
       "id": 317,
@@ -11718,14 +11718,25 @@
         "iv": "Z0gk0XyHfBP1WcX7",
         "ct": "IHeaTxotrCTAWUnbzDzEigKZYII9bMnGx2A=",
         "tag": "e9D6+Xu7zABU4Z3TIo781A=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "연초,연말 정전작업 / (연 1~4회)\n상록회관 15층 / 방문신청 메일",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "김명준 프로",
+          "org": "",
+          "phone": "010-2052-7330",
+          "email": "mj1212.kim@multicampus.com"
+        }
+      ]
     },
     {
       "group": "kr-010",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 멀티캠퍼스",
+      "location": "강남",
+      "support_id": "2487172",
       "sku": "SG-S400-30-PR-STANDARD",
       "sn": "3317320103",
       "entitlement": "🔗",
@@ -11737,9 +11748,9 @@
       "deploy_log": "23.06.14 윤태리 6.7.4.10 > 7.3.11.3 gpt / 24.04.23 윤태리 7.3.11.3 > 7.3.17.1 최신 / 25.02.19 윤태리 7.3.17.1 > 7.3.21.1 mem bug",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "강성준",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -11760,14 +11771,25 @@
         "iv": "db89TbHvuBNT4FH4",
         "ct": "pORKF280RvZTb1gm1Vab9lCrept7rYRxs8g=",
         "tag": "4itbLNKCkn44qcRKp9E9eA=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "연초,연말 정전작업 / (연 1~4회)\n상록회관 15층 / 방문신청 메일",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "김명준 프로",
+          "org": "",
+          "phone": "010-2052-7330",
+          "email": "mj1212.kim@multicampus.com"
+        }
+      ]
     },
     {
       "group": "kr-010",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 멀티캠퍼스",
+      "location": "강남",
+      "support_id": "2487172",
       "sku": "MC-S400-20-100-S",
       "sn": "4718320078",
       "entitlement": "🔗",
@@ -11779,9 +11801,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.1.3.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "강성준",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -11790,14 +11812,25 @@
       "id": 319,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "연초,연말 정전작업 / (연 1~4회)\n상록회관 15층 / 방문신청 메일",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "김명준 프로",
+          "org": "",
+          "phone": "010-2052-7330",
+          "email": "mj1212.kim@multicampus.com"
+        }
+      ]
     },
     {
       "group": "kr-010",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 멀티캠퍼스",
+      "location": "강남",
+      "support_id": "2487172",
       "sku": "RP-S500-20-STANDARD",
       "sn": "1218470018",
       "entitlement": "🔗",
@@ -11809,9 +11842,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "강성준",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -11824,14 +11857,25 @@
         "tag": "YRtI2JP2UzTeSazAO2Jxjw=="
       },
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "연초,연말 정전작업 / (연 1~4회)\n상록회관 15층 / 방문신청 메일",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "김명준 프로",
+          "org": "",
+          "phone": "010-2052-7330",
+          "email": "mj1212.kim@multicampus.com"
+        }
+      ]
     },
     {
       "group": "kr-010",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 멀티캠퍼스",
+      "location": "강남",
+      "support_id": "2487172",
       "sku": "WEB-PROTECT-SUB",
       "sn": "",
       "entitlement": "🔗",
@@ -11843,9 +11887,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "강성준",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -11854,14 +11898,25 @@
       "id": 321,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "연초,연말 정전작업 / (연 1~4회)\n상록회관 15층 / 방문신청 메일",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "김명준 프로",
+          "org": "",
+          "phone": "010-2052-7330",
+          "email": "mj1212.kim@multicampus.com"
+        }
+      ]
     },
     {
       "group": "kr-010",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 멀티캠퍼스",
+      "location": "강남",
+      "support_id": "2487172",
       "sku": "BCWF-S-1000-2499-1YR",
       "sn": "Q83X3-VZC98",
       "entitlement": "🔗",
@@ -11873,9 +11928,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "강성준",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -11884,7 +11939,18 @@
       "id": 322,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "연초,연말 정전작업 / (연 1~4회)\n상록회관 15층 / 방문신청 메일",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "김명준 프로",
+          "org": "",
+          "phone": "010-2052-7330",
+          "email": "mj1212.kim@multicampus.com"
+        }
+      ]
     },
     {
       "group": "kr-011",
