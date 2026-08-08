@@ -652,7 +652,7 @@
       "group": "in-sdn-proxy",
       "flag": "",
       "owner": "삼성 디스플레이 Noida (SDN)",
-      "location": "인도 노이다",
+      "location": "노이다",
       "support_id": "379966",
       "sku": "SG-S400-20-PR-STDPLUS",
       "sn": "4717320089",
@@ -706,13 +706,14 @@
           "email": "ajay3.kumar@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "인도"
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
       "owner": "삼성 디스플레이 Noida (SDN)",
-      "location": "인도 노이다",
+      "location": "노이다",
       "support_id": "379966",
       "sku": "SG-S400-20-PR-STDPLUS",
       "sn": "4717320088",
@@ -766,13 +767,14 @@
           "email": "ajay3.kumar@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "인도"
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
       "owner": "삼성 디스플레이 Noida (SDN)",
-      "location": "인도 노이다",
+      "location": "노이다",
       "support_id": "379966",
       "sku": "RP-S500-20-STDPLUS",
       "sn": "00117470009",
@@ -826,13 +828,14 @@
           "email": "ajay3.kumar@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "인도"
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
       "owner": "삼성 디스플레이 Noida (SDN)",
-      "location": "인도 노이다",
+      "location": "노이다",
       "support_id": "379966",
       "sku": "BCWF-S-500-999-1YR",
       "sn": "QJ4X6-WZG8X",
@@ -874,13 +877,14 @@
           "email": "ajay3.kumar@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "인도"
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
       "owner": "삼성 디스플레이 Noida (SDN)",
-      "location": "인도 노이다",
+      "location": "노이다",
       "support_id": "379966",
       "sku": "PS-S400-250MH-STDPLUS",
       "sn": "0219320073",
@@ -934,13 +938,14 @@
           "email": "ajay3.kumar@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "인도"
     },
     {
       "group": "in-sdn-proxy",
       "flag": "",
       "owner": "삼성 디스플레이 Noida (SDN)",
-      "location": "인도 노이다",
+      "location": "노이다",
       "support_id": "379966",
       "sku": "WEB-PROTECT-SUB",
       "sn": "",
@@ -982,7 +987,8 @@
           "email": "ajay3.kumar@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "인도"
     },
     {
       "group": "in-shi",
