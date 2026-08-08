@@ -5499,8 +5499,8 @@
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진",
-      "location": "심천",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
       "support_id": "937842",
       "sku": "RP-V200-1Y",
       "sn": "27484597",
@@ -5513,9 +5513,9 @@
       "deploy_log": "신호근",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "-",
-      "owner_secondary": "-",
-      "check_method": "점검 X",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5536,14 +5536,25 @@
         "iv": "9VJ8Yxs/xIJPQH8i",
         "ct": "YLdJw6bHGB3umqU=",
         "tag": "tCJ322pwqTkL/MUNQ6ivhw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "상해",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "RP-V200-1Y",
       "sn": "27484606",
       "entitlement": "🔗",
@@ -5555,9 +5566,9 @@
       "deploy_log": "신호근",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "-",
-      "owner_secondary": "-",
-      "check_method": "점검 X",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5578,14 +5589,25 @@
         "iv": "jKItoUuwQNcxDQSS",
         "ct": "3Tvi2Gn7XK+uLSI=",
         "tag": "FgnqHsO7dNZdgqz/wiZJ3w=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "천진(톈진) SDT",
-      "support_id": "743737",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "SSP-S210-10",
       "sn": "73998801",
       "entitlement": "🔗",
@@ -5599,10 +5621,10 @@
       "os_ver": "2.3.7.1",
       "owner_primary": "강성준",
       "owner_secondary": "윤태리",
-      "check_method": "원격 (RC)",
-      "cust_contact": "yifeng.guo",
+      "check_method": "X",
+      "cust_contact": "",
       "cust_phone": "",
-      "cust_email": "yifeng.guo@samsung.com",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "천진(톈진) SDT",
       "id": 136,
@@ -5620,14 +5642,25 @@
         "iv": "SuGpB7DP76xQJ8BO",
         "ct": "/9iZozvoeYIJ",
         "tag": "B17S500eMx70Eq33wQsTEg=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "SSP-S210-10",
       "sn": "73998789",
       "entitlement": "🔗",
@@ -5639,9 +5672,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.3.7.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5662,14 +5695,25 @@
         "iv": "OL7MPIoRbpVeyjXz",
         "ct": "Z66t1yaV2jtY",
         "tag": "FmSw0kh9LAqxSiQleNqp3A=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "ISG-Proxy 1",
       "sn": "0073998801",
       "entitlement": "🔗",
@@ -5681,9 +5725,9 @@
       "deploy_log": "23.08 강성준 7.3.11.3",
       "mode": "",
       "os_ver": "7.3.27.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5704,14 +5748,25 @@
         "iv": "iKAZV0I/72SJIYGf",
         "ct": "W8cKZXx00Bio",
         "tag": "3r7a8e0WZilZQKEkpgSfDw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "ISG-Proxy 2",
       "sn": "0073998789",
       "entitlement": "🔗",
@@ -5723,9 +5778,9 @@
       "deploy_log": "23.08 강성준 7.3.11.3",
       "mode": "",
       "os_ver": "7.3.27.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5746,14 +5801,25 @@
         "iv": "YJBFP7bFVZvkOlB4",
         "ct": "nffxpGzTWZnI",
         "tag": "J0YsW4YyopxLcmlFR+YgZw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "MC-V10",
       "sn": "2655413667",
       "entitlement": "🔗",
@@ -5765,9 +5831,9 @@
       "deploy_log": "23.08 강성준 3.3.2.1 / 25.03.12 윤태리 재구축 3.3.2.1",
       "mode": "",
       "os_ver": "3.3.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5788,14 +5854,25 @@
         "iv": "1LJzLTGPtQfJZB03",
         "ct": "kuheiOF1NQaY",
         "tag": "UvhXbsgUUgVe6nEJYaNnUw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "RP-V100",
       "sn": "0071489986",
       "entitlement": "🔗",
@@ -5807,9 +5884,9 @@
       "deploy_log": "24년? 강성준 v100 > v50 11.0.1.1 / 25.02.13 윤태리 v100으로 확인 / 25.03.12 윤태리 v100>v50 용량이슈",
       "mode": "",
       "os_ver": "11.0.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5830,14 +5907,25 @@
         "iv": "Y359bDBJE9QC6IzJ",
         "ct": "3Z5I9rWXS6aN22INq/VMhyvOW73Xww8=",
         "tag": "Tvl7kTPxa32x5PQz+Va00g=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "ONSITE-ADVANCED",
       "sn": "1422710025",
       "entitlement": "🔗",
@@ -5849,9 +5937,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5860,14 +5948,25 @@
       "id": 142,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "ONSITE-ADVANCED",
       "sn": "1422710039",
       "entitlement": "🔗",
@@ -5879,9 +5978,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5890,14 +5989,25 @@
       "id": 143,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52222844-1-1",
       "entitlement": "🔗",
@@ -5909,9 +6019,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5920,14 +6030,25 @@
       "id": 144,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52222844-7-1",
       "entitlement": "🔗",
@@ -5939,9 +6060,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -5950,14 +6071,25 @@
       "id": 145,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "209916",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "SG-S500-10-PR (STANDARD)",
       "sn": "2115300040",
       "entitlement": "🔗",
@@ -5969,25 +6101,36 @@
       "deploy_log": "",
       "mode": "Explicit",
       "os_ver": "7.3.11.3",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
-      "cust_contact": "반석 프로 / 박영범 프로(X) / 정재욱 / 변상호 (디스플레이 정보보호CAS)",
-      "cust_phone": "010-8718-9514 / 010-4434-5066 / - / 010-4157-1504",
-      "cust_email": "bans@samsung.com; yb_bba.park@samsung.com",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "천진(톈진) SDT",
       "id": 146,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "SG-S500-10-PR (STANDARD)",
       "sn": "3713300075",
       "entitlement": "🔗",
@@ -5999,9 +6142,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.11.3",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6010,14 +6153,25 @@
       "id": 147,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "SG-S500-10-PR (STANDARD)",
       "sn": "3713300120",
       "entitlement": "🔗",
@@ -6029,9 +6183,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.11.3",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6040,14 +6194,25 @@
       "id": 148,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "SG-S500-10-PR-STANDARD",
       "sn": "3218300006",
       "entitlement": "🔗",
@@ -6059,9 +6224,9 @@
       "deploy_log": "4번, 5번 7.3.15.1",
       "mode": "",
       "os_ver": "7.3.11.3",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6070,14 +6235,25 @@
       "id": 149,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "SG-S500-10-PR-STANDARD",
       "sn": "3218300007",
       "entitlement": "🔗",
@@ -6089,9 +6265,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.11.3",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6100,14 +6276,25 @@
       "id": 150,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "MC-S400-20-100-STANDARD",
       "sn": "2718320038",
       "entitlement": "🔗",
@@ -6119,9 +6306,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.1.3.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6142,14 +6329,25 @@
         "iv": "3pWqjIuAyPhmtnL9",
         "ct": "Of5UGsgL2iRMnFWB",
         "tag": "yPFZTO5f5rSsjFih3Lspuw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "RP-S500-20-STANDARD",
       "sn": "0918470044",
       "entitlement": "🔗",
@@ -6161,9 +6359,9 @@
       "deploy_log": "26-01-25 ~ 29-03-31 2318470007(RMA) / 하드웨어 미교체 (이테크 보관)",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6184,14 +6382,25 @@
         "iv": "oMH5IQcdMyqkhFr+",
         "ct": "89OJPCNNv2yDfQlu",
         "tag": "OzVepVUfOpzFDMVCulMGQg=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "CAS-S500-A1 (STANDARD)",
       "sn": "0114300052",
       "entitlement": "🔗",
@@ -6203,9 +6412,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.1.2.4",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6214,14 +6423,25 @@
       "id": 153,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "CAS-S500-A1 (STANDARD)",
       "sn": "4514300027",
       "entitlement": "🔗",
@@ -6233,9 +6453,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.1.2.4",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6244,14 +6464,25 @@
       "id": 154,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "FI-SYMC-10K-24999-1YR",
       "sn": "51227735-45-1",
       "entitlement": "🔗",
@@ -6263,9 +6494,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6274,14 +6505,25 @@
       "id": 155,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "FI-KASP/MCF-10K-19999-1YR",
       "sn": "HFH8N_YVBHI",
       "entitlement": "🔗",
@@ -6293,9 +6535,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6304,14 +6546,25 @@
       "id": 156,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성디스플레이 중국 천진 SDT",
+      "location": "중국 천진",
+      "support_id": "937842",
       "sku": "MA-CAS-S500-A1-1YR",
       "sn": "50689926-16-1",
       "entitlement": "🔗",
@@ -6323,9 +6576,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "윤태리",
+      "check_method": "X",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6334,7 +6587,18 @@
       "id": 157,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "yifeng.guo",
+          "org": "",
+          "phone": "",
+          "email": "yifeng.guo@samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-002",
