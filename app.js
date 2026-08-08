@@ -738,6 +738,7 @@ function render(){
           <div class="group-badges">
             <div class="group-title-actions">
               <button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/위치/Support ID/담당자/고객사 담당자)">${pencilSvg()}</button>
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
               <button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>
             </div>
             <span class="badge ${worst==='crit'?'tag-x':worst==='warn'?'':'tag-o'}" style="color:${worst==='crit'?'var(--red)':worst==='warn'?'var(--amber)':worst==='ok'?'var(--green)':'var(--text-faint)'}">${statusLabel(worst)}</span>
@@ -770,6 +771,9 @@ function render(){
 
   document.querySelectorAll('[data-group-edit]').forEach(btn=>{
     btn.onclick = (e) => { e.stopPropagation(); openGroupEditModal(btn.dataset.groupEdit); };
+  });
+  document.querySelectorAll('[data-group-duplicate]').forEach(btn=>{
+    btn.onclick = (e) => { e.stopPropagation(); duplicateGroup(btn.dataset.groupDuplicate); };
   });
   document.querySelectorAll('[data-group-delete]').forEach(btn=>{
     btn.onclick = (e) => { e.stopPropagation(); deleteGroup(btn.dataset.groupDelete); };
@@ -1325,6 +1329,45 @@ function deleteGroup(gid){
   expandedGroups.delete(gid);
   render();
   scheduleAutoSync();
+}
+
+// 마스터 전용: 이미 등록된 법인(그룹)의 자산 데이터를 그대로 복사해서
+// 원본 바로 아래에 새 법인으로 추가한다. 새로 생긴 법인의 값은
+// "법인 정보 수정"에서 필요한 만큼 고쳐 쓰면 된다.
+function duplicateGroup(gid){
+  if (!isCurrentUserAdmin()){ alert('마스터만 법인을 복제할 수 있습니다.'); return; }
+  const items = records.filter(r=>r.group===gid);
+  if (!items.length) return;
+  const meta = groupMeta(items);
+  if (!confirm(`"${meta.owner}" 법인의 자산 항목 ${items.length}건을 그대로 복사해서 바로 아래에 새 법인으로 추가할까요?`)) return;
+
+  let nextId = Math.max(0, ...records.map(r=>r.id)) + 1;
+  const newGid = 'dup-' + nextId;
+  const newOwnerName = meta.owner + ' (사본)';
+  const newRecords = items.map(r => {
+    const copy = JSON.parse(JSON.stringify(r)); // work_log, cust_contacts 등 배열/객체 필드까지 그대로 깊은 복사
+    copy.id = nextId++;
+    copy.group = newGid;
+    copy.owner = newOwnerName;
+    return copy;
+  });
+
+  // 원본 법인의 마지막 항목 바로 뒤에 끼워 넣어서, 화면에서도 원본 바로 아래에 나타나게 한다.
+  let insertAt = records.length;
+  for (let i = records.length - 1; i >= 0; i--){
+    if (records[i].group === gid){ insertAt = i + 1; break; }
+  }
+  records.splice(insertAt, 0, ...newRecords);
+  expandedGroups.add(newGid);
+
+  render();
+  scheduleAutoSync();
+
+  if (!viewOnly && sessionKey){
+    openGroupEditModal(newGid);
+  } else {
+    alert(`"${newOwnerName}" 법인이 바로 아래에 추가되었습니다.\n마스터 비밀번호로 잠금 해제 후 "법인 정보 수정"(연필 아이콘)에서 값을 필요한 대로 고쳐 주세요.`);
+  }
 }
 
 // ---------- users (각자 계정으로 로그인해서 작업 이력 작성자를 기록) ----------
