@@ -6,7 +6,7 @@
       "group": "jp-sds",
       "flag": "●",
       "owner": "삼성 SDS(아시아 법인)",
-      "location": "일본",
+      "location": "",
       "support_id": "560569",
       "sku": "ASG-S400-30-U5000",
       "sn": "3917320082",
@@ -69,13 +69,14 @@
           "email": "yhyun2.kim@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "일본"
     },
     {
       "group": "jp-sds",
       "flag": "",
       "owner": "삼성 SDS(아시아 법인)",
-      "location": "일본",
+      "location": "",
       "support_id": "560569",
       "sku": "ASG-S400-30-U5000",
       "sn": "3917320085",
@@ -114,13 +115,14 @@
           "email": "yhyun2.kim@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "일본"
     },
     {
       "group": "jp-sds",
       "flag": "",
       "owner": "삼성 SDS(아시아 법인)",
-      "location": "일본",
+      "location": "",
       "support_id": "560569",
       "sku": "IS-SWSA-SWG-1000-2500-1Y",
       "sn": "50648324-4-1",
@@ -156,13 +158,14 @@
           "email": "yhyun2.kim@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "일본"
     },
     {
       "group": "jp-sds",
       "flag": "",
       "owner": "삼성 SDS(아시아 법인)",
-      "location": "일본",
+      "location": "",
       "support_id": "560569",
       "sku": "MC-S400-20-100",
       "sn": "5017320101",
@@ -209,13 +212,14 @@
           "email": "yhyun2.kim@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "일본"
     },
     {
       "group": "jp-sds",
       "flag": "",
       "owner": "삼성 SDS(아시아 법인)",
-      "location": "일본",
+      "location": "",
       "support_id": "560569",
       "sku": "RP-V100-1Y",
       "sn": "26482591",
@@ -254,7 +258,8 @@
           "email": "yhyun2.kim@samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "일본"
     },
     {
       "group": "tw-ds",
