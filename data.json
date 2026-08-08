@@ -4308,8 +4308,8 @@
     {
       "group": "us-001",
       "flag": "",
-      "owner": "TX (미국 중부)",
-      "location": "미국 중부(TXDRT)",
+      "owner": "삼성전자 TXDRT (중부)",
+      "location": "텍사스 댈러스",
       "support_id": "298214",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
       "sn": "3517320119",
@@ -4325,9 +4325,9 @@
       "owner_primary": "윤태리",
       "owner_secondary": "신호근",
       "check_method": "원격 (RC)",
-      "cust_contact": "손재영 프로 (SEA BI그룹 (SDSA 소속))",
-      "cust_phone": "+1-201-364-3492",
-      "cust_email": "jaeyoung.s@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "미국 중부(TXDRT)",
       "id": 87,
@@ -4345,14 +4345,26 @@
         "iv": "Hc+BZfqMrmzPcbrb",
         "ct": "yMBgs19XW+fe60CvpqQ=",
         "tag": "W+Dld9O9rLT2ERS1C8FM2w=="
-      }
+      },
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "손재영 프로 (SEA BI그룹)",
+          "org": "SDSA",
+          "phone": "+1-201-364-3492",
+          "email": "jaeyoung.s@samsung.com"
+        }
+      ]
     },
     {
       "group": "us-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성전자 TXDRT (중부)",
+      "location": "텍사스 댈러스",
+      "support_id": "298214",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
       "sn": "3317320160",
       "entitlement": "🔗",
@@ -4364,9 +4376,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.18.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4387,14 +4399,26 @@
         "iv": "l9E2xl3ULVr7gQLE",
         "ct": "WnNj3EcPjdd67IJ22+o=",
         "tag": "l5IODqb50XExbw8cceopYg=="
-      }
+      },
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "손재영 프로 (SEA BI그룹)",
+          "org": "SDSA",
+          "phone": "+1-201-364-3492",
+          "email": "jaeyoung.s@samsung.com"
+        }
+      ]
     },
     {
       "group": "us-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성전자 TXDRT (중부)",
+      "location": "텍사스 댈러스",
+      "support_id": "298214",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
       "sn": "3317320165",
       "entitlement": "🔗",
@@ -4406,9 +4430,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.18.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4429,14 +4453,26 @@
         "iv": "xUFfneS+pQkAusmf",
         "ct": "dCA6wB6yktrHJVu6tUI=",
         "tag": "nDKQPkTNV6y0JkmbWoT/5w=="
-      }
+      },
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "손재영 프로 (SEA BI그룹)",
+          "org": "SDSA",
+          "phone": "+1-201-364-3492",
+          "email": "jaeyoung.s@samsung.com"
+        }
+      ]
     },
     {
       "group": "us-001",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성전자 TXDRT (중부)",
+      "location": "텍사스 댈러스",
+      "support_id": "298214",
       "sku": "MC-S400-20-100-ONSITEADV",
       "sn": "2117320266",
       "entitlement": "🔗",
@@ -4448,9 +4484,9 @@
       "deploy_log": "23.04.23 윤태리 3.1.1.1 > 3.3.2.1",
       "mode": "",
       "os_ver": "3.3.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4463,7 +4499,19 @@
         "tag": "j7o4osdF3zg9AP3jiTzoXA=="
       },
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "손재영 프로 (SEA BI그룹)",
+          "org": "SDSA",
+          "phone": "+1-201-364-3492",
+          "email": "jaeyoung.s@samsung.com"
+        }
+      ]
     },
     {
       "group": "us-002",
