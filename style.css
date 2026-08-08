@@ -311,20 +311,26 @@ aside.filters{
 /* main content */
 main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 
-/* 페이지 상단 법인명 빠른 필터 (칩 형태) */
-.company-filter-bar{
-  display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; padding-bottom:16px;
+/* 페이지 상단 필드별 드롭다운 필터 */
+.top-filter-bar{
+  display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px 14px; margin-bottom:18px; padding-bottom:16px;
   border-bottom:1px solid var(--border-solid);
 }
-.company-chip{
-  background:var(--surface); border:1px solid var(--border-solid); border-radius:999px;
-  padding:6px 14px; font-size:12.5px; font-weight:600; color:var(--text-dim);
-  cursor:pointer; transition:all .15s; font-family:var(--body);
+.tf-field{ display:flex; flex-direction:column; gap:5px; min-width:140px; }
+.tf-field label{
+  font-size:10px; font-weight:700; color:var(--text-faint); font-family:var(--mono);
+  text-transform:uppercase; letter-spacing:.03em;
 }
-.company-chip:hover{ border-color:#C7CFDC; color:var(--text); }
-.company-chip.active{ background:#E6F4FD; border-color:var(--accent); color:var(--accent-dim); }
-.company-chip-clear{ background:#FEF2F2; border-color:#FBD5D5; color:#B91C1C; }
-.company-chip-clear:hover{ background:#FEE2E2; border-color:#F3B4B4; color:#B91C1C; }
+.tf-field select{
+  padding:7px 10px; border:1px solid var(--border-solid); border-radius:8px; background:var(--surface);
+  font-size:12.5px; color:var(--text-dim); font-family:var(--body); cursor:pointer; max-width:220px;
+}
+.tf-field select:focus{ border-color:var(--accent); }
+.tf-reset-btn{
+  align-self:flex-end; padding:7px 14px; background:#FEF2F2; border:1px solid #FBD5D5; border-radius:8px;
+  color:#B91C1C; font-size:12px; font-family:var(--body); font-weight:700; cursor:pointer; transition:all .15s;
+}
+.tf-reset-btn:hover{ background:#FEE2E2; border-color:#F3B4B4; }
 
 /* ---------- 대시보드 ---------- */
 .dash-header{ margin-bottom:20px; }
