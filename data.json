@@ -1217,8 +1217,8 @@
     {
       "group": "pl-sepm",
       "flag": "",
-      "owner": "삼성전자 동유럽",
-      "location": "SEPM (폴란드)",
+      "owner": "삼성전자 SEPM",
+      "location": "",
       "support_id": "937842",
       "sku": "SSP-S210-10",
       "sn": "2422710019",
@@ -1234,9 +1234,9 @@
       "owner_primary": "강성준",
       "owner_secondary": "박동석",
       "check_method": "원격 (RC)",
-      "cust_contact": "Remigiusz Kudlaszyk",
+      "cust_contact": "",
       "cust_phone": "",
-      "cust_email": "r.kudlaszyk@samsung.com",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "SEPM (폴란드)",
       "id": 25,
@@ -1254,14 +1254,26 @@
         "iv": "jk3Xqbl5bjcRYX7H",
         "ct": "uvlrE/YIZzTz9yOxtwdUlQol",
         "tag": "6x8S3Z5tPE9veiqP47SYrQ=="
-      }
+      },
+      "country": "폴란드",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Remigiusz Kudlaszyk",
+          "org": "",
+          "phone": "",
+          "email": "r.kudlaszyk@samsung.com"
+        }
+      ]
     },
     {
       "group": "pl-sepm",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 SEPM",
       "location": "",
-      "support_id": "",
+      "support_id": "937842",
       "sku": "SSP-S210-10",
       "sn": "2422710066",
       "entitlement": "🔗",
@@ -1273,9 +1285,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1296,14 +1308,26 @@
         "iv": "l6Uz8QE1A+UdUwjo",
         "ct": "cHr5MO6DhUNElhlHMD4yr9l0",
         "tag": "RvgB4W8PUT3E+gyEiHwlfg=="
-      }
+      },
+      "country": "폴란드",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Remigiusz Kudlaszyk",
+          "org": "",
+          "phone": "",
+          "email": "r.kudlaszyk@samsung.com"
+        }
+      ]
     },
     {
       "group": "pl-sepm",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 SEPM",
       "location": "",
-      "support_id": "",
+      "support_id": "937842",
       "sku": "ISG-Proxy#1",
       "sn": "0079997679",
       "entitlement": "🔗",
@@ -1315,9 +1339,9 @@
       "deploy_log": "",
       "mode": "Explicit",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1338,14 +1362,26 @@
         "iv": "kwN/EIYa3RgZy1iL",
         "ct": "Kp/UvtZFxlSqPoWTnjC5Wc6p",
         "tag": "8hkuqKJp33P658RDJZbF6w=="
-      }
+      },
+      "country": "폴란드",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Remigiusz Kudlaszyk",
+          "org": "",
+          "phone": "",
+          "email": "r.kudlaszyk@samsung.com"
+        }
+      ]
     },
     {
       "group": "pl-sepm",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 SEPM",
       "location": "",
-      "support_id": "",
+      "support_id": "937842",
       "sku": "ISG-Proxy#2",
       "sn": "0079997679",
       "entitlement": "🔗",
@@ -1357,9 +1393,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1380,14 +1416,26 @@
         "iv": "kmW1JGk5yxBcqlTX",
         "ct": "k/TZuUbtmaXk+cV8i+llG0WX",
         "tag": "jeVbXNpe4AP2PLwevG/YFA=="
-      }
+      },
+      "country": "폴란드",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Remigiusz Kudlaszyk",
+          "org": "",
+          "phone": "",
+          "email": "r.kudlaszyk@samsung.com"
+        }
+      ]
     },
     {
       "group": "pl-sepm",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 SEPM",
       "location": "",
-      "support_id": "",
+      "support_id": "937842",
       "sku": "MC-VA",
       "sn": "2668418307",
       "entitlement": "🔗",
@@ -1399,9 +1447,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.3.5.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1422,14 +1470,26 @@
         "iv": "LIIa0LyenP3G63Pk",
         "ct": "snG6cJOp9+j6WdxmDexDJHQy",
         "tag": "btP1ZdQN3v4coSMZeeEFJA=="
-      }
+      },
+      "country": "폴란드",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Remigiusz Kudlaszyk",
+          "org": "",
+          "phone": "",
+          "email": "r.kudlaszyk@samsung.com"
+        }
+      ]
     },
     {
       "group": "pl-sepm",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 SEPM",
       "location": "",
-      "support_id": "",
+      "support_id": "937842",
       "sku": "RP-VA",
       "sn": "0074485230",
       "entitlement": "🔗",
@@ -1441,9 +1501,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "11.0.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1464,14 +1524,26 @@
         "iv": "WaYiY3dMtieu0zFz",
         "ct": "cPx6YQFWJsV5mZKxQ1tScVVI",
         "tag": "FedCLjm4inHqlC+GXwObIg=="
-      }
+      },
+      "country": "폴란드",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Remigiusz Kudlaszyk",
+          "org": "",
+          "phone": "",
+          "email": "r.kudlaszyk@samsung.com"
+        }
+      ]
     },
     {
       "group": "pl-sepm",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 SEPM",
       "location": "",
-      "support_id": "",
+      "support_id": "937842",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52563391-1-1",
       "entitlement": "🔗",
@@ -1483,9 +1555,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "강성준",
+      "owner_secondary": "박동석",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1494,7 +1566,19 @@
       "id": 31,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "폴란드",
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Remigiusz Kudlaszyk",
+          "org": "",
+          "phone": "",
+          "email": "r.kudlaszyk@samsung.com"
+        }
+      ]
     },
     {
       "group": "uk-seuk",
