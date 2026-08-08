@@ -7191,9 +7191,9 @@
     {
       "group": "kr-003",
       "flag": "서초",
-      "owner": "21년 금융서비스 네트워크 그룹 PROXY 통합 유지보수_v1",
-      "location": "서초 금융 연수원",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
       "sn": "2915330173",
       "entitlement": "🔗",
@@ -7205,12 +7205,12 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "6.7.4.13",
-      "owner_primary": "-",
-      "owner_secondary": "-",
-      "check_method": "점검 x / @교대역 금융캠퍼스",
-      "cust_contact": "이재웅",
-      "cust_phone": "010-4131-8390",
-      "cust_email": "jw0718.lee@samsung.com",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "서초 금융 연수원",
       "id": 180,
@@ -7228,14 +7228,25 @@
         "iv": "truUHvlUCQozY7QS",
         "ct": "bVYnA7HhdhrbGn7aYoS7EZyv9J+69jjVnuAcJYUtXdJFgw==",
         "tag": "0F4Hy+39wvaa1Xj+e/pLxw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
       "sn": "2915330143",
       "entitlement": "🔗",
@@ -7247,9 +7258,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "6.7.4.13",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7262,14 +7273,25 @@
         "tag": "yZYpdGgpQjsL64V/v/odUw=="
       },
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "과천 DC (SDS 메인)",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S500-20-PR-STANDARD",
       "sn": "2817300006",
       "entitlement": "🔗",
@@ -7281,12 +7303,12 @@
       "deploy_log": "",
       "mode": "Explicit",
       "os_ver": "6.7.5.12",
-      "owner_primary": "-",
-      "owner_secondary": "-",
-      "check_method": "방문 / @삼성SDS 수원 ICT 3층 / 원격 VDI / smartoffice.samsung.net / woody.lee / lyh@2020",
-      "cust_contact": "이용훈 (점검) / 류길선",
-      "cust_phone": "010-9699-4176 / 010-2520-7754",
-      "cust_email": "woody.lee@samsung.com; kilson.ryu@samsung.com",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "과천 DC (SDS 메인)",
       "id": 182,
@@ -7300,14 +7322,25 @@
         "iv": "heNPrCjz8ZZr6GOZ",
         "ct": "UpAsE3Ws1PIOKw==",
         "tag": "3fCciVTXYcIyDXeEXX3skA=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S500-20-PR-STANDARD",
       "sn": "2817300007",
       "entitlement": "🔗",
@@ -7319,9 +7352,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "6.7.5.12",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7330,14 +7363,25 @@
       "id": 183,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "MC-S400-20-100-STANDARD",
       "sn": "4617320091",
       "entitlement": "🔗",
@@ -7349,9 +7393,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.1.3.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7368,14 +7412,25 @@
         "iv": "KYDVqxayMlZgyNUB",
         "ct": "SklZCIiedWgdEQ==",
         "tag": "OuKpJFqcHaX02o/MM/f9+w=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "RNW-SVC-BCWF-B-1K-2499-1Y",
       "sn": "QJUF6-CZGER",
       "entitlement": "🔗",
@@ -7387,9 +7442,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7398,14 +7453,25 @@
       "id": 185,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "RNW-SVC-BCWF-B-1K-2499-1Y",
       "sn": "QJVFD-NRFYF",
       "entitlement": "🔗",
@@ -7417,9 +7483,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7428,14 +7494,25 @@
       "id": 186,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "인도 GDC 수원센터 3층 (비업무차단 수원)",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S400-30-PR-STDPLUS",
       "sn": "1519320002",
       "entitlement": "🔗",
@@ -7447,9 +7524,9 @@
       "deploy_log": "23.11.03 윤태리 6.7.4.10 > 7.3.15.1 eol / 24.11.29 윤태리 7.3.15.1 > 7.3.21.1 mem bug",
       "mode": "Explicit",
       "os_ver": "7.3.21.1",
-      "owner_primary": "윤태리",
-      "owner_secondary": "홍진영",
-      "check_method": "방문/원격 / @삼성SDS 수원 ICT 3층 / 원격 VDI / smartoffice.samsung.net / woody.lee / lyh@2020 or lyh@1010",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7470,14 +7547,25 @@
         "iv": "spRSDuz2NiPt9BS9",
         "ct": "rODchH/S2AgGKlHaIZ2vNcGD5PfdTvfTwssZ",
         "tag": "uYs9LFcl/hqVI0xS1waB8A=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S400-30-PR-STDPLUS",
       "sn": "0414320007",
       "entitlement": "🔗",
@@ -7489,9 +7577,9 @@
       "deploy_log": "23.11.03 윤태리 6.7.4.10 > 7.3.15.1 eol / 24.11.29 윤태리 7.3.15.1 > 7.3.21.1 mem bug",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7504,14 +7592,25 @@
         "tag": "qdSbHdu7eeKb0VOs4uq+wA=="
       },
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "MC-S400-20-100-STDPLUS",
       "sn": "3618320107",
       "entitlement": "🔗",
@@ -7523,9 +7622,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.3.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7546,14 +7645,25 @@
         "iv": "vMaHARzI43BxttHa",
         "ct": "4qPLYh35hkBoZQ==",
         "tag": "mpQOg9d9jTyhtbAjA+n0yw=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "RP-S500-20-STDPLUS",
       "sn": "1218470026",
       "entitlement": "🔗",
@@ -7565,9 +7675,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "11.0.1.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7588,14 +7698,25 @@
         "iv": "DpzjPCqa++imGl1o",
         "ct": "5OuF0OFM0+OO",
         "tag": "0FILlsB0DbiBC+yONAq1lA=="
-      }
+      },
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "IS-SWSA-SWG-1000-2500-1Y",
       "sn": "50615633-1-1",
       "entitlement": "🔗",
@@ -7607,9 +7728,9 @@
       "deploy_log": "2024.01.03 P2 BCIS 변경",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7618,14 +7739,25 @@
       "id": 191,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "수원DC (삼성증권) >춘천DC로 이전",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
       "sn": "3417320058",
       "entitlement": "🔗",
@@ -7637,25 +7769,36 @@
       "deploy_log": "24.05.25 강성준 7.3.15.1 > 7.3.17.1 / 25.03.22 박동석 7.3.17.1 > 7.3.18.2 / 26.06.20 박동석 7.3.18.2 > 7.3.21.1",
       "mode": "Explicit",
       "os_ver": "7.3.21.1",
-      "owner_primary": "박동석",
-      "owner_secondary": "강성준",
-      "check_method": "방문 / @여의도 전경련회관 / - 방문시 1층에서 출입증 받고 / - 28층에서 다시 출입증 변경 / - 27층에서 점검",
-      "cust_contact": "권오윤 / 점검일정 : 최선아 프로 / (보통 월말 3시 이후 점검)",
-      "cust_phone": "010-3281-1258 / 010-4262-4207",
-      "cust_email": "sunah.choi@secui.com",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "수원DC (삼성증권) >춘천DC로 이전",
       "id": 192,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
       "sn": "3417320059",
       "entitlement": "🔗",
@@ -7667,9 +7810,9 @@
       "deploy_log": "24.05.25 강성준 7.3.15.1 > 7.3.17.1 / 25.03.22 박동석 7.3.17.1 > 7.3.18.2 / 26.06.20 박동석 7.3.18.2 > 7.3.21.1",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7678,14 +7821,25 @@
       "id": 193,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
       "sn": "3417320060",
       "entitlement": "🔗",
@@ -7697,9 +7851,9 @@
       "deploy_log": "24.05.25 강성준 7.3.15.1 > 7.3.17.1 / 25.03.22 박동석 7.3.17.1 > 7.3.18.2 / 26.06.20 박동석 7.3.18.2 > 7.3.21.1",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7708,14 +7862,25 @@
       "id": 194,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
       "sn": "3417320063",
       "entitlement": "🔗",
@@ -7727,9 +7892,9 @@
       "deploy_log": "24.05.25 강성준 7.3.15.1 > 7.3.17.1 / 25.03.22 박동석 7.3.17.1 > 7.3.18.2 / 26.06.20 박동석 7.3.18.2 > 7.3.21.1",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7738,14 +7903,25 @@
       "id": 195,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "MC-S400-20-100-STANDARD",
       "sn": "2417320129",
       "entitlement": "🔗",
@@ -7757,9 +7933,9 @@
       "deploy_log": "26.06.20 박동석 3.3.2.1 > 3.3.5.2",
       "mode": "",
       "os_ver": "3.3.5.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7768,14 +7944,25 @@
       "id": 196,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "IS-AWAA-SWG-2500-5000-1Y",
       "sn": "QYUFV-CZUE3",
       "entitlement": "🔗",
@@ -7787,9 +7974,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7798,14 +7985,25 @@
       "id": 197,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "삼성전자 영덕연수원",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S200-30-M5-STANDARD",
       "sn": "1516330129",
       "entitlement": "🔗",
@@ -7817,25 +8015,36 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "6.7.5.12",
-      "owner_primary": "-",
-      "owner_secondary": "-",
-      "check_method": "점검 X",
-      "cust_contact": "고영태",
-      "cust_phone": "010-7689-7620",
-      "cust_email": "yongtae.ko@samsung.com",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "삼성전자 영덕연수원",
       "id": 198,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S200-30-M5-STANDARD",
       "sn": "1516330131",
       "entitlement": "🔗",
@@ -7847,9 +8056,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "6.7.5.12",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7858,14 +8067,25 @@
       "id": 199,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "인력개발원 창조관",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S400-30-M5-STANDARD",
       "sn": "2914320098",
       "entitlement": "🔗",
@@ -7877,25 +8097,36 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "-",
-      "owner_secondary": "-",
-      "check_method": "점검 X",
-      "cust_contact": "고영태",
-      "cust_phone": "010-7689-7620",
-      "cust_email": "yongtae.ko@samsung.com",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "인력개발원 창조관",
       "id": 200,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-003",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성증권",
+      "location": "여의도",
+      "support_id": "2065519",
       "sku": "SG-S400-30-M5-STANDARD",
       "sn": "3214320027",
       "entitlement": "🔗",
@@ -7907,9 +8138,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -7918,7 +8149,18 @@
       "id": 201,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "최선아 프로",
+          "org": "씨큐아이",
+          "phone": "010-4262-4207",
+          "email": "sunah.choi@secui.com"
+        }
+      ]
     },
     {
       "group": "kr-004",
