@@ -1668,11 +1668,34 @@ document.getElementById('logoutBtn').onclick = () => {
 
 
 // ---------- recent activity (최근 작업 이력 알림) ----------
+// 알림(최근 작업 이력)에서 한 번 클릭해서 확인한 항목은 다시 뜨지 않도록 "읽음/삭제" 상태를
+// 로그인한 사용자별로 이 브라우저에 저장해 둔다. (팀 공유 데이터 아님 — 즐겨찾기와 동일한 방식)
+function dismissedActivityKey(){
+  return 'bcAssetDismissedActivity_' + (currentUserId || 'anon');
+}
+function getDismissedActivity(){
+  try{
+    const raw = localStorage.getItem(dismissedActivityKey());
+    return new Set(raw ? JSON.parse(raw) : []);
+  }catch(e){ return new Set(); }
+}
+function dismissActivity(key){
+  const set = getDismissedActivity();
+  set.add(key);
+  try{ localStorage.setItem(dismissedActivityKey(), JSON.stringify([...set])); }catch(e){}
+}
+function activityKeyOf(recId, entryId){
+  return recId + ':' + entryId;
+}
+
 function getRecentWorkLogEntries(limit){
+  const dismissed = getDismissedActivity();
   const all = [];
   records.forEach(r => {
     (r.work_log||[]).forEach(entry => {
-      all.push({ entry, recId:r.id, recGroup:r.group, recOwner:r.owner, recLabel:r.sku || deviceTypeLabel(r) });
+      const key = activityKeyOf(r.id, entry.id);
+      if (dismissed.has(key)) return;
+      all.push({ entry, recId:r.id, recGroup:r.group, recOwner:r.owner, recLabel:r.sku || deviceTypeLabel(r), key });
     });
   });
   all.sort((a,b) => (b.entry.id||0) - (a.entry.id||0));
@@ -1682,7 +1705,11 @@ function getRecentWorkLogEntries(limit){
 function updateActivityBadge(){
   const badge = document.getElementById('raBadge');
   if (!badge) return;
-  const total = records.reduce((sum,r)=> sum + (r.work_log?r.work_log.length:0), 0);
+  const dismissed = getDismissedActivity();
+  let total = 0;
+  records.forEach(r => (r.work_log||[]).forEach(entry => {
+    if (!dismissed.has(activityKeyOf(r.id, entry.id))) total++;
+  }));
   if (total > 0){ badge.textContent = total > 99 ? '99+' : String(total); badge.style.display = ''; }
   else { badge.style.display = 'none'; }
 }
@@ -1694,8 +1721,8 @@ function renderRecentActivity(){
     wrap.innerHTML = `<div class="ra-empty">아직 작업 이력이 없습니다.</div>`;
     return;
   }
-  wrap.innerHTML = items.map(({entry, recGroup, recOwner, recLabel}) => `
-    <div class="ra-item" data-jump-group="${esc(recGroup)}">
+  wrap.innerHTML = items.map(({entry, recId, recGroup, recOwner, recLabel, key}) => `
+    <div class="ra-item" data-jump-group="${esc(recGroup)}" data-jump-rec="${esc(recId)}" data-activity-key="${esc(key)}">
       <div class="ra-top"><span class="ra-type">${esc(entry.type)}</span><span class="ra-date">${esc(entry.date)||''}</span></div>
       <div class="ra-asset">${esc(recOwner)} · ${esc(recLabel)||'—'}</div>
       <div class="ra-note">${esc(entry.note)||'—'}</div>
@@ -1704,12 +1731,25 @@ function renderRecentActivity(){
   wrap.querySelectorAll('[data-jump-group]').forEach(el=>{
     el.onclick = () => {
       const gid = el.dataset.jumpGroup;
+      const recId = el.dataset.jumpRec;
+      const key = el.dataset.activityKey;
+
+      // 클릭한 항목은 알림 목록/뱃지에서 바로 사라지도록 "읽음" 처리한다.
+      dismissActivity(key);
+      updateActivityBadge();
+
       expandedGroups.add(gid);
       render();
       document.getElementById('recentActivityDropdown').classList.remove('open');
+
       requestAnimationFrame(()=>{
-        const card = document.querySelector(`.group-card[data-gid="${CSS.escape(gid)}"]`);
-        if (card) card.scrollIntoView({behavior:'smooth', block:'center'});
+        const row = document.querySelector(`tr[data-id="${CSS.escape(recId)}"]`);
+        const target = row || document.querySelector(`.group-card[data-gid="${CSS.escape(gid)}"]`);
+        if (target){
+          target.scrollIntoView({behavior:'smooth', block:'center'});
+          target.classList.add('activity-highlight-flash');
+          setTimeout(()=> target.classList.remove('activity-highlight-flash'), 1800);
+        }
       });
     };
   });
