@@ -1584,7 +1584,7 @@
       "group": "uk-seuk",
       "flag": "",
       "owner": "삼성전자 SEUK",
-      "location": "영국 런던",
+      "location": "런던",
       "support_id": "15688885",
       "sku": "SSP-S410-20B",
       "sn": "625700032",
@@ -1631,13 +1631,14 @@
           "email": "r.alphonso@partner.samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "영국"
     },
     {
       "group": "uk-seuk",
       "flag": "",
       "owner": "삼성전자 SEUK",
-      "location": "영국 런던",
+      "location": "런던",
       "support_id": "15688885",
       "sku": "ISG-Proxy",
       "sn": "90999124",
@@ -1684,13 +1685,14 @@
           "email": "r.alphonso@partner.samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "영국"
     },
     {
       "group": "uk-seuk",
       "flag": "",
       "owner": "삼성전자 SEUK",
-      "location": "영국 런던",
+      "location": "런던",
       "support_id": "15688885",
       "sku": "MC-VA",
       "sn": "2674419234",
@@ -1737,13 +1739,14 @@
           "email": "r.alphonso@partner.samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "영국"
     },
     {
       "group": "uk-seuk",
       "flag": "",
       "owner": "삼성전자 SEUK",
-      "location": "영국 런던",
+      "location": "런던",
       "support_id": "15688885",
       "sku": "ELK",
       "sn": "-",
@@ -1790,13 +1793,14 @@
           "email": "r.alphonso@partner.samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "영국"
     },
     {
       "group": "uk-seuk",
       "flag": "",
       "owner": "삼성전자 SEUK",
-      "location": "영국 런던",
+      "location": "런던",
       "support_id": "15688885",
       "sku": "WEB-PROTECT-SUB",
       "sn": "53256864-1-1",
@@ -1831,7 +1835,8 @@
           "email": "r.alphonso@partner.samsung.com"
         }
       ],
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "country": "영국"
     },
     {
       "group": "vn-sdv-old",
