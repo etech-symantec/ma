@@ -249,6 +249,8 @@ const SKU_TAG_RULES = [
   { key:'BCWF', test: sku => sku.toUpperCase().includes('BCWF') },
   { key:'WSS',  test: sku => sku.toUpperCase().includes('WSS') },
   { key:'WPS',  test: sku => sku.toUpperCase() === 'WEB-PROTECT-SUB' },
+  { key:'CA',   test: sku => sku.toUpperCase().startsWith('CAS-') },
+  { key:'MA',   test: sku => sku.toUpperCase().startsWith('MA-') },
 ];
 const SKU_TAG_KEYS = SKU_TAG_RULES.map(r => r.key);
 
@@ -509,6 +511,7 @@ async function populateSecretFields(){
 function pencilSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`; }
 function trashSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`; }
 function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>`; }
+function moveSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>`; }
 
 // ---------- 대시보드 (OS 버전별 / 장비 종류별 / 위치별 / 국가별 / SKU별 현황 한눈에 보기) ----------
 let dashboardMode = false;
@@ -911,6 +914,12 @@ function render(){
       openDirectEditModal(btn.dataset.directEdit);
     };
   });
+  document.querySelectorAll('[data-move-asset]').forEach(btn=>{
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      openMoveAssetModal(btn.dataset.moveAsset);
+    };
+  });
 
   buildFilters();
   updateActivityBadge();
@@ -1009,6 +1018,7 @@ function rowHtml(r, groupSupportId){
     <td data-label="관리">
       <div style="display:flex; gap:6px;">
         ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-direct-edit="${r.id}" title="관리자 직접 수정 (작업이력 없이 바로 저장)">${pencilSvg()}</button>` : ''}
+        <button class="wl-action-btn icon-only" data-move-asset="${r.id}" title="다른 법인으로 이동">${moveSvg()}</button>
         <button class="wl-action-btn icon-only danger" data-delete-asset="${r.id}" title="삭제">${trashSvg()}</button>
       </div>
     </td>
@@ -1406,6 +1416,73 @@ document.getElementById('saveGeBtn').onclick = () => {
   });
   document.getElementById('groupEditModal').classList.remove('open');
   groupEditId = null;
+  render();
+  buildFilters();
+  scheduleAutoSync();
+};
+
+// ---------- 자산을 다른 법인으로 이동 ----------
+let moveAssetRecId = null;
+
+function openMoveAssetModal(recId){
+  if (viewOnly || !sessionKey){ alert('자산을 이동하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const rec = records.find(r=>String(r.id)===String(recId));
+  if (!rec) return;
+
+  const targetGids = [...new Set(records.map(r=>r.group))].filter(gid => gid !== rec.group);
+  if (!targetGids.length){
+    alert('이동할 수 있는 다른 법인이 없습니다.');
+    return;
+  }
+  const options = targetGids.map(gid => {
+    const meta = groupMeta(records.filter(r=>r.group===gid));
+    return { gid, label: meta.owner + (meta.location ? ' · '+meta.location : '') };
+  }).sort((a,b) => a.label.localeCompare(b.label, 'ko'));
+
+  moveAssetRecId = recId;
+  const sel = document.getElementById('ma_target_group');
+  sel.innerHTML = options.map(o => `<option value="${esc(o.gid)}">${esc(o.label)}</option>`).join('');
+  document.getElementById('maError').textContent = '';
+  const curMeta = groupMeta(records.filter(r=>r.group===rec.group));
+  document.getElementById('maHint').textContent =
+    `현재 "${curMeta.owner}" 법인에 속한 "${rec.sku || deviceTypeLabel(rec)}" 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.`;
+  document.getElementById('moveAssetModal').classList.add('open');
+}
+
+document.getElementById('cancelMaBtn').onclick = () => {
+  document.getElementById('moveAssetModal').classList.remove('open');
+  moveAssetRecId = null;
+};
+
+document.getElementById('saveMaBtn').onclick = () => {
+  const targetGid = document.getElementById('ma_target_group').value;
+  const rec = records.find(r=>String(r.id)===String(moveAssetRecId));
+  const errEl = document.getElementById('maError');
+  if (!rec){ errEl.textContent = '이동할 자산을 찾을 수 없습니다.'; return; }
+  if (!targetGid){ errEl.textContent = '이동할 법인을 선택해 주세요.'; return; }
+  const targetItems = records.filter(r=>r.group===targetGid);
+  if (!targetItems.length){ errEl.textContent = '대상 법인을 찾을 수 없습니다.'; return; }
+  const meta = groupMeta(targetItems);
+
+  if (!confirm(`"${rec.sku || deviceTypeLabel(rec)}" 항목을 "${meta.owner}" 법인으로 옮길까요?`)) return;
+
+  rec.group = targetGid;
+  rec.flag = meta.flag;
+  rec.owner = meta.owner;
+  rec.country = meta.country;
+  rec.location = meta.location;
+  rec.support_id = meta.support_id;
+  rec.check_method = meta.check_method;
+  rec.config_mode = meta.config_mode;
+  rec.owner_primary = meta.owner_primary;
+  rec.owner_secondary = meta.owner_secondary;
+  rec.cust_contacts = JSON.parse(JSON.stringify(meta.cust_contacts || []));
+  rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
+  rec.group_remarks = meta.group_remarks;
+
+  expandedGroups.add(targetGid);
+  document.getElementById('moveAssetModal').classList.remove('open');
+  moveAssetRecId = null;
   render();
   buildFilters();
   scheduleAutoSync();
