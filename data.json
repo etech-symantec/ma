@@ -2549,8 +2549,8 @@
     {
       "group": "vn-semv",
       "flag": "",
-      "owner": "삼성전기 베트남 SEMV법인",
-      "location": "베트남 삼성전기 (SEMV)",
+      "owner": "삼성전기 SEMV",
+      "location": "하노이",
       "support_id": "955817",
       "sku": "SG-S200-30-PR-STDPLUS",
       "sn": "4519330028",
@@ -2566,9 +2566,9 @@
       "owner_primary": "윤태리",
       "owner_secondary": "김상문",
       "check_method": "원격 (RC)",
-      "cust_contact": "Nguyen Tan Khanh",
+      "cust_contact": "",
       "cust_phone": "",
-      "cust_email": "tankhanh.nguyen@samsung.com",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "베트남 삼성전기 (SEMV)",
       "id": 55,
@@ -2586,14 +2586,26 @@
         "iv": "WT+EL/GXhJMjM6Tj",
         "ct": "e7uxdH2Fp92TL+14QsXIOJ2FmzXvGLu4NsfKZiC5",
         "tag": "VYgsR8yc/6AqHDDoa1x2hQ=="
-      }
+      },
+      "country": "베트남",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Nguyen Tan Khanh",
+          "org": "",
+          "phone": "",
+          "email": "tankhanh.nguyen@samsung.com"
+        }
+      ]
     },
     {
       "group": "vn-semv",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성전기 SEMV",
+      "location": "하노이",
+      "support_id": "955817",
       "sku": "IS-SWSA-SWG-1000-2500-1",
       "sn": "50357634-1-1",
       "entitlement": "🔗",
@@ -2605,9 +2617,9 @@
       "deploy_log": "키: EB6572D7FCF0ADA4516FFC",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "김상문",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2616,7 +2628,19 @@
       "id": 56,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "베트남",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Nguyen Tan Khanh",
+          "org": "",
+          "phone": "",
+          "email": "tankhanh.nguyen@samsung.com"
+        }
+      ]
     },
     {
       "group": "mx-samex-srt",
