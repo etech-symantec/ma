@@ -1163,8 +1163,8 @@
     {
       "group": "th-tse",
       "flag": "",
-      "owner": "태국 삼성전자",
-      "location": "TSE-S 콜센터 (태국)",
+      "owner": "삼성전자 TSE-S 콜센터",
+      "location": "",
       "support_id": "2065519",
       "sku": "SG-S200-20-PR-STDPLUS",
       "sn": "219330027",
@@ -1177,12 +1177,12 @@
       "deploy_log": "23.12.08 박동석 6.7.5.12>7.3.15.1 / 24.03.26 박동석 7.3.15.1>7.3.17.1",
       "mode": "Explicit",
       "os_ver": "7.3.17.1",
-      "owner_primary": "-",
-      "owner_secondary": "김상문",
+      "owner_primary": "김상문",
+      "owner_secondary": "윤태리",
       "check_method": "원격 (RC)",
-      "cust_contact": "김도현 프로 / 김재윤 프로(전자 네트워크그룹)<현재",
-      "cust_phone": "010-3292-3325 / 02-6155-8523",
-      "cust_email": "dohyun_sds.kim@samsung.com; jaeyuni.kim@samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "TSE-S 콜센터 (태국)",
       "id": 22,
@@ -1200,14 +1200,33 @@
         "iv": "TFSpR+anFH9/F4UQ",
         "ct": "+sQKte7g/hi0PQ==",
         "tag": "xSklYw16mlm/lXK5e0BjoA=="
-      }
+      },
+      "country": "태국",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "김도현 프로",
+          "org": "",
+          "phone": "010-3292-3325",
+          "email": "dohyun_sds.kim@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "김재윤 프로(전자 네트워크그룹)",
+          "org": "",
+          "phone": "02-6155-8523",
+          "email": "jaeyuni.kim@samsung.com"
+        }
+      ]
     },
     {
       "group": "th-tse",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 TSE-S 콜센터",
       "location": "",
-      "support_id": "",
+      "support_id": "2065519",
       "sku": "IS-SWSA-SWG-100-250-1Y",
       "sn": "50691100-3-1",
       "entitlement": "🔗",
@@ -1219,9 +1238,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1230,14 +1249,33 @@
       "id": 23,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "태국",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "김도현 프로",
+          "org": "",
+          "phone": "010-3292-3325",
+          "email": "dohyun_sds.kim@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "김재윤 프로(전자 네트워크그룹)",
+          "org": "",
+          "phone": "02-6155-8523",
+          "email": "jaeyuni.kim@samsung.com"
+        }
+      ]
     },
     {
       "group": "th-tse",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 TSE-S 콜센터",
       "location": "",
-      "support_id": "",
+      "support_id": "2065519",
       "sku": "RP-S500-20-STDPLUS",
       "sn": "1118470008",
       "entitlement": "🔗",
@@ -1249,9 +1287,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "윤태리",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1272,7 +1310,26 @@
         "iv": "qbLdFeKsdIwuOM2V",
         "ct": "xx54WpNr3qfleg==",
         "tag": "UKxR/3wkfMftfT7yqrD8TA=="
-      }
+      },
+      "country": "태국",
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "김도현 프로",
+          "org": "",
+          "phone": "010-3292-3325",
+          "email": "dohyun_sds.kim@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "김재윤 프로(전자 네트워크그룹)",
+          "org": "",
+          "phone": "02-6155-8523",
+          "email": "jaeyuni.kim@samsung.com"
+        }
+      ]
     },
     {
       "group": "pl-sepm",
