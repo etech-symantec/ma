@@ -11561,8 +11561,8 @@
     {
       "group": "kr-009",
       "flag": "수원",
-      "owner": "[23유지보수] 시만택 프락시 유지보수",
-      "location": "삼성 경제연구소 인력개발원(창조관)",
+      "owner": "삼성 인력개발원(창조관)",
+      "location": "수원",
       "support_id": "2550850",
       "sku": "SG-S400-30-PR-STANDARD",
       "sn": "3119320011",
@@ -11578,22 +11578,33 @@
       "owner_primary": "김상문",
       "owner_secondary": "홍진영",
       "check_method": "방문",
-      "cust_contact": "곽흥문 프로 / ▶장병훈 과장",
-      "cust_phone": "010-6809-0611 / 031-8006-5463",
-      "cust_email": "hungmoon.kwag@samsung.com; bhdream.jang@partner.samsung.com",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "삼성 경제연구소 인력개발원(창조관)",
       "id": 313,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "장병훈 과장",
+          "org": "",
+          "phone": "010-6809-0611 / 031-8006-5463",
+          "email": "bhdream.jang@partner.samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-009",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 인력개발원(창조관)",
+      "location": "수원",
+      "support_id": "2550850",
       "sku": "SG-S400-30-PR-STANDARD",
       "sn": "3119320005",
       "entitlement": "🔗",
@@ -11605,9 +11616,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.17.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "홍진영",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -11616,14 +11627,25 @@
       "id": 314,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "장병훈 과장",
+          "org": "",
+          "phone": "010-6809-0611 / 031-8006-5463",
+          "email": "bhdream.jang@partner.samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-009",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 인력개발원(창조관)",
+      "location": "수원",
+      "support_id": "2550850",
       "sku": "RP-S500-20-STANDARD",
       "sn": "1118470005",
       "entitlement": "🔗",
@@ -11635,9 +11657,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "10.5.2.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "홍진영",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -11646,14 +11668,25 @@
       "id": 315,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "장병훈 과장",
+          "org": "",
+          "phone": "010-6809-0611 / 031-8006-5463",
+          "email": "bhdream.jang@partner.samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-009",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "삼성 인력개발원(창조관)",
+      "location": "수원",
+      "support_id": "2550850",
       "sku": "SVC-BCWF-1000-2499-1YR",
       "sn": "QAZMM-9ZSV2",
       "entitlement": "🔗",
@@ -11665,9 +11698,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "홍진영",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -11676,7 +11709,18 @@
       "id": 316,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "config_mode": "Explicit",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "장병훈 과장",
+          "org": "",
+          "phone": "010-6809-0611 / 031-8006-5463",
+          "email": "bhdream.jang@partner.samsung.com"
+        }
+      ]
     },
     {
       "group": "kr-010",
