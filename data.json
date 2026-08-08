@@ -6104,8 +6104,8 @@
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "RP-V200-1Y",
       "sn": "27484597",
@@ -6152,13 +6152,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "RP-V200-1Y",
       "sn": "27484606",
@@ -6205,13 +6206,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "SSP-S210-10",
       "sn": "73998801",
@@ -6258,13 +6260,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "SSP-S210-10",
       "sn": "73998789",
@@ -6311,13 +6314,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "ISG-Proxy 1",
       "sn": "0073998801",
@@ -6364,13 +6368,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "ISG-Proxy 2",
       "sn": "0073998789",
@@ -6417,13 +6422,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "MC-V10",
       "sn": "2655413667",
@@ -6470,13 +6476,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "RP-V100",
       "sn": "0071489986",
@@ -6523,13 +6530,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "ONSITE-ADVANCED",
       "sn": "1422710025",
@@ -6564,13 +6572,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "ONSITE-ADVANCED",
       "sn": "1422710039",
@@ -6605,13 +6614,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52222844-1-1",
@@ -6646,13 +6656,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52222844-7-1",
@@ -6687,13 +6698,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "SG-S500-10-PR (STANDARD)",
       "sn": "2115300040",
@@ -6728,13 +6740,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "SG-S500-10-PR (STANDARD)",
       "sn": "3713300075",
@@ -6769,13 +6782,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "SG-S500-10-PR (STANDARD)",
       "sn": "3713300120",
@@ -6810,13 +6824,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "SG-S500-10-PR-STANDARD",
       "sn": "3218300006",
@@ -6851,13 +6866,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "SG-S500-10-PR-STANDARD",
       "sn": "3218300007",
@@ -6892,13 +6908,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "MC-S400-20-100-STANDARD",
       "sn": "2718320038",
@@ -6945,13 +6962,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "RP-S500-20-STANDARD",
       "sn": "0918470044",
@@ -6998,13 +7016,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "CAS-S500-A1 (STANDARD)",
       "sn": "0114300052",
@@ -7039,13 +7058,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "CAS-S500-A1 (STANDARD)",
       "sn": "4514300027",
@@ -7080,13 +7100,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "FI-SYMC-10K-24999-1YR",
       "sn": "51227735-45-1",
@@ -7121,13 +7142,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "FI-KASP/MCF-10K-19999-1YR",
       "sn": "HFH8N_YVBHI",
@@ -7162,13 +7184,14 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "cn-001",
       "flag": "",
-      "owner": "삼성디스플레이 중국 천진 SDT",
-      "location": "중국 천진",
+      "owner": "삼성디스플레이 SDT",
+      "location": "천진",
       "support_id": "937842",
       "sku": "MA-CAS-S500-A1-1YR",
       "sn": "50689926-16-1",
@@ -7203,7 +7226,8 @@
           "phone": "",
           "email": "yifeng.guo@samsung.com"
         }
-      ]
+      ],
+      "country": "중국"
     },
     {
       "group": "kr-002",
