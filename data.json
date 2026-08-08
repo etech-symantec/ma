@@ -18310,7 +18310,7 @@
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
@@ -18337,7 +18337,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18346,12 +18346,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
@@ -18378,7 +18379,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18387,12 +18388,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "IS-AWAA-SWG-250-500-1Y",
@@ -18419,7 +18421,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18428,12 +18430,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
@@ -18460,7 +18463,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18469,12 +18472,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
@@ -18501,7 +18505,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18510,12 +18514,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
@@ -18542,7 +18547,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18551,12 +18556,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
@@ -18583,7 +18589,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18592,12 +18598,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "MC-S400-20-100-STANDARD",
@@ -18624,7 +18631,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18633,12 +18640,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "IS-AWAA-SWG-2500-5000-1Y",
@@ -18665,7 +18673,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18674,12 +18682,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
@@ -18706,7 +18715,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18715,12 +18724,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
@@ -18747,7 +18757,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18756,12 +18766,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
@@ -18788,7 +18799,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18797,12 +18808,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
@@ -18829,7 +18841,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18838,12 +18850,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SVC-BCWF-1000-2499-1YR",
@@ -18870,7 +18883,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18879,12 +18892,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
@@ -18911,7 +18925,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18920,12 +18934,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S400-20-PR-STANDARD",
@@ -18952,7 +18967,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -18961,12 +18976,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "MC-S400-20-100-STANDARD",
@@ -18993,7 +19009,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19002,12 +19018,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SVC-BCWF-2500-4999-1YR",
@@ -19034,7 +19051,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19043,12 +19060,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-40-PR-STANDARD",
@@ -19075,7 +19093,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19084,12 +19102,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-40-PR-STANDARD",
@@ -19116,7 +19135,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19125,12 +19144,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-40-PR-STANDARD",
@@ -19157,7 +19177,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19166,12 +19186,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "MC-S400-20-100-STANDARD",
@@ -19198,7 +19219,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19207,12 +19228,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SVC-BCWF-500-999-1YR",
@@ -19239,7 +19261,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19248,12 +19270,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG900-30-PR",
@@ -19280,7 +19303,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19289,12 +19312,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG900-30-PR",
@@ -19321,7 +19345,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19330,12 +19354,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "IS-AWAA-SWG-1000-2500-1Y",
@@ -19362,7 +19387,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19371,12 +19396,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "IS-AWAA-SWG-2500-5000-1Y",
@@ -19403,7 +19429,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19412,12 +19438,13 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터 (HDC 신라면세점)",
+      "owner": "삼성 ICT 상암센터",
       "location": "수원",
       "support_id": "2065519",
       "sku": "IS-AWAA-SWG-1000-2500-1Y",
@@ -19444,7 +19471,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "",
+      "group_remarks": "HDC 신라면세점",
       "cust_contacts": [
         {
           "role": "운용",
@@ -19453,7 +19480,8 @@
           "phone": "010-6282-5322",
           "email": "eunkyu.ji@samsung.com"
         }
-      ]
+      ],
+      "country": "한국"
     },
     {
       "group": "kr-019",
