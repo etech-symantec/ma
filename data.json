@@ -3022,7 +3022,7 @@
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "228292",
       "sku": "MC-S400-20-100",
       "sn": "3120320113",
@@ -3060,13 +3060,15 @@
         "tag": "SIrpR+aVgwvPyehRw0P1Ow=="
       },
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "228292",
       "sku": "WEB-PROTECT-SUB",
       "sn": "53298373-1-1",
@@ -3096,13 +3098,15 @@
       },
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "228292",
       "sku": "CLD-RPT-SUB",
       "sn": "52467994-1-1",
@@ -3128,13 +3132,15 @@
       "id_enc": null,
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "228292",
       "sku": "SSP-S210-10",
       "sn": "4524710031",
@@ -3172,13 +3178,15 @@
         "tag": "DNyPtEEzfQRbGhLZgqHdNg=="
       },
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "228292",
       "sku": "SSP-S210-10",
       "sn": "4524710032",
@@ -3212,13 +3220,15 @@
       },
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "228292",
       "sku": "ISG-Proxy",
       "sn": "91991158",
@@ -3252,13 +3262,15 @@
       },
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "228292",
       "sku": "ISG-Proxy",
       "sn": "91991158",
@@ -3292,13 +3304,15 @@
       },
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "228292",
       "sku": "IS-AWAA-SWG-1000-2500-1Y",
       "sn": "50691098-2-1",
@@ -3324,7 +3338,9 @@
       "id_enc": null,
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "ng",
