@@ -4511,8 +4511,8 @@
     {
       "group": "kr-001",
       "flag": "",
-      "owner": "미주법인",
-      "location": "미주법인",
+      "owner": "삼성SDS 미주법인",
+      "location": "뉴저지",
       "support_id": "298214",
       "sku": "Web Security Service - WSS",
       "sn": "51418108-1-1",
@@ -4536,13 +4536,17 @@
       "id": 100,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": []
     },
     {
       "group": "kr-001",
       "flag": "",
-      "owner": "",
-      "location": "",
+      "owner": "삼성SDS 미주법인",
+      "location": "뉴저지",
       "support_id": "298214",
       "sku": "MC-S400-20-100-ONSITEADV",
       "sn": "2117320266",
@@ -4555,9 +4559,9 @@
       "deploy_log": "23.04.23 윤태리 3.1.1.1 > 3.3.2.1",
       "mode": "",
       "os_ver": "3.3.2.1",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4570,7 +4574,11 @@
         "tag": "3gOsBPEetI+W0Nk6m0zEBw=="
       },
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "미국",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": []
     },
     {
       "group": "us-005",
