@@ -248,6 +248,7 @@ const SKU_TAG_RULES = [
   { key:'CLD',  test: sku => sku.toUpperCase().includes('CLD') },
   { key:'BCWF', test: sku => sku.toUpperCase().includes('BCWF') },
   { key:'WSS',  test: sku => sku.toUpperCase().includes('WSS') },
+  { key:'WPS',  test: sku => sku.toUpperCase() === 'WEB-PROTECT-SUB' },
 ];
 const SKU_TAG_KEYS = SKU_TAG_RULES.map(r => r.key);
 
@@ -459,6 +460,7 @@ function groupMeta(items){
     flag: head.flag || '',
     owner: head.owner || '(법인명 미확인)',
     location: items.map(i=>i.location).find(Boolean) || '',
+    country: items.map(i=>i.country).find(Boolean) || '',
     support_id: items.map(i=>i.support_id).find(Boolean) || '',
     check_method: items.map(i=>i.check_method).find(Boolean) || '',
     config_mode: items.map(i=>i.config_mode).find(Boolean) || '',
@@ -526,10 +528,13 @@ function bucketGroups(arr, keyFn){
     .sort((a,b) => b[1]-a[1]);
 }
 
-// LOCATION 필드는 "국가" 또는 "국가 도시" 형태로 입력되어 있어 별도 국가 필드가 없다.
-// 대략적인 국가 구분을 위해 공백 앞의 첫 단어를 국가명으로 취급한다. (예: "인도 노이다" → "인도")
-function countryOf(loc){
-  const s = (loc||'').trim();
+// 국가는 이제 별도 필드(country)로 입력받는다. 다만 이 필드가 도입되기 전 기존 데이터는
+// location 필드에 "국가 도시"처럼 섞여 들어가 있을 수 있어, country가 비어 있으면
+// location의 첫 단어를 국가로 대신 추정하는 이전 방식으로 대체(fallback)한다.
+function countryOf(r){
+  const c = (r.country||'').trim();
+  if (c) return c;
+  const s = (r.location||'').trim();
   if (!s) return '';
   return s.split(/\s+/)[0];
 }
@@ -613,7 +618,7 @@ function renderDashboard(){
 
   const byType = bucketGroups(records, r => deviceTypeLabel(r));
   const byLocation = bucketGroups(records, r => r.location);
-  const byCountry = bucketGroups(records, r => countryOf(r.location));
+  const byCountry = bucketGroups(records, r => countryOf(r));
   const bySku = bucketGroups(records, r => r.sku);
 
   wrap.innerHTML = `
@@ -694,7 +699,7 @@ function render(){
     }
     if (q){
       const custBits = (r.cust_contacts||[]).flatMap(c=>[c.name,c.phone,c.email]);
-      const hay = [r.owner,r.location,r.sku,r.sn,r.support_id,r.check_method,r.owner_primary,r.owner_secondary,r.cust_contact,...custBits,deviceTypeLabel(r),r.remarks,r.group_remarks,skuKeywordMatches(r.sku).join(' ')].join(' ').toLowerCase();
+      const hay = [r.owner,r.country,r.location,r.sku,r.sn,r.support_id,r.check_method,r.owner_primary,r.owner_secondary,r.cust_contact,...custBits,deviceTypeLabel(r),r.remarks,r.group_remarks,skuKeywordMatches(r.sku).join(' ')].join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -723,6 +728,7 @@ function render(){
               <div class="title-row">
                 <h3 class="group-title-name">${esc(meta.owner)}</h3>
                 <div class="sub title-meta">
+                  <span class="meta-chip meta-chip-country"><span class="meta-label">국가</span><span class="meta-value">${esc(meta.country)||'—'}</span></span>
                   <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
                   <span class="meta-chip meta-chip-support"><span class="meta-label">Support ID</span><span class="meta-value">${esc(meta.support_id)||'—'}</span></span>
                   <span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
@@ -737,7 +743,7 @@ function render(){
           </div>
           <div class="group-badges">
             <div class="group-title-actions">
-              <button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/위치/Support ID/담당자/고객사 담당자)">${pencilSvg()}</button>
+              <button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/Support ID/담당자/고객사 담당자)">${pencilSvg()}</button>
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
               <button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>
             </div>
@@ -1102,7 +1108,7 @@ document.getElementById('expandAllBtn').onclick = () => {
 };
 
 // ---------- add / edit / delete record ----------
-const ASSET_FORM_IDS = ['f_owner','f_location','f_support','f_device_type','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_owner_primary','f_owner_secondary','f_cust','f_remarks'];
+const ASSET_FORM_IDS = ['f_owner','f_country','f_location','f_support','f_device_type','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_owner_primary','f_owner_secondary','f_cust','f_remarks'];
 
 function clearAssetForm(){
   ASSET_FORM_IDS.forEach(id=>document.getElementById(id).value='');
@@ -1130,7 +1136,7 @@ async function openDirectEditModal(recId){
   editingRecordId = recId;
   clearAssetForm();
   const set = (id, v) => { document.getElementById(id).value = v || ''; };
-  set('f_owner', rec.owner); set('f_location', rec.location); set('f_support', rec.support_id);
+  set('f_owner', rec.owner); set('f_country', rec.country); set('f_location', rec.location); set('f_support', rec.support_id);
   set('f_device_type', rec.device_type); set('f_sku', rec.sku); set('f_sn', rec.sn); set('f_qty', rec.qty);
   set('f_start', rec.start); set('f_end', rec.end); set('f_os', rec.os_ver); set('f_check', rec.check_method);
   set('f_owner_primary', rec.owner_primary); set('f_owner_secondary', rec.owner_secondary);
@@ -1163,7 +1169,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
     const rec = records.find(r=>String(r.id)===String(editingRecordId));
     if (!rec){ editingRecordId = null; document.getElementById('addModal').classList.remove('open'); return; }
     Object.assign(rec, {
-      owner: val('f_owner')||rec.owner, location:val('f_location'), support_id:val('f_support'),
+      owner: val('f_owner')||rec.owner, country:val('f_country'), location:val('f_location'), support_id:val('f_support'),
       device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
       start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'),
       os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
@@ -1183,7 +1189,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
   const newId = Math.max(0,...records.map(r=>r.id)) + 1;
   const gid = 'custom-' + newId;
   const rec = {
-    id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', location:val('f_location'),
+    id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', country:val('f_country'), location:val('f_location'),
     support_id:val('f_support'), device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
     start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
     mode:'', os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
@@ -1263,6 +1269,7 @@ function openGroupEditModal(gid){
   const meta = groupMeta(items);
   groupEditId = gid;
   document.getElementById('ge_owner').value = meta.owner==='(법인명 미확인)' ? '' : meta.owner;
+  document.getElementById('ge_country').value = meta.country || '';
   document.getElementById('ge_location').value = meta.location || '';
   document.getElementById('ge_support').value = meta.support_id || '';
   document.getElementById('ge_check').value = meta.check_method || '';
@@ -1290,6 +1297,7 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newOwner = val('ge_owner');
   if (!newOwner){ document.getElementById('geError').textContent = '법인명을 입력해 주세요.'; return; }
   const newLocation = val('ge_location');
+  const newCountry = val('ge_country');
   const newSupport = val('ge_support');
   const newCheck = val('ge_check');
   const newConfigMode = val('ge_config_mode');
@@ -1302,6 +1310,7 @@ document.getElementById('saveGeBtn').onclick = () => {
     if (r.group === groupEditId){
       r.owner = newOwner;
       r.location = newLocation;
+      r.country = newCountry;
       r.support_id = newSupport;
       r.check_method = newCheck;
       r.config_mode = newConfigMode;
