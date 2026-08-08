@@ -412,6 +412,8 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
   text-transform:uppercase; letter-spacing:.03em; white-space:nowrap;
 }
 .meta-value{ font-size:12px; color:var(--text-dim); white-space:nowrap; }
+.meta-chip-country{ background:#EEF0FE; border-color:#DBDEF9; }
+.meta-chip-country .meta-label{ color:#6C72C7; }
 .meta-chip-location{ background:#EFF5FF; border-color:#D9E6FA; }
 .meta-chip-location .meta-label{ color:#5B84C4; }
 .meta-chip-support{ background:#F6F1FC; border-color:#E4D8F5; }
