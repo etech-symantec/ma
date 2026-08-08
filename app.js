@@ -679,6 +679,26 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
   }
 });
 
+// 페이지 상단 법인명 빠른 필터 — 좌측 사이드바의 "국가 / 법인" 목록과 같은 상태(activeCountryFilter)를
+// 공유하는 칩 형태의 단축 필터. 자산 목록 맨 위에서 바로 법인을 눌러 필터링할 수 있게 한다.
+function companyFilterBarHtml(){
+  const favSet = getFavCountries();
+  const owners = [...new Map(records.map(r=>{
+    const grp = records.filter(x=>x.group===r.group);
+    const meta = groupMeta(grp);
+    return [meta.owner, meta];
+  })).values()].sort((a,b)=>{
+    const af = favSet.has(a.owner) ? 0 : 1;
+    const bf = favSet.has(b.owner) ? 0 : 1;
+    if (af !== bf) return af - bf;
+    return a.owner.localeCompare(b.owner, 'ko');
+  });
+  if (!owners.length) return '';
+  const chips = owners.map(m => `<button type="button" class="company-chip${activeCountryFilter===m.owner?' active':''}" data-owner="${esc(m.owner)}">${esc(m.owner)}</button>`).join('');
+  const clearBtn = activeCountryFilter ? `<button type="button" class="company-chip company-chip-clear" data-owner-clear="1">✕ 필터 해제</button>` : '';
+  return `<div class="company-filter-bar" id="companyFilterBar">${chips}${clearBtn}</div>`;
+}
+
 function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const mySiteGroupIds = getMySiteGroupIds();
@@ -707,11 +727,12 @@ function render(){
 
   const groups = groupRecords(list);
   const content = document.getElementById('content');
+  const companyBarHtml = companyFilterBarHtml();
 
   if (groups.size === 0){
-    content.innerHTML = `<div class="empty-state"><h3>조건에 맞는 자산이 없습니다</h3><p>검색어나 필터를 조정해 보세요.</p></div>`;
+    content.innerHTML = companyBarHtml + `<div class="empty-state"><h3>조건에 맞는 자산이 없습니다</h3><p>검색어나 필터를 조정해 보세요.</p></div>`;
   } else {
-    let html = '';
+    let html = companyBarHtml;
     for (const [gid, items] of groups){
       const meta = groupMeta(items);
       const isOpen = expandedGroups.has(gid);
@@ -766,6 +787,17 @@ function render(){
     }
     content.innerHTML = html;
   }
+
+  document.querySelectorAll('#companyFilterBar [data-owner]').forEach(btn=>{
+    btn.onclick = () => {
+      const v = btn.dataset.owner;
+      activeCountryFilter = activeCountryFilter===v ? null : v;
+      render();
+    };
+  });
+  document.querySelectorAll('#companyFilterBar [data-owner-clear]').forEach(btn=>{
+    btn.onclick = () => { activeCountryFilter = null; render(); };
+  });
 
   document.querySelectorAll('[data-toggle]').forEach(el=>{
     el.onclick = () => {
