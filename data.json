@@ -2646,7 +2646,7 @@
       "group": "mx-samex-srt",
       "flag": "＠",
       "owner": "삼성전자 SAMEX SRT",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "2065519",
       "sku": "SSP-S210-10",
       "sn": "4524710004",
@@ -2702,13 +2702,15 @@
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
-      ]
+      ],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
       "owner": "삼성전자 SAMEX SRT",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "2065519",
       "sku": "ISG-Proxy",
       "sn": "91991640",
@@ -2768,13 +2770,15 @@
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
-      ]
+      ],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
       "owner": "삼성전자 SAMEX SRT",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "2065519",
       "sku": "IS-AWAA-SWG-100-250-1Y",
       "sn": "50691099-2-1",
@@ -2822,13 +2826,15 @@
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
-      ]
+      ],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
       "owner": "삼성전자 SAMEX SRT",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "2065519",
       "sku": "MC-S400-20-100",
       "sn": "1419320060",
@@ -2888,13 +2894,15 @@
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
-      ]
+      ],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
       "owner": "삼성전자 SAMEX SRT",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "2065519",
       "sku": "WEB-PROTECT-SUB",
       "sn": "53304946-1-1",
@@ -2950,13 +2958,15 @@
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
-      ]
+      ],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex-srt",
       "flag": "",
       "owner": "삼성전자 SAMEX SRT",
-      "location": "멕시코 티후아나",
+      "location": "티후아나",
       "support_id": "2065519",
       "sku": "CLD-RPT-SUB",
       "sn": "52437994-1-1",
@@ -3004,7 +3014,9 @@
           "phone": "",
           "email": "ar.juarez@samsung.com"
         }
-      ]
+      ],
+      "country": "멕시코",
+      "config_mode": "Explicit"
     },
     {
       "group": "mx-samex",
