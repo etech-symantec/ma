@@ -206,6 +206,24 @@
   </div>
 </div>
 
+<div id="moveAssetModal">
+  <div class="modal-card">
+    <h2>자산 이동</h2>
+    <p class="hint" id="maHint">이 자산 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.</p>
+    <div class="form-grid">
+      <div class="full">
+        <label>이동할 법인 선택</label>
+        <select id="ma_target_group"></select>
+      </div>
+    </div>
+    <div id="maError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelMaBtn">취소</button>
+      <button class="btn btn-primary" id="saveMaBtn">이동</button>
+    </div>
+  </div>
+</div>
+
 <div id="workLogModal">
   <div class="modal-card">
     <h2>작업 이력</h2>
