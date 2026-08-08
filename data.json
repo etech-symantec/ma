@@ -3480,7 +3480,7 @@
       "group": "au-ccc",
       "flag": "★※",
       "owner": "삼성전자 호주콜센터 (SEAU-CCC)",
-      "location": "호주콜센터(SEAU-CCC)",
+      "location": "",
       "support_id": "946874",
       "sku": "SG-S400-20-PR-ONSITEADV",
       "sn": "4518320102",
@@ -3498,7 +3498,7 @@
       "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
-      "cust_email": "karen.lim@samsung.com (영업)",
+      "cust_email": "",
       "tag": "X",
       "tag_note": "호주콜센터(SEAU-CCC)",
       "id": 74,
@@ -3508,14 +3508,26 @@
         "tag": "IriJwFeof/FvcYDYGWM/Bw=="
       },
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "호주",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "",
+          "org": "",
+          "phone": "",
+          "email": "karen.lim@samsung.com (영업)"
+        }
+      ]
     },
     {
       "group": "au-ccc",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 호주콜센터 (SEAU-CCC)",
       "location": "",
-      "support_id": "",
+      "support_id": "946874",
       "sku": "BCWF-S-100-249-1YR",
       "sn": "QL4XB-WZ48P",
       "entitlement": "🔗",
@@ -3527,9 +3539,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "강성준",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3538,14 +3550,26 @@
       "id": 75,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "호주",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "",
+          "org": "",
+          "phone": "",
+          "email": "karen.lim@samsung.com (영업)"
+        }
+      ]
     },
     {
       "group": "au-ccc",
       "flag": "",
-      "owner": "",
+      "owner": "삼성전자 호주콜센터 (SEAU-CCC)",
       "location": "",
-      "support_id": "",
+      "support_id": "946874",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52387845-1-1",
       "entitlement": "🔗",
@@ -3557,9 +3581,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "김상문",
+      "owner_secondary": "강성준",
+      "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3568,7 +3592,19 @@
       "id": 76,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "호주",
+      "config_mode": "Transparent",
+      "group_remarks": "",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "",
+          "org": "",
+          "phone": "",
+          "email": "karen.lim@samsung.com (영업)"
+        }
+      ]
     },
     {
       "group": "au-seau",
