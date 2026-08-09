@@ -539,7 +539,7 @@
       "sku": "CAS-S400-A3",
       "sn": "4118320045",
       "entitlement": "🔗",
-      "qty": "MA",
+      "qty": "1",
       "start": "2025.1.1",
       "end": "2025.12.31",
       "remarks": "",
@@ -557,19 +557,19 @@
       "tag_note": "SDN(CA/MA)",
       "id": 10,
       "ip_enc": {
-        "iv": "y+Nx6ft9gBF+MWcq",
-        "ct": "M5rj0nWAw6wNbC1pGx1/",
-        "tag": "zf0Ww0Z8t0IAIo6+ghhVWw=="
+        "iv": "vaguTZMJmZJDZWnS",
+        "ct": "LjiI38hUlfWMV2ygvYhp",
+        "tag": "pU8zTigc8bCDfgw3CJ9luQ=="
       },
       "id_enc": {
-        "iv": "FpuCmJjoMpu/Iynq",
-        "ct": "1C/ElhXVFH7ByQ==",
-        "tag": "TUZOwq84Wcc2iGFImQwP5g=="
+        "iv": "bFPG1tIqF98TF1Zx",
+        "ct": "f4LXmlW2IO22OQ==",
+        "tag": "1wXT9b5Cxo9tipXkV4rEJw=="
       },
       "pw_enc": {
-        "iv": "EjC6XrefSz6rX4OR",
-        "ct": "czQp5AjrzpVJ",
-        "tag": "1xE54f9eJ8cFPtItdRz5qg=="
+        "iv": "L9img7EGOHeN8Qfx",
+        "ct": "KRY9Qi1XM69R",
+        "tag": "eKbCGh+BQuiOCtawYvt32Q=="
       },
       "country": "인도",
       "config_mode": "",
@@ -582,7 +582,8 @@
           "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
           "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
         }
-      ]
+      ],
+      "device_type": "MA"
     },
     {
       "group": "in-sdn-cama",
