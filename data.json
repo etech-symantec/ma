@@ -227,7 +227,7 @@
       "qty": "1",
       "start": "2025.11.1",
       "end": "2026.10.31",
-      "remarks": "RP) https 22.10~ 로그만 있음, 용량부족 http180/https365, 23.06.13 http90/https90",
+      "remarks": "https 22.10~ 로그만 있음\n용량부족 http180/https365\n23.06.13 http90/https90",
       "deploy_date": "2020-12-11",
       "deploy_log": "KSD/HWC",
       "mode": "",
@@ -242,9 +242,9 @@
       "tag_note": "일본",
       "id": 5,
       "ip_enc": {
-        "iv": "aKCQvuMsIJMsUqO+",
-        "ct": "pbm+GZI4PLYFy9n/",
-        "tag": "2gNYuJa/unEBdXyJ996TMg=="
+        "iv": "M2YLrTZ4oPe5F9fc",
+        "ct": "6jjh+p//IlfEmOuV",
+        "tag": "HoIjw12vW8k3Lseu53dncg=="
       },
       "id_enc": null,
       "pw_enc": null,
@@ -259,7 +259,8 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "일본"
+      "country": "일본",
+      "device_type": ""
     },
     {
       "group": "tw-ds",
