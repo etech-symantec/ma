@@ -217,15 +217,15 @@ aside.filters{
 }
 .profile-logout-btn:hover{ color:var(--red); border-color:#F3B4B4; background:#fff; }
 
-/* 상단 필터행 맨 앞의 검색창 */
+/* 상단 필터행 맨 앞의 검색창 (콤팩트하게 절반 크기) */
 .tf-search{
-  display:flex; align-items:center; gap:8px;
+  display:flex; align-items:center; gap:6px;
   background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px;
-  padding:7px 12px; flex:0 0 240px;
+  padding:6px 9px; flex:0 0 120px;
 }
 .tf-search svg{ color:var(--text-faint); flex-shrink:0; }
 .tf-search input{
-  flex:1; min-width:0; background:none; border:none; outline:none; color:var(--text); font-size:12.8px; font-family:var(--body);
+  flex:1; min-width:0; background:none; border:none; outline:none; color:var(--text); font-size:12.5px; font-family:var(--body);
 }
 
 /* 좌측 패널 액션 버튼 (내 사이트만 / 전체 펼치기 / 자산 추가) */
@@ -311,26 +311,32 @@ aside.filters{
 /* main content */
 main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 
-/* 페이지 상단 필터행 — 검색창(맨 앞) + 필드별 드롭다운 필터 */
+/* 페이지 상단 필터행 — 검색창(맨 앞) + 필드별 드롭다운 필터. 스크롤해도 항상 보이도록 고정하고,
+   각 항목은 폭을 똑같이 맞춰 한 줄에 콤팩트하게 나열한다. */
 .top-filter-row{
-  display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-bottom:18px; padding-bottom:16px;
+  display:flex; flex-wrap:nowrap; align-items:center; gap:8px;
+  margin:0 -26px 18px; padding:14px 26px 14px;
   border-bottom:1px solid var(--border-solid);
+  position:sticky; top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px)); z-index:20;
+  background:var(--bg);
 }
 .top-filter-bar{
-  display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; flex:1; min-width:0;
+  display:flex; flex-wrap:nowrap; align-items:stretch; gap:7px; flex:1; min-width:0;
+  overflow-x:auto; overflow-y:hidden; padding-bottom:2px;
 }
 .tf-field{
-  display:flex; flex-direction:row; align-items:center; gap:8px;
-  background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px;
-  padding:6px 10px 6px 12px;
+  display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+  flex:1 1 0; min-width:82px; max-width:150px;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
+  padding:5px 8px;
 }
 .tf-field label{
-  font-size:10.5px; font-weight:700; color:var(--text-faint); font-family:var(--mono);
-  text-transform:uppercase; letter-spacing:.03em; white-space:nowrap; flex-shrink:0;
+  font-size:8.5px; font-weight:700; color:var(--text-faint); font-family:var(--mono);
+  text-transform:uppercase; letter-spacing:.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;
 }
 .tf-field select{
-  padding:3px 6px; border:none; background:transparent;
-  font-size:12.5px; color:var(--text-dim); font-family:var(--body); cursor:pointer; max-width:170px;
+  width:100%; padding:0; border:none; background:transparent;
+  font-size:11.5px; color:var(--text-dim); font-family:var(--body); cursor:pointer;
 }
 .tf-field select:focus{ outline:none; }
 /* 법인 카드 상단 메타 칩과 동일한 색상 팔레트를 적용해서 항목을 구분하기 쉽게 한다 */
@@ -349,8 +355,8 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .tf-field.tf-cust{ background:#FDF3F6; border-color:#F4D9E3; }
 .tf-field.tf-cust label{ color:#C46B8A; }
 .tf-reset-btn{
-  padding:7px 14px; background:#FEF2F2; border:1px solid #FBD5D5; border-radius:8px;
-  color:#B91C1C; font-size:12px; font-family:var(--body); font-weight:700; cursor:pointer; transition:all .15s;
+  flex-shrink:0; padding:6px 12px; background:#FEF2F2; border:1px solid #FBD5D5; border-radius:8px;
+  color:#B91C1C; font-size:11.5px; font-family:var(--body); font-weight:700; cursor:pointer; transition:all .15s;
 }
 .tf-reset-btn:hover{ background:#FEE2E2; border-color:#F3B4B4; }
 
