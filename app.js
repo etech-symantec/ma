@@ -1552,7 +1552,7 @@ const CURRENT_USER_KEY = 'bcAssetCurrentUserId';
 let currentUserId = null;
 try{ currentUserId = localStorage.getItem(CURRENT_USER_KEY) || null; }catch(e){ currentUserId = null; }
 let agLoginPromptUserId = null; // 계정 게이트 목록에서 지금 비밀번호 입력창이 펼쳐진 계정
-let agLoginPromptMode = 'login'; // 'login' | 'delete' — 펼쳐진 비밀번호 입력창이 로그인용인지 삭제 확인용인지
+let agLoginPromptMode = 'login'; // 'login' | 'delete' | 'changepw' — 펼쳐진 폼이 로그인/삭제확인/비밀번호변경 중 무엇인지
 
 function saveCurrentUserId(id){
   try{ if (id) localStorage.setItem(CURRENT_USER_KEY, id); else localStorage.removeItem(CURRENT_USER_KEY); }catch(e){}
@@ -1594,6 +1594,7 @@ function renderAccountGateUserList(){
   wrap.innerHTML = users.map(u => {
     const isPrompting = String(u.id)===String(agLoginPromptUserId);
     const isDeleteMode = isPrompting && agLoginPromptMode === 'delete';
+    const isChangePwMode = isPrompting && agLoginPromptMode === 'changepw';
     return `
     <div class="user-row">
       <div class="user-row-main">
@@ -1601,13 +1602,19 @@ function renderAccountGateUserList(){
         ${isPrompting
           ? `<button type="button" class="wl-action-btn" data-ag-cancel="${u.id}">취소</button>`
           : `<button type="button" class="wl-action-btn" data-ag-login="${u.id}">로그인</button>
+             <button type="button" class="wl-action-btn" data-ag-changepw="${u.id}" title="비밀번호 변경">비밀번호 변경</button>
              <button type="button" class="wl-action-btn danger" data-ag-delete="${u.id}" title="이 계정 삭제">삭제</button>`}
       </div>
       ${isPrompting ? `
       ${isDeleteMode ? `<p class="user-delete-hint">계정을 삭제하려면 본인 비밀번호를 입력해 확인하세요. 이 작업은 되돌릴 수 없습니다.</p>` : ''}
-      <form class="user-login-form" data-ag-login-form="${u.id}">
-        <input type="password" class="user-login-pass" placeholder="비밀번호" autocomplete="current-password">
-        <button type="submit" class="btn ${isDeleteMode ? 'btn-danger' : 'btn-primary'}">${isDeleteMode ? '삭제 확인' : '확인'}</button>
+      ${isChangePwMode ? `<p class="user-changepw-hint">현재 비밀번호를 확인한 뒤 새 비밀번호로 바꿉니다.</p>` : ''}
+      <form class="user-login-form${isChangePwMode ? ' user-changepw-form' : ''}" data-ag-login-form="${u.id}">
+        <input type="password" class="user-login-pass" placeholder="${isChangePwMode ? '현재 비밀번호' : '비밀번호'}" autocomplete="current-password">
+        ${isChangePwMode ? `
+        <input type="password" class="user-newpass" placeholder="새 비밀번호 (4자 이상)" autocomplete="new-password">
+        <input type="password" class="user-newpass2" placeholder="새 비밀번호 확인" autocomplete="new-password">
+        ` : ''}
+        <button type="submit" class="btn ${isDeleteMode ? 'btn-danger' : 'btn-primary'}">${isDeleteMode ? '삭제 확인' : isChangePwMode ? '비밀번호 변경' : '확인'}</button>
       </form>
       <div class="user-login-error" id="agLoginError_${u.id}"></div>` : ''}
     </div>`;
@@ -1626,6 +1633,15 @@ function renderAccountGateUserList(){
     btn.onclick = () => {
       agLoginPromptUserId = btn.dataset.agDelete;
       agLoginPromptMode = 'delete';
+      renderAccountGateUserList();
+      const form = wrap.querySelector(`[data-ag-login-form="${CSS.escape(agLoginPromptUserId)}"]`);
+      if (form) form.querySelector('.user-login-pass').focus();
+    };
+  });
+  wrap.querySelectorAll('[data-ag-changepw]').forEach(btn=>{
+    btn.onclick = () => {
+      agLoginPromptUserId = btn.dataset.agChangepw;
+      agLoginPromptMode = 'changepw';
       renderAccountGateUserList();
       const form = wrap.querySelector(`[data-ag-login-form="${CSS.escape(agLoginPromptUserId)}"]`);
       if (form) form.querySelector('.user-login-pass').focus();
@@ -1659,12 +1675,42 @@ function renderAccountGateUserList(){
         return;
       }
 
+      if (agLoginPromptMode === 'changepw'){
+        const newPassInput = form.querySelector('.user-newpass');
+        const newPass2Input = form.querySelector('.user-newpass2');
+        const newPass = newPassInput.value;
+        const newPass2 = newPass2Input.value;
+        if (!newPass || newPass.length < 4){ errEl.textContent = '새 비밀번호는 4자 이상이어야 합니다.'; return; }
+        if (newPass !== newPass2){ errEl.textContent = '새 비밀번호가 서로 일치하지 않습니다.'; newPass2Input.value=''; newPass2Input.focus(); return; }
+        if (newPass === pass){ errEl.textContent = '현재 비밀번호와 다른 비밀번호를 입력해 주세요.'; return; }
+        errEl.textContent = '변경 중…';
+        await changeAccountPassword(uid, newPass);
+        return;
+      }
+
       currentUserId = uid;
       saveCurrentUserId(uid);
       agLoginPromptUserId = null;
       showMasterGate();
     };
   });
+}
+
+// 비밀번호 변경: 현재 비밀번호로 본인 확인이 끝난 뒤 호출됨. 새 salt를 생성해서 다시 해시한다.
+async function changeAccountPassword(uid, newPass){
+  const u = users.find(x=>String(x.id)===String(uid));
+  if (!u) return;
+  const pwSalt = bufToB64(crypto.getRandomValues(new Uint8Array(16)).buffer);
+  const pwIterations = 150000;
+  const pwHash = await hashPassword(newPass, pwSalt, pwIterations);
+  u.pwSalt = pwSalt;
+  u.pwIterations = pwIterations;
+  u.pwHash = pwHash;
+  agLoginPromptUserId = null;
+  agLoginPromptMode = 'login';
+  scheduleAutoSync();
+  renderAccountGateUserList();
+  alert(`"${u.name}" 계정의 비밀번호가 변경되었습니다. 새 비밀번호로 로그인해 주세요.`);
 }
 
 // 계정 삭제: 비밀번호로 본인 확인이 끝난 뒤 호출됨.
