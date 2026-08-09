@@ -809,9 +809,9 @@ function render(){
           </div>
           <div class="group-badges">
             <div class="group-title-actions">
-              <button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/Support ID/담당자/고객사 담당자)">${pencilSvg()}</button>
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/Support ID/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
-              <button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
             </div>
             <span class="badge ${worst==='crit'?'tag-x':worst==='warn'?'':'tag-o'}" style="color:${worst==='crit'?'var(--red)':worst==='warn'?'var(--amber)':worst==='ok'?'var(--green)':'var(--text-faint)'}">${statusLabel(worst)}</span>
             <span class="chev ${isOpen?'open':''}">›</span>
@@ -1018,8 +1018,8 @@ function rowHtml(r, groupSupportId){
     <td data-label="관리">
       <div style="display:flex; gap:6px;">
         ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-direct-edit="${r.id}" title="관리자 직접 수정 (작업이력 없이 바로 저장)">${pencilSvg()}</button>` : ''}
-        <button class="wl-action-btn icon-only" data-move-asset="${r.id}" title="다른 법인으로 이동">${moveSvg()}</button>
-        <button class="wl-action-btn icon-only danger" data-delete-asset="${r.id}" title="삭제">${trashSvg()}</button>
+        ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-move-asset="${r.id}" title="다른 법인으로 이동">${moveSvg()}</button>` : ''}
+        ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-delete-asset="${r.id}" title="삭제">${trashSvg()}</button>` : ''}
       </div>
     </td>
   </tr>`;
@@ -1240,6 +1240,7 @@ async function openDirectEditModal(recId){
 }
 
 function deleteAsset(recId){
+  if (!isCurrentUserAdmin()){ alert('마스터만 자산을 삭제할 수 있습니다.'); return; }
   const rec = records.find(r=>String(r.id)===String(recId));
   if (!rec) return;
   if (!confirm(`이 자산 항목을 삭제하시겠습니까?\n${rec.sku||''} ${rec.sn? '(S/N '+rec.sn+')':''}`)) return;
@@ -1355,6 +1356,7 @@ document.getElementById('ge_cust_add_btn').onclick = () => {
 };
 
 function openGroupEditModal(gid){
+  if (!isCurrentUserAdmin()){ alert('마스터만 법인 정보를 수정할 수 있습니다.'); return; }
   if (viewOnly || !sessionKey){ alert('법인 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
   const items = records.filter(r=>r.group===gid);
   if (!items.length) return;
@@ -1384,6 +1386,7 @@ document.getElementById('cancelGeBtn').onclick = () => {
 };
 
 document.getElementById('saveGeBtn').onclick = () => {
+  if (!isCurrentUserAdmin()){ alert('마스터만 법인 정보를 수정할 수 있습니다.'); return; }
   if (!groupEditId) return;
   const val = id => document.getElementById(id).value.trim();
   const newOwner = val('ge_owner');
@@ -1425,6 +1428,7 @@ document.getElementById('saveGeBtn').onclick = () => {
 let moveAssetRecId = null;
 
 function openMoveAssetModal(recId){
+  if (!isCurrentUserAdmin()){ alert('마스터만 자산을 다른 법인으로 이동할 수 있습니다.'); return; }
   if (viewOnly || !sessionKey){ alert('자산을 이동하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
   const rec = records.find(r=>String(r.id)===String(recId));
   if (!rec) return;
@@ -1455,6 +1459,7 @@ document.getElementById('cancelMaBtn').onclick = () => {
 };
 
 document.getElementById('saveMaBtn').onclick = () => {
+  if (!isCurrentUserAdmin()){ alert('마스터만 자산을 다른 법인으로 이동할 수 있습니다.'); return; }
   const targetGid = document.getElementById('ma_target_group').value;
   const rec = records.find(r=>String(r.id)===String(moveAssetRecId));
   const errEl = document.getElementById('maError');
@@ -1489,6 +1494,7 @@ document.getElementById('saveMaBtn').onclick = () => {
 };
 
 function deleteGroup(gid){
+  if (!isCurrentUserAdmin()){ alert('마스터만 법인을 삭제할 수 있습니다.'); return; }
   if (viewOnly || !sessionKey){ alert('법인 정보를 삭제하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
   const items = records.filter(r=>r.group===gid);
   if (!items.length) return;
