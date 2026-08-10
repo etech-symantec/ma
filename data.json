@@ -3212,7 +3212,7 @@
       "os_ver": "3.3.2.1",
       "owner_primary": "박동석",
       "owner_secondary": "홍진영",
-      "check_method": "",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3237,9 +3237,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "",
-      "build_engineer": "",
-      "build_date": ""
+      "config_mode": "Explicit",
+      "build_engineer": "신호근",
+      "build_date": "2022.07"
     },
     {
       "group": "custom-473",
@@ -3260,7 +3260,7 @@
       "os_ver": "",
       "owner_primary": "박동석",
       "owner_secondary": "홍진영",
-      "check_method": "",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3281,9 +3281,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "",
-      "build_engineer": "",
-      "build_date": ""
+      "config_mode": "Explicit",
+      "build_engineer": "신호근",
+      "build_date": "2022.07"
     },
     {
       "group": "custom-473",
@@ -3304,7 +3304,7 @@
       "os_ver": "",
       "owner_primary": "박동석",
       "owner_secondary": "홍진영",
-      "check_method": "",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3317,9 +3317,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "",
-      "build_engineer": "",
-      "build_date": ""
+      "config_mode": "Explicit",
+      "build_engineer": "신호근",
+      "build_date": "2022.07"
     },
     {
       "group": "custom-473",
@@ -3340,7 +3340,7 @@
       "os_ver": "3.3.2.1",
       "owner_primary": "박동석",
       "owner_secondary": "홍진영",
-      "check_method": "",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3365,9 +3365,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "",
-      "build_engineer": "",
-      "build_date": ""
+      "config_mode": "Explicit",
+      "build_engineer": "신호근",
+      "build_date": "2022.07"
     },
     {
       "group": "custom-473",
@@ -3388,7 +3388,7 @@
       "os_ver": "",
       "owner_primary": "박동석",
       "owner_secondary": "홍진영",
-      "check_method": "",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3405,9 +3405,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "",
-      "build_engineer": "",
-      "build_date": ""
+      "config_mode": "Explicit",
+      "build_engineer": "신호근",
+      "build_date": "2022.07"
     },
     {
       "group": "custom-473",
@@ -3428,7 +3428,7 @@
       "os_ver": "",
       "owner_primary": "박동석",
       "owner_secondary": "홍진영",
-      "check_method": "",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3441,9 +3441,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "",
-      "build_engineer": "",
-      "build_date": ""
+      "config_mode": "Explicit",
+      "build_engineer": "신호근",
+      "build_date": "2022.07"
     },
     {
       "group": "mx-samex",
@@ -21900,7 +21900,7 @@
       "os_ver": "",
       "owner_primary": "박동석",
       "owner_secondary": "홍진영",
-      "check_method": "",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -21908,7 +21908,12 @@
       "ip_enc": null,
       "id_enc": null,
       "pw_enc": null,
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "config_mode": "Explicit",
+      "build_engineer": "신호근",
+      "build_date": "2022.07",
+      "group_remarks": "",
+      "cust_contacts": []
     }
   ],
   "users": [
