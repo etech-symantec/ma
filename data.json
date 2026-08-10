@@ -5469,7 +5469,8 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "group_parent": "kr-001"
     },
     {
       "group": "us-007",
@@ -5507,7 +5508,8 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "group_parent": "kr-001"
     },
     {
       "group": "us-007",
@@ -5553,7 +5555,8 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "group_parent": "kr-001"
     },
     {
       "group": "us-007",
@@ -5591,7 +5594,8 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "group_parent": "kr-001"
     },
     {
       "group": "us-007",
@@ -5625,7 +5629,8 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "group_parent": "kr-001"
     },
     {
       "group": "sg-001",
