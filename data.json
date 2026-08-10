@@ -5215,19 +5215,19 @@
       "tag_note": "미국 중부(TXDRT)",
       "id": 109,
       "ip_enc": {
-        "iv": "3tx1oXF4Mz+yQhLh",
-        "ct": "PhV6U36J2+pzeCXJSclsBhTV7vtXYi+c+Cp9",
-        "tag": "SoJpV/bVEP4VJ7/OH9YLIw=="
+        "iv": "yVBa+gmbGl2QW6dH",
+        "ct": "zmiDx/wFjlS0XOL5lmfV5tOkZ66xjfK0B+hf",
+        "tag": "O5JGRMkAjHjUVjUJXBM0ZQ=="
       },
       "id_enc": {
-        "iv": "q4RPVaqGZv12wBR4",
-        "ct": "ys3ZSxmRjRSk00cG",
-        "tag": "x/2XIjOS0x4dQQeaKhjifA=="
+        "iv": "wrwDNq1KoRTESou7",
+        "ct": "dY5MoZ0XEYzDO/Ac",
+        "tag": "YfTpP/l3LKfD1Cx8qT9rBw=="
       },
       "pw_enc": {
-        "iv": "uJv5WWP50IVSgBJD",
-        "ct": "rMvRJrRQg5wN4Jc=",
-        "tag": "WX59Gnx8jdPHy42998Exgw=="
+        "iv": "jP9YVXrrvtleOqr4",
+        "ct": "VpXwCx0Qoqf29yA=",
+        "tag": "jlfXopy+o7wz+MhwpsWeUA=="
       },
       "country": "미국",
       "config_mode": "Transparent",
@@ -5235,7 +5235,8 @@
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
-      "build_date": "2024.12"
+      "build_date": "2024.12",
+      "enable_pw_enc": null
     },
     {
       "group": "us-006",
