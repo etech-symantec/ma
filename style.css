@@ -479,7 +479,6 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .group-title-actions{ display:flex; align-items:center; gap:4px; padding-right:6px; margin-right:2px; border-right:1px solid var(--border-solid); }
 .group-title .sub{ font-size:12px; color:var(--text-dim); margin-top:3px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
 .group-title .sub b{ color:var(--text-faint); font-weight:500; font-family:var(--mono); }
-.group-title .title-meta{ margin-top:6px; }
 .group-title .sub.group-remarks{ margin-top:6px; color:var(--text-faint); font-style:italic; white-space:pre-wrap; }
 
 /* 법인 카드 상단 메타 정보 — 위치 / Support ID / 점검 방식 / 항목 / 담당 엔지니어 / 고객사 담당자를
@@ -525,12 +524,17 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .meta-chip-family{ background:#FFF4F0; border-color:#F6D2C0; }
 .meta-chip-family .meta-label{ color:#C97A4A; }
 
-/* 법인명 바로 옆에 나란히 붙는 Support ID 배지 */
+/* 법인명 바로 옆에 나란히 붙는 Support ID 배지 — 하위 "SUPPORT ID" 칩(.sg-support-chip)과
+   같은 버튼형 스타일로 보이게 한다. */
 .title-support-ids{ display:inline-flex; flex-wrap:wrap; gap:4px; align-items:center; }
 .family-sid-chip{
-  font-family:var(--mono); font-size:11px; font-weight:700; color:#6A4A96;
-  background:#F6F1FC; border:1px solid #E4D8F5; border-radius:4px; padding:2px 8px;
+  display:inline-flex; align-items:center; gap:6px;
+  background:#F6F1FC; border:1px solid #E4D8F5; border-radius:7px; padding:4px 10px;
 }
+.family-sid-chip .meta-label{ color:#8B6BC9; }
+.family-sid-chip .meta-value{ font-weight:700; color:var(--text); }
+.family-sid-chip--editable{ cursor:pointer; transition:all .15s; }
+.family-sid-chip--editable:hover{ border-color:#CDB6E8; background:#EFE5FB; }
 
 /* 고객사 담당자 전체보기 모달 */
 .ccm-list{ display:flex; flex-direction:column; gap:8px; max-height:400px; overflow-y:auto; }
