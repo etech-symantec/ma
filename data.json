@@ -21887,7 +21887,13 @@
       "ip_enc": null,
       "id_enc": null,
       "pw_enc": null,
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "config_mode": "",
+      "group_remarks": "",
+      "group_parent": "kr-001",
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     }
   ],
   "users": [
