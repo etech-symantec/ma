@@ -540,7 +540,7 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .chev.open{ transform:rotate(90deg); }
 
 .items{ display:none; }
-.items.open{ display:block; overflow-x:auto; }
+.items.open{ display:block; }
 table{ width:100%; min-width:1180px; border-collapse:collapse; }
 thead th{
   text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em;
@@ -554,6 +554,28 @@ tbody td{
 }
 tbody tr:last-child td{ border-bottom:none; }
 tbody tr:hover{ background:#F3F6FA; }
+
+/* Support ID 단위 하위 그룹 — 같은 법인 안에서 Support ID가 여러 개일 때
+   각 Support ID별로 구축 엔지니어/구축 일자와 자산 목록을 따로 묶어서 보여준다. */
+.subgroup-block{ overflow-x:auto; }
+.subgroup-block + .subgroup-block{ border-top:1px solid var(--border-solid); }
+.subgroup-head{
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  padding:10px 18px; background:var(--surface2);
+}
+.sg-support-chip, .sg-build-chip, .sg-count-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  border-radius:7px; padding:4px 10px; font-size:12px;
+  border:1px solid var(--border-solid); background:var(--surface);
+}
+.sg-support-chip{ background:#F6F1FC; border-color:#E4D8F5; }
+.sg-support-chip .meta-label{ color:#8B6BC9; }
+.sg-support-chip .meta-value{ font-weight:700; color:var(--text); }
+.sg-build-chip{ background:#FBF6EF; border-color:#EEDFC5; }
+.sg-build-chip .meta-label{ color:#B8873A; }
+.sg-build-chip .meta-value{ font-weight:700; color:#8A631F; }
+.sg-count-chip{ color:var(--text-faint); font-family:var(--mono); font-size:11px; }
+.subgroup-head .sg-edit-btn{ margin-left:auto; }
 
 /* 최근 작업 이력 알림에서 클릭해 이동했을 때, 해당 행/카드를 한 번 강조해서 보여준다 */
 @keyframes activityFlash{
