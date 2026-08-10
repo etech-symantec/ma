@@ -7633,7 +7633,7 @@
         "tag": "ngUDCgjyK5T25xvJFe5N/A=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -7643,7 +7643,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -7687,7 +7690,7 @@
         "tag": "1WRCxliWktmbz5kie5gkdA=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -7697,7 +7700,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -7741,7 +7747,7 @@
         "tag": "7qdWW/umpAy9KUDc8IgA1g=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -7751,7 +7757,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -7795,7 +7804,7 @@
         "tag": "rDUvrmxb/LETCGcNWb1D7Q=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -7805,7 +7814,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -7849,7 +7861,7 @@
         "tag": "ZeNrSsXcPAg/FZXiivKXdg=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -7859,7 +7871,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -7903,7 +7918,7 @@
         "tag": "fV/aD4U80RK1GjkSEligFg=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -7913,7 +7928,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -7957,7 +7975,7 @@
         "tag": "+1LPmEopJ4Sx2A8Gbzs5vA=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -7967,7 +7985,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8011,7 +8032,7 @@
         "tag": "4OqXlfyoT5CrYCo2yHUEFA=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8021,7 +8042,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8065,7 +8089,7 @@
         "tag": "ddolnemC2GihpAlBpmrskw=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8075,7 +8099,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8119,7 +8146,7 @@
         "tag": "dfJzLk8A6y76qyD8ctXrXg=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8129,7 +8156,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8173,7 +8203,7 @@
         "tag": "O4bGkvRL0V0ckU6Uu7y9uw=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8183,7 +8213,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8227,7 +8260,7 @@
         "tag": "e7H09usMD8h9x0Hd/PUTtQ=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8237,7 +8270,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8281,7 +8317,7 @@
         "tag": "aIDROtrKW110EEgRSEqDag=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8291,7 +8327,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8335,7 +8374,7 @@
         "tag": "+GA1iQjvauhtQntV3VmxCg=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8345,7 +8384,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8389,7 +8431,7 @@
         "tag": "ocpQxnJfj+CEECJyt1hQtw=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8399,7 +8441,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8443,7 +8488,7 @@
         "tag": "Wiff86cuBG7XekRTTTX3LA=="
       },
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8453,7 +8498,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8485,7 +8533,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8495,7 +8543,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8527,7 +8578,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8537,7 +8588,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8569,7 +8623,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8579,7 +8633,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8611,7 +8668,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8621,7 +8678,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8653,7 +8713,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8663,7 +8723,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-002",
@@ -8695,7 +8758,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com / - 내방 담당자 : 반 석 프로 / - 내방장소 : 아산1캠퍼스 / - 내방목적 : A/S / - 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
+      "group_remarks": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 / > 방문일시 : / > 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S / > 접견자 : 네트워크그룹 박영범 프로 / > 방문장소 : 아산1 모듈동 회의실",
       "cust_contacts": [
         {
           "role": "운용",
@@ -8705,7 +8768,10 @@
           "email": "bans@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-003",
