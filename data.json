@@ -2531,7 +2531,7 @@
       "location": "하노이",
       "support_id": "2496112",
       "sku": "ISG-Proxy",
-      "sn": "-",
+      "sn": "0032996841",
       "entitlement": "🔗",
       "qty": "8",
       "start": "2026.1.1",
@@ -2551,19 +2551,19 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 46,
       "ip_enc": {
-        "iv": "/UBFI5GcdnHs+Pap",
-        "ct": "RBrba8IQbiOBIybL",
-        "tag": "hBNE09gFQqsbGj9dcJFWoQ=="
+        "iv": "MUT+wl60iBZJf4Xn",
+        "ct": "nVK5x4u4xP7x9Jjk",
+        "tag": "yKJbwO03bjD8Whk6G3cU4A=="
       },
       "id_enc": {
-        "iv": "IAjiykTqXqIfvKtM",
-        "ct": "cm45Wb6m2zL7",
-        "tag": "kMF5nesaU1/a9emVQOQXmg=="
+        "iv": "ac6LgSZCEqle/7TD",
+        "ct": "Yuk2R6aNbtQd",
+        "tag": "6YsSkYwghmYF6f43TDBqTw=="
       },
       "pw_enc": {
-        "iv": "PY6cS+uRd4aZgkLY",
-        "ct": "IGaSy0dRi2U=",
-        "tag": "5QI2a3AhxVZqw6AZPmzvCQ=="
+        "iv": "d7ZwAwmgghX9PeOd",
+        "ct": "amixHf6jc5A=",
+        "tag": "SZUtgCdzEwKqCeCwim+cDQ=="
       },
       "country": "베트남",
       "config_mode": "Explicit",
