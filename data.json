@@ -19740,48 +19740,6 @@
       "country": "한국"
     },
     {
-      "group": "kr-021",
-      "flag": "판교",
-      "owner": "SK가스",
-      "location": "SK가스",
-      "support_id": "",
-      "sku": "ASG-S400-30",
-      "sn": "2718320111",
-      "entitlement": "🔗",
-      "qty": "1",
-      "start": "2021.1.1",
-      "end": "2024.12.31",
-      "remarks": "씨엔토트 계약 / 총판 역할 정도만, 메모리 leak => OS 업그레이드 필요 =>  업그레이드 시 WPS 라이선스 사용 불가 => 카테고리 불가 => 인터넷 차단? => 영업적 해결 필요",
-      "deploy_date": "",
-      "deploy_log": "",
-      "mode": "TP",
-      "os_ver": "7.3.17.1",
-      "owner_primary": "김상문",
-      "owner_secondary": "강성준",
-      "check_method": "방문",
-      "cust_contact": "이기영 수석",
-      "cust_phone": "010-3443-8098",
-      "cust_email": "",
-      "tag": "O",
-      "tag_note": "SK가스",
-      "id": 403,
-      "ip_enc": {
-        "iv": "bdwEPOan4EIF7kKp",
-        "ct": "y7G9JO8Sz4Dzsw==",
-        "tag": "kqHMzG+jNHtYqJzcdQMsOQ=="
-      },
-      "id_enc": {
-        "iv": "81gC7zm32sp/XD6y",
-        "ct": "2vlCsoU00A/a",
-        "tag": "+bSpmvRSLHFocnz9M41XsA=="
-      },
-      "pw_enc": {
-        "iv": "XW3esmIbAzGEIINb",
-        "ct": "PTt/y+LKGes=",
-        "tag": "/tRJ2IG/SRAl2NCevyAVeQ=="
-      }
-    },
-    {
       "group": "kr-023",
       "flag": "평택",
       "owner": "동우화인켐",
