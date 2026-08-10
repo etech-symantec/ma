@@ -2347,7 +2347,9 @@
       "cust_contacts": [],
       "build_engineer": "",
       "build_date": "",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "vn-sdv-new",
@@ -2396,7 +2398,9 @@
       "cust_contacts": [],
       "build_engineer": "",
       "build_date": "",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "vn-sdv-new",
@@ -2445,7 +2449,9 @@
       "cust_contacts": [],
       "build_engineer": "",
       "build_date": "",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "vn-sdv-new",
@@ -2494,7 +2500,9 @@
       "cust_contacts": [],
       "build_engineer": "",
       "build_date": "",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "vn-sdv-new",
@@ -2531,7 +2539,9 @@
       "cust_contacts": [],
       "build_engineer": "",
       "build_date": "",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "custom-472",
@@ -2776,7 +2786,9 @@
       "cust_contacts": [],
       "build_engineer": "",
       "build_date": "",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "vn-semv",
