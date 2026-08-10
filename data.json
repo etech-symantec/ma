@@ -1585,19 +1585,19 @@
       "tag_note": "SEPM (폴란드)",
       "id": 29,
       "ip_enc": {
-        "iv": "w3fkB8SEHGzDMMpw",
-        "ct": "VqFTDzAlErbHExwx+A==",
-        "tag": "ynwmarNO2jNW2CZZ/rIgYg=="
+        "iv": "X9L+P6WF2IsPvRCW",
+        "ct": "rWz56vW05Xvn7iXxcg==",
+        "tag": "Ha6Ng3qAxcQK9Vg3j81Y0Q=="
       },
       "id_enc": {
-        "iv": "Wz380HePZ6xfAM6m",
-        "ct": "lhPj72I=",
-        "tag": "mSKm9npvUcSAtPtbJ3oDNQ=="
+        "iv": "AKsitm5ypRyQpIGY",
+        "ct": "+qJSX3I=",
+        "tag": "a6gng2xbNm6vlMXIFkBllg=="
       },
       "pw_enc": {
-        "iv": "LIIa0LyenP3G63Pk",
-        "ct": "snG6cJOp9+j6WdxmDexDJHQy",
-        "tag": "btP1ZdQN3v4coSMZeeEFJA=="
+        "iv": "YYERrYDcD9DhACiP",
+        "ct": "MqRQi0aldFE=",
+        "tag": "TK+fYKu1jqZvbJgJJc/pHA=="
       },
       "country": "폴란드",
       "config_mode": "",
@@ -1610,7 +1610,12 @@
           "phone": "",
           "email": "r.kudlaszyk@samsung.com"
         }
-      ]
+      ],
+      "enable_pw_enc": {
+        "iv": "TKW4zA/JNN8AWVID",
+        "ct": "BpVHDPcI5BaK",
+        "tag": "XfiTz9B1jaBoV5LeKAkfBw=="
+      }
     },
     {
       "group": "pl-sepm",
