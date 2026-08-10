@@ -894,17 +894,18 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
             <div class="group-title">
               <div class="title-row">
                 <h3 class="group-title-name">${esc(meta.owner)}</h3>
-                <div class="sub title-meta">
-                  <span class="meta-chip meta-chip-country"><span class="meta-label">국가</span><span class="meta-value">${esc(meta.country)||'—'}</span></span>
-                  <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
-                  <span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
-                  <span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
-                  <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
-                  ${managerNamesInlineHtml(meta)}
-                  ${custContactsSummaryHtml(gid, meta)}
-                </div>
+                ${supportIdTitleHtml(gid, items, isChild)}
               </div>
-              ${familyRelationHtml(gid, meta, items, isChild)}
+              <div class="sub title-meta">
+                <span class="meta-chip meta-chip-country"><span class="meta-label">국가</span><span class="meta-value">${esc(meta.country)||'—'}</span></span>
+                <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
+                <span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
+                <span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
+                <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
+                ${relationChipHtml(gid, meta, isChild)}
+                ${managerNamesInlineHtml(meta)}
+                ${custContactsSummaryHtml(gid, meta)}
+              </div>
               ${groupRemarksHtml(meta)}
             </div>
           </div>
@@ -1199,34 +1200,31 @@ function groupRemarksHtml(meta){
   return `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
 }
 
-// 법인 정보 영역에 Support ID를 항상 나란히 보여준다 (펼치지 않아도 보임).
-// - 부모-자식 관계가 없는 독립 법인: 이 법인 자신의 Support ID만 나열.
-// - 부모 법인(모회사, 자식이 중첩되어 표시됨): 관계 표시 + 가족 전체(자기+모든 자식)의 Support ID를 하나씩 모두 나열.
-// - 자식 법인(부모 카드 안에 중첩되어 표시됨): 이미 중첩된 위치 자체가 관계를 보여주므로 관계 칩은 생략하고,
-//   이 법인 자신의 Support ID만 보여준다 (전체 목록은 부모 카드 쪽에 이미 나와 있음).
-function familyRelationHtml(gid, meta, items, isChild){
-  const hasFamily = groupHasFamily(gid);
-  let relLabel = '';
-  if (hasFamily && !isChild){
-    const parentGid = meta.group_parent;
-    if (parentGid){
-      const parentItems = records.filter(r=>r.group===parentGid);
-      const parentOwner = parentItems.length ? groupMeta(parentItems).owner : '';
-      relLabel = `자회사 (상위: ${esc(parentOwner)})`;
-    } else if (groupChildrenOf(gid).length > 0){
-      relLabel = '모회사';
-    }
-  }
+// 법인명 옆에 나란히 Support ID를 보여준다 (펼치지 않아도, 별도 줄 없이 바로 이름 옆에 보임).
+// - 부모-자식 관계가 없는 독립 법인, 자식 법인: 이 법인 자신의 Support ID만.
+// - 부모 법인(모회사, 자식 카드들이 안에 중첩되어 표시됨): 가족 전체(자기+모든 자식)의 Support ID를 하나씩 모두 나열.
+function supportIdTitleHtml(gid, items, isChild){
   const sids = isChild ? ownSupportIds(items) : displaySupportIds(gid, items);
-  const sidsHtml = sids.length
-    ? `<span class="family-sid-list">${sids.map(s=>`<span class="family-sid-chip">${esc(s)}</span>`).join('')}</span>`
-    : `<span class="meta-value">—</span>`;
-  const supportLabel = (hasFamily && !isChild) ? '전체 Support ID' : 'Support ID';
-  return `
-    <div class="sub title-meta family-relation-row">
-      ${relLabel ? `<span class="meta-chip meta-chip-family"><span class="meta-label">관계</span><span class="meta-value">${relLabel}</span></span>` : ''}
-      <span class="meta-chip meta-chip-support-all"><span class="meta-label">${supportLabel}</span>${sidsHtml}</span>
-    </div>`;
+  if (!sids.length) return '';
+  return `<span class="title-support-ids">${sids.map(s=>`<span class="family-sid-chip">${esc(s)}</span>`).join('')}</span>`;
+}
+
+// 부모-자식 관계가 있는 법인에서만 "관계"(모회사/자회사) 칩을, 다른 법인 정보와 같은 한 줄에 함께 보여준다.
+// 자식 법인 카드는 부모 카드 안에 중첩된 위치 자체로 관계가 이미 드러나므로 이 칩은 생략한다.
+// 관계가 없는 독립 법인은 이 칩이 아예 없으므로 별도 서브 헤더 없이 기존 한 줄 그대로 보인다.
+function relationChipHtml(gid, meta, isChild){
+  if (isChild || !groupHasFamily(gid)) return '';
+  const parentGid = meta.group_parent;
+  let relLabel = '';
+  if (parentGid){
+    const parentItems = records.filter(r=>r.group===parentGid);
+    const parentOwner = parentItems.length ? groupMeta(parentItems).owner : '';
+    relLabel = `자회사 (상위: ${esc(parentOwner)})`;
+  } else if (groupChildrenOf(gid).length > 0){
+    relLabel = '모회사';
+  }
+  if (!relLabel) return '';
+  return `<span class="meta-chip meta-chip-family"><span class="meta-label">관계</span><span class="meta-value">${relLabel}</span></span>`;
 }
 
 function rowHtml(r, groupSupportId){
