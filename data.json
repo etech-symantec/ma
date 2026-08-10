@@ -88,7 +88,7 @@
       "deploy_date": "",
       "deploy_log": "24.03.11 박동석 6.7.5.12 > 7.3.17.1",
       "mode": "",
-      "os_ver": "",
+      "os_ver": "7.3.17.1",
       "owner_primary": "박동석",
       "owner_secondary": "김상문",
       "check_method": "원격 (RC)",
@@ -99,19 +99,19 @@
       "tag_note": "일본",
       "id": 2,
       "ip_enc": {
-        "iv": "zUDEeHXISL0Is2/m",
-        "ct": "16d4dwjw2yP3b7s=",
-        "tag": "X4eZdot5fVPa15JDBckvZQ=="
+        "iv": "6ydwapNeOmvd1N0G",
+        "ct": "bezdlniBDZo2RCo=",
+        "tag": "Bc35Sq5DTKktQUYsnx/h7w=="
       },
       "id_enc": {
-        "iv": "JK+pRMtnknx8dHYA",
-        "ct": "SarJH3mrL/UBWlI=",
-        "tag": "mvzg8+AvXOicn3RAyWZnyA=="
+        "iv": "iUcrUjGHVodVomLA",
+        "ct": "xxF6Gja2gyfS9jk=",
+        "tag": "94gXlBweh2+9lC6A1BsWCQ=="
       },
       "pw_enc": {
-        "iv": "Hj7dolVQjbTfXdnS",
-        "ct": "PaJNOAKroIi3b6bcSbnt/VNP7ptfEqvNxReRk74ueUETEFkDk+c=",
-        "tag": "d5f9oLZQu9ABkGN2HvDFAg=="
+        "iv": "y6zWsNtd4CXX5/G0",
+        "ct": "UQVFuSxU1ATnjwskNX5+Nhak50hYshR1YbAFYYuFVjML563uCuM=",
+        "tag": "tmUmV+zXFgKE+ls4vxsSag=="
       },
       "group_remarks": "",
       "cust_contacts": [
