@@ -7607,7 +7607,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -7616,7 +7616,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -7664,7 +7665,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -7673,7 +7674,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -7721,7 +7723,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -7730,7 +7732,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -7778,7 +7781,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -7787,7 +7790,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -7835,7 +7839,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -7844,7 +7848,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -7892,7 +7897,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -7901,7 +7906,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -7949,7 +7955,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -7958,7 +7964,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8006,7 +8013,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8015,7 +8022,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8063,7 +8071,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8072,7 +8080,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8120,7 +8129,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8129,7 +8138,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8177,7 +8187,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8186,7 +8196,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8234,7 +8245,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8243,7 +8254,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8291,7 +8303,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8300,7 +8312,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8348,7 +8361,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8357,7 +8370,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8405,7 +8419,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8414,7 +8428,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8462,7 +8477,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8471,7 +8486,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8507,7 +8523,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8516,7 +8532,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8552,7 +8569,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8561,7 +8578,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8597,7 +8615,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8606,7 +8624,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8642,7 +8661,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8651,7 +8670,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8687,7 +8707,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8696,7 +8716,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-002",
@@ -8732,7 +8753,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "반석",
+          "name": "반석 프로",
           "org": "삼성SDS",
           "phone": "010-8718-9514",
           "email": "bans@samsung.com"
@@ -8741,7 +8762,8 @@
       "country": "한국",
       "group_parent": "",
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "is_parent": false
     },
     {
       "group": "kr-003",
