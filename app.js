@@ -661,7 +661,38 @@ function secretField(rec, kind){
   const encKey = kind+'_enc';
   if (!rec[encKey]) return `<span class="sec-val empty">—</span>`;
   const id = rec.id + '_' + kind;
-  return `<span class="sec-val" id="disp_${id}" data-copy-id="${rec.id}" data-copy-kind="${kind}" title="클릭하여 복사">…</span>`;
+  const extraCls = kind === 'ip' ? ' sec-val-ip' : '';
+  return `<span class="sec-val${extraCls}" id="disp_${id}" data-copy-id="${rec.id}" data-copy-kind="${kind}" title="클릭하여 복사">…</span>`;
+}
+
+// IP 주소는 자산 하나에 여러 개(줄바꿈 또는 쉼표로 구분) 저장될 수 있으므로,
+// 잠금 해제 후에는 하나의 텍스트 블록이 아니라 각각 따로 클릭해서 복사할 수 있는
+// 칩(chip) 목록으로 풀어서 보여준다.
+function renderIpChips(wrapEl, val){
+  wrapEl.classList.remove('sec-val', 'locked', 'empty');
+  wrapEl.classList.add('ip-chip-list');
+  wrapEl.removeAttribute('title');
+  const ips = (val||'').split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+  if (!ips.length){
+    wrapEl.innerHTML = `<span class="ip-chip-empty">—</span>`;
+    wrapEl.onclick = null;
+    return;
+  }
+  wrapEl.innerHTML = ips.map(ip => `<span class="ip-chip" title="클릭하여 복사">${esc(ip)}</span>`).join('');
+  wrapEl.querySelectorAll('.ip-chip').forEach(chip=>{
+    chip.onclick = async (e) => {
+      e.stopPropagation();
+      try{
+        await navigator.clipboard.writeText(chip.textContent);
+        flashCopied(chip);
+      }catch(err){
+        alert('클립보드 복사에 실패했습니다. 브라우저 권한을 확인해 주세요.');
+      }
+    };
+  });
+  // 개별 칩이 자체 클릭 핸들러를 가지므로, 칩 사이 여백을 클릭했을 때
+  // 예전 "전체 복사" 핸들러가 대신 실행되며 칩 목록을 깨뜨리지 않도록 비활성화한다.
+  wrapEl.onclick = null;
 }
 
 function flashCopied(el){
@@ -686,6 +717,10 @@ async function populateSecretFields(){
     const rec = records.find(r=>String(r.id)===String(id));
     if (!rec) continue;
     const val = await decryptField(rec[kind+'_enc']);
+    if (kind === 'ip'){
+      renderIpChips(el, val);
+      continue;
+    }
     el.textContent = val;
     el.dataset.plain = val;
     el.classList.remove('locked');
@@ -1553,13 +1588,7 @@ function setAssetFormLocked(locked){
 }
 
 document.getElementById('addBtn').onclick = () => {
-  editingRecordId = null;
-  addAssetTargetGid = null;
-  clearAssetForm();
-  setAssetFormLocked(false);
-  document.getElementById('addModalTitle').textContent = '새 자산 항목 추가';
-  document.getElementById('saveAddBtn').textContent = '항목 저장';
-  document.getElementById('addModal').classList.add('open');
+  openAddGroupModal();
 };
 document.getElementById('cancelAddBtn').onclick = () => {
   document.getElementById('addModal').classList.remove('open');
@@ -1928,6 +1957,142 @@ document.getElementById('saveGeBtn').onclick = () => {
   enforceParentsHaveNoDirectAssets();
   document.getElementById('groupEditModal').classList.remove('open');
   groupEditId = null;
+  render();
+  buildFilters();
+  scheduleAutoSync();
+};
+
+// ---------- 법인 추가 (좌측 패널 ＋ 버튼) ----------
+// 새 법인의 회사 단위 정보(법인/Support ID/상위 법인/국가/위치/구축 엔지니어/구축 일자/
+// 구성방식/담당 엔지니어/점검 방식/고객사 담당자/비고)만 입력받아 법인을 새로 만든다.
+// 실제 자산(SKU/S/N/라이선스/OS/IP/ID/PW 등)은 법인을 만든 뒤 각 법인 카드의
+// ＋(이 법인에 자산 추가) 버튼으로 따로 추가한다.
+let ngCustContacts = []; // 작업 중인 고객사 담당자 목록 (모달이 열려 있는 동안의 임시 상태)
+
+function renderNgCustContactRows(){
+  const wrap = document.getElementById('ng_cust_list');
+  const roleOptions = ['', '운용', '영업'];
+  wrap.innerHTML = ngCustContacts.map((c,idx)=>`
+    <div class="cust-contact-row" data-idx="${idx}">
+      <div class="cc-row-top">
+        <select class="cc-role">
+          ${roleOptions.map(r=>`<option value="${esc(r)}" ${c.role===r?'selected':''}>${r?esc(r):'구분'}</option>`).join('')}
+        </select>
+        <input class="cc-name" placeholder="이름" value="${esc(c.name||'')}">
+        <button type="button" class="cc-remove-btn" data-remove="${idx}" title="이 담당자 삭제">✕</button>
+      </div>
+      <div class="cc-row-bottom">
+        <input class="cc-org" placeholder="소속" value="${esc(c.org||'')}">
+        <input class="cc-phone" placeholder="연락처" value="${esc(c.phone||'')}">
+        <input class="cc-email" placeholder="이메일" value="${esc(c.email||'')}">
+      </div>
+    </div>`).join('');
+  wrap.querySelectorAll('[data-remove]').forEach(btn=>{
+    btn.onclick = () => {
+      captureNgCustContactsFromDom();
+      ngCustContacts.splice(Number(btn.dataset.remove),1);
+      renderNgCustContactRows();
+    };
+  });
+  updateNgCustAddBtnState();
+}
+
+function captureNgCustContactsFromDom(){
+  const rows = document.querySelectorAll('#ng_cust_list .cust-contact-row');
+  ngCustContacts = Array.from(rows).map(row=>({
+    role: row.querySelector('.cc-role').value,
+    name: row.querySelector('.cc-name').value.trim(),
+    org: row.querySelector('.cc-org').value.trim(),
+    phone: row.querySelector('.cc-phone').value.trim(),
+    email: row.querySelector('.cc-email').value.trim(),
+  }));
+}
+
+function updateNgCustAddBtnState(){
+  const btn = document.getElementById('ng_cust_add_btn');
+  btn.style.display = ngCustContacts.length >= 5 ? 'none' : '';
+}
+
+document.getElementById('ng_cust_add_btn').onclick = () => {
+  captureNgCustContactsFromDom();
+  if (ngCustContacts.length >= 5) return;
+  ngCustContacts.push({role:'', name:'', org:'', phone:'', email:''});
+  renderNgCustContactRows();
+};
+
+// 하위 법인(부모를 지정한 법인)에는 고객사 담당자 정보가 필요 없으므로 해당 입력 영역을 숨긴다.
+function updateNgCustSectionVisibility(){
+  const isChildNow = !!document.getElementById('ng_parent_group').value;
+  document.getElementById('ng_cust_list').style.display = isChildNow ? 'none' : '';
+  document.getElementById('ng_cust_add_btn').style.display = isChildNow ? 'none' : '';
+  document.getElementById('ngCustHiddenHint').style.display = isChildNow ? '' : 'none';
+}
+document.getElementById('ng_parent_group').addEventListener('change', updateNgCustSectionVisibility);
+
+// 상위 법인(부모) 선택 드롭다운을 현재 존재하는 법인 목록으로 채운다. 아직 만들어지지 않은
+// 새 법인이라 자기 자신을 제외할 필요는 없다.
+function populateNewGroupParentSelect(){
+  const sel = document.getElementById('ng_parent_group');
+  const options = allGroupIds()
+    .map(g => ({ gid:g, owner: groupMeta(records.filter(r=>r.group===g)).owner }))
+    .sort((a,b) => a.owner.localeCompare(b.owner, 'ko'));
+  sel.innerHTML = '<option value="">없음 (독립된 법인)</option>' +
+    options.map(o => `<option value="${esc(o.gid)}">${esc(o.owner)}</option>`).join('');
+  sel.value = '';
+}
+
+function clearAddGroupForm(){
+  ['ng_owner','ng_support_id','ng_country','ng_location','ng_build_engineer','ng_build_date',
+   'ng_config_mode','ng_owner_primary','ng_owner_secondary','ng_check','ng_remarks'
+  ].forEach(id => { document.getElementById(id).value = ''; });
+}
+
+function openAddGroupModal(){
+  clearAddGroupForm();
+  populateNewGroupParentSelect();
+  ngCustContacts = [{role:'',name:'',org:'',phone:'',email:''}];
+  renderNgCustContactRows();
+  updateNgCustSectionVisibility();
+  document.getElementById('ngError').textContent = '';
+  document.getElementById('addGroupModal').classList.add('open');
+}
+
+document.getElementById('cancelNgBtn').onclick = () => {
+  document.getElementById('addGroupModal').classList.remove('open');
+};
+
+document.getElementById('saveNgBtn').onclick = () => {
+  if (viewOnly || !sessionKey){ alert('법인을 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const val = id => document.getElementById(id).value.trim();
+  const newOwner = val('ng_owner');
+  if (!newOwner){ document.getElementById('ngError').textContent = '법인명을 입력해 주세요.'; return; }
+  const newBuildDate = val('ng_build_date');
+  if (newBuildDate && !/^\d{4}\.(0?[1-9]|1[0-2])$/.test(newBuildDate)){
+    document.getElementById('ngError').textContent = '구축 일자는 YYYY.MM 형식으로 입력해 주세요 (예: 2026.07).';
+    return;
+  }
+  const parentGid = document.getElementById('ng_parent_group').value;
+  captureNgCustContactsFromDom();
+  const contacts = parentGid ? [] : ngCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
+
+  const newId = Math.max(0,...records.map(r=>r.id)) + 1;
+  const gid = 'custom-' + newId;
+  const rec = {
+    id:newId, group:gid, flag:'',
+    owner:newOwner, country:val('ng_country'), location:val('ng_location'),
+    check_method:val('ng_check'), config_mode:val('ng_config_mode'),
+    owner_primary:val('ng_owner_primary'), owner_secondary:val('ng_owner_secondary'),
+    cust_contacts: contacts, cust_contact:'', cust_phone:'', cust_email:'',
+    group_remarks:val('ng_remarks'), group_parent: parentGid,
+    support_id:val('ng_support_id'), build_engineer:val('ng_build_engineer'), build_date:newBuildDate,
+    sku:'', sn:'', qty:'', start:'', end:'', os_ver:'', remarks:'', deploy_date:'', mode:'',
+    work_log:[],
+  };
+  records.push(rec);
+  // 방금 지정한 상위 법인에게 그 자신 소유의 직속 자산이 남아 있다면, 규칙에 따라 자식 법인으로 자동 이전한다.
+  enforceParentsHaveNoDirectAssets();
+  expandGroupWithAncestors(gid);
+  document.getElementById('addGroupModal').classList.remove('open');
   render();
   buildFilters();
   scheduleAutoSync();
@@ -2603,7 +2768,7 @@ const WL_FIELD_DEFS = [
   { field:'end',         label:'라이선스 종료일', type:'text' },
   { field:'os_ver',      label:'OS 버전', type:'text' },
   { field:'remarks',     label:'비고', type:'textarea' },
-  { field:'ip',  label:'IP 주소', type:'text', sensitive:true, encField:'ip_enc' },
+  { field:'ip',  label:'IP 주소 (여러 개면 줄바꿈으로 구분)', type:'textarea', sensitive:true, encField:'ip_enc' },
   { field:'id',  label:'계정 ID', type:'text', sensitive:true, encField:'id_enc' },
   { field:'pw',  label:'비밀번호', type:'text', sensitive:true, encField:'pw_enc' },
   { field:'enable_pw', label:'Enable 비밀번호', type:'text', sensitive:true, encField:'enable_pw_enc' },
