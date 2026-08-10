@@ -182,19 +182,19 @@
       "tag_note": "일본",
       "id": 4,
       "ip_enc": {
-        "iv": "r1McTmzFSoQzY7qY",
-        "ct": "UC9Uj72tzM5oczo=",
-        "tag": "4SpAVQbMWCbwutghA/rXDg=="
+        "iv": "gjuk2X6fuQ3Ae+Bg",
+        "ct": "hL+jsiglTEazfXY=",
+        "tag": "N/kfdweGcEVNlNN8REgQmA=="
       },
       "id_enc": {
-        "iv": "E/6kAC11WlthdESL",
-        "ct": "YqhqqDWk+znPKg7ULlcH8O2C3kwuV+HbnOgHqXkPV+O4XC9+l2zaoVk9Kj0qpl275w==",
-        "tag": "c3MudnM7rSSZxNzkv6PqoA=="
+        "iv": "dRm27GlFiPneaN/1",
+        "ct": "N337UMVxQCbAlDPSoa7ouFyJEfCV4VVRB7PeJ9tXC2M=",
+        "tag": "JJsM0P9NvX2XfWDJ/VGjtw=="
       },
       "pw_enc": {
-        "iv": "HIoWnZBwfzROgvBv",
-        "ct": "eYl55YKxithW+j3PuR2YplpG5zHNu6RFighfTM4n0BNQZZuBihmQCF2uqMBjheLD6704hSZkZklMaPY=",
-        "tag": "8pj7YYDPfN2BVZcTmhHgjg=="
+        "iv": "imDxndMxmEk2al2b",
+        "ct": "xTYpcoqQvO1BD9MWP/qQYRzh/8XL6IMtpf5tyXHz8HZP",
+        "tag": "w2KgZ+nvecoQLnSPlSdHIQ=="
       },
       "group_remarks": "",
       "cust_contacts": [
@@ -207,7 +207,8 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "일본"
+      "country": "일본",
+      "device_type": "MC"
     },
     {
       "group": "jp-sds",
