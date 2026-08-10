@@ -2953,7 +2953,7 @@
       "qty": "1",
       "start": "2026.1.1",
       "end": "2026.12.31",
-      "remarks": "CPU 출근/점심전후/퇴근전 높음, ssp-410-10*2대 제안(24.7.18), 27년 교체예정(자산 소유 불명확)",
+      "remarks": "CPU 출근/점심전후/퇴근전 높음\nssp-410-10*2대 제안(24.7.18)\n27년 교체예정(자산 소유 불명확)",
       "deploy_date": "",
       "deploy_log": "23.06.11 윤태리 6.7.5.12>7.3.11.3 / 23.12.31 윤태리 7.3.11.3>7.3.17.1(cpu) / 25.02.08 7.3.17.1>7.3.21.1(mem bug)",
       "mode": "Explicit",
@@ -2968,19 +2968,19 @@
       "tag_note": "베트남 삼성전기 (SEMV)",
       "id": 55,
       "ip_enc": {
-        "iv": "Xm7okuKcMce99F5q",
-        "ct": "ZyEXSr92Cye/wDoWrz8=",
-        "tag": "3+J5OGX9oLifG1plOGtLDQ=="
+        "iv": "edtg4rDkxXpCYLbv",
+        "ct": "ur7PkX2bZ6jofp9krik=",
+        "tag": "Kma3GSiIgGktPIowWqJEpQ=="
       },
       "id_enc": {
-        "iv": "unFD4HI8Pv6dNaYS",
-        "ct": "4ysD9dVPVi7N",
-        "tag": "OWnAX2NPJEnpE8c9HMrFMw=="
+        "iv": "w7zD98j/8NeIBNmC",
+        "ct": "dcLnnm8554+i",
+        "tag": "F2CDi7NPmK/R6of4uECNjQ=="
       },
       "pw_enc": {
-        "iv": "WT+EL/GXhJMjM6Tj",
-        "ct": "e7uxdH2Fp92TL+14QsXIOJ2FmzXvGLu4NsfKZiC5",
-        "tag": "VYgsR8yc/6AqHDDoa1x2hQ=="
+        "iv": "ugpgSqSQDzQawF8F",
+        "ct": "FFNEtBPvlmEwe+1mPqoHv0lZkWI4Ykz96qKV8Y4c",
+        "tag": "V1cAPH4FbxviVHZjgAd0nQ=="
       },
       "country": "베트남",
       "config_mode": "Explicit",
@@ -2993,7 +2993,8 @@
           "phone": "",
           "email": "tankhanh.nguyen@samsung.com"
         }
-      ]
+      ],
+      "enable_pw_enc": null
     },
     {
       "group": "vn-semv",
