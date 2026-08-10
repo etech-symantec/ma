@@ -20339,11 +20339,25 @@
       "owner_secondary": "홍진영",
       "cust_contacts": [
         {
-          "role": "",
-          "name": "Raul",
+          "role": "운용",
+          "name": "Raul Espinoza",
+          "org": "",
+          "phone": "52-664-188-1999",
+          "email": "raul.espinoza@samsung.com"
+        },
+        {
+          "role": "운용",
+          "name": "Arturo Juarez",
+          "org": "",
+          "phone": "1-619-403-1803",
+          "email": "ar.juarez@samsung.com"
+        },
+        {
+          "role": "운용",
+          "name": "Dong Yob Kim",
           "org": "",
           "phone": "",
-          "email": ""
+          "email": "dongyob.kim@samsung.com"
         }
       ],
       "cust_contact": "",
