@@ -3824,17 +3824,11 @@
       "country": "호주",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Karen Lim",
-          "org": "",
-          "phone": "",
-          "email": "karen.lim@samsung.com (영업)"
-        }
-      ],
+      "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "group_parent": "custom-1786348956934",
+      "is_parent": false
     },
     {
       "group": "au-ccc",
@@ -3868,17 +3862,11 @@
       "country": "호주",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Karen Lim",
-          "org": "",
-          "phone": "",
-          "email": "karen.lim@samsung.com (영업)"
-        }
-      ],
+      "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "group_parent": "custom-1786348956934",
+      "is_parent": false
     },
     {
       "group": "au-ccc",
@@ -3912,17 +3900,11 @@
       "country": "호주",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Karen Lim",
-          "org": "",
-          "phone": "",
-          "email": "karen.lim@samsung.com (영업)"
-        }
-      ],
+      "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "group_parent": "custom-1786348956934",
+      "is_parent": false
     },
     {
       "group": "au-seau",
@@ -20928,7 +20910,40 @@
     },
     {
       "id": 1786348956934,
+      "group": "au-ccc",
+      "flag": "★※",
+      "owner": "삼성전자 SEAU-CCC 콜센터",
+      "country": "호주",
+      "location": "",
+      "check_method": "원격 (RC)",
+      "config_mode": "Transparent",
+      "owner_primary": "김상문",
+      "owner_secondary": "강성준",
+      "cust_contacts": [],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "custom-1786348956934",
+      "is_parent": false,
+      "support_id": "",
+      "build_engineer": "",
+      "build_date": "",
+      "sku": "",
+      "sn": "",
+      "qty": "",
+      "start": "",
+      "end": "",
+      "os_ver": "",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "work_log": []
+    },
+    {
+      "id": 1786349440901,
       "group": "custom-1786348956934",
+      "is_group_shell": true,
       "flag": "",
       "owner": "삼성전자 SEAU",
       "country": "호주",
@@ -20945,17 +20960,12 @@
       "group_parent": "",
       "is_parent": true,
       "support_id": "",
-      "build_engineer": "",
-      "build_date": "",
       "sku": "",
       "sn": "",
       "qty": "",
       "start": "",
       "end": "",
       "os_ver": "",
-      "remarks": "",
-      "deploy_date": "",
-      "mode": "",
       "work_log": []
     }
   ],
