@@ -9781,7 +9781,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -9808,7 +9808,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -9844,7 +9848,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -9871,7 +9875,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -9907,7 +9915,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -9934,7 +9942,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -9970,7 +9982,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -9997,7 +10009,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10033,7 +10049,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10060,7 +10076,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10096,7 +10116,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10123,7 +10143,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10159,7 +10183,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10186,7 +10210,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10222,7 +10250,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10249,7 +10277,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10285,7 +10317,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10312,7 +10344,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10352,7 +10388,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10379,7 +10415,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10419,7 +10459,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10446,7 +10486,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10482,7 +10526,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10509,7 +10553,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10549,7 +10597,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10576,7 +10624,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10616,7 +10668,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10643,7 +10695,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10679,7 +10735,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10706,7 +10762,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10754,7 +10814,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10781,7 +10841,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10821,7 +10885,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10848,7 +10912,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10884,7 +10952,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10911,7 +10979,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -10951,7 +11023,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -10978,7 +11050,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11018,7 +11094,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11045,7 +11121,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11081,7 +11161,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11108,7 +11188,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11148,7 +11232,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11175,7 +11259,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11215,7 +11303,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11242,7 +11330,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11278,7 +11370,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11305,7 +11397,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11345,7 +11441,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11372,7 +11468,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11412,7 +11512,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11439,7 +11539,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11475,7 +11579,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11502,7 +11606,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11542,7 +11650,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11569,7 +11677,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11609,7 +11721,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11636,7 +11748,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11672,7 +11788,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11699,7 +11815,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11739,7 +11859,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11766,7 +11886,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11806,7 +11930,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11833,7 +11957,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11869,7 +11997,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11896,7 +12024,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -11936,7 +12068,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -11963,7 +12095,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12003,7 +12139,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12030,7 +12166,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12066,7 +12206,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12093,7 +12233,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12129,7 +12273,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12156,7 +12300,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12192,7 +12340,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12219,7 +12367,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12255,7 +12407,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12282,7 +12434,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12318,7 +12474,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12345,7 +12501,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12381,7 +12541,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12408,7 +12568,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12444,7 +12608,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12471,7 +12635,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12507,7 +12675,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12534,7 +12702,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12570,7 +12742,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12597,7 +12769,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12633,7 +12809,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12660,7 +12836,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12696,7 +12876,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12723,7 +12903,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12759,7 +12943,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12786,7 +12970,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12822,7 +13010,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12849,7 +13037,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12885,7 +13077,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12912,7 +13104,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -12948,7 +13144,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -12975,7 +13171,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13011,7 +13211,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13038,7 +13238,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13074,7 +13278,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13101,7 +13305,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13137,7 +13345,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13164,7 +13372,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13200,7 +13412,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13227,7 +13439,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13263,7 +13479,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13290,7 +13506,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13326,7 +13546,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13353,7 +13573,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13389,7 +13613,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13416,7 +13640,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13452,7 +13680,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13479,7 +13707,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13515,7 +13747,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13542,7 +13774,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13578,7 +13814,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13605,7 +13841,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13641,7 +13881,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13668,7 +13908,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13704,7 +13948,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13731,7 +13975,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13767,7 +14015,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13794,7 +14042,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13842,7 +14094,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13869,7 +14121,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13917,7 +14173,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -13944,7 +14200,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -13992,7 +14252,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14019,7 +14279,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14067,7 +14331,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14094,7 +14358,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14142,7 +14410,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14169,7 +14437,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14217,7 +14489,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14244,7 +14516,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14292,7 +14568,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14319,7 +14595,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14367,7 +14647,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14394,7 +14674,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14442,7 +14726,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14469,7 +14753,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14517,7 +14805,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14544,7 +14832,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14592,7 +14884,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14619,7 +14911,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14667,7 +14963,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14694,7 +14990,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14730,7 +15030,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14757,7 +15057,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14793,7 +15097,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14820,7 +15124,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14868,7 +15176,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14895,7 +15203,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14931,7 +15243,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -14958,7 +15270,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -14994,7 +15310,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15021,7 +15337,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15057,7 +15377,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15084,7 +15404,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15120,7 +15444,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15147,7 +15471,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15183,7 +15511,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15210,7 +15538,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15246,7 +15578,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15273,7 +15605,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15309,7 +15645,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15336,7 +15672,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15372,7 +15712,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15399,7 +15739,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15435,7 +15779,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15462,7 +15806,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15498,7 +15846,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15525,7 +15873,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15573,7 +15925,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15600,7 +15952,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15648,7 +16004,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15675,7 +16031,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15723,7 +16083,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15750,7 +16110,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15798,7 +16162,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15825,7 +16189,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15873,7 +16241,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15900,7 +16268,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -15940,7 +16312,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -15967,7 +16339,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -16003,7 +16379,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -16030,7 +16406,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -16066,7 +16446,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -16093,7 +16473,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -16129,7 +16513,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -16156,7 +16540,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -16192,7 +16580,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -16219,7 +16607,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -16255,7 +16647,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -16282,7 +16674,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -16318,7 +16714,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -16345,7 +16741,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -16381,7 +16781,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -16408,7 +16808,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
@@ -16444,7 +16848,7 @@
       "cust_contacts": [
         {
           "role": "운용",
-          "name": "김호곤 프로 /  /  /",
+          "name": "김호곤 프로",
           "org": "삼성SDS",
           "phone": "031-8062-4643 / 010-8585-2865",
           "email": "hg1009.kim@samsung.com"
@@ -16471,7 +16875,11 @@
           "email": "great_gh.lee@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-009",
