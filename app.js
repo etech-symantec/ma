@@ -468,7 +468,11 @@ function groupMeta(items){
     owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
     cust_contacts: getGroupCustContacts(items),
     group_remarks: items.map(i=>i.group_remarks).find(Boolean) || '',
-    group_parent: items.map(i=>i.group_parent).find(Boolean) || ''
+    group_parent: items.map(i=>i.group_parent).find(Boolean) || '',
+    // is_parent: 이 법인 자체가 (체크박스로 명시적으로 지정된) 상위 법인인지 여부.
+    // 실제로 이 법인을 부모로 지정한 자식 법인이 있는 경우(groupChildrenOf)는
+    // enforceParentsHaveNoDirectAssets에서 항상 true로 맞춰 준다.
+    is_parent: items.some(i => !!i.is_parent)
   };
 }
 
@@ -525,6 +529,9 @@ function enforceParentsHaveNoDirectAssets(){
   allGroupIds().forEach(gid => {
     const children = groupChildrenOf(gid);
     if (!children.length) return;
+    // 실제로 자식 법인을 둔 법인은 (체크박스로 지정하지 않았더라도, 또는 예전 데이터라도)
+    // 항상 상위 법인으로 취급한다 — 상위 법인 드롭다운에 계속 나타나도록 플래그를 맞춰 둔다.
+    records.filter(r => r.group === gid).forEach(r => { r.is_parent = true; });
     // "이름표" 역할의 shell 레코드(is_group_shell)는 실제 자산이 아니므로 이전 대상에서 제외한다.
     const ownRecs = records.filter(r => r.group === gid && !r.is_group_shell);
     if (!ownRecs.length) return;
@@ -554,6 +561,7 @@ function enforceParentsHaveNoDirectAssets(){
       rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
       rec.group_remarks = meta.group_remarks;
       rec.group_parent = meta.group_parent;
+      rec.is_parent = meta.is_parent;
     });
 
     // 부모 법인 자신에게 자산이 하나도 남지 않았다면, 대표 이름/국가/위치 등을 계속 보여줄 수 있도록
@@ -575,6 +583,7 @@ function enforceParentsHaveNoDirectAssets(){
         cust_contact: '', cust_phone: '', cust_email: '',
         group_remarks: parentMetaSnapshot.group_remarks,
         group_parent: parentMetaSnapshot.group_parent,
+        is_parent: true,
         support_id: '', sku: '', sn: '', qty: '', start: '', end: '', os_ver: '',
         work_log: []
       });
@@ -1811,45 +1820,43 @@ document.getElementById('ge_cust_add_btn').onclick = () => {
 };
 
 // 상위 법인(부모) 선택 드롭다운을 현재 존재하는 법인 목록으로 채운다.
-// 자기 자신과, 자기 자신의 하위(자식/손자…) 법인은 골라도 순환 관계가 생기므로 목록에서 제외한다.
+// 자기 자신과, 자기 자신의 하위(자식/손자…) 법인은 골라도 순환 관계가 생기므로 목록에서 제외하고,
+// "이 법인은 상위 법인입니다" 체크박스로 상위 법인이라고 표시된 법인만 후보로 보여준다.
 function populateParentGroupSelect(gid, currentParent){
   const sel = document.getElementById('ge_parent_group');
   const excluded = new Set([gid, ...groupDescendantIds(gid)]);
   const options = allGroupIds()
     .filter(g => !excluded.has(g))
-    .map(g => ({ gid:g, owner: groupMeta(records.filter(r=>r.group===g)).owner }))
+    .map(g => ({ gid:g, meta: groupMeta(records.filter(r=>r.group===g)) }))
+    .filter(o => o.meta.is_parent)
+    .map(o => ({ gid:o.gid, owner:o.meta.owner }))
     .sort((a,b) => a.owner.localeCompare(b.owner, 'ko'));
   sel.innerHTML = '<option value="">없음 (독립된 법인)</option>' +
     options.map(o => `<option value="${esc(o.gid)}">${esc(o.owner)}</option>`).join('');
   sel.value = (currentParent && !excluded.has(currentParent)) ? currentParent : '';
 }
 
-function openGroupEditModal(gid){
-  if (!isCurrentUserAdmin()){ alert('마스터만 법인 정보를 수정할 수 있습니다.'); return; }
-  if (viewOnly || !sessionKey){ alert('법인 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-  const items = records.filter(r=>r.group===gid);
-  if (!items.length) return;
-  const meta = groupMeta(items);
-  groupEditId = gid;
-  document.getElementById('ge_owner').value = meta.owner==='(법인명 미확인)' ? '' : meta.owner;
-  document.getElementById('ge_country').value = meta.country || '';
-  document.getElementById('ge_location').value = meta.location || '';
-  document.getElementById('ge_check').value = meta.check_method || '';
-  document.getElementById('ge_config_mode').value = meta.config_mode || '';
-  document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
-  document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
-  document.getElementById('ge_remarks').value = meta.group_remarks || '';
+// 현재 법인 정보 수정창에서 편집 중인 법인의 Support ID 하위 그룹 목록과, 체크박스를 켜기 전
+// 원래 갖고 있던 구성방식 값(체크 해제 시 복원용)을 담아 둔다. openGroupEditModal에서 채워지고
+// applyGeSidFieldState(체크박스 change 핸들러 포함)에서 참조한다.
+let geSubGroupsCache = [];
+let geOriginalConfigMode = '';
 
-  // Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있다.
-  // 여러 개면(각기 다른 구축 엔지니어/일자를 가질 수 있으므로) 각 Support ID 영역의 ✎ 버튼으로 안내한다.
-  // 다른 법인을 자식으로 둔 상위 법인은 대표 이름 역할만 하며 Support ID를 직접 가질 수 없으므로,
-  // 이 경우는 항상 잠가서 아예 입력하지 못하게 한다.
-  const hasChildren = groupChildrenOf(gid).length > 0;
-  const subGroups = buildSubGroups(items);
+// "이 법인은 상위 법인입니다" 체크박스 상태와 Support ID 개수에 따라 Support ID / 구축 엔지니어 /
+// 구축 일자 / 구성방식 입력창을 활성화·비활성화하고 값을 채운다. 체크박스를 켜면(상위 법인)
+// 네 필드 모두 비우고 잠근다 — 상위 법인은 대표 이름 역할만 하기 때문이다.
+function applyGeSidFieldState(){
   const sidInput = document.getElementById('ge_support_id');
   const engInput = document.getElementById('ge_build_engineer');
   const dateInput = document.getElementById('ge_build_date');
-  if (hasChildren){
+  const configSelect = document.getElementById('ge_config_mode');
+  const isParentCb = document.getElementById('ge_is_parent');
+  const subGroups = geSubGroupsCache;
+
+  configSelect.disabled = isParentCb.checked;
+  configSelect.value = isParentCb.checked ? '' : geOriginalConfigMode;
+
+  if (isParentCb.checked){
     sidInput.disabled = true; engInput.disabled = true; dateInput.disabled = true;
     sidInput.value = ''; engInput.value = ''; dateInput.value = '';
     sidInput.placeholder = '상위 법인은 대표 이름 역할만 합니다';
@@ -1871,6 +1878,37 @@ function openGroupEditModal(gid){
     engInput.placeholder = 'Support ID별로 각 영역의 ✎ 버튼에서 수정';
     dateInput.placeholder = 'Support ID별로 각 영역의 ✎ 버튼에서 수정';
   }
+}
+document.getElementById('ge_is_parent').addEventListener('change', applyGeSidFieldState);
+
+function openGroupEditModal(gid){
+  if (!isCurrentUserAdmin()){ alert('마스터만 법인 정보를 수정할 수 있습니다.'); return; }
+  if (viewOnly || !sessionKey){ alert('법인 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const items = records.filter(r=>r.group===gid);
+  if (!items.length) return;
+  const meta = groupMeta(items);
+  groupEditId = gid;
+  document.getElementById('ge_owner').value = meta.owner==='(법인명 미확인)' ? '' : meta.owner;
+  document.getElementById('ge_country').value = meta.country || '';
+  document.getElementById('ge_location').value = meta.location || '';
+  document.getElementById('ge_check').value = meta.check_method || '';
+  document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
+  document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
+  document.getElementById('ge_remarks').value = meta.group_remarks || '';
+  geOriginalConfigMode = meta.config_mode || '';
+
+  // Support ID / 구축 엔지니어 / 구축 일자 / 구성방식은 이 법인이 상위 법인이 아니고
+  // Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있다. Support ID가 여러 개면(각기 다른
+  // 구축 엔지니어/일자를 가질 수 있으므로) 각 Support ID 영역의 ✎ 버튼으로 안내한다.
+  // 다른 법인을 자식으로 둔 상위 법인(실제 관계)이거나 "이 법인은 상위 법인입니다"에 체크된
+  // 경우는 대표 이름 역할만 하며 Support ID를 직접 가질 수 없으므로 항상 잠근다.
+  const hasChildren = groupChildrenOf(gid).length > 0;
+  geSubGroupsCache = buildSubGroups(items);
+  const isParentCb = document.getElementById('ge_is_parent');
+  isParentCb.checked = hasChildren || !!meta.is_parent;
+  // 실제로 자식 법인이 있으면 상위 법인 상태를 해제할 수 없다.
+  isParentCb.disabled = hasChildren;
+  applyGeSidFieldState();
 
   populateParentGroupSelect(gid, meta.group_parent);
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
@@ -1911,6 +1949,7 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newPrimary = val('ge_owner_primary');
   const newSecondary = val('ge_owner_secondary');
   const newRemarks = val('ge_remarks');
+  const newIsParent = document.getElementById('ge_is_parent').checked;
   const newParentGid = document.getElementById('ge_parent_group').value;
   // Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐이었을 때만(입력창이 활성화된 경우만) 저장한다.
   // 여러 개인 경우, 또는 이 법인이 다른 법인을 자식으로 둔 상위 법인인 경우는 여기서 건드리지 않는다.
@@ -1942,6 +1981,7 @@ document.getElementById('saveGeBtn').onclick = () => {
       r.owner_secondary = newSecondary;
       r.group_remarks = newRemarks;
       r.group_parent = finalParentGid;
+      r.is_parent = newIsParent;
       r.cust_contacts = newContacts;
       // clear legacy single-contact fields now that the array field is authoritative
       r.cust_contact = ''; r.cust_phone = ''; r.cust_email = '';
@@ -2030,26 +2070,44 @@ function updateNgCustSectionVisibility(){
 document.getElementById('ng_parent_group').addEventListener('change', updateNgCustSectionVisibility);
 
 // 상위 법인(부모) 선택 드롭다운을 현재 존재하는 법인 목록으로 채운다. 아직 만들어지지 않은
-// 새 법인이라 자기 자신을 제외할 필요는 없다.
+// 새 법인이라 자기 자신을 제외할 필요는 없다. "이 법인은 상위 법인입니다" 체크박스로
+// 상위 법인이라고 표시된 법인만 후보로 보여준다.
 function populateNewGroupParentSelect(){
   const sel = document.getElementById('ng_parent_group');
   const options = allGroupIds()
-    .map(g => ({ gid:g, owner: groupMeta(records.filter(r=>r.group===g)).owner }))
+    .map(g => ({ gid:g, meta: groupMeta(records.filter(r=>r.group===g)) }))
+    .filter(o => o.meta.is_parent)
+    .map(o => ({ gid:o.gid, owner:o.meta.owner }))
     .sort((a,b) => a.owner.localeCompare(b.owner, 'ko'));
   sel.innerHTML = '<option value="">없음 (독립된 법인)</option>' +
     options.map(o => `<option value="${esc(o.gid)}">${esc(o.owner)}</option>`).join('');
   sel.value = '';
 }
 
+// "이 법인은 상위 법인입니다" 체크박스 상태에 따라 Support ID / 구축 엔지니어 / 구축 일자 /
+// 구성방식 입력창을 활성화·비활성화한다. 체크하면(=새로 만드는 법인이 상위 법인이라면) 네
+// 필드 모두 비우고 잠근다 — 상위 법인은 대표 이름 역할만 하며 이 값들을 직접 갖지 않는다.
+function updateNgParentFlagState(){
+  const isParent = document.getElementById('ng_is_parent').checked;
+  ['ng_support_id','ng_build_engineer','ng_build_date','ng_config_mode'].forEach(id => {
+    const el = document.getElementById(id);
+    el.disabled = isParent;
+    if (isParent) el.value = '';
+  });
+}
+document.getElementById('ng_is_parent').addEventListener('change', updateNgParentFlagState);
+
 function clearAddGroupForm(){
   ['ng_owner','ng_support_id','ng_country','ng_location','ng_build_engineer','ng_build_date',
    'ng_config_mode','ng_owner_primary','ng_owner_secondary','ng_check','ng_remarks'
   ].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('ng_is_parent').checked = false;
 }
 
 function openAddGroupModal(){
   clearAddGroupForm();
   populateNewGroupParentSelect();
+  updateNgParentFlagState();
   ngCustContacts = [{role:'',name:'',org:'',phone:'',email:''}];
   renderNgCustContactRows();
   updateNgCustSectionVisibility();
@@ -2072,6 +2130,7 @@ document.getElementById('saveNgBtn').onclick = () => {
     return;
   }
   const parentGid = document.getElementById('ng_parent_group').value;
+  const newIsParent = document.getElementById('ng_is_parent').checked;
   captureNgCustContactsFromDom();
   const contacts = parentGid ? [] : ngCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
 
@@ -2083,7 +2142,7 @@ document.getElementById('saveNgBtn').onclick = () => {
     check_method:val('ng_check'), config_mode:val('ng_config_mode'),
     owner_primary:val('ng_owner_primary'), owner_secondary:val('ng_owner_secondary'),
     cust_contacts: contacts, cust_contact:'', cust_phone:'', cust_email:'',
-    group_remarks:val('ng_remarks'), group_parent: parentGid,
+    group_remarks:val('ng_remarks'), group_parent: parentGid, is_parent: newIsParent,
     support_id:val('ng_support_id'), build_engineer:val('ng_build_engineer'), build_date:newBuildDate,
     sku:'', sn:'', qty:'', start:'', end:'', os_ver:'', remarks:'', deploy_date:'', mode:'',
     work_log:[],
