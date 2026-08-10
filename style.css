@@ -508,6 +508,18 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .meta-chip-cust:hover{ border-color:#EBC0D2; background:#FBEAF0; }
 .meta-value-link{ color:var(--accent-dim); font-weight:600; text-decoration:underline; text-underline-offset:2px; }
 
+/* 부모-자식 관계로 연결된 법인 — 관계 표시 + 가족 전체의 Support ID 모음 */
+.family-relation-row{ margin-top:6px; }
+.meta-chip-family{ background:#FFF4F0; border-color:#F6D2C0; }
+.meta-chip-family .meta-label{ color:#C97A4A; }
+.meta-chip-support-all{ background:#F6F1FC; border-color:#E4D8F5; align-items:flex-start; }
+.meta-chip-support-all .meta-label{ color:#8B6BC9; margin-top:3px; }
+.family-sid-list{ display:inline-flex; flex-wrap:wrap; gap:4px; }
+.family-sid-chip{
+  font-family:var(--mono); font-size:11px; font-weight:700; color:var(--text);
+  background:rgba(255,255,255,.7); border:1px solid #E4D8F5; border-radius:4px; padding:1px 7px;
+}
+
 /* 고객사 담당자 전체보기 모달 */
 .ccm-list{ display:flex; flex-direction:column; gap:8px; max-height:400px; overflow-y:auto; }
 .ccm-card{
