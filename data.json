@@ -2651,7 +2651,7 @@
       "owner": "삼성디스플레이 SDV",
       "location": "하노이",
       "support_id": "743737",
-      "sku": "SSP-410-20B",
+      "sku": "SSP-S410-20B",
       "sn": "1925700023",
       "entitlement": "🔗",
       "qty": "1",
@@ -2672,19 +2672,19 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 51,
       "ip_enc": {
-        "iv": "9qdmSl67ISy7WpjM",
-        "ct": "E+x1wxX3wD4XnsOFvA==",
-        "tag": "/3t62tFeHS4kOMOJwwc3+A=="
+        "iv": "JQD24TTNCa0c7kOJ",
+        "ct": "TATtIr8UpJU4wabfrw==",
+        "tag": "Or/MbeVkGD97OEJJkbFCuA=="
       },
       "id_enc": {
-        "iv": "mtnuLxb0rn4c6CSK",
-        "ct": "nUvO6Sk=",
-        "tag": "BXgK6vo5MJGiOGq4WBSGqQ=="
+        "iv": "MzsfVSTz2wWYLR3+",
+        "ct": "pEONLqI=",
+        "tag": "bhOoAFN/UOSflbSjAZcAmA=="
       },
       "pw_enc": {
-        "iv": "tcw+5AYX26fk6UNf",
-        "ct": "u2Rl+NDsdJg=",
-        "tag": "Nrt4rDHbY5jCEnOa2oWwmw=="
+        "iv": "AD3sLUevH1MpXtWe",
+        "ct": "kj+QTMA1iIU=",
+        "tag": "SpmigaT5crEonC0O4pdkkA=="
       },
       "country": "베트남",
       "config_mode": "",
