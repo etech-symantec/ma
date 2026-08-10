@@ -331,9 +331,9 @@ async function encryptWithKey(plain, key){
 async function tryUnlock(passphrase){
   const key = await deriveKey(passphrase, ENC_STORE.salt, ENC_STORE.iterations);
   // verify against first record that actually has an encrypted field
-  const probe = ENC_STORE.records.find(r => r.ip_enc || r.id_enc || r.pw_enc);
+  const probe = ENC_STORE.records.find(r => r.ip_enc || r.id_enc || r.pw_enc || r.enable_pw_enc);
   if (probe){
-    const f = probe.ip_enc || probe.id_enc || probe.pw_enc;
+    const f = probe.ip_enc || probe.id_enc || probe.pw_enc || probe.enable_pw_enc;
     try{
       const iv = b64ToBuf(f.iv);
       const ct = new Uint8Array(b64ToBuf(f.ct));
@@ -827,7 +827,7 @@ function render(){
           <table>
             <thead><tr>
               <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
-              <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
+              <th>IP</th><th>ID</th><th>PW</th><th>Enable PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
             </tr></thead>
             <tbody>
               ${items.map(r=>rowHtml(r, meta.support_id)).join('')}
@@ -1016,6 +1016,7 @@ function rowHtml(r, groupSupportId){
     <td data-label="IP">${secretField(r,'ip')}</td>
     <td data-label="ID">${secretField(r,'id')}</td>
     <td data-label="PW">${secretField(r,'pw')}</td>
+    <td data-label="Enable PW">${secretField(r,'enable_pw')}</td>
     <td data-label="OS 버전">${esc(r.os_ver)||'—'}</td>
     <td class="remarks-cell" data-label="비고"><div class="remarks-txt">${esc(r.remarks)||'—'}</div></td>
     <td data-label="작업이력">
@@ -1184,7 +1185,7 @@ document.getElementById('expandAllBtn').onclick = () => {
 };
 
 // ---------- add / edit / delete record ----------
-const ASSET_FORM_IDS = ['f_owner','f_country','f_location','f_support','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_owner_primary','f_owner_secondary','f_cust','f_remarks'];
+const ASSET_FORM_IDS = ['f_owner','f_country','f_location','f_support','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_enable_pw','f_owner_primary','f_owner_secondary','f_cust','f_remarks'];
 
 function clearAssetForm(){
   ASSET_FORM_IDS.forEach(id=>document.getElementById(id).value='');
@@ -1220,6 +1221,7 @@ async function openDirectEditModal(recId){
   set('f_ip', rec.ip_enc ? await decryptField(rec.ip_enc) : '');
   set('f_id', rec.id_enc ? await decryptField(rec.id_enc) : '');
   set('f_pw', rec.pw_enc ? await decryptField(rec.pw_enc) : '');
+  set('f_enable_pw', rec.enable_pw_enc ? await decryptField(rec.enable_pw_enc) : '');
 
   document.getElementById('addModalTitle').textContent = '자산 정보 직접 수정 (관리자)';
   document.getElementById('saveAddBtn').textContent = '수정 저장 (작업이력 없이)';
@@ -1255,6 +1257,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
       ip_enc: await encryptField(val('f_ip')),
       id_enc: await encryptField(val('f_id')),
       pw_enc: await encryptField(val('f_pw')),
+      enable_pw_enc: await encryptField(val('f_enable_pw')),
     });
     editingRecordId = null;
     document.getElementById('addModal').classList.remove('open');
@@ -1276,6 +1279,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
     ip_enc: await encryptField(val('f_ip')),
     id_enc: await encryptField(val('f_id')),
     pw_enc: await encryptField(val('f_pw')),
+    enable_pw_enc: await encryptField(val('f_enable_pw')),
   };
   records.push(rec);
   expandedGroups.add(gid);
@@ -2001,6 +2005,7 @@ const WL_FIELD_DEFS = [
   { field:'ip',  label:'IP 주소', type:'text', sensitive:true, encField:'ip_enc' },
   { field:'id',  label:'계정 ID', type:'text', sensitive:true, encField:'id_enc' },
   { field:'pw',  label:'비밀번호', type:'text', sensitive:true, encField:'pw_enc' },
+  { field:'enable_pw', label:'Enable 비밀번호', type:'text', sensitive:true, encField:'enable_pw_enc' },
 ];
 function wlFieldDef(field){ return WL_FIELD_DEFS.find(d=>d.field===field); }
 
