@@ -20282,7 +20282,8 @@
       "start": "",
       "end": "",
       "os_ver": "",
-      "work_log": []
+      "work_log": [],
+      "is_parent": true
     },
     {
       "id": 1786344991846,
@@ -20364,7 +20365,7 @@
       "country": "멕시코",
       "location": "티후아나",
       "check_method": "원격",
-      "config_mode": "Explicit",
+      "config_mode": "",
       "owner_primary": "박동석",
       "owner_secondary": "홍진영",
       "cust_contacts": [
@@ -20393,7 +20394,8 @@
       "remarks": "",
       "deploy_date": "",
       "mode": "",
-      "work_log": []
+      "work_log": [],
+      "is_parent": true
     }
   ],
   "users": [
