@@ -5165,19 +5165,19 @@
       "tag_note": "미국 중부(TXDRT)",
       "id": 108,
       "ip_enc": {
-        "iv": "V3pcppY9T8R/yhtR",
-        "ct": "OX1YxVOYX3/QHIoNacc3ZDjVMfOt95yFdZSEdw==",
-        "tag": "2OSRWEObLj1DKqIovXHioQ=="
+        "iv": "47FR9GYmQnQvydxC",
+        "ct": "U8e61Py9PS+v/EmPlJKCoQ6Xf7dDqw5ksC2pjg==",
+        "tag": "/A8LQmVzccUKGxRs6osETg=="
       },
       "id_enc": {
-        "iv": "1fi2Zc+epJNm1y62",
-        "ct": "WRQ0580=",
-        "tag": "FrCSq6BaTyvmzi+Es2SeOQ=="
+        "iv": "i1ZMFys0kboGll6N",
+        "ct": "wh7m1yg=",
+        "tag": "ySo7HFUxqiwZ7BH/CMomUw=="
       },
       "pw_enc": {
-        "iv": "/nVHoSXcE/z3rVze",
-        "ct": "4z3YLHFnyJatX1o=",
-        "tag": "Icsdao8/knQO1kUNLoBKyw=="
+        "iv": "K3H7r8Ck69H/euxv",
+        "ct": "4MWYRN1JOYPXs3w=",
+        "tag": "+3orXfODF76Iga8swQyUCQ=="
       },
       "country": "미국",
       "config_mode": "Transparent",
