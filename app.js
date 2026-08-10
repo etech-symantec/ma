@@ -511,6 +511,18 @@ function groupFamilyIds(gid){
 function groupHasFamily(gid){
   return groupFamilyIds(gid).size > 1;
 }
+// gid 자신과, 부모를 따라 올라가는 모든 상위 법인까지 함께 펼친 상태로 만든다.
+// 자식 법인 카드는 부모 카드가 펼쳐져 있어야만 화면에 보이므로, 특정 법인을 확실히 보여주려면
+// 조상 법인까지 모두 펼쳐야 한다.
+function expandGroupWithAncestors(gid){
+  let cur = gid;
+  const guard = new Set();
+  while (cur && !guard.has(cur)){
+    guard.add(cur);
+    expandedGroups.add(cur);
+    cur = groupParentOf(cur);
+  }
+}
 // 연결된 가족 전체(자기 자신 포함)에 속한 자산들의 Support ID를 모두 모아 중복 없이 반환.
 function familySupportIds(gid){
   const fam = groupFamilyIds(gid);
@@ -519,6 +531,17 @@ function familySupportIds(gid){
     if (fam.has(r.group) && (r.support_id||'').trim()) ids.add(r.support_id.trim());
   });
   return [...ids].sort((a,b)=>a.localeCompare(b,'ko'));
+}
+// 이 법인 자신의 자산들만 놓고 본 Support ID 목록(부모-자식 관계가 없는 독립 법인용).
+// 같은 법인 안에서도 Support ID가 여러 개일 수 있으므로 중복 없이 전부 모은다.
+function ownSupportIds(items){
+  const ids = new Set();
+  items.forEach(r => { if ((r.support_id||'').trim()) ids.add(r.support_id.trim()); });
+  return [...ids].sort((a,b)=>a.localeCompare(b,'ko'));
+}
+// 법인 정보에 표시할 Support ID 목록 — 부모-자식 관계가 있으면 가족 전체, 없으면 이 법인 자신의 것만.
+function displaySupportIds(gid, items){
+  return groupHasFamily(gid) ? familySupportIds(gid) : ownSupportIds(items);
 }
 
 // ---------- Support ID 단위 하위 그룹 (같은 법인 안에서 Support ID가 여러 개인 경우) ----------
@@ -821,6 +844,87 @@ function topFilterBarHtml(){
   return selectsHtml + resetBtn;
 }
 
+// 법인 카드 하나를 그려낸다. 부모-자식 관계가 있는 법인은 자식 법인 카드를 자신의
+// items 영역 안에 재귀적으로 중첩시켜, 부모를 펼치면 자식 법인들의 정보(법인 정보 + Support ID별 자산)가
+// 그대로 그 안에서 보이도록 한다. depth=0이면 최상위(독립 법인 또는 모회사), depth>0이면 중첩된 자식 법인.
+function groupCardHtml(gid, items, groupsMap, depth, visited){
+  visited = visited ? new Set(visited) : new Set();
+  if (visited.has(gid)) return ''; // 데이터가 잘못 꼬여 순환 관계가 생긴 경우를 방어
+  visited.add(gid);
+
+  const meta = groupMeta(items);
+  const isOpen = expandedGroups.has(gid);
+  const isChild = depth > 0;
+  const worst = items.reduce((acc,r)=>{
+    const s = licenseStatus(r);
+    const rank = {crit:3,warn:2,ok:1,na:0};
+    return rank[s]>rank[acc]?s:acc;
+  },'na');
+
+  const subgroupsHtml = buildSubGroups(items).map(sg => `
+          <div class="subgroup-block">
+            <div class="subgroup-head">
+              <span class="sg-support-chip"><span class="meta-label">Support ID</span><span class="meta-value">${esc(sg.sid)||'미지정'}</span></span>
+              ${buildEngineerInlineHtml(sg.meta)}
+              <span class="sg-count-chip">${sg.items.length}건</span>
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only sg-edit-btn" data-subgroup-gid="${esc(gid)}" data-subgroup-sid="${esc(sg.sid)}" title="Support ID / 구축 엔지니어 / 구축 일자 수정">${pencilSvg()}</button>` : ''}
+            </div>
+            <table>
+              <thead><tr>
+                ${canBulkMove() ? '<th class="col-select"></th>' : ''}
+                <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
+                <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
+              </tr></thead>
+              <tbody>
+                ${sg.items.map(r=>rowHtml(r, sg.sid)).join('')}
+              </tbody>
+            </table>
+          </div>`).join('');
+
+  const childGids = groupChildrenOf(gid).filter(cg => groupsMap.has(cg));
+  const childrenHtml = childGids
+    .map(cg => groupCardHtml(cg, groupsMap.get(cg), groupsMap, depth + 1, visited))
+    .join('');
+
+  return `
+      <div class="group-card ${isChild ? 'group-card--child' : ''}" data-gid="${gid}">
+        <div class="group-head ${isOpen?'expanded':''}" data-toggle="${gid}">
+          <div class="group-head-left">
+            ${isChild ? `<span class="child-branch" title="상위 법인에 속한 자회사">↳</span>` : ''}
+            <div class="group-title">
+              <div class="title-row">
+                <h3 class="group-title-name">${esc(meta.owner)}</h3>
+                <div class="sub title-meta">
+                  <span class="meta-chip meta-chip-country"><span class="meta-label">국가</span><span class="meta-value">${esc(meta.country)||'—'}</span></span>
+                  <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
+                  <span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
+                  <span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
+                  <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
+                  ${managerNamesInlineHtml(meta)}
+                  ${custContactsSummaryHtml(gid, meta)}
+                </div>
+              </div>
+              ${familyRelationHtml(gid, meta, items, isChild)}
+              ${groupRemarksHtml(meta)}
+            </div>
+          </div>
+          <div class="group-badges">
+            <div class="group-title-actions">
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/점검방식/구성방식/상위 법인/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
+            </div>
+            <span class="badge ${worst==='crit'?'tag-x':worst==='warn'?'':'tag-o'}" style="color:${worst==='crit'?'var(--red)':worst==='warn'?'var(--amber)':worst==='ok'?'var(--green)':'var(--text-faint)'}">${statusLabel(worst)}</span>
+            <span class="chev ${isOpen?'open':''}">›</span>
+          </div>
+        </div>
+        <div class="items ${isOpen?'open':''}">
+          ${subgroupsHtml}
+          ${childrenHtml ? `<div class="child-groups">${childrenHtml}</div>` : ''}
+        </div>
+      </div>`;
+}
+
 function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const mySiteGroupIds = getMySiteGroupIds();
@@ -869,66 +973,11 @@ function render(){
   } else {
     let html = '';
     for (const [gid, items] of groups){
-      const meta = groupMeta(items);
-      const isOpen = expandedGroups.has(gid);
-      const worst = items.reduce((acc,r)=>{
-        const s = licenseStatus(r);
-        const rank = {crit:3,warn:2,ok:1,na:0};
-        return rank[s]>rank[acc]?s:acc;
-      },'na');
-      html += `
-      <div class="group-card" data-gid="${gid}">
-        <div class="group-head ${isOpen?'expanded':''}" data-toggle="${gid}">
-          <div class="group-head-left">
-            <div class="group-title">
-              <div class="title-row">
-                <h3 class="group-title-name">${esc(meta.owner)}</h3>
-                <div class="sub title-meta">
-                  <span class="meta-chip meta-chip-country"><span class="meta-label">국가</span><span class="meta-value">${esc(meta.country)||'—'}</span></span>
-                  <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
-                  <span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
-                  <span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
-                  <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
-                  ${managerNamesInlineHtml(meta)}
-                  ${custContactsSummaryHtml(gid, meta)}
-                </div>
-              </div>
-              ${familyRelationHtml(gid, meta)}
-              ${groupRemarksHtml(meta)}
-            </div>
-          </div>
-          <div class="group-badges">
-            <div class="group-title-actions">
-              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/점검방식/구성방식/상위 법인/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
-              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
-              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
-            </div>
-            <span class="badge ${worst==='crit'?'tag-x':worst==='warn'?'':'tag-o'}" style="color:${worst==='crit'?'var(--red)':worst==='warn'?'var(--amber)':worst==='ok'?'var(--green)':'var(--text-faint)'}">${statusLabel(worst)}</span>
-            <span class="chev ${isOpen?'open':''}">›</span>
-          </div>
-        </div>
-        <div class="items ${isOpen?'open':''}">
-          ${buildSubGroups(items).map(sg => `
-          <div class="subgroup-block">
-            <div class="subgroup-head">
-              <span class="sg-support-chip"><span class="meta-label">Support ID</span><span class="meta-value">${esc(sg.sid)||'미지정'}</span></span>
-              ${buildEngineerInlineHtml(sg.meta)}
-              <span class="sg-count-chip">${sg.items.length}건</span>
-              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only sg-edit-btn" data-subgroup-gid="${esc(gid)}" data-subgroup-sid="${esc(sg.sid)}" title="Support ID / 구축 엔지니어 / 구축 일자 수정">${pencilSvg()}</button>` : ''}
-            </div>
-            <table>
-              <thead><tr>
-                ${canBulkMove() ? '<th class="col-select"></th>' : ''}
-                <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
-                <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
-              </tr></thead>
-              <tbody>
-                ${sg.items.map(r=>rowHtml(r, sg.sid)).join('')}
-              </tbody>
-            </table>
-          </div>`).join('')}
-        </div>
-      </div>`;
+      // 부모가 있고 그 부모가 현재 화면(필터링된 목록)에도 있다면, 이 법인은 최상위가 아니라
+      // 부모 카드 안에 중첩되어 표시된다 (아래 groupCardHtml의 재귀 호출에서 그려짐).
+      const parentGid = groupParentOf(gid);
+      if (parentGid && groups.has(parentGid)) continue;
+      html += groupCardHtml(gid, items, groups, 0);
     }
     listArea.innerHTML = html;
   }
@@ -1150,28 +1199,33 @@ function groupRemarksHtml(meta){
   return `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
 }
 
-// 부모-자식 관계로 연결된 법인일 때만, 관계(상위 법인)와 가족 전체의 Support ID를
-// 법인 정보 영역에 보여준다. 관계가 없는 법인은 기존처럼 아무것도 표시하지 않는다.
-function familyRelationHtml(gid, meta){
-  if (!groupHasFamily(gid)) return '';
-  const parentGid = meta.group_parent;
-  const hasChildren = groupChildrenOf(gid).length > 0;
+// 법인 정보 영역에 Support ID를 항상 나란히 보여준다 (펼치지 않아도 보임).
+// - 부모-자식 관계가 없는 독립 법인: 이 법인 자신의 Support ID만 나열.
+// - 부모 법인(모회사, 자식이 중첩되어 표시됨): 관계 표시 + 가족 전체(자기+모든 자식)의 Support ID를 하나씩 모두 나열.
+// - 자식 법인(부모 카드 안에 중첩되어 표시됨): 이미 중첩된 위치 자체가 관계를 보여주므로 관계 칩은 생략하고,
+//   이 법인 자신의 Support ID만 보여준다 (전체 목록은 부모 카드 쪽에 이미 나와 있음).
+function familyRelationHtml(gid, meta, items, isChild){
+  const hasFamily = groupHasFamily(gid);
   let relLabel = '';
-  if (parentGid){
-    const parentItems = records.filter(r=>r.group===parentGid);
-    const parentOwner = parentItems.length ? groupMeta(parentItems).owner : '';
-    relLabel = `자회사 (상위: ${esc(parentOwner)})`;
-  } else if (hasChildren){
-    relLabel = '모회사';
+  if (hasFamily && !isChild){
+    const parentGid = meta.group_parent;
+    if (parentGid){
+      const parentItems = records.filter(r=>r.group===parentGid);
+      const parentOwner = parentItems.length ? groupMeta(parentItems).owner : '';
+      relLabel = `자회사 (상위: ${esc(parentOwner)})`;
+    } else if (groupChildrenOf(gid).length > 0){
+      relLabel = '모회사';
+    }
   }
-  const sids = familySupportIds(gid);
+  const sids = isChild ? ownSupportIds(items) : displaySupportIds(gid, items);
   const sidsHtml = sids.length
     ? `<span class="family-sid-list">${sids.map(s=>`<span class="family-sid-chip">${esc(s)}</span>`).join('')}</span>`
     : `<span class="meta-value">—</span>`;
+  const supportLabel = (hasFamily && !isChild) ? '전체 Support ID' : 'Support ID';
   return `
     <div class="sub title-meta family-relation-row">
       ${relLabel ? `<span class="meta-chip meta-chip-family"><span class="meta-label">관계</span><span class="meta-value">${relLabel}</span></span>` : ''}
-      <span class="meta-chip meta-chip-support-all"><span class="meta-label">전체 Support ID</span>${sidsHtml}</span>
+      <span class="meta-chip meta-chip-support-all"><span class="meta-label">${supportLabel}</span>${sidsHtml}</span>
     </div>`;
 }
 
@@ -1758,7 +1812,7 @@ document.getElementById('saveMaBtn').onclick = () => {
     selectedAssetIds.delete(String(rec.id));
   }
 
-  expandedGroups.add(targetGid);
+  expandGroupWithAncestors(targetGid);
   document.getElementById('moveAssetModal').classList.remove('open');
   moveAssetRecIds = [];
   render();
@@ -1807,7 +1861,7 @@ function duplicateGroup(gid){
     if (records[i].group === gid){ insertAt = i + 1; break; }
   }
   records.splice(insertAt, 0, ...newRecords);
-  expandedGroups.add(newGid);
+  expandGroupWithAncestors(newGid);
 
   render();
   buildFilters();
@@ -2140,7 +2194,7 @@ function renderRecentActivity(){
       dismissActivity(key);
       updateActivityBadge();
 
-      expandedGroups.add(gid);
+      expandGroupWithAncestors(gid);
       render();
       document.getElementById('recentActivityDropdown').classList.remove('open');
 
