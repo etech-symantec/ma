@@ -459,8 +459,66 @@ function groupMeta(items){
     owner_primary: items.map(i=>i.owner_primary).find(Boolean) || '',
     owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
     cust_contacts: getGroupCustContacts(items),
-    group_remarks: items.map(i=>i.group_remarks).find(Boolean) || ''
+    group_remarks: items.map(i=>i.group_remarks).find(Boolean) || '',
+    group_parent: items.map(i=>i.group_parent).find(Boolean) || ''
   };
+}
+
+// ---------- 법인 간 부모-자식 관계 ----------
+// group_parent: 자식 법인 쪽 레코드들에 저장되는, 상위(부모) 법인의 group id.
+// (다른 그룹 공통 필드와 마찬가지로 같은 group의 모든 레코드에 동일하게 저장한다.)
+// 부모-자식으로 연결된 법인들은 서로 Support ID를 공유해서 보여주기 위해,
+// "가족"(부모 + 모든 자식, 자식의 자식까지 포함한 연결 요소) 단위로 묶어서 다룬다.
+function allGroupIds(){
+  return [...new Set(records.map(r=>r.group))];
+}
+function groupParentOf(gid){
+  const parent = records.filter(r=>r.group===gid).map(i=>i.group_parent).find(Boolean) || '';
+  // 부모로 지정됐던 법인이 그 사이 삭제됐다면(더 이상 존재하지 않으면) 관계가 끊긴 것으로 취급한다.
+  if (parent && !records.some(r=>r.group===parent)) return '';
+  return parent;
+}
+function groupChildrenOf(gid){
+  return allGroupIds().filter(g => g!==gid && groupParentOf(g)===gid);
+}
+// gid의 모든 하위(자식, 손자…) 법인 id 집합 — 부모 선택 시 순환 관계를 막는 데 사용.
+function groupDescendantIds(gid){
+  const result = new Set();
+  const stack = [...groupChildrenOf(gid)];
+  while (stack.length){
+    const cur = stack.pop();
+    if (result.has(cur)) continue;
+    result.add(cur);
+    groupChildrenOf(cur).forEach(c => stack.push(c));
+  }
+  return result;
+}
+// gid를 포함해 부모-자식 관계로 연결된 모든 법인 id (연결 요소 전체)를 반환한다.
+function groupFamilyIds(gid){
+  const visited = new Set();
+  const stack = [gid];
+  while (stack.length){
+    const cur = stack.pop();
+    if (visited.has(cur)) continue;
+    visited.add(cur);
+    const parent = groupParentOf(cur);
+    if (parent && !visited.has(parent)) stack.push(parent);
+    groupChildrenOf(cur).forEach(c => { if (!visited.has(c)) stack.push(c); });
+  }
+  return visited;
+}
+// 이 법인이 다른 법인과 부모-자식 관계로 연결되어 있는지 (자기 자신만 있으면 false)
+function groupHasFamily(gid){
+  return groupFamilyIds(gid).size > 1;
+}
+// 연결된 가족 전체(자기 자신 포함)에 속한 자산들의 Support ID를 모두 모아 중복 없이 반환.
+function familySupportIds(gid){
+  const fam = groupFamilyIds(gid);
+  const ids = new Set();
+  records.forEach(r => {
+    if (fam.has(r.group) && (r.support_id||'').trim()) ids.add(r.support_id.trim());
+  });
+  return [...ids].sort((a,b)=>a.localeCompare(b,'ko'));
 }
 
 // ---------- Support ID 단위 하위 그룹 (같은 법인 안에서 Support ID가 여러 개인 경우) ----------
@@ -835,12 +893,13 @@ function render(){
                   ${custContactsSummaryHtml(gid, meta)}
                 </div>
               </div>
+              ${familyRelationHtml(gid, meta)}
               ${groupRemarksHtml(meta)}
             </div>
           </div>
           <div class="group-badges">
             <div class="group-title-actions">
-              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/점검방식/구성방식/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/점검방식/구성방식/상위 법인/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
             </div>
@@ -1089,6 +1148,31 @@ document.getElementById('custContactsModalCloseBtn').onclick = () => {
 function groupRemarksHtml(meta){
   if (!meta.group_remarks) return '';
   return `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
+}
+
+// 부모-자식 관계로 연결된 법인일 때만, 관계(상위 법인)와 가족 전체의 Support ID를
+// 법인 정보 영역에 보여준다. 관계가 없는 법인은 기존처럼 아무것도 표시하지 않는다.
+function familyRelationHtml(gid, meta){
+  if (!groupHasFamily(gid)) return '';
+  const parentGid = meta.group_parent;
+  const hasChildren = groupChildrenOf(gid).length > 0;
+  let relLabel = '';
+  if (parentGid){
+    const parentItems = records.filter(r=>r.group===parentGid);
+    const parentOwner = parentItems.length ? groupMeta(parentItems).owner : '';
+    relLabel = `자회사 (상위: ${esc(parentOwner)})`;
+  } else if (hasChildren){
+    relLabel = '모회사';
+  }
+  const sids = familySupportIds(gid);
+  const sidsHtml = sids.length
+    ? `<span class="family-sid-list">${sids.map(s=>`<span class="family-sid-chip">${esc(s)}</span>`).join('')}</span>`
+    : `<span class="meta-value">—</span>`;
+  return `
+    <div class="sub title-meta family-relation-row">
+      ${relLabel ? `<span class="meta-chip meta-chip-family"><span class="meta-label">관계</span><span class="meta-value">${relLabel}</span></span>` : ''}
+      <span class="meta-chip meta-chip-support-all"><span class="meta-label">전체 Support ID</span>${sidsHtml}</span>
+    </div>`;
 }
 
 function rowHtml(r, groupSupportId){
@@ -1445,6 +1529,20 @@ document.getElementById('ge_cust_add_btn').onclick = () => {
   renderCustContactRows();
 };
 
+// 상위 법인(부모) 선택 드롭다운을 현재 존재하는 법인 목록으로 채운다.
+// 자기 자신과, 자기 자신의 하위(자식/손자…) 법인은 골라도 순환 관계가 생기므로 목록에서 제외한다.
+function populateParentGroupSelect(gid, currentParent){
+  const sel = document.getElementById('ge_parent_group');
+  const excluded = new Set([gid, ...groupDescendantIds(gid)]);
+  const options = allGroupIds()
+    .filter(g => !excluded.has(g))
+    .map(g => ({ gid:g, owner: groupMeta(records.filter(r=>r.group===g)).owner }))
+    .sort((a,b) => a.owner.localeCompare(b.owner, 'ko'));
+  sel.innerHTML = '<option value="">없음 (독립된 법인)</option>' +
+    options.map(o => `<option value="${esc(o.gid)}">${esc(o.owner)}</option>`).join('');
+  sel.value = (currentParent && !excluded.has(currentParent)) ? currentParent : '';
+}
+
 function openGroupEditModal(gid){
   if (!isCurrentUserAdmin()){ alert('마스터만 법인 정보를 수정할 수 있습니다.'); return; }
   if (viewOnly || !sessionKey){ alert('법인 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
@@ -1460,6 +1558,7 @@ function openGroupEditModal(gid){
   document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
   document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
+  populateParentGroupSelect(gid, meta.group_parent);
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
     ? meta.cust_contacts.slice(0,5)
     : [{role:'',name:'',org:'',phone:'',email:''}]
@@ -1487,6 +1586,10 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newPrimary = val('ge_owner_primary');
   const newSecondary = val('ge_owner_secondary');
   const newRemarks = val('ge_remarks');
+  const newParentGid = document.getElementById('ge_parent_group').value;
+  // 방어적으로 한 번 더 확인: 자기 자신이나 자신의 하위 법인을 부모로 저장하지 않는다.
+  const forbiddenParents = new Set([groupEditId, ...groupDescendantIds(groupEditId)]);
+  const finalParentGid = (newParentGid && !forbiddenParents.has(newParentGid)) ? newParentGid : '';
   captureCustContactsFromDom();
   const newContacts = geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
   records.forEach(r => {
@@ -1499,6 +1602,7 @@ document.getElementById('saveGeBtn').onclick = () => {
       r.owner_primary = newPrimary;
       r.owner_secondary = newSecondary;
       r.group_remarks = newRemarks;
+      r.group_parent = finalParentGid;
       r.cust_contacts = newContacts;
       // clear legacy single-contact fields now that the array field is authoritative
       r.cust_contact = ''; r.cust_phone = ''; r.cust_email = '';
@@ -1650,6 +1754,7 @@ document.getElementById('saveMaBtn').onclick = () => {
     rec.cust_contacts = JSON.parse(JSON.stringify(meta.cust_contacts || []));
     rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
     rec.group_remarks = meta.group_remarks;
+    rec.group_parent = meta.group_parent;
     selectedAssetIds.delete(String(rec.id));
   }
 
