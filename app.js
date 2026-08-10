@@ -460,6 +460,7 @@ function groupMeta(items){
     owner_primary: items.map(i=>i.owner_primary).find(Boolean) || '',
     owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
     build_engineer: items.map(i=>i.build_engineer).find(Boolean) || '',
+    build_date: items.map(i=>i.build_date).find(Boolean) || '',
     cust_contacts: getGroupCustContacts(items),
     group_remarks: items.map(i=>i.group_remarks).find(Boolean) || ''
   };
@@ -1002,7 +1003,7 @@ function managerNamesInlineHtml(meta){
   if (meta.owner_secondary) names.push(`<span class="mgr-secondary">${esc(meta.owner_secondary)}</span>`);
   const buildChip = meta.build_engineer ? `<span class="meta-chip meta-chip-build-eng">
     <span class="meta-label">구축 엔지니어</span>
-    <span class="meta-value">${esc(meta.build_engineer)}</span>
+    <span class="meta-value">${esc(meta.build_engineer)}${meta.build_date ? ` <span class="build-eng-date">(${esc(meta.build_date)})</span>` : ''}</span>
   </span>` : '';
   const mgrChip = names.length ? `<span class="meta-chip meta-chip-mgr">
     <span class="meta-label">담당 엔지니어</span>
@@ -1423,6 +1424,7 @@ function openGroupEditModal(gid){
   document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
   document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
   document.getElementById('ge_build_engineer').value = meta.build_engineer || '';
+  document.getElementById('ge_build_date').value = meta.build_date || '';
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
     ? meta.cust_contacts.slice(0,5)
@@ -1452,6 +1454,11 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newPrimary = val('ge_owner_primary');
   const newSecondary = val('ge_owner_secondary');
   const newBuildEngineer = val('ge_build_engineer');
+  const newBuildDate = val('ge_build_date');
+  if (newBuildDate && !/^\d{4}\.(0?[1-9]|1[0-2])$/.test(newBuildDate)){
+    document.getElementById('geError').textContent = '구축 일자는 YYYY.MM 형식으로 입력해 주세요 (예: 2026.07).';
+    return;
+  }
   const newRemarks = val('ge_remarks');
   captureCustContactsFromDom();
   const newContacts = geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
@@ -1466,6 +1473,7 @@ document.getElementById('saveGeBtn').onclick = () => {
       r.owner_primary = newPrimary;
       r.owner_secondary = newSecondary;
       r.build_engineer = newBuildEngineer;
+      r.build_date = newBuildDate;
       r.group_remarks = newRemarks;
       r.cust_contacts = newContacts;
       // clear legacy single-contact fields now that the array field is authoritative
@@ -1564,6 +1572,7 @@ document.getElementById('saveMaBtn').onclick = () => {
     rec.owner_primary = meta.owner_primary;
     rec.owner_secondary = meta.owner_secondary;
     rec.build_engineer = meta.build_engineer;
+    rec.build_date = meta.build_date;
     rec.cust_contacts = JSON.parse(JSON.stringify(meta.cust_contacts || []));
     rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
     rec.group_remarks = meta.group_remarks;
