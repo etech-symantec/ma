@@ -29,19 +29,19 @@
       "tag_note": "일본",
       "id": 1,
       "ip_enc": {
-        "iv": "0zhC9ix4JKROrzt5",
-        "ct": "kQsTz22e7nZQrfQ=",
-        "tag": "lEP12c0Ws+Vb41SK7rpthA=="
+        "iv": "P/cYqKYL8TRj1zhR",
+        "ct": "Z61GZ2ypuctozk0=",
+        "tag": "oCe8s2yp/En4EjttSiLX/g=="
       },
       "id_enc": {
-        "iv": "wNQ5MPbO40Ihh27I",
-        "ct": "5iyyjlDDEkCfD7g=",
-        "tag": "+AP6hdKnaHfIb/87+OVMNQ=="
+        "iv": "+DyrPRZ6f3kR2jJC",
+        "ct": "7kF95Mcogk2N/+A=",
+        "tag": "yyWHd21IEi12vmmORKzOtQ=="
       },
       "pw_enc": {
-        "iv": "qJWZpWlzjdTSFOFA",
-        "ct": "8I6IZohYrE1AVFsD8vAHqeOaUhoRtlPgUFpZygnnYgxWtiEF/DI=",
-        "tag": "lvDppXl7BUi7cYFkSfvU/Q=="
+        "iv": "ZWmejuwowAWWBYT9",
+        "ct": "I4rQ/Lp6GKQ61SgBdy1g62cr8Q==",
+        "tag": "jcl5vM6p10oQMNYFU8KZZw=="
       },
       "work_log": [],
       "group_remarks": "",
@@ -55,7 +55,12 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "일본"
+      "country": "일본",
+      "enable_pw_enc": {
+        "iv": "Vt1hLLYXW1dvqxh4",
+        "ct": "pWkBXnw0GAtuHyQy",
+        "tag": "GF5x6i+d4ftBVum4ibrjXw=="
+      }
     },
     {
       "group": "jp-sds",
