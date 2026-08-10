@@ -454,16 +454,39 @@ function groupMeta(items){
     owner: head.owner || '(법인명 미확인)',
     location: items.map(i=>i.location).find(Boolean) || '',
     country: items.map(i=>i.country).find(Boolean) || '',
-    support_id: items.map(i=>i.support_id).find(Boolean) || '',
     check_method: items.map(i=>i.check_method).find(Boolean) || '',
     config_mode: items.map(i=>i.config_mode).find(Boolean) || '',
     owner_primary: items.map(i=>i.owner_primary).find(Boolean) || '',
     owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
-    build_engineer: items.map(i=>i.build_engineer).find(Boolean) || '',
-    build_date: items.map(i=>i.build_date).find(Boolean) || '',
     cust_contacts: getGroupCustContacts(items),
     group_remarks: items.map(i=>i.group_remarks).find(Boolean) || ''
   };
+}
+
+// ---------- Support ID 단위 하위 그룹 (같은 법인 안에서 Support ID가 여러 개인 경우) ----------
+// 법인(그룹)은 국가/위치/점검방식/구성방식/담당 엔지니어/고객사 담당자를 공유하고,
+// 그 아래 Support ID별로 구축 엔지니어/구축 일자와 자산 항목들을 따로 관리한다.
+function subGroupMeta(items){
+  return {
+    support_id: items.map(i=>i.support_id).find(Boolean) || '',
+    build_engineer: items.map(i=>i.build_engineer).find(Boolean) || '',
+    build_date: items.map(i=>i.build_date).find(Boolean) || ''
+  };
+}
+function buildSubGroups(items){
+  const map = new Map();
+  for (const it of items){
+    const key = (it.support_id||'').trim();
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(it);
+  }
+  const arr = [...map.entries()].map(([sid, its]) => ({ sid, items: its, meta: subGroupMeta(its) }));
+  arr.sort((a,b) => {
+    if (!a.sid && b.sid) return 1;
+    if (a.sid && !b.sid) return -1;
+    return a.sid.localeCompare(b.sid, 'ko');
+  });
+  return arr;
 }
 
 function secretField(rec, kind){
@@ -805,7 +828,6 @@ function render(){
                 <div class="sub title-meta">
                   <span class="meta-chip meta-chip-country"><span class="meta-label">국가</span><span class="meta-value">${esc(meta.country)||'—'}</span></span>
                   <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
-                  <span class="meta-chip meta-chip-support"><span class="meta-label">Support ID</span><span class="meta-value">${esc(meta.support_id)||'—'}</span></span>
                   <span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
                   <span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
                   <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
@@ -818,7 +840,7 @@ function render(){
           </div>
           <div class="group-badges">
             <div class="group-title-actions">
-              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/Support ID/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/점검방식/구성방식/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
             </div>
@@ -827,16 +849,25 @@ function render(){
           </div>
         </div>
         <div class="items ${isOpen?'open':''}">
-          <table>
-            <thead><tr>
-              ${canBulkMove() ? '<th class="col-select"></th>' : ''}
-              <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
-              <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
-            </tr></thead>
-            <tbody>
-              ${items.map(r=>rowHtml(r, meta.support_id)).join('')}
-            </tbody>
-          </table>
+          ${buildSubGroups(items).map(sg => `
+          <div class="subgroup-block">
+            <div class="subgroup-head">
+              <span class="sg-support-chip"><span class="meta-label">Support ID</span><span class="meta-value">${esc(sg.sid)||'미지정'}</span></span>
+              ${buildEngineerInlineHtml(sg.meta)}
+              <span class="sg-count-chip">${sg.items.length}건</span>
+              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only sg-edit-btn" data-subgroup-gid="${esc(gid)}" data-subgroup-sid="${esc(sg.sid)}" title="Support ID / 구축 엔지니어 / 구축 일자 수정">${pencilSvg()}</button>` : ''}
+            </div>
+            <table>
+              <thead><tr>
+                ${canBulkMove() ? '<th class="col-select"></th>' : ''}
+                <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
+                <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
+              </tr></thead>
+              <tbody>
+                ${sg.items.map(r=>rowHtml(r, sg.sid)).join('')}
+              </tbody>
+            </table>
+          </div>`).join('')}
         </div>
       </div>`;
     }
@@ -867,6 +898,9 @@ function render(){
 
   document.querySelectorAll('[data-group-edit]').forEach(btn=>{
     btn.onclick = (e) => { e.stopPropagation(); openGroupEditModal(btn.dataset.groupEdit); };
+  });
+  document.querySelectorAll('[data-subgroup-gid]').forEach(btn=>{
+    btn.onclick = (e) => { e.stopPropagation(); openSubGroupEditModal(btn.dataset.subgroupGid, btn.dataset.subgroupSid); };
   });
   document.querySelectorAll('[data-group-duplicate]').forEach(btn=>{
     btn.onclick = (e) => { e.stopPropagation(); duplicateGroup(btn.dataset.groupDuplicate); };
@@ -997,19 +1031,22 @@ function snLink(r, groupSupportId){
 }
 
 function managerNamesInlineHtml(meta){
-  if (!meta.build_engineer && !meta.owner_primary && !meta.owner_secondary) return '';
+  if (!meta.owner_primary && !meta.owner_secondary) return '';
   const names = [];
   if (meta.owner_primary) names.push(`<span class="mgr-primary">${esc(meta.owner_primary)}</span>`);
   if (meta.owner_secondary) names.push(`<span class="mgr-secondary">${esc(meta.owner_secondary)}</span>`);
-  const buildChip = meta.build_engineer ? `<span class="meta-chip meta-chip-build-eng">
-    <span class="meta-label">구축 엔지니어</span>
-    <span class="meta-value">${esc(meta.build_engineer)}${meta.build_date ? ` <span class="build-eng-date">(${esc(meta.build_date)})</span>` : ''}</span>
-  </span>` : '';
-  const mgrChip = names.length ? `<span class="meta-chip meta-chip-mgr">
+  return `<span class="meta-chip meta-chip-mgr">
     <span class="meta-label">담당 엔지니어</span>
     <span class="meta-value">${names.join(' ')}</span>
-  </span>` : '';
-  return buildChip + mgrChip;
+  </span>`;
+}
+
+function buildEngineerInlineHtml(sgMeta){
+  if (!sgMeta.build_engineer) return '';
+  return `<span class="sg-build-chip">
+    <span class="meta-label">구축 엔지니어</span>
+    <span class="meta-value">${esc(sgMeta.build_engineer)}${sgMeta.build_date ? ` <span class="build-eng-date">(${esc(sgMeta.build_date)})</span>` : ''}</span>
+  </span>`;
 }
 
 function custContactsSummaryHtml(gid, meta){
@@ -1418,13 +1455,10 @@ function openGroupEditModal(gid){
   document.getElementById('ge_owner').value = meta.owner==='(법인명 미확인)' ? '' : meta.owner;
   document.getElementById('ge_country').value = meta.country || '';
   document.getElementById('ge_location').value = meta.location || '';
-  document.getElementById('ge_support').value = meta.support_id || '';
   document.getElementById('ge_check').value = meta.check_method || '';
   document.getElementById('ge_config_mode').value = meta.config_mode || '';
   document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
   document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
-  document.getElementById('ge_build_engineer').value = meta.build_engineer || '';
-  document.getElementById('ge_build_date').value = meta.build_date || '';
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
     ? meta.cust_contacts.slice(0,5)
@@ -1448,17 +1482,10 @@ document.getElementById('saveGeBtn').onclick = () => {
   if (!newOwner){ document.getElementById('geError').textContent = '법인명을 입력해 주세요.'; return; }
   const newLocation = val('ge_location');
   const newCountry = val('ge_country');
-  const newSupport = val('ge_support');
   const newCheck = val('ge_check');
   const newConfigMode = val('ge_config_mode');
   const newPrimary = val('ge_owner_primary');
   const newSecondary = val('ge_owner_secondary');
-  const newBuildEngineer = val('ge_build_engineer');
-  const newBuildDate = val('ge_build_date');
-  if (newBuildDate && !/^\d{4}\.(0?[1-9]|1[0-2])$/.test(newBuildDate)){
-    document.getElementById('geError').textContent = '구축 일자는 YYYY.MM 형식으로 입력해 주세요 (예: 2026.07).';
-    return;
-  }
   const newRemarks = val('ge_remarks');
   captureCustContactsFromDom();
   const newContacts = geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
@@ -1467,13 +1494,10 @@ document.getElementById('saveGeBtn').onclick = () => {
       r.owner = newOwner;
       r.location = newLocation;
       r.country = newCountry;
-      r.support_id = newSupport;
       r.check_method = newCheck;
       r.config_mode = newConfigMode;
       r.owner_primary = newPrimary;
       r.owner_secondary = newSecondary;
-      r.build_engineer = newBuildEngineer;
-      r.build_date = newBuildDate;
       r.group_remarks = newRemarks;
       r.cust_contacts = newContacts;
       // clear legacy single-contact fields now that the array field is authoritative
@@ -1482,6 +1506,57 @@ document.getElementById('saveGeBtn').onclick = () => {
   });
   document.getElementById('groupEditModal').classList.remove('open');
   groupEditId = null;
+  render();
+  buildFilters();
+  scheduleAutoSync();
+};
+
+// ---------- Support ID 하위 그룹 정보 수정 (Support ID / 구축 엔지니어 / 구축 일자) ----------
+let subGroupEditTarget = null; // { gid, sid } 편집 중인 하위 그룹
+
+function openSubGroupEditModal(gid, sid){
+  if (!isCurrentUserAdmin()){ alert('마스터만 Support ID 정보를 수정할 수 있습니다.'); return; }
+  if (viewOnly || !sessionKey){ alert('Support ID 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const items = records.filter(r => r.group===gid && (r.support_id||'').trim() === sid);
+  if (!items.length) return;
+  const meta = subGroupMeta(items);
+  subGroupEditTarget = { gid, sid };
+  document.getElementById('sg_support').value = meta.support_id || '';
+  document.getElementById('sg_build_engineer').value = meta.build_engineer || '';
+  document.getElementById('sg_build_date').value = meta.build_date || '';
+  const groupOwner = groupMeta(records.filter(r=>r.group===gid)).owner;
+  document.getElementById('sgHint').textContent =
+    `"${groupOwner}" 법인 중 이 Support ID(${sid||'미지정'})를 쓰는 자산 항목 ${items.length}건에 공통으로 적용됩니다.`;
+  document.getElementById('sgError').textContent = '';
+  document.getElementById('subGroupEditModal').classList.add('open');
+}
+
+document.getElementById('cancelSgBtn').onclick = () => {
+  document.getElementById('subGroupEditModal').classList.remove('open');
+  subGroupEditTarget = null;
+};
+
+document.getElementById('saveSgBtn').onclick = () => {
+  if (!isCurrentUserAdmin()){ alert('마스터만 Support ID 정보를 수정할 수 있습니다.'); return; }
+  if (!subGroupEditTarget) return;
+  const val = id => document.getElementById(id).value.trim();
+  const newSupport = val('sg_support');
+  const newBuildEngineer = val('sg_build_engineer');
+  const newBuildDate = val('sg_build_date');
+  if (newBuildDate && !/^\d{4}\.(0?[1-9]|1[0-2])$/.test(newBuildDate)){
+    document.getElementById('sgError').textContent = '구축 일자는 YYYY.MM 형식으로 입력해 주세요 (예: 2026.07).';
+    return;
+  }
+  const { gid, sid } = subGroupEditTarget;
+  records.forEach(r => {
+    if (r.group === gid && (r.support_id||'').trim() === sid){
+      r.support_id = newSupport;
+      r.build_engineer = newBuildEngineer;
+      r.build_date = newBuildDate;
+    }
+  });
+  document.getElementById('subGroupEditModal').classList.remove('open');
+  subGroupEditTarget = null;
   render();
   buildFilters();
   scheduleAutoSync();
@@ -1514,9 +1589,11 @@ function openMoveAssetModal(recIdOrIds){
     return;
   }
   const options = targetGids.map(gid => {
-    const meta = groupMeta(records.filter(r=>r.group===gid));
+    const gItems = records.filter(r=>r.group===gid);
+    const meta = groupMeta(gItems);
+    const sids = buildSubGroups(gItems).map(sg=>sg.sid).filter(Boolean);
     const parts = [meta.owner];
-    if (meta.support_id) parts.push(`Support ID: ${meta.support_id}`);
+    if (sids.length) parts.push(`Support ID: ${sids.join(', ')}`);
     if (meta.location) parts.push(meta.location);
     return { gid, label: parts.join(' · ') };
   }).sort((a,b) => a.label.localeCompare(b.label, 'ko'));
@@ -1531,10 +1608,10 @@ function openMoveAssetModal(recIdOrIds){
     const rec = recs[0];
     const curMeta = groupMeta(records.filter(r=>r.group===rec.group));
     hintEl.textContent =
-      `현재 "${curMeta.owner}" 법인에 속한 "${rec.sku || skuTagLabel(rec)}" 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.`;
+      `현재 "${curMeta.owner}" 법인에 속한 "${rec.sku || skuTagLabel(rec)}" 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / Support ID / 구축 엔지니어 / 구축 일자 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.`;
   } else {
     hintEl.textContent =
-      `선택한 ${recs.length}개 자산 항목을 한 번에 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 각 항목별로 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 일괄 변경됩니다.`;
+      `선택한 ${recs.length}개 자산 항목을 한 번에 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / Support ID / 구축 엔지니어 / 구축 일자 / 비고 등 자산 고유 정보는 각 항목별로 그대로 유지되고, 법인명·국가·위치·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 일괄 변경됩니다.`;
   }
   document.getElementById('moveAssetModal').classList.add('open');
 }
@@ -1566,13 +1643,10 @@ document.getElementById('saveMaBtn').onclick = () => {
     rec.owner = meta.owner;
     rec.country = meta.country;
     rec.location = meta.location;
-    rec.support_id = meta.support_id;
     rec.check_method = meta.check_method;
     rec.config_mode = meta.config_mode;
     rec.owner_primary = meta.owner_primary;
     rec.owner_secondary = meta.owner_secondary;
-    rec.build_engineer = meta.build_engineer;
-    rec.build_date = meta.build_date;
     rec.cust_contacts = JSON.parse(JSON.stringify(meta.cust_contacts || []));
     rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
     rec.group_remarks = meta.group_remarks;
