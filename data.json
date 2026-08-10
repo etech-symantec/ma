@@ -2893,8 +2893,8 @@
       "owner": "삼성디스플레이 SDV",
       "location": "하노이",
       "support_id": "2496112",
-      "sku": "2496112",
-      "sn": "-",
+      "sku": "RP-V100-1Y",
+      "sn": "0027480220",
       "entitlement": "🔗",
       "qty": "1",
       "start": "2026.1.1",
@@ -2914,26 +2914,27 @@
       "tag_note": "(참조오류: 원본 시트 #REF!)",
       "id": 54,
       "ip_enc": {
-        "iv": "RW1YwNF95bU1raSe",
-        "ct": "A0mCr5egYPRI3QXNTw==",
-        "tag": "mfPVYON2MUlbUed6sr/CJw=="
+        "iv": "BdzegFtKOQu4SZFJ",
+        "ct": "dL6F/vpTBrrlE7+3sA==",
+        "tag": "rlGWTkYaMKRTGJNExcMTNQ=="
       },
       "id_enc": {
-        "iv": "b3sQyEWib3pexe1o",
-        "ct": "7VHY4CsWc9FI",
-        "tag": "cuQPORk1k0ds66fmIuaDhA=="
+        "iv": "sQxUp15RrFp9R+yN",
+        "ct": "yWRhKcLN2M/E",
+        "tag": "3FagouJPxYP1bgOWT0F1jA=="
       },
       "pw_enc": {
-        "iv": "w4kbx9IMva0NlP3A",
-        "ct": "tYfW9n3FOA4=",
-        "tag": "eknRQu4RyvKwCG9WvKB4PQ=="
+        "iv": "NxlpfNYfg0RiXvV5",
+        "ct": "FXPwYQkJ8lI=",
+        "tag": "icrvVBbbECuAB/vSOGRw9g=="
       },
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "vn-semv",
