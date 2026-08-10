@@ -1745,19 +1745,19 @@
       "tag_note": "SEUK (영국)",
       "id": 32,
       "ip_enc": {
-        "iv": "gdUTOlbZkolv9GbG",
-        "ct": "tmCBtFRnATI5o+Y=",
-        "tag": "NFagQDu9oJdwy1h2ls6HRg=="
+        "iv": "0H7D66L0DzoIfFPJ",
+        "ct": "+ulQyhIQda6e3KQ=",
+        "tag": "cR+7GQ3EFtxedRe9uJLM8w=="
       },
       "id_enc": {
-        "iv": "+1/nti6tU82Wbx3J",
-        "ct": "jWbD8nY=",
-        "tag": "UcDrjgb7Jp64PgwVAPnYdQ=="
+        "iv": "NdQ2lMFeOATqdFi3",
+        "ct": "mZKm9JA=",
+        "tag": "tZImaUafSpn2I/6L0zc+Pg=="
       },
       "pw_enc": {
-        "iv": "g+b64c6ZxVgHiN/Y",
-        "ct": "t7UiOyQpUSuBYFm3klyJEcPTiZe9bnFJIEXl3SHY",
-        "tag": "jrpQti5tGdYwjy2teKOvKA=="
+        "iv": "cG62p4jG0Vr4nsXT",
+        "ct": "u9y5Iku+T/v5qrxc/g==",
+        "tag": "WsEqdxY2vSfk/n8wjCP3PQ=="
       },
       "group_remarks": "",
       "cust_contacts": [
@@ -1770,7 +1770,12 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "영국"
+      "country": "영국",
+      "enable_pw_enc": {
+        "iv": "7re4OKuQFkdZVOnm",
+        "ct": "1hgwMJ4qwyxGReY=",
+        "tag": "sEB/a1gsCrKR+632X2dlAw=="
+      }
     },
     {
       "group": "uk-seuk",
