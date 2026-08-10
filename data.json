@@ -5155,7 +5155,7 @@
       "flag": "★★★★★★★★★★★★★★★★★★★★★★★★★★★",
       "owner": "삼성전자 TX (중부)",
       "location": "텍사스 댈러스",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "SSP-S210-10 #1",
       "sn": "924710016",
       "entitlement": "🔗",
@@ -5195,14 +5195,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-006",
       "flag": "",
       "owner": "삼성전자 TX (중부)",
       "location": "텍사스 댈러스",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "SSP-S210-10 #2",
       "sn": "924710019",
       "entitlement": "🔗",
@@ -5234,14 +5235,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-006",
       "flag": "",
       "owner": "삼성전자 TX (중부)",
       "location": "텍사스 댈러스",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "ISG-Proxy 1",
       "sn": "81991418",
       "entitlement": "🔗",
@@ -5281,14 +5283,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-006",
       "flag": "",
       "owner": "삼성전자 TX (중부)",
       "location": "텍사스 댈러스",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "ISG-Proxy 2",
       "sn": "81991418",
       "entitlement": "🔗",
@@ -5320,14 +5323,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-006",
       "flag": "",
       "owner": "삼성전자 TX (중부)",
       "location": "텍사스 댈러스",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "MC-VA",
       "sn": "2670417432",
       "entitlement": "🔗",
@@ -5367,14 +5371,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-006",
       "flag": "",
       "owner": "삼성전자 TX (중부)",
       "location": "텍사스 댈러스",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "RP-V100",
       "sn": "0075480640",
       "entitlement": "🔗",
@@ -5402,14 +5407,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-006",
       "flag": "",
       "owner": "삼성전자 TX (중부)",
       "location": "텍사스 댈러스",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52794033-1-1",
       "entitlement": "🔗",
@@ -5437,7 +5443,8 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-007",
