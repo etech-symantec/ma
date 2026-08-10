@@ -158,35 +158,45 @@
 <div id="groupEditModal">
   <div class="modal-card">
     <h2>법인 정보 수정</h2>
-    <p class="hint">법인명 / 국가 / 위치 / 점검 방식 / 구성방식 / 상위 법인(부모) / 담당자 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다. Support ID / 구축 엔지니어 / 구축 일자는 Support ID별로 따로 관리하며, 각 Support ID 영역의 ✎ 버튼에서 수정합니다.</p>
+    <p class="hint">법인명 / 국가 / 위치 / 점검 방식 / 구성방식 / 상위 법인(부모) / 담당 엔지니어 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다. Support ID와 구축 엔지니어는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있습니다. 구축 일자를 수정하거나 Support ID가 여러 개인 경우는 각 Support ID 영역의 ✎ 버튼에서 따로 수정합니다.</p>
     <div class="form-grid">
-      <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
-      <div><label>국가 (COUNTRY)</label><input id="ge_country" placeholder="예: 베트남"></div>
-      <div><label>위치 (LOCATION)</label><input id="ge_location" placeholder="예: 하노이"></div>
-      <div><label>점검 방식</label><input id="ge_check" placeholder="원격 (RC)"></div>
-      <div><label>구성방식</label>
-        <select id="ge_config_mode">
-          <option value="">선택 안 함</option>
-          <option value="Explicit">Explicit</option>
-          <option value="Inline">Inline</option>
-          <option value="Virtual Inline">Virtual Inline</option>
-          <option value="Transparent">Transparent</option>
-        </select>
+      <div class="ge-row ge-row-3">
+        <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
+        <div><label>Support ID</label><input id="ge_support_id" placeholder="예: 12345678"></div>
+        <div>
+          <label>상위 법인 (부모)</label>
+          <select id="ge_parent_group">
+            <option value="">없음 (독립된 법인)</option>
+          </select>
+        </div>
       </div>
-      <div class="full">
-        <label>상위 법인 (부모)</label>
-        <select id="ge_parent_group">
-          <option value="">없음 (독립된 법인)</option>
-        </select>
-        <p class="hint" style="margin-top:6px; margin-bottom:0;">다른 법인을 상위(부모)로 지정하면, 두 법인은 부모-자식 관계로 연결됩니다. 이렇게 연결된 법인들은 법인 정보 영역에 서로의 Support ID를 모두 함께 보여줍니다 (예: 같은 그룹사의 여러 법인이 Support ID를 나눠 쓰는 경우). 관계가 없는 법인은 기존처럼 표시됩니다.</p>
+      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">다른 법인을 상위(부모)로 지정하면, 두 법인은 부모-자식 관계로 연결됩니다. 이렇게 연결된 법인들은 법인 정보 영역에 서로의 Support ID를 모두 함께 보여줍니다 (예: 같은 그룹사의 여러 법인이 Support ID를 나눠 쓰는 경우). 관계가 없는 법인은 기존처럼 표시됩니다.</p>
+      <div class="ge-row ge-row-3">
+        <div><label>국가 (COUNTRY)</label><input id="ge_country" placeholder="예: 베트남"></div>
+        <div><label>위치 (LOCATION)</label><input id="ge_location" placeholder="예: 하노이"></div>
+        <div><label>점검 방식</label><input id="ge_check" placeholder="원격 (RC)"></div>
+      </div>
+      <div class="ge-row ge-row-2">
+        <div><label>구축 엔지니어</label><input id="ge_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
+        <div><label>구성방식</label>
+          <select id="ge_config_mode">
+            <option value="">선택 안 함</option>
+            <option value="Explicit">Explicit</option>
+            <option value="Inline">Inline</option>
+            <option value="Virtual Inline">Virtual Inline</option>
+            <option value="Transparent">Transparent</option>
+          </select>
+        </div>
+      </div>
+      <div class="ge-row ge-row-2">
+        <div><label>담당 엔지니어 (정)</label><input id="ge_owner_primary" placeholder="주 담당자"></div>
+        <div><label>담당 엔지니어 (부)</label><input id="ge_owner_secondary" placeholder="부 담당자"></div>
       </div>
       <div class="full">
         <label>고객사 담당자 (최대 5명)</label>
         <div id="ge_cust_list" class="cust-contact-list"></div>
         <button type="button" class="btn btn-ghost cust-add-btn" id="ge_cust_add_btn">＋ 담당자 추가</button>
       </div>
-      <div><label>담당 엔지니어 (정)</label><input id="ge_owner_primary" placeholder="주 담당자"></div>
-      <div><label>담당 엔지니어 (부)</label><input id="ge_owner_secondary" placeholder="부 담당자"></div>
       <div class="full"><label>비고</label><textarea id="ge_remarks" placeholder="법인 관련 별도 코멘트"></textarea></div>
     </div>
     <div id="geError" class="cp-error"></div>
