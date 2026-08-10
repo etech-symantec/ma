@@ -2590,7 +2590,9 @@
       "cust_contacts": [],
       "build_engineer": "신호근",
       "build_date": "2026.06",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "custom-472",
@@ -2639,7 +2641,9 @@
       "cust_contacts": [],
       "build_engineer": "신호근",
       "build_date": "2026.06",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "custom-472",
@@ -2688,7 +2692,9 @@
       "cust_contacts": [],
       "build_engineer": "신호근",
       "build_date": "2026.06",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "custom-472",
@@ -2737,7 +2743,9 @@
       "cust_contacts": [],
       "build_engineer": "신호근",
       "build_date": "2026.06",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "custom-1786348811427",
+      "is_parent": false
     },
     {
       "group": "vn-sdv-new",
@@ -20572,9 +20580,9 @@
       "id": 472,
       "group": "custom-472",
       "flag": "",
-      "owner": "삼성전자 SAMEX",
-      "country": "멕시코",
-      "location": "티후아",
+      "owner": "삼성디스플레이 SDV",
+      "country": "베트남",
+      "location": "하노이",
       "support_id": "4050417",
       "sku": "",
       "sn": "",
@@ -20585,8 +20593,8 @@
       "deploy_date": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
       "check_method": "",
       "cust_contact": "",
       "cust_phone": "",
@@ -20595,7 +20603,12 @@
       "ip_enc": null,
       "id_enc": null,
       "pw_enc": null,
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "config_mode": "",
+      "group_remarks": "",
+      "group_parent": "custom-1786348811427",
+      "is_parent": false,
+      "cust_contacts": []
     },
     {
       "id": 1786344991845,
