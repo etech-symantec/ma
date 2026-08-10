@@ -99,11 +99,15 @@
       "tag_note": "일본",
       "id": 2,
       "ip_enc": {
-        "iv": "aPycycewdJ31Mo0v",
-        "ct": "4kG6J0oEu6JtgcA=",
-        "tag": "w088d+pRRHWomjdZbcLnuA=="
+        "iv": "bYjevFvtpbqZIxAr",
+        "ct": "7Yl7Jv3O3oI3ua8=",
+        "tag": "z26kIFZ/LHykBbvjnamIUQ=="
       },
-      "id_enc": null,
+      "id_enc": {
+        "iv": "CgUIIIsQq4s/EB9H",
+        "ct": "ecHrANpiUPpXr4s=",
+        "tag": "ALqvfnphUdWRp7QEK6+JIw=="
+      },
       "pw_enc": null,
       "group_remarks": "",
       "cust_contacts": [
@@ -116,7 +120,8 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "일본"
+      "country": "일본",
+      "device_type": "ASG/SG"
     },
     {
       "group": "jp-sds",
