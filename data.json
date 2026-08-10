@@ -21931,6 +21931,43 @@
       "cust_contacts": [],
       "build_engineer": "",
       "build_date": ""
+    },
+    {
+      "id": 1786344991847,
+      "group": "custom-1786344991846",
+      "flag": "",
+      "owner": "삼성전자 미주법인",
+      "country": "미국",
+      "location": "뉴저지",
+      "support_id": "298214",
+      "sku": "MC-S400-20-100-ONSITEADV",
+      "sn": "2117320266",
+      "qty": "1",
+      "start": "2026. 4. 1",
+      "end": "2027. 3. 31",
+      "remarks": "SEA_MC (미사용 예정. VA로 이전)",
+      "deploy_date": "",
+      "mode": "",
+      "os_ver": "3.3.2.1",
+      "owner_primary": "",
+      "owner_secondary": "",
+      "check_method": "",
+      "config_mode": "",
+      "cust_contacts": [],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "kr-001",
+      "work_log": [],
+      "ip_enc": {
+        "iv": "0MHiDyvltpYukg3l",
+        "ct": "UZ6Yz18fNxHp/NFEfg==",
+        "tag": "reGJ2MFVjCoS1FhnnbkcXg=="
+      },
+      "id_enc": null,
+      "pw_enc": null,
+      "enable_pw_enc": null
     }
   ],
   "users": [
