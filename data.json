@@ -5115,19 +5115,19 @@
       "tag_note": "미국 중부(TXDRT)",
       "id": 107,
       "ip_enc": {
-        "iv": "Cy0DcXWryLvICP/p",
-        "ct": "bT4psBEhn5hycAirc7WVSXrYVWrkhSYCiIgOwg==",
-        "tag": "v4ptxJwRzTNFWvle/Rwtcg=="
+        "iv": "e4C7UkXuX+vV6o9E",
+        "ct": "/uerOAU+pXEQMoITaxAoSN0mtrqCu7Y4Ff+NCQ==",
+        "tag": "wpmqm90pYKvT5YP4Ys5J3w=="
       },
       "id_enc": {
-        "iv": "+esgkQk1T4myiYj5",
-        "ct": "8w7ae6I=",
-        "tag": "zX5DBdwua4nfAnhfRnkIRg=="
+        "iv": "MPfP40ia2Wah2ZAV",
+        "ct": "qs8wcq0=",
+        "tag": "QhrH2VEn5zwU17wOKvwLvQ=="
       },
       "pw_enc": {
-        "iv": "Vjad6pK7LtSpaze/",
-        "ct": "zReOIdqMHz1b/Xg=",
-        "tag": "LcT6PNMEYC6n9I4FleM6Eg=="
+        "iv": "/gwLS2vESoPQTmTE",
+        "ct": "PkVWOM+5eSMrlOE=",
+        "tag": "JSvcIJok4Z8mOstsm63Zsg=="
       },
       "country": "미국",
       "config_mode": "Transparent",
@@ -5135,7 +5135,8 @@
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
-      "build_date": "2024.12"
+      "build_date": "2024.12",
+      "enable_pw_enc": null
     },
     {
       "group": "us-006",
