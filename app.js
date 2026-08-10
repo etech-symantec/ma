@@ -379,8 +379,15 @@ function boot(){
   document.getElementById('lockOverlay').style.display = 'none';
   document.getElementById('app').classList.add('ready');
   updateUserBtnLabel();
+  // 예전 데이터 중 상위 법인 자신에게 직접 연결된 Support ID/자산이 남아 있다면
+  // (규칙 도입 이전 데이터 등) 첫 번째 자식 법인으로 자동 이전한다.
+  const migrated = enforceParentsHaveNoDirectAssets();
   render();
   requestAnimationFrame(() => { syncGlobalHeaderHeight(); syncStickyOffsets(); });
+  if (migrated && !viewOnly && sessionKey){
+    buildFilters();
+    scheduleAutoSync();
+  }
 }
 
 // ---------- date / status ----------
@@ -506,6 +513,74 @@ function groupFamilyIds(gid){
     groupChildrenOf(cur).forEach(c => { if (!visited.has(c)) stack.push(c); });
   }
   return visited;
+}
+// 상위 법인은 대표 이름 역할만 하고, Support ID/자산은 항상 하위(자식) 법인에 속해야 한다.
+// 자식이 있는 법인(gid)에 그 자신에게 직접 붙어 있는 자산 항목이 남아 있다면,
+// (부모-자식 관계가 방금 새로 생겼거나, 예전 데이터에 남아 있던 경우 등) 첫 번째 자식 법인으로
+// 자동 이전한다 — 이동 시 자산 고유 정보(SKU/S/N/라이선스/IP 등)는 그대로 유지하고,
+// 법인 공통 정보(법인명/국가/위치/점검방식/구성방식/담당자/고객사담당자/상위법인)만 자식 법인 기준으로 맞춘다.
+function enforceParentsHaveNoDirectAssets(){
+  let changed = false;
+  allGroupIds().forEach(gid => {
+    const children = groupChildrenOf(gid);
+    if (!children.length) return;
+    // "이름표" 역할의 shell 레코드(is_group_shell)는 실제 자산이 아니므로 이전 대상에서 제외한다.
+    const ownRecs = records.filter(r => r.group === gid && !r.is_group_shell);
+    if (!ownRecs.length) return;
+    // 자식 법인이 사라지지 않도록, 이전 전에 부모 자신의 법인 정보(이름/국가/위치 등)를 스냅샷해 둔다.
+    const parentMetaSnapshot = groupMeta(records.filter(r=>r.group===gid));
+
+    const sortedChildren = children.slice().sort((a,b) => {
+      const an = groupMeta(records.filter(r=>r.group===a)).owner;
+      const bn = groupMeta(records.filter(r=>r.group===b)).owner;
+      return an.localeCompare(bn, 'ko');
+    });
+    const targetGid = sortedChildren[0];
+    const targetItems = records.filter(r=>r.group===targetGid);
+    if (!targetItems.length) return;
+    const meta = groupMeta(targetItems);
+    ownRecs.forEach(rec => {
+      rec.group = targetGid;
+      rec.flag = meta.flag;
+      rec.owner = meta.owner;
+      rec.country = meta.country;
+      rec.location = meta.location;
+      rec.check_method = meta.check_method;
+      rec.config_mode = meta.config_mode;
+      rec.owner_primary = meta.owner_primary;
+      rec.owner_secondary = meta.owner_secondary;
+      rec.cust_contacts = JSON.parse(JSON.stringify(meta.cust_contacts || []));
+      rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
+      rec.group_remarks = meta.group_remarks;
+      rec.group_parent = meta.group_parent;
+    });
+
+    // 부모 법인 자신에게 자산이 하나도 남지 않았다면, 대표 이름/국가/위치 등을 계속 보여줄 수 있도록
+    // 자산이 아닌 "이름표" 전용 shell 레코드를 하나 남겨 둔다 (목록/테이블에는 표시되지 않음).
+    if (!records.some(r => r.group === gid)){
+      records.push({
+        id: Date.now() + Math.floor(Math.random()*1000),
+        group: gid,
+        is_group_shell: true,
+        flag: parentMetaSnapshot.flag || '',
+        owner: parentMetaSnapshot.owner,
+        country: parentMetaSnapshot.country,
+        location: parentMetaSnapshot.location,
+        check_method: parentMetaSnapshot.check_method,
+        config_mode: parentMetaSnapshot.config_mode,
+        owner_primary: parentMetaSnapshot.owner_primary,
+        owner_secondary: parentMetaSnapshot.owner_secondary,
+        cust_contacts: JSON.parse(JSON.stringify(parentMetaSnapshot.cust_contacts || [])),
+        cust_contact: '', cust_phone: '', cust_email: '',
+        group_remarks: parentMetaSnapshot.group_remarks,
+        group_parent: parentMetaSnapshot.group_parent,
+        support_id: '', sku: '', sn: '', qty: '', start: '', end: '', os_ver: '',
+        work_log: []
+      });
+    }
+    changed = true;
+  });
+  return changed;
 }
 // 이 법인이 다른 법인과 부모-자식 관계로 연결되어 있는지 (자기 자신만 있으면 false)
 function groupHasFamily(gid){
@@ -866,7 +941,10 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
   const meta = groupMeta(items);
   const isOpen = expandedGroups.has(gid);
   const isChild = depth > 0;
-  const worst = items.reduce((acc,r)=>{
+  // "이름표" 역할만 하는 shell 레코드(상위 법인 자신에게 남는, 자산이 아닌 더미 레코드)는
+  // 실제 자산 목록/건수/상태 계산에서 제외한다.
+  const realItems = items.filter(r => !r.is_group_shell);
+  const worst = realItems.reduce((acc,r)=>{
     const s = licenseStatus(r);
     const rank = {crit:3,warn:2,ok:1,na:0};
     return rank[s]>rank[acc]?s:acc;
@@ -875,9 +953,10 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
   // Support ID가 하나뿐인 카드는 법인명 옆 배지가 이미 그 Support ID를 보여주므로
   // 하위 "SUPPORT ID / 항목 건수" 바는 중복 정보라 생략한다 (독립 법인/자식 법인 모두 동일).
   // Support ID가 여러 개인 카드만 각 Support ID를 구분하기 위해 그대로 보여준다.
-  const subGroups = buildSubGroups(items);
+  // 자산이 하나도 없는(=자식 법인들의 대표 이름 역할만 하는) 상위 법인은 subGroups가 비어 있을 수 있다.
+  const subGroups = buildSubGroups(realItems);
   const collapseSubHead = subGroups.length <= 1;
-  const soloSubGroup = collapseSubHead ? subGroups[0] : null;
+  const soloSubGroup = collapseSubHead ? (subGroups[0] || null) : null;
   const editableSid = soloSubGroup ? soloSubGroup.sid : null;
 
   const subgroupsHtml = subGroups.map(sg => `
@@ -919,8 +998,8 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
                 <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
                 ${isChild ? '' : `<span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>`}
                 <span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
-                <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
-                ${collapseSubHead ? buildEngineerInlineHtml(soloSubGroup.meta) : ''}
+                <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${realItems.length}건</span></span>
+                ${soloSubGroup ? buildEngineerInlineHtml(soloSubGroup.meta) : ''}
                 ${isChild ? '' : managerNamesInlineHtml(meta)}
                 ${custContactsSummaryHtml(gid, meta)}
               </div>
@@ -1220,12 +1299,34 @@ function groupRemarksHtml(meta){
 
 // 법인명 옆에 나란히 Support ID를 보여준다 (펼치지 않아도, 별도 줄 없이 바로 이름 옆에 보임).
 // - 부모-자식 관계가 없는 독립 법인, 자식 법인: 이 법인 자신의 Support ID만.
-// - 부모 법인(모회사, 자식 카드들이 안에 중첩되어 표시됨): 가족 전체(자기+모든 자식)의 Support ID를 하나씩 모두 나열.
-// Support ID가 여러 개면 배지 하나 안에 쉼표로 구분해서 보여준다.
+// - 부모 법인(모회사, 자식 카드들이 안에 중첩되어 표시됨): 자기 자신의 Support ID를 먼저 보여주고,
+//   자식 법인에 더 있는 Support ID는 "외 N개"로 구분해서 보여준다 (부모 자신의 것과 헷갈리지 않도록).
 // editableSid가 주어지면(=Support ID가 하나뿐인 독립 법인이라 하위 Support ID 영역을 생략한 경우),
 // 그 배지를 클릭해서 바로 Support ID / 구축 엔지니어 / 구축 일자를 수정할 수 있게 한다.
 function supportIdTitleHtml(gid, items, isChild, editableSid){
-  const sids = isChild ? ownSupportIds(items) : displaySupportIds(gid, items);
+  const ownSids = ownSupportIds(items);
+
+  if (isChild || !groupHasFamily(gid)){
+    return supportIdChipSimple(gid, ownSids, editableSid);
+  }
+
+  // 부모 법인(가족 관계 있음)
+  const familyAll = familySupportIds(gid);
+  const extraCount = Math.max(0, familyAll.length - ownSids.length);
+  if (!ownSids.length){
+    if (!familyAll.length) return '';
+    return `<span class="title-support-ids"><span class="family-sid-chip"><span class="meta-label">Support ID</span><span class="meta-value">하위 법인 ${familyAll.length}개</span></span></span>`;
+  }
+  const singleEditable = ownSids.length === 1 && extraCount === 0 && editableSid && ownSids[0] === editableSid && isCurrentUserAdmin();
+  const attrs = singleEditable
+    ? ` data-subgroup-gid="${esc(gid)}" data-subgroup-sid="${esc(ownSids[0])}" title="Support ID / 구축 엔지니어 / 구축 일자 수정"`
+    : '';
+  const valueText = ownSids.map(s=>esc(s)).join(', ') + (extraCount > 0 ? ` 외 ${extraCount}개` : '');
+  return `<span class="title-support-ids"><span class="family-sid-chip${singleEditable ? ' family-sid-chip--editable' : ''}"${attrs}><span class="meta-label">Support ID</span><span class="meta-value">${valueText}</span></span></span>`;
+}
+
+// Support ID 배지 하나를 그려낸다 (가족 관계 없이 자기 자신의 Support ID만 있는 일반적인 경우용).
+function supportIdChipSimple(gid, sids, editableSid){
   if (!sids.length) return '';
   if (sids.length === 1){
     const s = sids[0];
@@ -1624,23 +1725,36 @@ function openGroupEditModal(gid){
   document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
 
-  // Support ID / 구축 엔지니어는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있다.
-  // 여러 개면(각기 다른 구축 엔지니어를 가질 수 있으므로) 각 Support ID 영역의 ✎ 버튼으로 안내한다.
+  // Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있다.
+  // 여러 개면(각기 다른 구축 엔지니어/일자를 가질 수 있으므로) 각 Support ID 영역의 ✎ 버튼으로 안내한다.
+  // 다른 법인을 자식으로 둔 상위 법인은 대표 이름 역할만 하며 Support ID를 직접 가질 수 없으므로,
+  // 이 경우는 항상 잠가서 아예 입력하지 못하게 한다.
+  const hasChildren = groupChildrenOf(gid).length > 0;
   const subGroups = buildSubGroups(items);
   const sidInput = document.getElementById('ge_support_id');
   const engInput = document.getElementById('ge_build_engineer');
-  if (subGroups.length <= 1){
-    sidInput.disabled = false; engInput.disabled = false;
+  const dateInput = document.getElementById('ge_build_date');
+  if (hasChildren){
+    sidInput.disabled = true; engInput.disabled = true; dateInput.disabled = true;
+    sidInput.value = ''; engInput.value = ''; dateInput.value = '';
+    sidInput.placeholder = '상위 법인은 대표 이름 역할만 합니다';
+    engInput.placeholder = '자식 법인에서 관리';
+    dateInput.placeholder = '자식 법인에서 관리';
+  } else if (subGroups.length <= 1){
+    sidInput.disabled = false; engInput.disabled = false; dateInput.disabled = false;
     sidInput.value = subGroups.length ? subGroups[0].sid : '';
     engInput.value = subGroups.length ? (subGroups[0].meta.build_engineer || '') : '';
+    dateInput.value = subGroups.length ? (subGroups[0].meta.build_date || '') : '';
     sidInput.placeholder = '예: 12345678';
     engInput.placeholder = '장비를 구축한 엔지니어 (선택)';
+    dateInput.placeholder = '2026.07';
   } else {
-    sidInput.disabled = true; engInput.disabled = true;
+    sidInput.disabled = true; engInput.disabled = true; dateInput.disabled = true;
     sidInput.value = subGroups.map(sg=>sg.sid||'미지정').join(', ');
-    engInput.value = '';
+    engInput.value = ''; dateInput.value = '';
     sidInput.placeholder = '';
     engInput.placeholder = 'Support ID별로 각 영역의 ✎ 버튼에서 수정';
+    dateInput.placeholder = 'Support ID별로 각 영역의 ✎ 버튼에서 수정';
   }
 
   populateParentGroupSelect(gid, meta.group_parent);
@@ -1672,13 +1786,19 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newSecondary = val('ge_owner_secondary');
   const newRemarks = val('ge_remarks');
   const newParentGid = document.getElementById('ge_parent_group').value;
-  // Support ID / 구축 엔지니어는 이 법인에 Support ID가 하나뿐이었을 때만(입력창이 활성화된 경우만) 저장한다.
-  // 여러 개인 경우는 각 Support ID 영역의 ✎ 버튼에서 따로 관리하므로 여기서는 건드리지 않는다.
+  // Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐이었을 때만(입력창이 활성화된 경우만) 저장한다.
+  // 여러 개인 경우, 또는 이 법인이 다른 법인을 자식으로 둔 상위 법인인 경우는 여기서 건드리지 않는다.
   const sidInputEl = document.getElementById('ge_support_id');
   const engInputEl = document.getElementById('ge_build_engineer');
+  const dateInputEl = document.getElementById('ge_build_date');
   const applySoloSid = !sidInputEl.disabled;
   const newSupportId = applySoloSid ? sidInputEl.value.trim() : null;
   const newBuildEngineer = applySoloSid ? engInputEl.value.trim() : null;
+  const newBuildDate = applySoloSid ? dateInputEl.value.trim() : null;
+  if (applySoloSid && newBuildDate && !/^\d{4}\.(0?[1-9]|1[0-2])$/.test(newBuildDate)){
+    document.getElementById('geError').textContent = '구축 일자는 YYYY.MM 형식으로 입력해 주세요 (예: 2026.07).';
+    return;
+  }
   // 방어적으로 한 번 더 확인: 자기 자신이나 자신의 하위 법인을 부모로 저장하지 않는다.
   const forbiddenParents = new Set([groupEditId, ...groupDescendantIds(groupEditId)]);
   const finalParentGid = (newParentGid && !forbiddenParents.has(newParentGid)) ? newParentGid : '';
@@ -1701,9 +1821,13 @@ document.getElementById('saveGeBtn').onclick = () => {
       if (applySoloSid){
         r.support_id = newSupportId;
         r.build_engineer = newBuildEngineer;
+        r.build_date = newBuildDate;
       }
     }
   });
+  // 이 법인이 방금 어떤 법인의 첫 자식으로 새로 연결됐을 수 있으므로, 상위 법인 자신에게
+  // 남아 있는 직속 Support ID/자산이 있다면 자식 법인으로 자동 이전해 규칙을 지킨다.
+  enforceParentsHaveNoDirectAssets();
   document.getElementById('groupEditModal').classList.remove('open');
   groupEditId = null;
   render();
@@ -1780,7 +1904,8 @@ function openMoveAssetModal(recIdOrIds){
 
   const sourceGids = new Set(recs.map(r=>r.group));
   // 선택한 자산이 전부 같은 법인 소속이면 그 법인은 이동 대상에서 제외, 여러 법인에 걸쳐 있으면 전체 법인을 보여준다.
-  const allGids = [...new Set(records.map(r=>r.group))];
+  // 다른 법인을 자식으로 둔 상위 법인(대표 이름 역할만 함)은 Support ID/자산을 직접 가질 수 없으므로 이동 대상에서 제외한다.
+  const allGids = [...new Set(records.map(r=>r.group))].filter(gid => groupChildrenOf(gid).length === 0);
   const targetGids = sourceGids.size === 1
     ? allGids.filter(gid => gid !== [...sourceGids][0])
     : allGids;
