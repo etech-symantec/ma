@@ -5451,7 +5451,7 @@
       "flag": "",
       "owner": "삼성전자 SJ (서부)",
       "location": "캘리포니아 산 호세",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "SSP-S210-10 #1",
       "sn": "924710020",
       "entitlement": "🔗",
@@ -5491,14 +5491,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-007",
       "flag": "",
       "owner": "삼성전자 SJ (서부)",
       "location": "캘리포니아 산 호세",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "SSP-S210-10 #2",
       "sn": "924710023",
       "entitlement": "🔗",
@@ -5530,14 +5531,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-007",
       "flag": "",
       "owner": "삼성전자 SJ (서부)",
       "location": "캘리포니아 산 호세",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "ISG-Proxy 1",
       "sn": "81991690",
       "entitlement": "🔗",
@@ -5577,14 +5579,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-007",
       "flag": "",
       "owner": "삼성전자 SJ (서부)",
       "location": "캘리포니아 산 호세",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "ISG-Proxy 2",
       "sn": "81991690",
       "entitlement": "🔗",
@@ -5616,14 +5619,15 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-007",
       "flag": "",
       "owner": "삼성전자 SJ (서부)",
       "location": "캘리포니아 산 호세",
-      "support_id": "",
+      "support_id": "697943",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52796566-1-1",
       "entitlement": "🔗",
@@ -5651,7 +5655,8 @@
       "config_mode": "Transparent",
       "group_remarks": "",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "sg-001",
