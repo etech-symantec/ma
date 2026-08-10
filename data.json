@@ -3353,26 +3353,31 @@
       "tag_note": "삼성전자 멕시코 (SAMEX)",
       "id": 63,
       "ip_enc": {
-        "iv": "JLfcJQ5BOcvfnETm",
-        "ct": "OMUimRM4Z4vrmZIrWw==",
-        "tag": "FB1C/skiAhvjwCchkgpYiQ=="
+        "iv": "CxU/RyGfJS9EsOYz",
+        "ct": "QpC6cDCvEMetwWKVRg==",
+        "tag": "m8fIntDTrXQ1rsTGMaMtAg=="
       },
       "id_enc": {
-        "iv": "Ipzn34IEoAdarDqV",
-        "ct": "4JS5PxzbaLq9",
-        "tag": "zYr4CGBkZhnYvFpVLIZZKQ=="
+        "iv": "oE8xxliJHRQ+zZjU",
+        "ct": "2Ern0QeNw0A8",
+        "tag": "Xlkqt2mvOYbmDK7Q4GaVUQ=="
       },
       "pw_enc": {
-        "iv": "2RcS6vXQU+A2x656",
-        "ct": "x6/LsJqDwTlCKLWMBolgK5XagmiNcR11",
-        "tag": "SIrpR+aVgwvPyehRw0P1Ow=="
+        "iv": "FvhfHr84ht0vAl3H",
+        "ct": "zAmkd531MsvL",
+        "tag": "Mr3IWG2ZqBfMCLQ+U4qUnA=="
       },
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
       "config_mode": "Explicit",
       "build_engineer": "신호근",
-      "build_date": "2022.07"
+      "build_date": "2022.07",
+      "enable_pw_enc": {
+        "iv": "tvvFeHiy30wmOc5R",
+        "ct": "H+RD2Lhk16/sFg==",
+        "tag": "NeRazxqYjxxor0hTxM4yyQ=="
+      }
     },
     {
       "group": "custom-473",
