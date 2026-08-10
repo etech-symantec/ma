@@ -19791,7 +19791,7 @@
       "flag": "",
       "owner": "동우화인켐",
       "location": "평택",
-      "support_id": "",
+      "support_id": "546252",
       "sku": "ISG-Proxy",
       "sn": "0076996458",
       "entitlement": "🔗",
@@ -19813,21 +19813,22 @@
       "tag_note": "동우화인켐",
       "id": 406,
       "ip_enc": {
-        "iv": "9HK6VJsMt43svx1V",
-        "ct": "TEvDyNQ+VOY=",
-        "tag": "noFP8rv5WUQKUE1nb4IZKg=="
+        "iv": "Q25rc7Fq6ZaNPTA8",
+        "ct": "8VPaHe77LT8=",
+        "tag": "Md3Zw6/iXSHCH+pOwCBPIw=="
       },
       "id_enc": {
-        "iv": "62hhhy91QJggNlBb",
-        "ct": "Q9TImtA=",
-        "tag": "UCdd7fnJfw/gdm1CEZ+1tA=="
+        "iv": "ijxsX4tBb1xuk4iu",
+        "ct": "O3Qn2y4=",
+        "tag": "ACGcnw5qPiAL4TTYZmzrBQ=="
       },
       "pw_enc": null,
       "country": "한국",
       "config_mode": "",
       "group_remarks": "",
       "group_parent": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "enable_pw_enc": null
     },
     {
       "group": "kr-024",
