@@ -2665,8 +2665,8 @@
       "owner": "삼성디스플레이 SDV",
       "location": "하노이",
       "support_id": "743737",
-      "sku": "743737",
-      "sn": "-",
+      "sku": "SSP-410-20B",
+      "sn": "1925700009",
       "entitlement": "🔗",
       "qty": "1",
       "start": "2026.5.13",
@@ -2686,26 +2686,27 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 49,
       "ip_enc": {
-        "iv": "WOg/uOpX8uDBHBTZ",
-        "ct": "ltE+IRIuLlIJkfr4Cg==",
-        "tag": "vo4Tf82AV9Gv9WY/iNG05A=="
+        "iv": "DstcpOC6EhEbpwaC",
+        "ct": "1ZbK6ANBIcPMbvnu/w==",
+        "tag": "CWHDbeFh3GylRrk8pcsVxg=="
       },
       "id_enc": {
-        "iv": "GpTI2YfR3lOjLdVp",
-        "ct": "ZemODiU=",
-        "tag": "HemeRXwtHlEJB8LeVvhAVw=="
+        "iv": "TOFwxDQ/R5Y5WOwV",
+        "ct": "eFhf00s=",
+        "tag": "pSs4hzwi8SOcfXNzfvAZFA=="
       },
       "pw_enc": {
-        "iv": "TYTWPhK0ubt9maL5",
-        "ct": "tSjSyjDLYUo=",
-        "tag": "O7lvW0yJWAiP88c8YZxMIg=="
+        "iv": "pSWm8AwnTYHOgYj5",
+        "ct": "lqhwBF2P4OI=",
+        "tag": "kcEP9sl//4mv8j3TUuTarQ=="
       },
       "country": "베트남",
       "config_mode": "",
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "custom-472",
