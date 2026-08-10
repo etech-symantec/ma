@@ -523,6 +523,17 @@ function expandGroupWithAncestors(gid){
     cur = groupParentOf(cur);
   }
 }
+// gid 자신과 모든 하위(자식, 손자…) 법인까지 함께 펼친 상태로 만든다.
+// 부모 법인을 펼칠 때 중첩된 자식 법인 카드도 매번 따로 클릭하지 않아도 바로 펼쳐지도록 한다.
+function expandGroupWithDescendants(gid){
+  expandedGroups.add(gid);
+  groupDescendantIds(gid).forEach(cg => expandedGroups.add(cg));
+}
+// gid 자신과 모든 하위(자식, 손자…) 법인의 펼침 상태를 함께 접는다.
+function collapseGroupWithDescendants(gid){
+  expandedGroups.delete(gid);
+  groupDescendantIds(gid).forEach(cg => expandedGroups.delete(cg));
+}
 // 연결된 가족 전체(자기 자신 포함)에 속한 자산들의 Support ID를 모두 모아 중복 없이 반환.
 function familySupportIds(gid){
   const fam = groupFamilyIds(gid);
@@ -861,12 +872,11 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
     return rank[s]>rank[acc]?s:acc;
   },'na');
 
-  // 부모-자식 관계가 전혀 없는 "독립 법인"이면서 Support ID가 하나뿐인 경우,
-  // 법인명 옆 배지가 이미 그 Support ID를 보여주므로 하위 "SUPPORT ID / 항목 건수" 바는
-  // 중복 정보라 생략한다. (가족 관계가 있거나 Support ID가 여러 개면 구분을 위해 그대로 보여준다.)
+  // Support ID가 하나뿐인 카드는 법인명 옆 배지가 이미 그 Support ID를 보여주므로
+  // 하위 "SUPPORT ID / 항목 건수" 바는 중복 정보라 생략한다 (독립 법인/자식 법인 모두 동일).
+  // Support ID가 여러 개인 카드만 각 Support ID를 구분하기 위해 그대로 보여준다.
   const subGroups = buildSubGroups(items);
-  const isIndependent = !isChild && !groupHasFamily(gid);
-  const collapseSubHead = isIndependent && subGroups.length <= 1;
+  const collapseSubHead = subGroups.length <= 1;
   const soloSubGroup = collapseSubHead ? subGroups[0] : null;
   const editableSid = soloSubGroup ? soloSubGroup.sid : null;
 
@@ -1009,7 +1019,7 @@ function render(){
   document.querySelectorAll('[data-toggle]').forEach(el=>{
     el.onclick = () => {
       const gid = el.dataset.toggle;
-      if (expandedGroups.has(gid)) expandedGroups.delete(gid); else expandedGroups.add(gid);
+      if (expandedGroups.has(gid)) collapseGroupWithDescendants(gid); else expandGroupWithDescendants(gid);
       render();
     };
   });
