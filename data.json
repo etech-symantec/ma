@@ -540,10 +540,17 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
       ],
       "device_type": "CA",
@@ -551,7 +558,11 @@
         "iv": "YWRkLLvDLkF8hu90",
         "ct": "MeLESeY=",
         "tag": "A8/nEv/LYBj+wLnOrvXlyg=="
-      }
+      },
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -600,10 +611,17 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
       ],
       "device_type": "MA",
@@ -611,7 +629,11 @@
         "iv": "sY4hJf/pIoxuVbJy",
         "ct": "sdGZ4TI=",
         "tag": "7R2lU9baaUaghRyndWzpNg=="
-      }
+      },
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -648,12 +670,23 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
-      ]
+      ],
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -690,12 +723,23 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
-      ]
+      ],
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -732,12 +776,23 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
-      ]
+      ],
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -784,14 +839,25 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
       ],
       "config_mode": "",
-      "country": "인도"
+      "country": "인도",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -838,14 +904,25 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
       ],
       "config_mode": "",
-      "country": "인도"
+      "country": "인도",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -892,14 +969,25 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
       ],
       "config_mode": "",
-      "country": "인도"
+      "country": "인도",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -934,14 +1022,25 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
       ],
       "config_mode": "",
-      "country": "인도"
+      "country": "인도",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -988,14 +1087,25 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
       ],
       "config_mode": "",
-      "country": "인도"
+      "country": "인도",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
@@ -1030,14 +1140,25 @@
       "cust_contacts": [
         {
           "role": "",
-          "name": "최원석 프로(PM) / 서상철<",
+          "name": "최원석 프로(PM)",
           "org": "",
-          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
-          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
         }
       ],
       "config_mode": "",
-      "country": "인도"
+      "country": "인도",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-shi",
