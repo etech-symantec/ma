@@ -452,6 +452,19 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
   overflow:hidden;
   box-shadow: var(--shadow);
 }
+/* 부모 법인 카드 안에 중첩되어 표시되는 자식 법인 카드 — 조금 더 작고, 옅은 배경과
+   왼쪽 강조선으로 "이 법인은 위 법인에 속한 자회사"라는 것을 시각적으로 구분해 준다. */
+.child-groups{ padding:14px 18px 4px; display:flex; flex-direction:column; gap:12px; background:var(--surface2); }
+.group-card--child{
+  margin-bottom:0;
+  background:var(--surface);
+  border-color:var(--border-solid);
+  border-left:3px solid var(--accent-dim);
+  box-shadow:none;
+}
+.group-card--child .group-head{ padding:13px 15px; }
+.group-card--child .group-title h3{ font-size:14px; }
+.child-branch{ font-size:15px; color:var(--accent-dim); line-height:1.3; margin-top:1px; flex-shrink:0; }
 .group-head{
   display:flex; align-items:flex-start; justify-content:space-between; gap:14px;
   padding:16px 18px; cursor:pointer;
