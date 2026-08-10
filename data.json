@@ -2502,11 +2502,15 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 45,
       "ip_enc": {
-        "iv": "bLN2Ihh4kQ4gz+aQ",
-        "ct": "cZqaOvLDIragRQtWDg==",
-        "tag": "Y3LawSiQ5GT1Mb6TL730Zg=="
+        "iv": "pZM5a3kyVV7GsrL3",
+        "ct": "GX+/t8+z2uqaHd27qQ==",
+        "tag": "Ckl+RN0eU1PlOhQDJjyYZw=="
       },
-      "id_enc": null,
+      "id_enc": {
+        "iv": "GSYxFU7aSqLWDfBG",
+        "ct": "UFKkUWE=",
+        "tag": "iSvAmQjlh/Ya7RoOr3XfhA=="
+      },
       "pw_enc": null,
       "country": "베트남",
       "config_mode": "Explicit",
