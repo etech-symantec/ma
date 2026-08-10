@@ -823,9 +823,9 @@
       "country": "인도"
     },
     {
-      "group": "in-sdn-proxy",
-      "flag": "",
-      "owner": "삼성 디스플레이 (SDN)",
+      "group": "in-sdn-cama",
+      "flag": "◎",
+      "owner": "삼성디스플레이 SDN",
       "location": "노이다",
       "support_id": "379966",
       "sku": "RP-S500-20-STDPLUS",
@@ -839,8 +839,8 @@
       "deploy_log": "24.09.07 Proxy1,2,RP PM (매년 같은날 전부 PM예정), RP stop까지 1시간정도 소요, disk 2% 기준",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "강성준",
-      "owner_secondary": "윤태리",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
       "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
@@ -863,24 +863,17 @@
         "ct": "wmaBly3hp8qDDsFvJpmV79/8aoXw/xR9Jp+hufNzuA==",
         "tag": "MHWcxjJcfMuWLEAqO9V9DQ=="
       },
-      "group_remarks": "※ 유지보수 PS 제외",
+      "group_remarks": "",
       "cust_contacts": [
         {
           "role": "",
-          "name": "Harshit Tripathi",
+          "name": "최원석 프로(PM) / 서상철<",
           "org": "",
-          "phone": "",
-          "email": "h.tripathi@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Ajay Kumar",
-          "org": "",
-          "phone": "",
-          "email": "ajay3.kumar@samsung.com"
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표) / +91-124-74280-41219",
+          "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
         }
       ],
-      "config_mode": "Explicit",
+      "config_mode": "",
       "country": "인도"
     },
     {
