@@ -2968,19 +2968,19 @@
       "tag_note": "베트남 삼성전기 (SEMV)",
       "id": 55,
       "ip_enc": {
-        "iv": "edtg4rDkxXpCYLbv",
-        "ct": "ur7PkX2bZ6jofp9krik=",
-        "tag": "Kma3GSiIgGktPIowWqJEpQ=="
+        "iv": "iOkUUIxaFDlv0/KN",
+        "ct": "sdH858MgMz8iyYilRlY=",
+        "tag": "DohaF9/7eCayV5jkUn7njg=="
       },
       "id_enc": {
-        "iv": "w7zD98j/8NeIBNmC",
-        "ct": "dcLnnm8554+i",
-        "tag": "F2CDi7NPmK/R6of4uECNjQ=="
+        "iv": "z2/wrDKINlDTwdaV",
+        "ct": "VKd97eCApqsm",
+        "tag": "MnI88wa0+Zsfvo0+L4l1BQ=="
       },
       "pw_enc": {
-        "iv": "ugpgSqSQDzQawF8F",
-        "ct": "FFNEtBPvlmEwe+1mPqoHv0lZkWI4Ykz96qKV8Y4c",
-        "tag": "V1cAPH4FbxviVHZjgAd0nQ=="
+        "iv": "4XivyIEC0zS0f6WZ",
+        "ct": "nZahp8NY3YPUQs8u",
+        "tag": "v/rPyzbnW7HYWZbfXGcdLA=="
       },
       "country": "베트남",
       "config_mode": "Explicit",
@@ -2994,7 +2994,11 @@
           "email": "tankhanh.nguyen@samsung.com"
         }
       ],
-      "enable_pw_enc": null
+      "enable_pw_enc": {
+        "iv": "FYhho9h6UmiUjaFj",
+        "ct": "XihwDS+JxWEVu+GeAA==",
+        "tag": "8OTFlA47OX4YByEqtnsXVQ=="
+      }
     },
     {
       "group": "vn-semv",
