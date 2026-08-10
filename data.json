@@ -2585,7 +2585,7 @@
       "qty": "8",
       "start": "2026.1.1",
       "end": "2026.12.31",
-      "remarks": "accelerated_pac, WPS 0073992894, 25.12.23 auto-update on, 7.3.24.x/7.4.4.x~7.4.8.1 업그레이드 불가",
+      "remarks": "accelerated_pac\nWPS 0073992894\n25.12.23 auto-update on\n7.3.24.x/7.4.4.x~7.4.8.1 업그레이드 불가",
       "deploy_date": "",
       "deploy_log": "22.05.21 신호근 / 23.06.27 윤태리 6.7.5.14>7.3.11.3 / 24.06.18 윤태리 7.3.11.3>7.3.18.2 / 25.04.16 윤태리 7.3.18.2>7.3.24.2 실패 / 25.04.16 윤태리 7.3.21.1 베트남 요청 / 26.01.04 윤태리 BCWF>BCIS",
       "mode": "",
@@ -2600,19 +2600,19 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 47,
       "ip_enc": {
-        "iv": "gwXt00gjjLykYQw1",
-        "ct": "ehQM2W31ZG1Askgd",
-        "tag": "a3O/5ShbpD7zBLLTD5lpTw=="
+        "iv": "dr8kFfK0Jd8qhtp/",
+        "ct": "m5t4dJ4HVy2UeQ+3",
+        "tag": "PTLJ3IUaUbbaEBmIAT6c2g=="
       },
       "id_enc": {
-        "iv": "RsTYVHy/rN8Bada3",
-        "ct": "ccjVEDacz/+x",
-        "tag": "P/S5qw9uOCsDSn3HtI3P1A=="
+        "iv": "3Q7TUUOU3WN0C58z",
+        "ct": "4wLY5JufoZxT",
+        "tag": "erQTRvQyCI/FJr8qgG56VA=="
       },
       "pw_enc": {
-        "iv": "Buga0wHVadQZXVnm",
-        "ct": "KBPxfG6T/xg=",
-        "tag": "FfgEYMbpJqV73/Hl4rvmmg=="
+        "iv": "mrCi1r0jhBI3Xm4S",
+        "ct": "JDYyB3uvF9M=",
+        "tag": "e++kZVQvKgNyieoh13d1Fw=="
       },
       "country": "베트남",
       "config_mode": "Explicit",
