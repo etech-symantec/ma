@@ -4572,7 +4572,7 @@
     {
       "group": "us-002",
       "flag": "",
-      "owner": "삼성전자 SJDRT",
+      "owner": "삼성전자 SJDRT (서부)",
       "location": "캘리포니아 산 호세",
       "support_id": "298214",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
@@ -4613,12 +4613,14 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "us-002",
       "flag": "",
-      "owner": "삼성전자 SJDRT",
+      "owner": "삼성전자 SJDRT (서부)",
       "location": "캘리포니아 산 호세",
       "support_id": "298214",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
@@ -4659,12 +4661,14 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "us-002",
       "flag": "",
-      "owner": "삼성전자 SJDRT",
+      "owner": "삼성전자 SJDRT (서부)",
       "location": "캘리포니아 산 호세",
       "support_id": "298214",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
@@ -4705,7 +4709,9 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "us-003",
