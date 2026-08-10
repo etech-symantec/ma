@@ -158,7 +158,7 @@
 <div id="groupEditModal">
   <div class="modal-card">
     <h2>법인 정보 수정</h2>
-    <p class="hint">법인명 / 국가 / 위치 / 점검 방식 / 구성방식 / 상위 법인(부모) / 담당 엔지니어 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다. Support ID와 구축 엔지니어는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있습니다. 구축 일자를 수정하거나 Support ID가 여러 개인 경우는 각 Support ID 영역의 ✎ 버튼에서 따로 수정합니다.</p>
+    <p class="hint">법인명 / 국가 / 위치 / 점검 방식 / 구성방식 / 상위 법인(부모) / 담당 엔지니어 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다. Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있습니다. Support ID가 여러 개인 경우는 각 Support ID 영역의 ✎ 버튼에서 따로 수정합니다. <b>다른 법인을 자식(하위 법인)으로 둔 상위 법인은 대표 이름 역할만 하며 Support ID를 직접 가질 수 없습니다.</b></p>
     <div class="form-grid">
       <div class="ge-row ge-row-3">
         <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
@@ -170,14 +170,15 @@
           </select>
         </div>
       </div>
-      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">다른 법인을 상위(부모)로 지정하면, 두 법인은 부모-자식 관계로 연결됩니다. 이렇게 연결된 법인들은 법인 정보 영역에 서로의 Support ID를 모두 함께 보여줍니다 (예: 같은 그룹사의 여러 법인이 Support ID를 나눠 쓰는 경우). 관계가 없는 법인은 기존처럼 표시됩니다.</p>
+      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">다른 법인을 상위(부모)로 지정하면, 두 법인은 부모-자식 관계로 연결됩니다. 이렇게 연결된 법인들은 법인 정보 영역에 서로의 Support ID를 모두 함께 보여줍니다 (예: 같은 그룹사의 여러 법인이 Support ID를 나눠 쓰는 경우). 관계가 없는 법인은 기존처럼 표시됩니다. 상위 법인으로 지정된 법인에 기존에 직접 연결되어 있던 Support ID/자산이 있다면, 대표 이름 역할만 하도록 자동으로 첫 번째 자식 법인 아래로 옮겨집니다.</p>
       <div class="ge-row ge-row-3">
         <div><label>국가 (COUNTRY)</label><input id="ge_country" placeholder="예: 베트남"></div>
         <div><label>위치 (LOCATION)</label><input id="ge_location" placeholder="예: 하노이"></div>
         <div><label>점검 방식</label><input id="ge_check" placeholder="원격 (RC)"></div>
       </div>
-      <div class="ge-row ge-row-2">
+      <div class="ge-row ge-row-3">
         <div><label>구축 엔지니어</label><input id="ge_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
+        <div><label>구축 일자 (YYYY.MM)</label><input id="ge_build_date" placeholder="2026.07"></div>
         <div><label>구성방식</label>
           <select id="ge_config_mode">
             <option value="">선택 안 함</option>
