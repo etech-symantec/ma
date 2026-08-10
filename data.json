@@ -535,7 +535,7 @@
         "tag": "aw9dEWWkgLZthwMa8FiTAg=="
       },
       "country": "인도",
-      "config_mode": "",
+      "config_mode": "Explicit",
       "group_remarks": "",
       "cust_contacts": [
         {
@@ -606,7 +606,7 @@
         "tag": "CQ3LTKR6A5bpgzcWi8OyTg=="
       },
       "country": "인도",
-      "config_mode": "",
+      "config_mode": "Explicit",
       "group_remarks": "",
       "cust_contacts": [
         {
@@ -665,7 +665,7 @@
       "id_enc": null,
       "pw_enc": null,
       "country": "인도",
-      "config_mode": "",
+      "config_mode": "Explicit",
       "group_remarks": "",
       "cust_contacts": [
         {
@@ -718,7 +718,7 @@
       "id_enc": null,
       "pw_enc": null,
       "country": "인도",
-      "config_mode": "",
+      "config_mode": "Explicit",
       "group_remarks": "",
       "cust_contacts": [
         {
@@ -771,7 +771,7 @@
       "id_enc": null,
       "pw_enc": null,
       "country": "인도",
-      "config_mode": "",
+      "config_mode": "Explicit",
       "group_remarks": "",
       "cust_contacts": [
         {
@@ -852,7 +852,7 @@
           "email": "sc2470.seo@samsung.com"
         }
       ],
-      "config_mode": "",
+      "config_mode": "Explicit",
       "country": "인도",
       "group_parent": "",
       "is_parent": false,
@@ -917,7 +917,7 @@
           "email": "sc2470.seo@samsung.com"
         }
       ],
-      "config_mode": "",
+      "config_mode": "Explicit",
       "country": "인도",
       "group_parent": "",
       "is_parent": false,
@@ -982,7 +982,7 @@
           "email": "sc2470.seo@samsung.com"
         }
       ],
-      "config_mode": "",
+      "config_mode": "Explicit",
       "country": "인도",
       "group_parent": "",
       "is_parent": false,
@@ -1035,7 +1035,7 @@
           "email": "sc2470.seo@samsung.com"
         }
       ],
-      "config_mode": "",
+      "config_mode": "Explicit",
       "country": "인도",
       "group_parent": "",
       "is_parent": false,
@@ -1100,7 +1100,7 @@
           "email": "sc2470.seo@samsung.com"
         }
       ],
-      "config_mode": "",
+      "config_mode": "Explicit",
       "country": "인도",
       "group_parent": "",
       "is_parent": false,
@@ -1153,7 +1153,7 @@
           "email": "sc2470.seo@samsung.com"
         }
       ],
-      "config_mode": "",
+      "config_mode": "Explicit",
       "country": "인도",
       "group_parent": "",
       "is_parent": false,
