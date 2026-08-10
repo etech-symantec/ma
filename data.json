@@ -1162,7 +1162,7 @@
       "qty": "1",
       "start": "2025.1.1",
       "end": "2025.12.31",
-      "remarks": "사업장 폐쇄",
+      "remarks": "",
       "deploy_date": "",
       "deploy_log": "23.12.08 박동석 6.7.5.12>7.3.15.1 / 24.03.26 박동석 7.3.15.1>7.3.17.1",
       "mode": "Explicit",
@@ -1177,19 +1177,19 @@
       "tag_note": "TSE-S 콜센터 (태국)",
       "id": 22,
       "ip_enc": {
-        "iv": "NslRnouVl8qbUcKY",
-        "ct": "ELuOKAosAQwXG7wEy6M=",
-        "tag": "OITps+Zf+/R3QJdI5oExNw=="
+        "iv": "Q7cF/C2fWakbRfVK",
+        "ct": "HI4ZLki4wPC451W5EaQ=",
+        "tag": "UhmrD+bhatkDh/ar9j8RnQ=="
       },
       "id_enc": {
-        "iv": "8YvxicXNSY9GUAJt",
-        "ct": "4kS6Ayn5blw=",
-        "tag": "d73ayqbgBe6CAfwbesLY7w=="
+        "iv": "SHCcntbTihR3vBdk",
+        "ct": "tNpJRnVnUaQ=",
+        "tag": "id0bKmkBmF/ywMVrK9kmbQ=="
       },
       "pw_enc": {
-        "iv": "TFSpR+anFH9/F4UQ",
-        "ct": "+sQKte7g/hi0PQ==",
-        "tag": "xSklYw16mlm/lXK5e0BjoA=="
+        "iv": "SPZHAurAm9GAuPVZ",
+        "ct": "CCH7s0M2srNMmg==",
+        "tag": "zvAMBlnHIx5YmRaE9Bpxmw=="
       },
       "country": "태국",
       "config_mode": "Explicit",
@@ -1209,7 +1209,8 @@
           "phone": "02-6155-8523",
           "email": "jaeyuni.kim@samsung.com"
         }
-      ]
+      ],
+      "enable_pw_enc": null
     },
     {
       "group": "th-tse",
