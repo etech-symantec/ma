@@ -1789,7 +1789,9 @@
         "iv": "7re4OKuQFkdZVOnm",
         "ct": "1hgwMJ4qwyxGReY=",
         "tag": "sEB/a1gsCrKR+632X2dlAw=="
-      }
+      },
+      "build_engineer": "신호근",
+      "build_date": "2026.01"
     },
     {
       "group": "uk-seuk",
@@ -1848,7 +1850,9 @@
         "iv": "gOl1MFmyHvxah4y1",
         "ct": "X6Uwm+dMbzmfmEw=",
         "tag": "gc7b53ISXf9iYfWovJBYDA=="
-      }
+      },
+      "build_engineer": "신호근",
+      "build_date": "2026.01"
     },
     {
       "group": "uk-seuk",
@@ -1902,7 +1906,9 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "영국"
+      "country": "영국",
+      "build_engineer": "신호근",
+      "build_date": "2026.01"
     },
     {
       "group": "uk-seuk",
@@ -1956,7 +1962,9 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "영국"
+      "country": "영국",
+      "build_engineer": "신호근",
+      "build_date": "2026.01"
     },
     {
       "group": "uk-seuk",
@@ -1998,7 +2006,9 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "영국"
+      "country": "영국",
+      "build_engineer": "신호근",
+      "build_date": "2026.01"
     },
     {
       "group": "vn-sdv-old",
