@@ -2530,7 +2530,7 @@
       "owner": "삼성디스플레이 SDV",
       "location": "하노이",
       "support_id": "2496112",
-      "sku": "-",
+      "sku": "ISG-Proxy",
       "sn": "-",
       "entitlement": "🔗",
       "qty": "8",
@@ -2551,26 +2551,27 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 46,
       "ip_enc": {
-        "iv": "+vVZ+6Z4Sx53tNjb",
-        "ct": "Y1F9hEmSkzPaJXo/",
-        "tag": "7CYZVc2/pI4/OGevaarr2w=="
+        "iv": "/UBFI5GcdnHs+Pap",
+        "ct": "RBrba8IQbiOBIybL",
+        "tag": "hBNE09gFQqsbGj9dcJFWoQ=="
       },
       "id_enc": {
-        "iv": "bVdVxgTEDMU4kRqu",
-        "ct": "b/5R+WQPcv9M",
-        "tag": "3EmelBATvbM5tezLBAFi2Q=="
+        "iv": "IAjiykTqXqIfvKtM",
+        "ct": "cm45Wb6m2zL7",
+        "tag": "kMF5nesaU1/a9emVQOQXmg=="
       },
       "pw_enc": {
-        "iv": "4fZOJEiKSi6AN195",
-        "ct": "GvYXrKtG+OQ=",
-        "tag": "2DbWXod+iAfbVRZx9lLUhA=="
+        "iv": "PY6cS+uRd4aZgkLY",
+        "ct": "IGaSy0dRi2U=",
+        "tag": "5QI2a3AhxVZqw6AZPmzvCQ=="
       },
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "vn-sdv-new",
