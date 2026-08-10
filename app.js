@@ -162,7 +162,14 @@ let editingRecordId = null; // asset record id currently being edited via addMod
 
 // ---------- device type ----------
 const DEVICE_COLORS = ['#31D8C9','#F2AE40','#EC5F4B','#7C9EFF','#C792EA','#48D48A','#FF8A65','#4FC3F7','#BA68C8','#AED581'];
-function deviceTypeLabel(r){ return (r.device_type && r.device_type.trim()) || '미지정'; }
+// device_type을 직접 입력하지 않은 자산이라도, SKU에 매칭되는 태그(MC/ASG/ISG 등)가 있으면
+// 그 태그를 장비 종류로 자동으로 채워서 보여준다. device_type을 직접 입력한 경우엔 그 값을 우선한다.
+function deviceTypeLabel(r){
+  if (r.device_type && r.device_type.trim()) return r.device_type.trim();
+  const tags = skuKeywordMatches(r.sku);
+  if (tags.length) return tags.join('/');
+  return '미지정';
+}
 function deviceTypeColor(label){
   let hash = 0;
   for (let i=0;i<label.length;i++) hash = (hash*31 + label.charCodeAt(i)) >>> 0;
@@ -1203,6 +1210,15 @@ function clearAssetForm(){
   ASSET_FORM_IDS.forEach(id=>document.getElementById(id).value='');
 }
 
+// SKU를 입력하는 동안 매칭되는 태그(MC/ASG/ISG 등)가 있으면 "장비 종류" 칸을 자동으로 채워준다.
+// 이미 장비 종류를 직접 입력해 둔 경우엔 덮어쓰지 않는다.
+document.getElementById('f_sku').addEventListener('input', () => {
+  const deviceTypeInput = document.getElementById('f_device_type');
+  if (deviceTypeInput.value.trim()) return;
+  const tags = skuKeywordMatches(document.getElementById('f_sku').value);
+  if (tags.length) deviceTypeInput.value = tags.join('/');
+});
+
 document.getElementById('addBtn').onclick = () => {
   editingRecordId = null;
   clearAssetForm();
@@ -1226,7 +1242,7 @@ async function openDirectEditModal(recId){
   clearAssetForm();
   const set = (id, v) => { document.getElementById(id).value = v || ''; };
   set('f_owner', rec.owner); set('f_country', rec.country); set('f_location', rec.location); set('f_support', rec.support_id);
-  set('f_device_type', rec.device_type); set('f_sku', rec.sku); set('f_sn', rec.sn); set('f_qty', rec.qty);
+  set('f_device_type', rec.device_type || skuKeywordMatches(rec.sku).join('/')); set('f_sku', rec.sku); set('f_sn', rec.sn); set('f_qty', rec.qty);
   set('f_start', rec.start); set('f_end', rec.end); set('f_os', rec.os_ver); set('f_check', rec.check_method);
   set('f_owner_primary', rec.owner_primary); set('f_owner_secondary', rec.owner_secondary);
   set('f_cust', rec.cust_contact); set('f_remarks', rec.remarks);
