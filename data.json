@@ -19958,7 +19958,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "dup-425",
@@ -20004,7 +20008,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "dup-425",
@@ -20050,7 +20058,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "dup-425",
@@ -20096,7 +20108,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "dup-425",
@@ -20142,7 +20158,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "dup-425",
@@ -20188,7 +20208,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "dup-425",
@@ -20222,7 +20246,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "id": 472,
