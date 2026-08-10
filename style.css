@@ -635,6 +635,18 @@ td.remarks-cell{ max-width:230px; }
 .sec-val.locked{ cursor:pointer; color:var(--text-faint); }
 .sec-val.copied{ background:#E8F7EE; color:var(--green); font-weight:600; }
 
+/* 자산 하나에 IP 주소가 여러 개일 수 있어, 잠금 해제 후에는 각 IP를 줄마다 하나씩
+   따로 클릭해서 복사할 수 있는 칩 목록으로 보여준다 */
+.ip-chip-list{ display:flex; flex-direction:column; gap:3px; align-items:flex-start; }
+.ip-chip{
+  letter-spacing:0.02em; font-family:var(--mono); font-size:12px;
+  cursor:pointer; border-radius:4px; padding:2px 5px; margin:-2px -5px;
+  transition:background .12s, color .12s; white-space:nowrap;
+}
+.ip-chip:hover{ background:var(--surface2); color:var(--accent-dim); }
+.ip-chip.copied{ background:#E8F7EE; color:var(--green); font-weight:600; }
+.ip-chip-empty{ color:var(--text-faint); }
+
 /* PW 셀 — 일반 비밀번호 아래에 Enable 비밀번호가 있으면 한 줄 더 붙여서 보여준다 */
 .pw-cell{ display:flex; flex-direction:column; gap:3px; }
 .pw-cell-row{ display:flex; align-items:center; }
@@ -742,12 +754,12 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 #wl_fieldchange_grid{ margin-top:12px; }
 
 /* add form / modals */
-#addModal, #workLogModal, #groupEditModal, #custContactsModal, #moveAssetModal{
+#addModal, #workLogModal, #groupEditModal, #addGroupModal, #subGroupEditModal, #custContactsModal, #moveAssetModal{
   position:fixed; inset:0; z-index:1200; background:rgba(15,23,42,0.45); backdrop-filter:blur(3px);
   display:none; align-items:flex-start; justify-content:center; overflow-y:auto;
   padding:calc(var(--global-header-h, 0px) + 24px) 20px 40px;
 }
-#addModal.open, #workLogModal.open, #groupEditModal.open, #custContactsModal.open, #moveAssetModal.open{ display:flex; }
+#addModal.open, #workLogModal.open, #groupEditModal.open, #addGroupModal.open, #subGroupEditModal.open, #custContactsModal.open, #moveAssetModal.open{ display:flex; }
 .cp-error{ color:var(--red); font-size:12.5px; margin-top:14px; min-height:16px; }
 .modal-card{
   width:100%; max-width:640px; background:var(--surface); border:1px solid var(--border-solid);
@@ -768,8 +780,12 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 /* 법인 정보 수정창 — 요청한 3열/2열 행 배치. 각 행은 form-grid(2열) 안에서 전체 너비를 차지하고,
    행 내부에서 자체적으로 3열 또는 2열 그리드를 이룬다. */
 .form-grid .ge-row{ grid-column:1/-1; display:grid; gap:12px; }
+.form-grid .ge-row-5{ grid-template-columns:1.3fr 1fr 1.2fr 1fr 1fr; }
 .form-grid .ge-row-3{ grid-template-columns:1fr 1fr 1fr; }
 .form-grid .ge-row-2{ grid-template-columns:1fr 1fr; }
+
+/* 법인 추가창 — 가로로 넓게, 세로는 짧게 (한 행에 필드를 더 많이 배치) */
+#addGroupModal .modal-card{ max-width:900px; }
 .form-grid input:disabled, .form-grid select:disabled{
   background:var(--surface2); color:var(--text-faint); cursor:not-allowed;
 }
@@ -833,5 +849,5 @@ footer.foot{
   tbody td{ border:none; padding:4px 0; }
   tbody td::before{ content:attr(data-label); display:block; font-size:9.5px; color:var(--text-faint); text-transform:uppercase; font-family:var(--mono); margin-bottom:2px;}
   .form-grid{ grid-template-columns:1fr; }
-  .form-grid .ge-row-3, .form-grid .ge-row-2{ grid-template-columns:1fr; }
+  .form-grid .ge-row-3, .form-grid .ge-row-2, .form-grid .ge-row-5{ grid-template-columns:1fr; }
 }
