@@ -17278,9 +17278,9 @@
     {
       "group": "kr-013",
       "flag": "잠실",
-      "owner": "2021년 에스코어 Symantec Proxy 유지보수",
-      "location": "에스코어",
-      "support_id": "",
+      "owner": "에스코어",
+      "location": "잠실",
+      "support_id": "2065519",
       "sku": "SG-S500-10-PR-STANDARD",
       "sn": "3417300010",
       "entitlement": "🔗",
@@ -17294,23 +17294,45 @@
       "os_ver": "7.3.11.3",
       "owner_primary": "윤태리",
       "owner_secondary": "신호근",
-      "check_method": "방문 / 방문신청 메일로 양식맞춰서",
-      "cust_contact": "전수영 프로(장기휴가) / 김재민 프로 / 장비: 가락시장",
-      "cust_phone": "010-8860-8653",
-      "cust_email": "soo.j@samsung.com; jm.jemin.kim@samsung.com",
+      "check_method": "방문",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
       "tag": "O",
       "tag_note": "에스코어",
       "id": 327,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "한국",
+      "config_mode": "Explicit",
+      "group_remarks": "장비: 가락시장",
+      "group_parent": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "전수영 프로",
+          "org": "",
+          "phone": "010-8860-8653",
+          "email": "soo.j@samsung.com"
+        },
+        {
+          "role": "운용",
+          "name": "김재민 프로",
+          "org": "",
+          "phone": "",
+          "email": "jm.jemin.kim@samsung.com"
+        }
+      ],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-013",
       "flag": "",
-      "owner": "",
-      "location": "",
-      "support_id": "",
+      "owner": "에스코어",
+      "location": "잠실",
+      "support_id": "2065519",
       "sku": "RNW-SVC-BCWF-250-499-1Y",
       "sn": "QJTP6-BZGHY",
       "entitlement": "🔗",
@@ -17322,9 +17344,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -17333,7 +17355,29 @@
       "id": 328,
       "ip_enc": null,
       "id_enc": null,
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "한국",
+      "config_mode": "Explicit",
+      "group_remarks": "장비: 가락시장",
+      "group_parent": "",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "전수영 프로",
+          "org": "",
+          "phone": "010-8860-8653",
+          "email": "soo.j@samsung.com"
+        },
+        {
+          "role": "운용",
+          "name": "김재민 프로",
+          "org": "",
+          "phone": "",
+          "email": "jm.jemin.kim@samsung.com"
+        }
+      ],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-015",
