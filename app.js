@@ -861,14 +861,24 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
     return rank[s]>rank[acc]?s:acc;
   },'na');
 
-  const subgroupsHtml = buildSubGroups(items).map(sg => `
+  // 부모-자식 관계가 전혀 없는 "독립 법인"이면서 Support ID가 하나뿐인 경우,
+  // 법인명 옆 배지가 이미 그 Support ID를 보여주므로 하위 "SUPPORT ID / 항목 건수" 바는
+  // 중복 정보라 생략한다. (가족 관계가 있거나 Support ID가 여러 개면 구분을 위해 그대로 보여준다.)
+  const subGroups = buildSubGroups(items);
+  const isIndependent = !isChild && !groupHasFamily(gid);
+  const collapseSubHead = isIndependent && subGroups.length <= 1;
+  const soloSubGroup = collapseSubHead ? subGroups[0] : null;
+  const editableSid = soloSubGroup ? soloSubGroup.sid : null;
+
+  const subgroupsHtml = subGroups.map(sg => `
           <div class="subgroup-block">
+            ${sg === soloSubGroup ? '' : `
             <div class="subgroup-head">
               <span class="sg-support-chip"><span class="meta-label">Support ID</span><span class="meta-value">${esc(sg.sid)||'미지정'}</span></span>
               ${buildEngineerInlineHtml(sg.meta)}
               <span class="sg-count-chip">${sg.items.length}건</span>
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only sg-edit-btn" data-subgroup-gid="${esc(gid)}" data-subgroup-sid="${esc(sg.sid)}" title="Support ID / 구축 엔지니어 / 구축 일자 수정">${pencilSvg()}</button>` : ''}
-            </div>
+            </div>`}
             <table>
               <thead><tr>
                 ${canBulkMove() ? '<th class="col-select"></th>' : ''}
@@ -894,14 +904,13 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
             <div class="group-title">
               <div class="title-row">
                 <h3 class="group-title-name">${esc(meta.owner)}</h3>
-                ${supportIdTitleHtml(gid, items, isChild)}
-              </div>
-              <div class="sub title-meta">
+                ${supportIdTitleHtml(gid, items, isChild, editableSid)}
                 <span class="meta-chip meta-chip-country"><span class="meta-label">국가</span><span class="meta-value">${esc(meta.country)||'—'}</span></span>
                 <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
                 <span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>
                 <span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>
                 <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${items.length}건</span></span>
+                ${collapseSubHead ? buildEngineerInlineHtml(soloSubGroup.meta) : ''}
                 ${relationChipHtml(gid, meta, isChild)}
                 ${managerNamesInlineHtml(meta)}
                 ${custContactsSummaryHtml(gid, meta)}
@@ -1203,10 +1212,19 @@ function groupRemarksHtml(meta){
 // 법인명 옆에 나란히 Support ID를 보여준다 (펼치지 않아도, 별도 줄 없이 바로 이름 옆에 보임).
 // - 부모-자식 관계가 없는 독립 법인, 자식 법인: 이 법인 자신의 Support ID만.
 // - 부모 법인(모회사, 자식 카드들이 안에 중첩되어 표시됨): 가족 전체(자기+모든 자식)의 Support ID를 하나씩 모두 나열.
-function supportIdTitleHtml(gid, items, isChild){
+// editableSid가 주어지면(=Support ID가 하나뿐인 독립 법인이라 하위 Support ID 영역을 생략한 경우),
+// 그 배지를 클릭해서 바로 Support ID / 구축 엔지니어 / 구축 일자를 수정할 수 있게 한다.
+function supportIdTitleHtml(gid, items, isChild, editableSid){
   const sids = isChild ? ownSupportIds(items) : displaySupportIds(gid, items);
   if (!sids.length) return '';
-  return `<span class="title-support-ids">${sids.map(s=>`<span class="family-sid-chip">${esc(s)}</span>`).join('')}</span>`;
+  const chips = sids.map(s => {
+    const editable = editableSid && s === editableSid && isCurrentUserAdmin();
+    const attrs = editable
+      ? ` data-subgroup-gid="${esc(gid)}" data-subgroup-sid="${esc(s)}" title="Support ID / 구축 엔지니어 / 구축 일자 수정"`
+      : '';
+    return `<span class="family-sid-chip${editable ? ' family-sid-chip--editable' : ''}"${attrs}><span class="meta-label">Support ID</span><span class="meta-value">${esc(s)}</span></span>`;
+  }).join('');
+  return `<span class="title-support-ids">${chips}</span>`;
 }
 
 // 부모-자식 관계가 있는 법인에서만 "관계"(모회사/자회사) 칩을, 다른 법인 정보와 같은 한 줄에 함께 보여준다.
