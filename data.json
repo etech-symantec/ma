@@ -2432,7 +2432,7 @@
       "owner": "삼성디스플레이 SDV",
       "location": "하노이",
       "support_id": "2496112",
-      "sku": "-",
+      "sku": "SSP-S410-10-STD PLUS",
       "sn": "-",
       "entitlement": "🔗",
       "qty": "1",
@@ -2453,26 +2453,27 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 44,
       "ip_enc": {
-        "iv": "p1B8Z6dm7qus+DXo",
-        "ct": "bNgHT5oLEUYtP2sv6g==",
-        "tag": "Wq2v57HWWMvZ0OaZMbLH+A=="
+        "iv": "BMCXeG7MKWUXjino",
+        "ct": "Hl4fKxlvcj6b9InQQw==",
+        "tag": "8BipiONmEXL1sPWENVyTcg=="
       },
       "id_enc": {
-        "iv": "Hx81DuA+CmJndYi3",
-        "ct": "8wnb960=",
-        "tag": "+epMD2OCM+indIwIXnF46g=="
+        "iv": "vLzTf6rawEpeM3zR",
+        "ct": "8xvaej0=",
+        "tag": "Lk7vO6P+Qj7Hy8BZmUUfsA=="
       },
       "pw_enc": {
-        "iv": "VwiAK0VtOv0wsY0O",
-        "ct": "zmvwas1JX1aIoHTJow==",
-        "tag": "dZzpPhXOxcKB1+gKGi4AWw=="
+        "iv": "NsVriFOhw8zNPSZs",
+        "ct": "nPrqCY1/xrCyIu5w+w==",
+        "tag": "nLdUtN5UsMJfiMhLqEWoSA=="
       },
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "vn-sdv-new",
