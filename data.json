@@ -3944,7 +3944,7 @@
     {
       "group": "au-seau",
       "flag": "",
-      "owner": "삼성전자 호주 (SEAU)",
+      "owner": "삼성전자 SEAU",
       "location": "",
       "support_id": "4109283",
       "sku": "SG-S400-20-PR-ONSITEADV",
@@ -3977,12 +3977,14 @@
       "country": "호주",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "au-seau",
       "flag": "",
-      "owner": "삼성전자 호주 (SEAU)",
+      "owner": "삼성전자 SEAU",
       "location": "",
       "support_id": "4109283",
       "sku": "BCWF-B-100-249",
@@ -4011,12 +4013,14 @@
       "country": "호주",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "au-seau",
       "flag": "",
-      "owner": "삼성전자 호주 (SEAU)",
+      "owner": "삼성전자 SEAU",
       "location": "",
       "support_id": "4109283",
       "sku": "WEB-PROTECT-SUB",
@@ -4045,7 +4049,9 @@
       "country": "호주",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "seha",
