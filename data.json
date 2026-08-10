@@ -236,12 +236,16 @@
       "tag_note": "일본",
       "id": 5,
       "ip_enc": {
-        "iv": "M2YLrTZ4oPe5F9fc",
-        "ct": "6jjh+p//IlfEmOuV",
-        "tag": "HoIjw12vW8k3Lseu53dncg=="
+        "iv": "oD/WAeMLMURrBt1+",
+        "ct": "p/Lyexp0rETnPYGv",
+        "tag": "q44bDOXIGHL+n+AVOohbuQ=="
       },
       "id_enc": null,
-      "pw_enc": null,
+      "pw_enc": {
+        "iv": "AOW62GeSTtIW/ki7",
+        "ct": "9wzPIxlXUeyHMrvhQJf1",
+        "tag": "tBf2tOWgPDk7w6/tNET5tg=="
+      },
       "group_remarks": "",
       "cust_contacts": [
         {
@@ -254,7 +258,7 @@
       ],
       "config_mode": "Explicit",
       "country": "일본",
-      "device_type": ""
+      "device_type": "RP"
     },
     {
       "group": "tw-ds",
