@@ -241,6 +241,7 @@ const SKU_TAG_RULES = [
   { key:'WPS',  test: sku => sku.toUpperCase() === 'WEB-PROTECT-SUB' },
   { key:'CA',   test: sku => sku.toUpperCase().startsWith('CAS-') },
   { key:'MA',   test: sku => sku.toUpperCase().startsWith('MA-') },
+  { key:'File Inspection', test: sku => sku.toUpperCase().startsWith('FI-') },
 ];
 const SKU_TAG_KEYS = SKU_TAG_RULES.map(r => r.key);
 
@@ -827,7 +828,7 @@ function render(){
           <table>
             <thead><tr>
               <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
-              <th>IP</th><th>ID</th><th>PW</th><th>Enable PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
+              <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
             </tr></thead>
             <tbody>
               ${items.map(r=>rowHtml(r, meta.support_id)).join('')}
@@ -1015,8 +1016,12 @@ function rowHtml(r, groupSupportId){
     </td>
     <td data-label="IP">${secretField(r,'ip')}</td>
     <td data-label="ID">${secretField(r,'id')}</td>
-    <td data-label="PW">${secretField(r,'pw')}</td>
-    <td data-label="Enable PW">${secretField(r,'enable_pw')}</td>
+    <td data-label="PW">
+      <div class="pw-cell">
+        <div class="pw-cell-row">${secretField(r,'pw')}</div>
+        ${r.enable_pw_enc ? `<div class="pw-cell-row pw-cell-enable"><span class="en-badge" title="Enable 비밀번호">EN</span>${secretField(r,'enable_pw')}</div>` : ''}
+      </div>
+    </td>
     <td data-label="OS 버전">${esc(r.os_ver)||'—'}</td>
     <td class="remarks-cell" data-label="비고"><div class="remarks-txt">${esc(r.remarks)||'—'}</div></td>
     <td data-label="작업이력">
