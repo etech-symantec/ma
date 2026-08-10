@@ -89,19 +89,19 @@
       "tag_note": "일본",
       "id": 2,
       "ip_enc": {
-        "iv": "6ydwapNeOmvd1N0G",
-        "ct": "bezdlniBDZo2RCo=",
-        "tag": "Bc35Sq5DTKktQUYsnx/h7w=="
+        "iv": "BGvH8YQZuSqok1oG",
+        "ct": "AFTBZAbgN7XSSwo=",
+        "tag": "VuTKr/XrIjlKXkSGfPosYA=="
       },
       "id_enc": {
-        "iv": "iUcrUjGHVodVomLA",
-        "ct": "xxF6Gja2gyfS9jk=",
-        "tag": "94gXlBweh2+9lC6A1BsWCQ=="
+        "iv": "tE25RDdjPfTpkId9",
+        "ct": "wfP94k+nt5TSJ6M=",
+        "tag": "uPulFQ3bTAWSjgOyzmjbdg=="
       },
       "pw_enc": {
-        "iv": "y6zWsNtd4CXX5/G0",
-        "ct": "UQVFuSxU1ATnjwskNX5+Nhak50hYshR1YbAFYYuFVjML563uCuM=",
-        "tag": "tmUmV+zXFgKE+ls4vxsSag=="
+        "iv": "HlNsK/87vX3zWsf2",
+        "ct": "UqqpwOWedHSPcd3no3KbWwMPvw==",
+        "tag": "i2Jl00Uzd91599o1Z7cccg=="
       },
       "group_remarks": "",
       "cust_contacts": [
@@ -115,7 +115,12 @@
       ],
       "config_mode": "Explicit",
       "country": "일본",
-      "device_type": "ASG/SG"
+      "device_type": "ASG/SG",
+      "enable_pw_enc": {
+        "iv": "g5zrkufils9GF5Iw",
+        "ct": "a5BlDtRZX07lpYro",
+        "tag": "09tR+1qQkHAoWHGoHgTVKw=="
+      }
     },
     {
       "group": "jp-sds",
