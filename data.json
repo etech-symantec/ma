@@ -2042,29 +2042,11 @@
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Ngo Van Tuong",
-          "org": "",
-          "phone": "+84-222-390-5145, +84-985-479-311",
-          "email": "tuongnv.93@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Pham The Thao",
-          "org": "",
-          "phone": "+84-222-390-5999, +84-97-397-0461",
-          "email": "lt.dat@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Le Minh Diep",
-          "org": "",
-          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
-          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
-        }
-      ]
+      "cust_contacts": [],
+      "group_parent": "custom-1786348811427",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "vn-sdv-old",
@@ -2098,29 +2080,11 @@
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Ngo Van Tuong",
-          "org": "",
-          "phone": "+84-222-390-5145, +84-985-479-311",
-          "email": "tuongnv.93@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Pham The Thao",
-          "org": "",
-          "phone": "+84-222-390-5999, +84-97-397-0461",
-          "email": "lt.dat@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Le Minh Diep",
-          "org": "",
-          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
-          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
-        }
-      ]
+      "cust_contacts": [],
+      "group_parent": "custom-1786348811427",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "vn-sdv-old",
@@ -2154,29 +2118,11 @@
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Ngo Van Tuong",
-          "org": "",
-          "phone": "+84-222-390-5145, +84-985-479-311",
-          "email": "tuongnv.93@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Pham The Thao",
-          "org": "",
-          "phone": "+84-222-390-5999, +84-97-397-0461",
-          "email": "lt.dat@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Le Minh Diep",
-          "org": "",
-          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
-          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
-        }
-      ]
+      "cust_contacts": [],
+      "group_parent": "custom-1786348811427",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "vn-sdv-old",
@@ -2210,29 +2156,11 @@
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Ngo Van Tuong",
-          "org": "",
-          "phone": "+84-222-390-5145, +84-985-479-311",
-          "email": "tuongnv.93@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Pham The Thao",
-          "org": "",
-          "phone": "+84-222-390-5999, +84-97-397-0461",
-          "email": "lt.dat@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Le Minh Diep",
-          "org": "",
-          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
-          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
-        }
-      ]
+      "cust_contacts": [],
+      "group_parent": "custom-1786348811427",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "vn-sdv-old",
@@ -2278,29 +2206,11 @@
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Ngo Van Tuong",
-          "org": "",
-          "phone": "+84-222-390-5145, +84-985-479-311",
-          "email": "tuongnv.93@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Pham The Thao",
-          "org": "",
-          "phone": "+84-222-390-5999, +84-97-397-0461",
-          "email": "lt.dat@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Le Minh Diep",
-          "org": "",
-          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
-          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
-        }
-      ]
+      "cust_contacts": [],
+      "group_parent": "custom-1786348811427",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "vn-sdv-old",
@@ -2346,29 +2256,11 @@
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Ngo Van Tuong",
-          "org": "",
-          "phone": "+84-222-390-5145, +84-985-479-311",
-          "email": "tuongnv.93@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Pham The Thao",
-          "org": "",
-          "phone": "+84-222-390-5999, +84-97-397-0461",
-          "email": "lt.dat@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Le Minh Diep",
-          "org": "",
-          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
-          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
-        }
-      ]
+      "cust_contacts": [],
+      "group_parent": "custom-1786348811427",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "vn-sdv-old",
@@ -2402,29 +2294,11 @@
       "country": "베트남",
       "config_mode": "Explicit",
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Ngo Van Tuong",
-          "org": "",
-          "phone": "+84-222-390-5145, +84-985-479-311",
-          "email": "tuongnv.93@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Pham The Thao",
-          "org": "",
-          "phone": "+84-222-390-5999, +84-97-397-0461",
-          "email": "lt.dat@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Le Minh Diep",
-          "org": "",
-          "phone": "+84-222-390-5588, +84-96-583-2699(카톡)",
-          "email": "minhdiep.le@samsung.com; minhdiep.le@samsung.com; ; cc.sdv.itsec@samsung.com"
-        }
-      ]
+      "cust_contacts": [],
+      "group_parent": "custom-1786348811427",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "vn-sdv-new",
@@ -20914,7 +20788,40 @@
     },
     {
       "id": 1786348811427,
+      "group": "vn-sdv-old",
+      "flag": "★",
+      "owner": "삼성디스플레이 SDV",
+      "country": "베트남",
+      "location": "하노이",
+      "check_method": "원격 (RC)",
+      "config_mode": "Explicit",
+      "owner_primary": "윤태리",
+      "owner_secondary": "홍진영",
+      "cust_contacts": [],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "custom-1786348811427",
+      "is_parent": false,
+      "support_id": "",
+      "build_engineer": "",
+      "build_date": "",
+      "sku": "",
+      "sn": "",
+      "qty": "",
+      "start": "",
+      "end": "",
+      "os_ver": "",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "work_log": []
+    },
+    {
+      "id": 1786348956933,
       "group": "custom-1786348811427",
+      "is_group_shell": true,
       "flag": "",
       "owner": "삼성디스플레이 SDV",
       "country": "베트남",
@@ -20931,17 +20838,12 @@
       "group_parent": "",
       "is_parent": true,
       "support_id": "",
-      "build_engineer": "",
-      "build_date": "",
       "sku": "",
       "sn": "",
       "qty": "",
       "start": "",
       "end": "",
       "os_ver": "",
-      "remarks": "",
-      "deploy_date": "",
-      "mode": "",
       "work_log": []
     }
   ],
