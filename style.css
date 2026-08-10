@@ -780,12 +780,15 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 /* 법인 정보 수정창 — 요청한 3열/2열 행 배치. 각 행은 form-grid(2열) 안에서 전체 너비를 차지하고,
    행 내부에서 자체적으로 3열 또는 2열 그리드를 이룬다. */
 .form-grid .ge-row{ grid-column:1/-1; display:grid; gap:12px; }
-.form-grid .ge-row-5{ grid-template-columns:1.3fr 1fr 1.2fr 1fr 1fr; }
+.form-grid .ge-row-5{ grid-template-columns:repeat(5, 1fr); }
 .form-grid .ge-row-3{ grid-template-columns:1fr 1fr 1fr; }
 .form-grid .ge-row-2{ grid-template-columns:1fr 1fr; }
 
 /* 법인 추가창 — 가로로 넓게, 세로는 짧게 (한 행에 필드를 더 많이 배치) */
 #addGroupModal .modal-card{ max-width:900px; }
+
+/* 자산 추가/수정창 — SKU/S/N/수량/라이선스, OS/IP/ID/PW/Enable PW를 각각 5열로 배치하기 위해 더 넓게 */
+#addModal .modal-card{ max-width:960px; }
 .form-grid input:disabled, .form-grid select:disabled{
   background:var(--surface2); color:var(--text-faint); cursor:not-allowed;
 }
