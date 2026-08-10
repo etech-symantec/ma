@@ -2714,8 +2714,8 @@
       "owner": "삼성디스플레이 SDV",
       "location": "하노이",
       "support_id": "743737",
-      "sku": "-",
-      "sn": "-",
+      "sku": "ISG-CAS-SUB",
+      "sn": "91998989",
       "entitlement": "🔗",
       "qty": "16",
       "start": "2026.5.18",
@@ -2735,26 +2735,27 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 50,
       "ip_enc": {
-        "iv": "kUHas33rgBsFGAsl",
-        "ct": "DfVExKRmtb5M334dhBJa6WbjEZl8SbY=",
-        "tag": "KBCh+0a25e87hPUz5tl5jQ=="
+        "iv": "vWa+cK5dn6xp1cjB",
+        "ct": "5kFCKg5hJkHYKp4LiYtaIyxwmu0R3cQ=",
+        "tag": "ZBJYxL3iOcFDjsL4zCYZEQ=="
       },
       "id_enc": {
-        "iv": "qG4NBWFZUjisvKVl",
-        "ct": "asCY58Y=",
-        "tag": "bG0IViGvPH3wa1b2CELV5w=="
+        "iv": "0WE/MEexbOMlxzhZ",
+        "ct": "yRq7TLU=",
+        "tag": "0/LkoVJqUP+ql/nhf7O4Ag=="
       },
       "pw_enc": {
-        "iv": "HosYeRvmU2PGJjOs",
-        "ct": "b/M3bSbQgyU=",
-        "tag": "q+CqKTJaIs3ivcdCISWhqw=="
+        "iv": "BtSBUYpho1tFbGYA",
+        "ct": "vEIkno94+Qw=",
+        "tag": "E69tSsFlwUsElIMHYLS3Aw=="
       },
       "country": "베트남",
       "config_mode": "",
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "custom-472",
