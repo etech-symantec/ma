@@ -158,6 +158,7 @@ let activeMyAssetsFilter = false; // 로그인한 사용자가 정 담당자인 
 let workLogRecordId = null; // which record's modal is currently open
 let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
 let editingRecordId = null; // asset record id currently being edited via addModal (null = adding new)
+let addAssetTargetGid = null; // 특정 법인에 자산을 추가 중일 때 그 법인의 group id (null = 완전히 새 법인 추가)
 
 // SKU에 매칭되는 태그(MC/ASG/ISG 등)를 기반으로 이 자산을 대표하는 짧은 이름을 만든다.
 // SKU 자체가 비어 있을 때 등, 사람이 읽을 표시용 이름이 필요한 곳(이동/이력 안내 문구 등)에서 사용한다.
@@ -959,6 +960,8 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
   const soloSubGroup = collapseSubHead ? (subGroups[0] || null) : null;
   const editableSid = soloSubGroup ? soloSubGroup.sid : null;
 
+  const isParentGroup = groupChildrenOf(gid).length > 0;
+
   const subgroupsHtml = subGroups.map(sg => `
           <div class="subgroup-block">
             ${sg === soloSubGroup ? '' : `
@@ -1001,13 +1004,14 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
                 <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${realItems.length}건</span></span>
                 ${soloSubGroup ? buildEngineerInlineHtml(soloSubGroup.meta) : ''}
                 ${isChild ? '' : managerNamesInlineHtml(meta)}
-                ${custContactsSummaryHtml(gid, meta)}
+                ${isChild ? '' : custContactsSummaryHtml(gid, meta)}
               </div>
               ${groupRemarksHtml(meta)}
             </div>
           </div>
           <div class="group-badges">
             <div class="group-title-actions">
+              ${isCurrentUserAdmin() && !isParentGroup ? `<button class="wl-action-btn icon-only" data-group-add-asset="${gid}" title="이 법인에 자산 추가">＋</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/점검방식/구성방식/상위 법인/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
@@ -1104,6 +1108,9 @@ function render(){
 
   document.querySelectorAll('[data-group-edit]').forEach(btn=>{
     btn.onclick = (e) => { e.stopPropagation(); openGroupEditModal(btn.dataset.groupEdit); };
+  });
+  document.querySelectorAll('[data-group-add-asset]').forEach(btn=>{
+    btn.onclick = (e) => { e.stopPropagation(); openAddAssetToGroup(btn.dataset.groupAddAsset); };
   });
   document.querySelectorAll('[data-subgroup-gid]').forEach(btn=>{
     btn.onclick = (e) => { e.stopPropagation(); openSubGroupEditModal(btn.dataset.subgroupGid, btn.dataset.subgroupSid); };
@@ -1540,9 +1547,16 @@ function clearAssetForm(){
   ASSET_FORM_IDS.forEach(id=>document.getElementById(id).value='');
 }
 
+const ASSET_FORM_LOCKABLE_IDS = ['f_owner','f_country','f_location','f_check','f_owner_primary','f_owner_secondary'];
+function setAssetFormLocked(locked){
+  ASSET_FORM_LOCKABLE_IDS.forEach(id=>{ document.getElementById(id).disabled = locked; });
+}
+
 document.getElementById('addBtn').onclick = () => {
   editingRecordId = null;
+  addAssetTargetGid = null;
   clearAssetForm();
+  setAssetFormLocked(false);
   document.getElementById('addModalTitle').textContent = '새 자산 항목 추가';
   document.getElementById('saveAddBtn').textContent = '항목 저장';
   document.getElementById('addModal').classList.add('open');
@@ -1550,7 +1564,40 @@ document.getElementById('addBtn').onclick = () => {
 document.getElementById('cancelAddBtn').onclick = () => {
   document.getElementById('addModal').classList.remove('open');
   editingRecordId = null;
+  addAssetTargetGid = null;
+  setAssetFormLocked(false);
 };
+
+// 특정 법인(gid)에 바로 자산을 추가한다. 법인명/국가/위치/점검방식/담당 엔지니어 등 법인 공통 정보는
+// 그 법인 기준으로 자동 채워지고 잠기며(변경하려면 "법인 정보 수정" 이용), Support ID와 자산 고유 정보만 입력한다.
+// 자식 법인을 둔 상위 법인(대표 이름 역할만 함)에는 자산을 직접 추가할 수 없다.
+function openAddAssetToGroup(gid){
+  if (!isCurrentUserAdmin()){ alert('마스터만 자산을 추가할 수 있습니다.'); return; }
+  if (viewOnly || !sessionKey){ alert('자산을 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  if (groupChildrenOf(gid).length){ alert('상위 법인은 대표 이름 역할만 하므로 자산을 직접 추가할 수 없습니다. 해당 자산이 속할 자식 법인(Support ID)에 추가해 주세요.'); return; }
+  const items = records.filter(r=>r.group===gid);
+  if (!items.length) return;
+  const meta = groupMeta(items);
+
+  editingRecordId = null;
+  addAssetTargetGid = gid;
+  clearAssetForm();
+  const set = (id, v) => { document.getElementById(id).value = v || ''; };
+  set('f_owner', meta.owner==='(법인명 미확인)' ? '' : meta.owner);
+  set('f_country', meta.country);
+  set('f_location', meta.location);
+  set('f_check', meta.check_method);
+  set('f_owner_primary', meta.owner_primary);
+  set('f_owner_secondary', meta.owner_secondary);
+  // Support ID가 이미 하나뿐이면 미리 채워 두고, 여러 개이거나 없으면 직접 입력하도록 비워 둔다.
+  const sids = ownSupportIds(items.filter(r=>!r.is_group_shell));
+  set('f_support', sids.length === 1 ? sids[0] : '');
+  setAssetFormLocked(true);
+
+  document.getElementById('addModalTitle').textContent = `"${meta.owner}" 법인에 자산 추가`;
+  document.getElementById('saveAddBtn').textContent = '항목 저장';
+  document.getElementById('addModal').classList.add('open');
+}
 
 // 마스터 관리자 전용: 작업이력을 남기지 않고 자산의 모든 필드를 바로 수정한다.
 async function openDirectEditModal(recId){
@@ -1560,7 +1607,9 @@ async function openDirectEditModal(recId){
   if (!rec) return;
 
   editingRecordId = recId;
+  addAssetTargetGid = null;
   clearAssetForm();
+  setAssetFormLocked(false);
   const set = (id, v) => { document.getElementById(id).value = v || ''; };
   set('f_owner', rec.owner); set('f_country', rec.country); set('f_location', rec.location); set('f_support', rec.support_id);
   set('f_sku', rec.sku); set('f_sn', rec.sn); set('f_qty', rec.qty);
@@ -1609,6 +1658,43 @@ document.getElementById('saveAddBtn').onclick = async () => {
       enable_pw_enc: await encryptField(val('f_enable_pw')),
     });
     editingRecordId = null;
+    document.getElementById('addModal').classList.remove('open');
+    clearAssetForm();
+    render();
+    buildFilters();
+    scheduleAutoSync();
+    return;
+  }
+
+  if (addAssetTargetGid){
+    // 특정 법인에 자산 추가: 법인 공통 정보는 그 법인 기준으로 강제 적용하고, Support ID/자산 고유 정보만 입력받는다.
+    if (groupChildrenOf(addAssetTargetGid).length){
+      alert('상위 법인은 대표 이름 역할만 하므로 자산을 직접 추가할 수 없습니다.');
+      return;
+    }
+    const items = records.filter(r=>r.group===addAssetTargetGid);
+    if (!items.length){ addAssetTargetGid = null; document.getElementById('addModal').classList.remove('open'); return; }
+    const meta = groupMeta(items);
+    const newId = Math.max(0,...records.map(r=>r.id)) + 1;
+    const rec = {
+      id:newId, group:addAssetTargetGid, flag: meta.flag || '',
+      owner: meta.owner, country: meta.country, location: meta.location,
+      support_id:val('f_support'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
+      start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
+      mode:'', os_ver:val('f_os'), owner_primary: meta.owner_primary, owner_secondary: meta.owner_secondary,
+      check_method: meta.check_method, config_mode: meta.config_mode,
+      cust_contacts: JSON.parse(JSON.stringify(meta.cust_contacts || [])),
+      cust_contact:'', cust_phone:'', cust_email:'',
+      group_remarks: meta.group_remarks, group_parent: meta.group_parent, work_log:[],
+      ip_enc: await encryptField(val('f_ip')),
+      id_enc: await encryptField(val('f_id')),
+      pw_enc: await encryptField(val('f_pw')),
+      enable_pw_enc: await encryptField(val('f_enable_pw')),
+    };
+    records.push(rec);
+    expandGroupWithAncestors(addAssetTargetGid);
+    addAssetTargetGid = null;
+    setAssetFormLocked(false);
     document.getElementById('addModal').classList.remove('open');
     clearAssetForm();
     render();
@@ -1763,9 +1849,20 @@ function openGroupEditModal(gid){
     : [{role:'',name:'',org:'',phone:'',email:''}]
   ).map(c=>({...c}));
   renderCustContactRows();
+  updateGeCustSectionVisibility();
   document.getElementById('geError').textContent = '';
   document.getElementById('groupEditModal').classList.add('open');
 }
+
+// 하위 법인(부모가 지정된 법인)에는 고객사 담당자 정보가 필요 없으므로 해당 입력 영역을 숨긴다.
+// 모달이 열려 있는 동안 상위 법인 선택을 바꾸면 그에 맞춰 즉시 보이거나 숨겨진다.
+function updateGeCustSectionVisibility(){
+  const isChildNow = !!document.getElementById('ge_parent_group').value;
+  document.getElementById('ge_cust_list').style.display = isChildNow ? 'none' : '';
+  document.getElementById('ge_cust_add_btn').style.display = isChildNow ? 'none' : '';
+  document.getElementById('geCustHiddenHint').style.display = isChildNow ? '' : 'none';
+}
+document.getElementById('ge_parent_group').addEventListener('change', updateGeCustSectionVisibility);
 
 document.getElementById('cancelGeBtn').onclick = () => {
   document.getElementById('groupEditModal').classList.remove('open');
@@ -1803,7 +1900,8 @@ document.getElementById('saveGeBtn').onclick = () => {
   const forbiddenParents = new Set([groupEditId, ...groupDescendantIds(groupEditId)]);
   const finalParentGid = (newParentGid && !forbiddenParents.has(newParentGid)) ? newParentGid : '';
   captureCustContactsFromDom();
-  const newContacts = geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
+  // 하위 법인(부모가 지정된 법인)에는 고객사 담당자 정보가 필요 없으므로 저장하지 않는다.
+  const newContacts = finalParentGid ? [] : geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
   records.forEach(r => {
     if (r.group === groupEditId){
       r.owner = newOwner;
