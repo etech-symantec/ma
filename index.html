@@ -193,10 +193,11 @@
         <div><label>담당 엔지니어 (정)</label><input id="ge_owner_primary" placeholder="주 담당자"></div>
         <div><label>담당 엔지니어 (부)</label><input id="ge_owner_secondary" placeholder="부 담당자"></div>
       </div>
-      <div class="full">
+      <div class="full" id="geCustSectionWrap">
         <label>고객사 담당자 (최대 5명)</label>
         <div id="ge_cust_list" class="cust-contact-list"></div>
         <button type="button" class="btn btn-ghost cust-add-btn" id="ge_cust_add_btn">＋ 담당자 추가</button>
+        <p class="hint" id="geCustHiddenHint" style="display:none; margin-top:6px;">하위 법인(자식 법인)에는 고객사 담당자 정보가 필요 없어 이 법인에서는 입력하지 않습니다.</p>
       </div>
       <div class="full"><label>비고</label><textarea id="ge_remarks" placeholder="법인 관련 별도 코멘트"></textarea></div>
     </div>
