@@ -4716,7 +4716,7 @@
     {
       "group": "us-003",
       "flag": "",
-      "owner": "삼성전자 SEARP",
+      "owner": "삼성전자 SEARP (동부)",
       "location": "뉴저지",
       "support_id": "298214",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
@@ -4757,12 +4757,14 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "us-003",
       "flag": "",
-      "owner": "삼성전자 SEARP",
+      "owner": "삼성전자 SEARP (동부)",
       "location": "뉴저지",
       "support_id": "298214",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
@@ -4803,12 +4805,14 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "us-003",
       "flag": "",
-      "owner": "삼성전자 SEARP",
+      "owner": "삼성전자 SEARP (동부)",
       "location": "뉴저지",
       "support_id": "298214",
       "sku": "ASG-S400-20-U1000-ONSITEADV",
@@ -4849,7 +4853,9 @@
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
-      "cust_contacts": []
+      "cust_contacts": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "us-004",
