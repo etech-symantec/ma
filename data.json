@@ -3043,31 +3043,13 @@
       },
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Raul Espinoza",
-          "org": "",
-          "phone": "52-664-188-1999 / 1-619-403-1803",
-          "email": "raul.espinoza@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Dong Yob Kim",
-          "org": "",
-          "phone": "",
-          "email": "dongyob.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Arturo Juarez",
-          "org": "",
-          "phone": "",
-          "email": "ar.juarez@samsung.com"
-        }
-      ],
+      "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "group_parent": "custom-1786344991848",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "mx-samex-srt",
@@ -3111,31 +3093,13 @@
         "tag": "gatKE44O0ExbfjPPKkp6Ew=="
       },
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Raul Espinoza",
-          "org": "",
-          "phone": "52-664-188-1999 / 1-619-403-1803",
-          "email": "raul.espinoza@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Dong Yob Kim",
-          "org": "",
-          "phone": "",
-          "email": "dongyob.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Arturo Juarez",
-          "org": "",
-          "phone": "",
-          "email": "ar.juarez@samsung.com"
-        }
-      ],
+      "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "group_parent": "custom-1786344991848",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "mx-samex-srt",
@@ -3167,31 +3131,13 @@
       "id_enc": null,
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "Raul Espinoza",
-          "org": "",
-          "phone": "52-664-188-1999 / 1-619-403-1803",
-          "email": "raul.espinoza@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Dong Yob Kim",
-          "org": "",
-          "phone": "",
-          "email": "dongyob.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "Arturo Juarez",
-          "org": "",
-          "phone": "",
-          "email": "ar.juarez@samsung.com"
-        }
-      ],
+      "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "group_parent": "custom-1786344991848",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "custom-473",
