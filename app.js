@@ -153,34 +153,17 @@ let users = [];              // registered users (working array, in-memory) — 
 let expandedGroups = new Set();
 let activeStatusFilters = new Set(['ok','warn','na']);
 let activeCountryFilter = null;
-let activeDeviceTypeFilter = null;
 let activeSkuKeywordFilters = new Set();
 let activeMyAssetsFilter = false; // 로그인한 사용자가 정 담당자인 사이트(법인)만 보기
 let workLogRecordId = null; // which record's modal is currently open
 let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
 let editingRecordId = null; // asset record id currently being edited via addModal (null = adding new)
 
-// ---------- device type ----------
-const DEVICE_COLORS = ['#31D8C9','#F2AE40','#EC5F4B','#7C9EFF','#C792EA','#48D48A','#FF8A65','#4FC3F7','#BA68C8','#AED581'];
-// device_type을 직접 입력하지 않은 자산이라도, SKU에 매칭되는 태그(MC/ASG/ISG 등)가 있으면
-// 그 태그를 장비 종류로 자동으로 채워서 보여준다. device_type을 직접 입력한 경우엔 그 값을 우선한다.
-function deviceTypeLabel(r){
-  if (r.device_type && r.device_type.trim()) return r.device_type.trim();
+// SKU에 매칭되는 태그(MC/ASG/ISG 등)를 기반으로 이 자산을 대표하는 짧은 이름을 만든다.
+// SKU 자체가 비어 있을 때 등, 사람이 읽을 표시용 이름이 필요한 곳(이동/이력 안내 문구 등)에서 사용한다.
+function skuTagLabel(r){
   const tags = skuKeywordMatches(r.sku);
-  if (tags.length) return tags.join('/');
-  return '미지정';
-}
-function deviceTypeColor(label){
-  let hash = 0;
-  for (let i=0;i<label.length;i++) hash = (hash*31 + label.charCodeAt(i)) >>> 0;
-  return DEVICE_COLORS[hash % DEVICE_COLORS.length];
-}
-function deviceBadge(r){
-  const label = deviceTypeLabel(r);
-  const color = deviceTypeColor(label);
-  return `<span class="device-badge" style="color:${color}; border-color:${color}55; background:${color}1a;">
-    <span class="device-dot" style="background:${color}"></span>${esc(label)}
-  </span>`;
+  return tags.length ? tags.join('/') : '미지정';
 }
 
 // ---------- SKU category tags ----------
@@ -520,7 +503,7 @@ function trashSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fil
 function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>`; }
 function moveSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>`; }
 
-// ---------- 대시보드 (OS 버전별 / 장비 종류별 / 위치별 / 국가별 / SKU별 현황 한눈에 보기) ----------
+// ---------- 대시보드 (OS 버전별 / 태그별 / 위치별 / 국가별 / SKU별 현황 한눈에 보기) ----------
 let dashboardMode = false;
 
 // keyFn으로 묶은 뒤, 각 그룹에 해당하는 원본 항목 배열도 함께 반환한다.
@@ -604,6 +587,23 @@ function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable){
     </div>`;
 }
 
+// 한 자산이 여러 태그에 동시에 매칭될 수 있으므로(예: ISG-100은 ISG와 SG 둘 다 매칭),
+// 태그별 통계는 bucketGroups처럼 항목당 버킷 하나가 아니라, 매칭되는 태그마다 항목을 중복해서 센다.
+function bucketByTags(arr){
+  const map = new Map();
+  arr.forEach(item => {
+    const tags = skuKeywordMatches(item.sku);
+    const keys = tags.length ? tags : ['태그 없음'];
+    keys.forEach(k => {
+      if (!map.has(k)) map.set(k, []);
+      map.get(k).push(item);
+    });
+  });
+  return [...map.entries()]
+    .map(([label, items]) => [label, items.length, items])
+    .sort((a,b) => b[1]-a[1]);
+}
+
 function renderDashboard(){
   const wrap = document.getElementById('dashboardView');
   if (!wrap) return;
@@ -626,7 +626,7 @@ function renderDashboard(){
     ? dashboardSectionHtml('os_none', '태그 없음 · 버전별', 'dash-c1', bucketGroups(osNoTagItems, r => osVersionTag(r.os_ver)), true)
     : '';
 
-  const byType = bucketGroups(records, r => deviceTypeLabel(r));
+  const byTag = bucketByTags(records);
   const byLocation = bucketGroups(records, r => r.location);
   const byCountry = bucketGroups(records, r => countryOf(r));
   const bySku = bucketGroups(records, r => r.sku);
@@ -644,7 +644,7 @@ function renderDashboard(){
     </div>
 
     <div class="dash-grid" style="margin-top:16px;">
-      ${dashboardSectionHtml('type', '장비 종류별', 'dash-c2', byType, false)}
+      ${dashboardSectionHtml('tag', '태그별 · 클릭하면 사용 법인 표시', 'dash-c2', byTag, true)}
       ${dashboardSectionHtml('location', '위치별', 'dash-c3', byLocation, false)}
       ${dashboardSectionHtml('country', '국가별', 'dash-c4', byCountry, false)}
       ${dashboardSectionHtml('sku', 'SKU별 · 클릭하면 사용 법인 표시', 'dash-c5', bySku, true)}
@@ -742,7 +742,6 @@ function render(){
   const mySiteGroupIds = getMySiteGroupIds();
   let list = records.filter(r => {
     if (!activeStatusFilters.has(licenseStatus(r))) return false;
-    if (activeDeviceTypeFilter && deviceTypeLabel(r) !== activeDeviceTypeFilter) return false;
     if (activeSkuKeywordFilters.size){
       const kws = skuKeywordMatches(r.sku);
       if (!kws.some(k => activeSkuKeywordFilters.has(k))) return false;
@@ -770,7 +769,7 @@ function render(){
     }
     if (q){
       const custBits = (r.cust_contacts||[]).flatMap(c=>[c.name,c.phone,c.email]);
-      const hay = [r.owner,r.country,r.location,r.sku,r.sn,r.support_id,r.check_method,r.owner_primary,r.owner_secondary,r.cust_contact,...custBits,deviceTypeLabel(r),r.remarks,r.group_remarks,skuKeywordMatches(r.sku).join(' ')].join(' ').toLowerCase();
+      const hay = [r.owner,r.country,r.location,r.sku,r.sn,r.support_id,r.check_method,r.owner_primary,r.owner_secondary,r.cust_contact,...custBits,r.remarks,r.group_remarks,skuKeywordMatches(r.sku).join(' ')].join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -1101,24 +1100,6 @@ function buildFilters(){
     };
   });
 
-  const deviceBox = document.getElementById('deviceTypeFilters');
-  const deviceTypes = [...new Set(records.map(deviceTypeLabel))].sort((a,b)=>a.localeCompare(b,'ko'));
-  deviceBox.innerHTML = deviceTypes.map(t=>{
-    const color = deviceTypeColor(t);
-    return `
-    <div class="filter-item ${activeDeviceTypeFilter===t?'active':''}" data-devicetype="${esc(t)}">
-      <span><span class="device-dot" style="display:inline-block; background:${color}; margin-right:6px;"></span>${esc(t)}</span>
-      <span class="cnt">${records.filter(r=>deviceTypeLabel(r)===t).length}</span>
-    </div>`;
-  }).join('');
-  deviceBox.querySelectorAll('[data-devicetype]').forEach(el=>{
-    el.onclick = ()=>{
-      const v = el.dataset.devicetype;
-      activeDeviceTypeFilter = activeDeviceTypeFilter===v ? null : v;
-      render();
-    };
-  });
-
   const kwBox = document.getElementById('skuKeywordFilters');
   kwBox.innerHTML = SKU_TAG_KEYS.map(k=>{
     const cnt = records.filter(r=>skuKeywordMatches(r.sku).includes(k)).length;
@@ -1171,7 +1152,7 @@ function renderFiltersResetSlot(){
   const searchInput = document.getElementById('searchInput');
   const hasQuery = !!(searchInput && searchInput.value.trim());
   const hasTopFieldFilters = Object.values(topFieldFilters).some(Boolean);
-  const hasActiveFilters = !isDefaultStatus || !!activeCountryFilter || !!activeDeviceTypeFilter
+  const hasActiveFilters = !isDefaultStatus || !!activeCountryFilter
     || activeSkuKeywordFilters.size > 0 || activeMyAssetsFilter || hasQuery || hasTopFieldFilters;
 
   if (!hasActiveFilters){ slot.innerHTML = ''; return; }
@@ -1179,7 +1160,6 @@ function renderFiltersResetSlot(){
   document.getElementById('filtersResetBtn').onclick = () => {
     activeStatusFilters = new Set(['ok','warn','na']);
     activeCountryFilter = null;
-    activeDeviceTypeFilter = null;
     activeSkuKeywordFilters = new Set();
     activeMyAssetsFilter = false;
     Object.keys(topFieldFilters).forEach(k => topFieldFilters[k] = '');
@@ -1204,20 +1184,11 @@ document.getElementById('expandAllBtn').onclick = () => {
 };
 
 // ---------- add / edit / delete record ----------
-const ASSET_FORM_IDS = ['f_owner','f_country','f_location','f_support','f_device_type','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_owner_primary','f_owner_secondary','f_cust','f_remarks'];
+const ASSET_FORM_IDS = ['f_owner','f_country','f_location','f_support','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_owner_primary','f_owner_secondary','f_cust','f_remarks'];
 
 function clearAssetForm(){
   ASSET_FORM_IDS.forEach(id=>document.getElementById(id).value='');
 }
-
-// SKU를 입력하는 동안 매칭되는 태그(MC/ASG/ISG 등)가 있으면 "장비 종류" 칸을 자동으로 채워준다.
-// 이미 장비 종류를 직접 입력해 둔 경우엔 덮어쓰지 않는다.
-document.getElementById('f_sku').addEventListener('input', () => {
-  const deviceTypeInput = document.getElementById('f_device_type');
-  if (deviceTypeInput.value.trim()) return;
-  const tags = skuKeywordMatches(document.getElementById('f_sku').value);
-  if (tags.length) deviceTypeInput.value = tags.join('/');
-});
 
 document.getElementById('addBtn').onclick = () => {
   editingRecordId = null;
@@ -1242,7 +1213,7 @@ async function openDirectEditModal(recId){
   clearAssetForm();
   const set = (id, v) => { document.getElementById(id).value = v || ''; };
   set('f_owner', rec.owner); set('f_country', rec.country); set('f_location', rec.location); set('f_support', rec.support_id);
-  set('f_device_type', rec.device_type || skuKeywordMatches(rec.sku).join('/')); set('f_sku', rec.sku); set('f_sn', rec.sn); set('f_qty', rec.qty);
+  set('f_sku', rec.sku); set('f_sn', rec.sn); set('f_qty', rec.qty);
   set('f_start', rec.start); set('f_end', rec.end); set('f_os', rec.os_ver); set('f_check', rec.check_method);
   set('f_owner_primary', rec.owner_primary); set('f_owner_secondary', rec.owner_secondary);
   set('f_cust', rec.cust_contact); set('f_remarks', rec.remarks);
@@ -1277,7 +1248,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
     if (!rec){ editingRecordId = null; document.getElementById('addModal').classList.remove('open'); return; }
     Object.assign(rec, {
       owner: val('f_owner')||rec.owner, country:val('f_country'), location:val('f_location'), support_id:val('f_support'),
-      device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
+      sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
       start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'),
       os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
       cust_contact:val('f_cust'),
@@ -1298,7 +1269,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
   const gid = 'custom-' + newId;
   const rec = {
     id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', country:val('f_country'), location:val('f_location'),
-    support_id:val('f_support'), device_type:val('f_device_type'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
+    support_id:val('f_support'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
     start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
     mode:'', os_ver:val('f_os'), owner_primary:val('f_owner_primary'), owner_secondary:val('f_owner_secondary'), check_method:val('f_check'),
     cust_contact:val('f_cust'), cust_phone:'', cust_email:'', work_log:[],
@@ -1465,7 +1436,7 @@ function openMoveAssetModal(recId){
   document.getElementById('maError').textContent = '';
   const curMeta = groupMeta(records.filter(r=>r.group===rec.group));
   document.getElementById('maHint').textContent =
-    `현재 "${curMeta.owner}" 법인에 속한 "${rec.sku || deviceTypeLabel(rec)}" 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.`;
+    `현재 "${curMeta.owner}" 법인에 속한 "${rec.sku || skuTagLabel(rec)}" 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.`;
   document.getElementById('moveAssetModal').classList.add('open');
 }
 
@@ -1485,7 +1456,7 @@ document.getElementById('saveMaBtn').onclick = () => {
   if (!targetItems.length){ errEl.textContent = '대상 법인을 찾을 수 없습니다.'; return; }
   const meta = groupMeta(targetItems);
 
-  if (!confirm(`"${rec.sku || deviceTypeLabel(rec)}" 항목을 "${meta.owner}" 법인으로 옮길까요?`)) return;
+  if (!confirm(`"${rec.sku || skuTagLabel(rec)}" 항목을 "${meta.owner}" 법인으로 옮길까요?`)) return;
 
   rec.group = targetGid;
   rec.flag = meta.flag;
@@ -1840,7 +1811,7 @@ function getRecentWorkLogEntries(limit){
     (r.work_log||[]).forEach(entry => {
       const key = activityKeyOf(r.id, entry.id);
       if (dismissed.has(key)) return;
-      all.push({ entry, recId:r.id, recGroup:r.group, recOwner:r.owner, recLabel:r.sku || deviceTypeLabel(r), key });
+      all.push({ entry, recId:r.id, recGroup:r.group, recOwner:r.owner, recLabel:r.sku || skuTagLabel(r), key });
     });
   });
   all.sort((a,b) => (b.entry.id||0) - (a.entry.id||0));
