@@ -5164,16 +5164,20 @@
       "tag_note": "미국 중부(TXDRT)",
       "id": 108,
       "ip_enc": {
-        "iv": "1ZcwU9IBwfjkMHlh",
-        "ct": "NHUajC6OccYsmGjFHWOfPExjSJ2PS5zYo9MK3w==",
-        "tag": "0059mu1sHLSgnZz07Cwjyw=="
+        "iv": "V3pcppY9T8R/yhtR",
+        "ct": "OX1YxVOYX3/QHIoNacc3ZDjVMfOt95yFdZSEdw==",
+        "tag": "2OSRWEObLj1DKqIovXHioQ=="
       },
       "id_enc": {
-        "iv": "rxXYmGpKlPktE0w+",
-        "ct": "M84Sifk=",
-        "tag": "qPJpCc+NqrRQPeRfSLMMTg=="
+        "iv": "1fi2Zc+epJNm1y62",
+        "ct": "WRQ0580=",
+        "tag": "FrCSq6BaTyvmzi+Es2SeOQ=="
       },
-      "pw_enc": null,
+      "pw_enc": {
+        "iv": "/nVHoSXcE/z3rVze",
+        "ct": "4z3YLHFnyJatX1o=",
+        "tag": "Icsdao8/knQO1kUNLoBKyw=="
+      },
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
