@@ -2481,7 +2481,7 @@
       "owner": "삼성디스플레이 SDV",
       "location": "하노이",
       "support_id": "2496112",
-      "sku": "-",
+      "sku": "SSP-S410-10-STD PLUS",
       "sn": "-",
       "entitlement": "🔗",
       "qty": "1",
@@ -2502,9 +2502,9 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 45,
       "ip_enc": {
-        "iv": "hSRVaZfqV2x01JYm",
-        "ct": "Hku4TnvPUT9Mx1GSpA==",
-        "tag": "wVPgTU1+itnqGjkq9OLBdg=="
+        "iv": "ca+UhOdjsvVUf6ND",
+        "ct": "kPlhFfYTPGrv3oXjzg==",
+        "tag": "laLksD8T2fagGS8GozfW2g=="
       },
       "id_enc": null,
       "pw_enc": null,
@@ -2513,7 +2513,8 @@
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "vn-sdv-new",
