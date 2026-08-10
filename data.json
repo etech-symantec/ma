@@ -2861,7 +2861,7 @@
       "owner": "삼성디스플레이 SDV",
       "location": "하노이",
       "support_id": "743737",
-      "sku": "-",
+      "sku": "WEB-PROTECT-SUB",
       "sn": "-",
       "entitlement": "",
       "qty": "-",
@@ -2889,7 +2889,8 @@
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "신호근",
-      "build_date": "2026.06"
+      "build_date": "2026.06",
+      "enable_pw_enc": null
     },
     {
       "group": "vn-sdv-new",
