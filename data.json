@@ -2704,8 +2704,8 @@
       "config_mode": "",
       "group_remarks": "",
       "cust_contacts": [],
-      "build_engineer": "",
-      "build_date": "",
+      "build_engineer": "신호근",
+      "build_date": "2026.06",
       "enable_pw_enc": null
     },
     {
@@ -2753,8 +2753,8 @@
       "config_mode": "",
       "group_remarks": "",
       "cust_contacts": [],
-      "build_engineer": "",
-      "build_date": "",
+      "build_engineer": "신호근",
+      "build_date": "2026.06",
       "enable_pw_enc": null
     },
     {
@@ -2802,8 +2802,8 @@
       "config_mode": "",
       "group_remarks": "",
       "cust_contacts": [],
-      "build_engineer": "",
-      "build_date": "",
+      "build_engineer": "신호근",
+      "build_date": "2026.06",
       "enable_pw_enc": null
     },
     {
@@ -2851,8 +2851,8 @@
       "config_mode": "",
       "group_remarks": "",
       "cust_contacts": [],
-      "build_engineer": "",
-      "build_date": "",
+      "build_engineer": "신호근",
+      "build_date": "2026.06",
       "enable_pw_enc": null
     },
     {
@@ -2888,8 +2888,8 @@
       "config_mode": "",
       "group_remarks": "",
       "cust_contacts": [],
-      "build_engineer": "",
-      "build_date": ""
+      "build_engineer": "신호근",
+      "build_date": "2026.06"
     },
     {
       "group": "vn-sdv-new",
@@ -21964,7 +21964,12 @@
       "ip_enc": null,
       "id_enc": null,
       "pw_enc": null,
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "config_mode": "",
+      "build_engineer": "신호근",
+      "build_date": "2026.06",
+      "group_remarks": "",
+      "cust_contacts": []
     }
   ],
   "users": [
