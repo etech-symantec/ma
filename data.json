@@ -5263,16 +5263,20 @@
       "tag_note": "미국 중부(TXDRT)",
       "id": 110,
       "ip_enc": {
-        "iv": "SZk+dvOZd2RMl4XI",
-        "ct": "+QXBjMfBsK46ErFY10UM30N//uGk6x6/uBtt",
-        "tag": "V57H/Ixj/0uDsHMRidwVJQ=="
+        "iv": "XB+1kokuBxRD/XH3",
+        "ct": "A0T1UeflPNaNJt3QDEhNyttVE6tqoicRHG5A",
+        "tag": "b2zY6OA+jdYsl/68pdIiWw=="
       },
       "id_enc": {
-        "iv": "skSEdYQRZWgXEDON",
-        "ct": "zAyHEfbdd/RDmiyR",
-        "tag": "jBwPpZ9R7xkxuh4GxUmmZg=="
+        "iv": "06cJuLquoIEQOHYT",
+        "ct": "oZhTe36QLXDhZvKw",
+        "tag": "11SxQQnwZmjMYQpLl30+6g=="
       },
-      "pw_enc": null,
+      "pw_enc": {
+        "iv": "4oPjDQKyGFJNfUtz",
+        "ct": "75sfK5JdS/GZvLA=",
+        "tag": "4MXHp+3NXK2/wXzpudO81Q=="
+      },
       "country": "미국",
       "config_mode": "Transparent",
       "group_remarks": "",
