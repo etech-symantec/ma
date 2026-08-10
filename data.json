@@ -4872,9 +4872,9 @@
       "group_parent": "kr-001"
     },
     {
-      "group": "kr-001",
+      "group": "us-005",
       "flag": "",
-      "owner": "삼성전자 미주법인",
+      "owner": "삼성전자 RP (동부)",
       "location": "뉴저지",
       "support_id": "298214",
       "sku": "Web Security Service - WSS",
@@ -4902,13 +4902,14 @@
       "pw_enc": null,
       "country": "미국",
       "config_mode": "Transparent",
-      "group_remarks": "",
-      "cust_contacts": []
+      "group_remarks": "미국 HQ",
+      "cust_contacts": [],
+      "group_parent": "kr-001"
     },
     {
-      "group": "kr-001",
+      "group": "us-005",
       "flag": "",
-      "owner": "삼성전자 미주법인",
+      "owner": "삼성전자 RP (동부)",
       "location": "뉴저지",
       "support_id": "298214",
       "sku": "MC-S400-20-100-ONSITEADV",
@@ -4940,8 +4941,9 @@
       "pw_enc": null,
       "country": "미국",
       "config_mode": "Transparent",
-      "group_remarks": "",
-      "cust_contacts": []
+      "group_remarks": "미국 HQ",
+      "cust_contacts": [],
+      "group_parent": "kr-001"
     },
     {
       "group": "us-005",
@@ -21896,6 +21898,33 @@
       "id_enc": null,
       "pw_enc": null,
       "enable_pw_enc": null
+    },
+    {
+      "id": 1786344991845,
+      "group": "kr-001",
+      "is_group_shell": true,
+      "flag": "",
+      "owner": "삼성전자 미주법인",
+      "country": "미국",
+      "location": "뉴저지",
+      "check_method": "원격 (RC)",
+      "config_mode": "Transparent",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "cust_contacts": [],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "support_id": "",
+      "sku": "",
+      "sn": "",
+      "qty": "",
+      "start": "",
+      "end": "",
+      "os_ver": "",
+      "work_log": []
     }
   ],
   "users": [
