@@ -19520,7 +19520,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-025",
@@ -19566,7 +19570,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-025",
@@ -19612,7 +19620,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-025",
@@ -19658,7 +19670,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-025",
@@ -19704,7 +19720,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-025",
@@ -19750,7 +19770,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-025",
@@ -19796,7 +19820,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-025",
@@ -19842,7 +19870,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-025",
@@ -19876,7 +19908,11 @@
       "config_mode": "Inline",
       "group_remarks": "",
       "cust_contacts": [],
-      "country": "미국"
+      "country": "미국",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "dup-425",
@@ -20377,7 +20413,40 @@
     },
     {
       "id": 1786348497151,
+      "group": "kr-025",
+      "flag": "미국",
+      "owner": "한화큐셀 Module",
+      "country": "미국",
+      "location": "조지아",
+      "check_method": "X",
+      "config_mode": "Inline",
+      "owner_primary": "신호근",
+      "owner_secondary": "강성준",
+      "cust_contacts": [],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "custom-1786348497151",
+      "is_parent": false,
+      "support_id": "",
+      "build_engineer": "",
+      "build_date": "",
+      "sku": "",
+      "sn": "",
+      "qty": "",
+      "start": "",
+      "end": "",
+      "os_ver": "",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "work_log": []
+    },
+    {
+      "id": 1786348811426,
       "group": "custom-1786348497151",
+      "is_group_shell": true,
       "flag": "",
       "owner": "한화큐셀",
       "country": "미국",
@@ -20409,17 +20478,12 @@
       "group_parent": "",
       "is_parent": true,
       "support_id": "",
-      "build_engineer": "",
-      "build_date": "",
       "sku": "",
       "sn": "",
       "qty": "",
       "start": "",
       "end": "",
       "os_ver": "",
-      "remarks": "",
-      "deploy_date": "",
-      "mode": "",
       "work_log": []
     }
   ],
