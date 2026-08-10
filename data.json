@@ -19743,7 +19743,7 @@
       "group": "kr-023",
       "flag": "평택",
       "owner": "동우화인켐",
-      "location": "동우화인켐",
+      "location": "평택",
       "support_id": "546252",
       "sku": "SSP-S410-40B",
       "sn": "1123700021",
@@ -19779,13 +19779,18 @@
         "iv": "jxu4tUSRvprIaChD",
         "ct": "u6uHKmg=",
         "tag": "lQBWA0ZSTCrJCmEKQepvXg=="
-      }
+      },
+      "country": "한국",
+      "config_mode": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "cust_contacts": []
     },
     {
       "group": "kr-023",
       "flag": "",
-      "owner": "",
-      "location": "",
+      "owner": "동우화인켐",
+      "location": "평택",
       "support_id": "",
       "sku": "ISG-Proxy",
       "sn": "0076996458",
@@ -19798,9 +19803,9 @@
       "deploy_log": "",
       "mode": "TP",
       "os_ver": "7.3.18.2",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "check_method": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -19817,7 +19822,12 @@
         "ct": "Q9TImtA=",
         "tag": "UCdd7fnJfw/gdm1CEZ+1tA=="
       },
-      "pw_enc": null
+      "pw_enc": null,
+      "country": "한국",
+      "config_mode": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "cust_contacts": []
     },
     {
       "group": "kr-024",
