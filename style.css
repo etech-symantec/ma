@@ -562,6 +562,17 @@ td.remarks-cell{ max-width:230px; }
 .sec-val.locked{ cursor:pointer; color:var(--text-faint); }
 .sec-val.copied{ background:#E8F7EE; color:var(--green); font-weight:600; }
 
+/* PW 셀 — 일반 비밀번호 아래에 Enable 비밀번호가 있으면 한 줄 더 붙여서 보여준다 */
+.pw-cell{ display:flex; flex-direction:column; gap:3px; }
+.pw-cell-row{ display:flex; align-items:center; }
+.pw-cell-enable{ gap:5px; }
+.en-badge{
+  flex-shrink:0; display:inline-flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:.02em;
+  color:var(--accent-dim); background:#E6F4FD; border:1px solid #C9E7F7; border-radius:4px;
+  padding:1px 5px; line-height:1.4;
+}
+
 .contact-cell{ font-size:11.8px; line-height:1.5; }
 .contact-cell .who{ color:var(--text); }
 .contact-cell .mail{ color:var(--text-faint); font-family:var(--mono); font-size:11px; }
