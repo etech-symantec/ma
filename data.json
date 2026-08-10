@@ -580,19 +580,19 @@
       "tag_note": "SDN(CA/MA)",
       "id": 10,
       "ip_enc": {
-        "iv": "XjHFsujVDfQy6JnM",
-        "ct": "adwC3Q1jgMYpMcBZavS3",
-        "tag": "XpvQVmYT/iifFyyFpB/QWg=="
+        "iv": "e/+JlotjqF1rFC8L",
+        "ct": "PbCGuMrvrLiCpdh86rMi",
+        "tag": "xihmiRy4i8o6qRDDfRnp1A=="
       },
       "id_enc": {
-        "iv": "LvpAB3amKkjlP+WJ",
-        "ct": "lsI75d+eW3/IXw==",
-        "tag": "DvT6WcvZkhn9n4TuVXKqkA=="
+        "iv": "zS4rmDu9cH+GMHz0",
+        "ct": "2AOlMHxj3nEkbg==",
+        "tag": "zWFXdLhSSbqUrLplhiPmHA=="
       },
       "pw_enc": {
-        "iv": "CSUVfRLpD7TZAEDQ",
-        "ct": "75cLKiIY8iI7",
-        "tag": "PY4h7gBqdDZgEMiJGG1JSQ=="
+        "iv": "FU7XCM9iy4TLPn43",
+        "ct": "UwDQTzEEbjDr",
+        "tag": "CQ3LTKR6A5bpgzcWi8OyTg=="
       },
       "country": "인도",
       "config_mode": "",
@@ -606,7 +606,12 @@
           "email": "wonsukc@samsung.com; sc2470.seo@samsung.com"
         }
       ],
-      "device_type": "MA"
+      "device_type": "MA",
+      "enable_pw_enc": {
+        "iv": "sY4hJf/pIoxuVbJy",
+        "ct": "sdGZ4TI=",
+        "tag": "7R2lU9baaUaghRyndWzpNg=="
+      }
     },
     {
       "group": "in-sdn-cama",
