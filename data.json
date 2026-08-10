@@ -5164,11 +5164,15 @@
       "tag_note": "미국 중부(TXDRT)",
       "id": 108,
       "ip_enc": {
-        "iv": "PlN7ZgWD6BXOH3KZ",
-        "ct": "ElDZA+Rv3xkCOyWflNKJyZQleLeIoyXcYudQ8g==",
-        "tag": "3IhRK1Uk3MMOKsaYOBdWoQ=="
+        "iv": "1ZcwU9IBwfjkMHlh",
+        "ct": "NHUajC6OccYsmGjFHWOfPExjSJ2PS5zYo9MK3w==",
+        "tag": "0059mu1sHLSgnZz07Cwjyw=="
       },
-      "id_enc": null,
+      "id_enc": {
+        "iv": "rxXYmGpKlPktE0w+",
+        "ct": "M84Sifk=",
+        "tag": "qPJpCc+NqrRQPeRfSLMMTg=="
+      },
       "pw_enc": null,
       "country": "미국",
       "config_mode": "Transparent",
@@ -5176,7 +5180,8 @@
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
-      "build_date": "2024.12"
+      "build_date": "2024.12",
+      "enable_pw_enc": null
     },
     {
       "group": "us-006",
