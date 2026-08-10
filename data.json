@@ -3944,7 +3944,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "group_parent": "custom-1786348956934",
+      "is_parent": false
     },
     {
       "group": "au-seau",
@@ -3980,7 +3982,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "group_parent": "custom-1786348956934",
+      "is_parent": false
     },
     {
       "group": "au-seau",
@@ -4016,7 +4020,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "group_parent": "custom-1786348956934",
+      "is_parent": false
     },
     {
       "group": "seha",
