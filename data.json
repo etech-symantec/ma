@@ -20287,6 +20287,45 @@
       "id_enc": null,
       "pw_enc": null,
       "enable_pw_enc": null
+    },
+    {
+      "id": 1786344991848,
+      "group": "custom-1786344991848",
+      "flag": "",
+      "owner": "삼성전자 SAMEX",
+      "country": "멕시코",
+      "location": "티후아나",
+      "check_method": "원격",
+      "config_mode": "Explicit",
+      "owner_primary": "박동석",
+      "owner_secondary": "홍진영",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "Raul",
+          "org": "",
+          "phone": "",
+          "email": ""
+        }
+      ],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "support_id": "",
+      "build_engineer": "",
+      "build_date": "",
+      "sku": "",
+      "sn": "",
+      "qty": "",
+      "start": "",
+      "end": "",
+      "os_ver": "",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "work_log": []
     }
   ],
   "users": [
