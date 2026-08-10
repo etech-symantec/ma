@@ -764,6 +764,15 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 .form-grid input:focus, .form-grid textarea:focus, .form-grid select:focus{ border-color:var(--accent); }
 .form-grid .full{ grid-column:1/-1; }
+
+/* 법인 정보 수정창 — 요청한 3열/2열 행 배치. 각 행은 form-grid(2열) 안에서 전체 너비를 차지하고,
+   행 내부에서 자체적으로 3열 또는 2열 그리드를 이룬다. */
+.form-grid .ge-row{ grid-column:1/-1; display:grid; gap:12px; }
+.form-grid .ge-row-3{ grid-template-columns:1fr 1fr 1fr; }
+.form-grid .ge-row-2{ grid-template-columns:1fr 1fr; }
+.form-grid input:disabled, .form-grid select:disabled{
+  background:var(--surface2); color:var(--text-faint); cursor:not-allowed;
+}
 .date-field{ position:relative; display:flex; align-items:center; gap:0; }
 .date-field input:not(.date-native-input){ padding-right:38px; }
 .date-pick-btn{
@@ -823,4 +832,6 @@ footer.foot{
   tbody tr{ padding:12px; border-bottom:1px solid var(--border-solid); }
   tbody td{ border:none; padding:4px 0; }
   tbody td::before{ content:attr(data-label); display:block; font-size:9.5px; color:var(--text-faint); text-transform:uppercase; font-family:var(--mono); margin-bottom:2px;}
+  .form-grid{ grid-template-columns:1fr; }
+  .form-grid .ge-row-3, .form-grid .ge-row-2{ grid-template-columns:1fr; }
 }
