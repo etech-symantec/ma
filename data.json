@@ -2899,7 +2899,7 @@
       "qty": "1",
       "start": "2026.1.1",
       "end": "2026.12.31",
-      "remarks": "WPS 0071487146, 26.12.31 이후 사용 불가",
+      "remarks": "WPS 0071487146\n26.12.31 이후 사용 불가",
       "deploy_date": "",
       "deploy_log": "22.05.09 신호근",
       "mode": "",
@@ -2914,19 +2914,19 @@
       "tag_note": "(참조오류: 원본 시트 #REF!)",
       "id": 54,
       "ip_enc": {
-        "iv": "BdzegFtKOQu4SZFJ",
-        "ct": "dL6F/vpTBrrlE7+3sA==",
-        "tag": "rlGWTkYaMKRTGJNExcMTNQ=="
+        "iv": "nP1AdOQ6tGpXyWJo",
+        "ct": "qonwOy4hW2PCC28i7w==",
+        "tag": "wGzE3i00dfITapdmb1OApQ=="
       },
       "id_enc": {
-        "iv": "sQxUp15RrFp9R+yN",
-        "ct": "yWRhKcLN2M/E",
-        "tag": "3FagouJPxYP1bgOWT0F1jA=="
+        "iv": "39hJzqXukNLP58Dc",
+        "ct": "YHVah5zMF1iU",
+        "tag": "9nIErWLj8/+fZ/WTIM+ojA=="
       },
       "pw_enc": {
-        "iv": "NxlpfNYfg0RiXvV5",
-        "ct": "FXPwYQkJ8lI=",
-        "tag": "icrvVBbbECuAB/vSOGRw9g=="
+        "iv": "lYTX5PGKkz/k5ad7",
+        "ct": "pjDhNmFCYv8=",
+        "tag": "ht13K/UmPYNHi+PSvzbnOg=="
       },
       "country": "베트남",
       "config_mode": "Explicit",
