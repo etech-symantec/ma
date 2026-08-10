@@ -227,7 +227,7 @@ function skuBadge(sku){
 const SKU_TAG_RULES = [
   { key:'BCIS', test: sku => sku.toUpperCase().startsWith('IS-') },
   { key:'ASG',  test: sku => sku.toUpperCase().includes('ASG') },
-  { key:'MC',   test: sku => sku.toUpperCase().includes('MC') },
+  { key:'MC',   test: sku => sku.toUpperCase().startsWith('MC-') || sku.toUpperCase().includes('-MC') },
   { key:'RP',   test: sku => sku.toUpperCase().includes('RP') },
   { key:'ISG',  test: sku => sku.toUpperCase().includes('ISG') },
   { key:'SG',   test: sku => sku.toUpperCase().includes('SG') },
@@ -241,7 +241,7 @@ const SKU_TAG_RULES = [
   { key:'WPS',  test: sku => sku.toUpperCase() === 'WEB-PROTECT-SUB' },
   { key:'CA',   test: sku => sku.toUpperCase().startsWith('CAS-') },
   { key:'MA',   test: sku => sku.toUpperCase().startsWith('MA-') },
-  { key:'File Inspection', test: sku => sku.toUpperCase().startsWith('FI-') },
+  { key:'AV', test: sku => sku.toUpperCase().startsWith('FI-') },
 ];
 const SKU_TAG_KEYS = SKU_TAG_RULES.map(r => r.key);
 
@@ -459,6 +459,7 @@ function groupMeta(items){
     config_mode: items.map(i=>i.config_mode).find(Boolean) || '',
     owner_primary: items.map(i=>i.owner_primary).find(Boolean) || '',
     owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
+    build_engineer: items.map(i=>i.build_engineer).find(Boolean) || '',
     cust_contacts: getGroupCustContacts(items),
     group_remarks: items.map(i=>i.group_remarks).find(Boolean) || ''
   };
@@ -827,6 +828,7 @@ function render(){
         <div class="items ${isOpen?'open':''}">
           <table>
             <thead><tr>
+              ${canBulkMove() ? '<th class="col-select"></th>' : ''}
               <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
               <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
             </tr></thead>
@@ -927,10 +929,58 @@ function render(){
       openMoveAssetModal(btn.dataset.moveAsset);
     };
   });
+  document.querySelectorAll('[data-select-asset]').forEach(cb=>{
+    cb.onclick = (e) => e.stopPropagation();
+    cb.onchange = () => {
+      const id = String(cb.dataset.selectAsset);
+      if (cb.checked) selectedAssetIds.add(id); else selectedAssetIds.delete(id);
+      updateBulkMoveBar();
+    };
+  });
+  updateBulkMoveBar();
 
   buildFilters();
   updateActivityBadge();
   populateSecretFields();
+}
+
+// ---------- 자산 일괄 선택 이동 툴바 ----------
+function bulkMoveBarEl(){
+  let bar = document.getElementById('bulkMoveBar');
+  if (!bar){
+    bar = document.createElement('div');
+    bar.id = 'bulkMoveBar';
+    bar.className = 'bulk-move-bar';
+    bar.innerHTML = `
+      <span class="bmb-count" id="bmbCount"></span>
+      <button type="button" class="btn btn-ghost" id="bmbClearBtn">선택 해제</button>
+      <button type="button" class="btn btn-primary" id="bmbMoveBtn">선택 항목 이동</button>
+    `;
+    document.body.appendChild(bar);
+    document.getElementById('bmbClearBtn').onclick = () => {
+      selectedAssetIds.clear();
+      render();
+    };
+    document.getElementById('bmbMoveBtn').onclick = () => {
+      if (!selectedAssetIds.size) return;
+      openMoveAssetModal([...selectedAssetIds]);
+    };
+  }
+  return bar;
+}
+function updateBulkMoveBar(){
+  // 현재 목록에 더 이상 존재하지 않는 선택은 정리
+  const validIds = new Set(records.map(r=>String(r.id)));
+  [...selectedAssetIds].forEach(id => { if (!validIds.has(id)) selectedAssetIds.delete(id); });
+
+  if (!canBulkMove() || selectedAssetIds.size === 0){
+    const bar = document.getElementById('bulkMoveBar');
+    if (bar) bar.classList.remove('open');
+    return;
+  }
+  const bar = bulkMoveBarEl();
+  document.getElementById('bmbCount').textContent = `${selectedAssetIds.size}개 항목 선택됨`;
+  bar.classList.add('open');
 }
 
 function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료됨', na:'기간정보없음'}[s]; }
@@ -946,14 +996,19 @@ function snLink(r, groupSupportId){
 }
 
 function managerNamesInlineHtml(meta){
-  if (!meta.owner_primary && !meta.owner_secondary) return '';
+  if (!meta.build_engineer && !meta.owner_primary && !meta.owner_secondary) return '';
   const names = [];
   if (meta.owner_primary) names.push(`<span class="mgr-primary">${esc(meta.owner_primary)}</span>`);
   if (meta.owner_secondary) names.push(`<span class="mgr-secondary">${esc(meta.owner_secondary)}</span>`);
-  return `<span class="meta-chip meta-chip-mgr">
+  const buildChip = meta.build_engineer ? `<span class="meta-chip meta-chip-build-eng">
+    <span class="meta-label">구축 엔지니어</span>
+    <span class="meta-value">${esc(meta.build_engineer)}</span>
+  </span>` : '';
+  const mgrChip = names.length ? `<span class="meta-chip meta-chip-mgr">
     <span class="meta-label">담당 엔지니어</span>
     <span class="meta-value">${names.join(' ')}</span>
-  </span>`;
+  </span>` : '';
+  return buildChip + mgrChip;
 }
 
 function custContactsSummaryHtml(gid, meta){
@@ -1004,6 +1059,7 @@ function rowHtml(r, groupSupportId){
   const logCount = (r.work_log||[]).length;
   return `
   <tr data-id="${r.id}">
+    ${canBulkMove() ? `<td class="col-select" data-label=""><input type="checkbox" class="asset-select-cb" data-select-asset="${r.id}" ${selectedAssetIds.has(String(r.id))?'checked':''} title="일괄 이동을 위해 선택"></td>` : ''}
     <td class="sku" data-label="SKU / 제품">${skuBadge(r.sku)}${skuKeywordTagsHtml(r.sku)}</td>
     <td class="sn" data-label="S/N">${snLink(r, groupSupportId)}</td>
     <td data-label="수량">${esc(r.qty)||''}</td>
@@ -1366,6 +1422,7 @@ function openGroupEditModal(gid){
   document.getElementById('ge_config_mode').value = meta.config_mode || '';
   document.getElementById('ge_owner_primary').value = meta.owner_primary || '';
   document.getElementById('ge_owner_secondary').value = meta.owner_secondary || '';
+  document.getElementById('ge_build_engineer').value = meta.build_engineer || '';
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
     ? meta.cust_contacts.slice(0,5)
@@ -1394,6 +1451,7 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newConfigMode = val('ge_config_mode');
   const newPrimary = val('ge_owner_primary');
   const newSecondary = val('ge_owner_secondary');
+  const newBuildEngineer = val('ge_build_engineer');
   const newRemarks = val('ge_remarks');
   captureCustContactsFromDom();
   const newContacts = geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
@@ -1407,6 +1465,7 @@ document.getElementById('saveGeBtn').onclick = () => {
       r.config_mode = newConfigMode;
       r.owner_primary = newPrimary;
       r.owner_secondary = newSecondary;
+      r.build_engineer = newBuildEngineer;
       r.group_remarks = newRemarks;
       r.cust_contacts = newContacts;
       // clear legacy single-contact fields now that the array field is authoritative
@@ -1421,69 +1480,99 @@ document.getElementById('saveGeBtn').onclick = () => {
 };
 
 // ---------- 자산을 다른 법인으로 이동 ----------
-let moveAssetRecId = null;
+let moveAssetRecIds = []; // 이동 대상 자산 id 목록 (단건이든 여러 건이든 항상 배열로 보관)
+let selectedAssetIds = new Set(); // 목록에서 체크박스로 선택한 자산 id들 (일괄 이동용)
 
-function openMoveAssetModal(recId){
+function canBulkMove(){
+  return isCurrentUserAdmin() && !viewOnly && sessionKey;
+}
+
+// recIdOrIds: 단일 id(문자열/숫자) 또는 id 배열 모두 허용
+function openMoveAssetModal(recIdOrIds){
   if (!isCurrentUserAdmin()){ alert('마스터만 자산을 다른 법인으로 이동할 수 있습니다.'); return; }
   if (viewOnly || !sessionKey){ alert('자산을 이동하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-  const rec = records.find(r=>String(r.id)===String(recId));
-  if (!rec) return;
+  const ids = Array.isArray(recIdOrIds) ? recIdOrIds.map(String) : [String(recIdOrIds)];
+  const recs = records.filter(r => ids.includes(String(r.id)));
+  if (!recs.length) return;
 
-  const targetGids = [...new Set(records.map(r=>r.group))].filter(gid => gid !== rec.group);
+  const sourceGids = new Set(recs.map(r=>r.group));
+  // 선택한 자산이 전부 같은 법인 소속이면 그 법인은 이동 대상에서 제외, 여러 법인에 걸쳐 있으면 전체 법인을 보여준다.
+  const allGids = [...new Set(records.map(r=>r.group))];
+  const targetGids = sourceGids.size === 1
+    ? allGids.filter(gid => gid !== [...sourceGids][0])
+    : allGids;
   if (!targetGids.length){
     alert('이동할 수 있는 다른 법인이 없습니다.');
     return;
   }
   const options = targetGids.map(gid => {
     const meta = groupMeta(records.filter(r=>r.group===gid));
-    return { gid, label: meta.owner + (meta.location ? ' · '+meta.location : '') };
+    const parts = [meta.owner];
+    if (meta.support_id) parts.push(`Support ID: ${meta.support_id}`);
+    if (meta.location) parts.push(meta.location);
+    return { gid, label: parts.join(' · ') };
   }).sort((a,b) => a.label.localeCompare(b.label, 'ko'));
 
-  moveAssetRecId = recId;
+  moveAssetRecIds = ids;
   const sel = document.getElementById('ma_target_group');
   sel.innerHTML = options.map(o => `<option value="${esc(o.gid)}">${esc(o.label)}</option>`).join('');
   document.getElementById('maError').textContent = '';
-  const curMeta = groupMeta(records.filter(r=>r.group===rec.group));
-  document.getElementById('maHint').textContent =
-    `현재 "${curMeta.owner}" 법인에 속한 "${rec.sku || skuTagLabel(rec)}" 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.`;
+
+  const hintEl = document.getElementById('maHint');
+  if (recs.length === 1){
+    const rec = recs[0];
+    const curMeta = groupMeta(records.filter(r=>r.group===rec.group));
+    hintEl.textContent =
+      `현재 "${curMeta.owner}" 법인에 속한 "${rec.sku || skuTagLabel(rec)}" 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.`;
+  } else {
+    hintEl.textContent =
+      `선택한 ${recs.length}개 자산 항목을 한 번에 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 각 항목별로 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 일괄 변경됩니다.`;
+  }
   document.getElementById('moveAssetModal').classList.add('open');
 }
 
 document.getElementById('cancelMaBtn').onclick = () => {
   document.getElementById('moveAssetModal').classList.remove('open');
-  moveAssetRecId = null;
+  moveAssetRecIds = [];
 };
 
 document.getElementById('saveMaBtn').onclick = () => {
   if (!isCurrentUserAdmin()){ alert('마스터만 자산을 다른 법인으로 이동할 수 있습니다.'); return; }
   const targetGid = document.getElementById('ma_target_group').value;
-  const rec = records.find(r=>String(r.id)===String(moveAssetRecId));
+  const recs = records.filter(r => moveAssetRecIds.map(String).includes(String(r.id)));
   const errEl = document.getElementById('maError');
-  if (!rec){ errEl.textContent = '이동할 자산을 찾을 수 없습니다.'; return; }
+  if (!recs.length){ errEl.textContent = '이동할 자산을 찾을 수 없습니다.'; return; }
   if (!targetGid){ errEl.textContent = '이동할 법인을 선택해 주세요.'; return; }
   const targetItems = records.filter(r=>r.group===targetGid);
   if (!targetItems.length){ errEl.textContent = '대상 법인을 찾을 수 없습니다.'; return; }
   const meta = groupMeta(targetItems);
 
-  if (!confirm(`"${rec.sku || skuTagLabel(rec)}" 항목을 "${meta.owner}" 법인으로 옮길까요?`)) return;
+  const confirmMsg = recs.length === 1
+    ? `"${recs[0].sku || skuTagLabel(recs[0])}" 항목을 "${meta.owner}" 법인으로 옮길까요?`
+    : `선택한 ${recs.length}개 항목을 "${meta.owner}" 법인으로 옮길까요?`;
+  if (!confirm(confirmMsg)) return;
 
-  rec.group = targetGid;
-  rec.flag = meta.flag;
-  rec.owner = meta.owner;
-  rec.country = meta.country;
-  rec.location = meta.location;
-  rec.support_id = meta.support_id;
-  rec.check_method = meta.check_method;
-  rec.config_mode = meta.config_mode;
-  rec.owner_primary = meta.owner_primary;
-  rec.owner_secondary = meta.owner_secondary;
-  rec.cust_contacts = JSON.parse(JSON.stringify(meta.cust_contacts || []));
-  rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
-  rec.group_remarks = meta.group_remarks;
+  for (const rec of recs){
+    rec.group = targetGid;
+    rec.flag = meta.flag;
+    rec.owner = meta.owner;
+    rec.country = meta.country;
+    rec.location = meta.location;
+    rec.support_id = meta.support_id;
+    rec.check_method = meta.check_method;
+    rec.config_mode = meta.config_mode;
+    rec.owner_primary = meta.owner_primary;
+    rec.owner_secondary = meta.owner_secondary;
+    rec.build_engineer = meta.build_engineer;
+    rec.cust_contacts = JSON.parse(JSON.stringify(meta.cust_contacts || []));
+    rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
+    rec.group_remarks = meta.group_remarks;
+    selectedAssetIds.delete(String(rec.id));
+  }
 
   expandedGroups.add(targetGid);
   document.getElementById('moveAssetModal').classList.remove('open');
-  moveAssetRecId = null;
+  moveAssetRecIds = [];
   render();
   buildFilters();
   scheduleAutoSync();
