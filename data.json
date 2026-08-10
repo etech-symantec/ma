@@ -2482,7 +2482,7 @@
       "location": "하노이",
       "support_id": "2496112",
       "sku": "SSP-S410-10-STD PLUS",
-      "sn": "-",
+      "sn": "3920700040",
       "entitlement": "🔗",
       "qty": "1",
       "start": "2025.1.1",
@@ -2502,9 +2502,9 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 45,
       "ip_enc": {
-        "iv": "ca+UhOdjsvVUf6ND",
-        "ct": "kPlhFfYTPGrv3oXjzg==",
-        "tag": "laLksD8T2fagGS8GozfW2g=="
+        "iv": "bLN2Ihh4kQ4gz+aQ",
+        "ct": "cZqaOvLDIragRQtWDg==",
+        "tag": "Y3LawSiQ5GT1Mb6TL730Zg=="
       },
       "id_enc": null,
       "pw_enc": null,
