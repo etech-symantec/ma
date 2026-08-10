@@ -1339,8 +1339,8 @@
       "deploy_log": "강성준",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "강성준",
-      "owner_secondary": "박동석",
+      "owner_primary": "박동석",
+      "owner_secondary": "강성준",
       "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
@@ -1379,7 +1379,9 @@
         "iv": "LqcPjh7vmiru5GLK",
         "ct": "ESp6rhBiTzYE",
         "tag": "aE44pwHqpnAbaaFdWbN7Ug=="
-      }
+      },
+      "build_engineer": "강성준",
+      "build_date": "2024.07"
     },
     {
       "group": "pl-sepm",
@@ -1398,8 +1400,8 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "2.4.10.1",
-      "owner_primary": "강성준",
-      "owner_secondary": "박동석",
+      "owner_primary": "박동석",
+      "owner_secondary": "강성준",
       "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
@@ -1438,7 +1440,9 @@
         "iv": "HuV6nc+sDpJeLLK+",
         "ct": "XAKIKWFgTzFD",
         "tag": "GmNob8ywoVHEb46NBPpRVQ=="
-      }
+      },
+      "build_engineer": "강성준",
+      "build_date": "2024.07"
     },
     {
       "group": "pl-sepm",
@@ -1457,8 +1461,8 @@
       "deploy_log": "",
       "mode": "Explicit",
       "os_ver": "7.3.21.1",
-      "owner_primary": "강성준",
-      "owner_secondary": "박동석",
+      "owner_primary": "박동석",
+      "owner_secondary": "강성준",
       "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
@@ -1497,7 +1501,9 @@
         "iv": "FBgrZ87vvFEAFxne",
         "ct": "mISMA8NMkWTG",
         "tag": "StlKs67MzBjEgJMUpho2OA=="
-      }
+      },
+      "build_engineer": "강성준",
+      "build_date": "2024.07"
     },
     {
       "group": "pl-sepm",
@@ -1516,8 +1522,8 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "강성준",
-      "owner_secondary": "박동석",
+      "owner_primary": "박동석",
+      "owner_secondary": "강성준",
       "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
@@ -1556,7 +1562,9 @@
         "iv": "/uNvCTRb9jIizfON",
         "ct": "41aU9eHzAxZG",
         "tag": "iDWHvxVnGoOC+7DYZSvJBQ=="
-      }
+      },
+      "build_engineer": "강성준",
+      "build_date": "2024.07"
     },
     {
       "group": "pl-sepm",
@@ -1575,8 +1583,8 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.3.5.2",
-      "owner_primary": "강성준",
-      "owner_secondary": "박동석",
+      "owner_primary": "박동석",
+      "owner_secondary": "강성준",
       "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
@@ -1615,7 +1623,9 @@
         "iv": "TKW4zA/JNN8AWVID",
         "ct": "BpVHDPcI5BaK",
         "tag": "XfiTz9B1jaBoV5LeKAkfBw=="
-      }
+      },
+      "build_engineer": "강성준",
+      "build_date": "2024.07"
     },
     {
       "group": "pl-sepm",
@@ -1634,8 +1644,8 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "11.0.2.1",
-      "owner_primary": "강성준",
-      "owner_secondary": "박동석",
+      "owner_primary": "박동석",
+      "owner_secondary": "강성준",
       "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
@@ -1674,7 +1684,9 @@
         "iv": "EKIg1z3bCVFTRqsc",
         "ct": "i2WMKVm4VI/m",
         "tag": "LunS7XchlVBSYIPrbq3zAw=="
-      }
+      },
+      "build_engineer": "강성준",
+      "build_date": "2024.07"
     },
     {
       "group": "pl-sepm",
@@ -1693,8 +1705,8 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "강성준",
-      "owner_secondary": "박동석",
+      "owner_primary": "박동석",
+      "owner_secondary": "강성준",
       "check_method": "원격 (RC)",
       "cust_contact": "",
       "cust_phone": "",
@@ -1716,7 +1728,9 @@
           "phone": "",
           "email": "r.kudlaszyk@samsung.com"
         }
-      ]
+      ],
+      "build_engineer": "강성준",
+      "build_date": "2024.07"
     },
     {
       "group": "uk-seuk",
