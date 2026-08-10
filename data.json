@@ -2433,7 +2433,7 @@
       "location": "하노이",
       "support_id": "2496112",
       "sku": "SSP-S410-10-STD PLUS",
-      "sn": "-",
+      "sn": "1621700074",
       "entitlement": "🔗",
       "qty": "1",
       "start": "2025.1.1",
@@ -2453,19 +2453,19 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 44,
       "ip_enc": {
-        "iv": "BMCXeG7MKWUXjino",
-        "ct": "Hl4fKxlvcj6b9InQQw==",
-        "tag": "8BipiONmEXL1sPWENVyTcg=="
+        "iv": "2GI/eOiUaAWDEUrR",
+        "ct": "Ool5ZFpDreWCCKKcGQ==",
+        "tag": "TiaFSIh6YYE8KdIEfeGDVA=="
       },
       "id_enc": {
-        "iv": "vLzTf6rawEpeM3zR",
-        "ct": "8xvaej0=",
-        "tag": "Lk7vO6P+Qj7Hy8BZmUUfsA=="
+        "iv": "9pvZoaiYG6qTai4I",
+        "ct": "PdL5YJ0=",
+        "tag": "IYU/KyNhpmyb2hDgTnxHOg=="
       },
       "pw_enc": {
-        "iv": "NsVriFOhw8zNPSZs",
-        "ct": "nPrqCY1/xrCyIu5w+w==",
-        "tag": "nLdUtN5UsMJfiMhLqEWoSA=="
+        "iv": "CX8uEFURaUpJhC5Q",
+        "ct": "2O9HHzFLQaJDKYwsqw==",
+        "tag": "BIdp/0Pn3gs55uHqqJX+Bw=="
       },
       "country": "베트남",
       "config_mode": "Explicit",
