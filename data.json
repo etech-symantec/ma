@@ -1051,7 +1051,7 @@
       "qty": "1",
       "start": "2025.12.1",
       "end": "2026.11.30",
-      "remarks": "24.03.20 RMA 4516330009>4816330064, #33686726(장비부팅안됨)",
+      "remarks": "24.03.20 RMA 4516330009>4816330064\n#33686726(장비부팅안됨)",
       "deploy_date": "",
       "deploy_log": "24.01.12 윤태리 6.7.5.21>7.3.17.1 / 26.07.17 윤태리 7.3.17.1>7.3.24.1(실패) / 26.07.17 윤태리 7.3.17.1>7.3.21.1",
       "mode": "Explicit",
@@ -1066,19 +1066,19 @@
       "tag_note": "인도중공업(SHI)",
       "id": 20,
       "ip_enc": {
-        "iv": "YaIJjkGONXU0iYip",
-        "ct": "cH8qnSWHmtFFZdSqPwmL",
-        "tag": "065qzMvSWEi+qaPMr3cQ5w=="
+        "iv": "/QGNobfGoApuIFx5",
+        "ct": "NDBjYgEx9iKbWP0OpRHo",
+        "tag": "3Nx5aj7DqGGOIDeLiK2IGw=="
       },
       "id_enc": {
-        "iv": "S+5WexX9kwMXu8Kl",
-        "ct": "ny57dIo3CQ==",
-        "tag": "VolkkvKIgyQ1sHqsyfrMDQ=="
+        "iv": "Ar5Bar16/9sv+W0s",
+        "ct": "B/HUqDQiAQ==",
+        "tag": "gTI1jCEEJl3ryyJ5+lqUYw=="
       },
       "pw_enc": {
-        "iv": "bPGW8cDIBEDbDk1G",
-        "ct": "BLT8T0qkw10DLQ==",
-        "tag": "XNkCO6UOPLz7c+qtM7C2FQ=="
+        "iv": "um4a1yQHR2/23U+I",
+        "ct": "4/49N72JsQQCmg==",
+        "tag": "sP3w1wXN2UynVJkFlWGLAA=="
       },
       "group_remarks": "",
       "cust_contacts": [
@@ -1098,7 +1098,8 @@
         }
       ],
       "country": "인도",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "enable_pw_enc": null
     },
     {
       "group": "in-shi",
