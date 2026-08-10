@@ -3808,7 +3808,7 @@
     {
       "group": "au-ccc",
       "flag": "★※",
-      "owner": "삼성전자 호주콜센터 (SEAU-CCC)",
+      "owner": "삼성전자 SEAU-CCC 콜센터",
       "location": "",
       "support_id": "946874",
       "sku": "SG-S400-20-PR-ONSITEADV",
@@ -3849,12 +3849,14 @@
           "phone": "",
           "email": "karen.lim@samsung.com (영업)"
         }
-      ]
+      ],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "au-ccc",
       "flag": "",
-      "owner": "삼성전자 호주콜센터 (SEAU-CCC)",
+      "owner": "삼성전자 SEAU-CCC 콜센터",
       "location": "",
       "support_id": "946874",
       "sku": "BCWF-S-100-249-1YR",
@@ -3891,12 +3893,14 @@
           "phone": "",
           "email": "karen.lim@samsung.com (영업)"
         }
-      ]
+      ],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "au-ccc",
       "flag": "",
-      "owner": "삼성전자 호주콜센터 (SEAU-CCC)",
+      "owner": "삼성전자 SEAU-CCC 콜센터",
       "location": "",
       "support_id": "946874",
       "sku": "WEB-PROTECT-SUB",
@@ -3933,7 +3937,9 @@
           "phone": "",
           "email": "karen.lim@samsung.com (영업)"
         }
-      ]
+      ],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "au-seau",
