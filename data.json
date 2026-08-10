@@ -3499,7 +3499,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "build_engineer": "강성준",
+      "build_date": "2026.04"
     },
     {
       "group": "mx-samex",
@@ -3541,7 +3543,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "build_engineer": "강성준",
+      "build_date": "2026.04"
     },
     {
       "group": "mx-samex",
@@ -3583,7 +3587,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "build_engineer": "강성준",
+      "build_date": "2026.04"
     },
     {
       "group": "mx-samex",
@@ -3625,7 +3631,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "build_engineer": "강성준",
+      "build_date": "2026.04"
     },
     {
       "group": "mx-samex",
@@ -3659,7 +3667,9 @@
       "group_remarks": "",
       "cust_contacts": [],
       "country": "멕시코",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "build_engineer": "강성준",
+      "build_date": "2026.04"
     },
     {
       "group": "ng",
