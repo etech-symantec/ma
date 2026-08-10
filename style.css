@@ -274,7 +274,6 @@ aside.filters{
 .filter-group--status .fg-dot{ background:var(--green); }
 .filter-group--tags .fg-dot{ background:var(--amber); }
 .filter-group--country .fg-dot{ background:var(--accent); }
-.filter-group--device .fg-dot{ background:var(--brand); }
 .filter-item{
   display:flex; align-items:center; justify-content:space-between; gap:8px;
   padding:7px 9px; border-radius:8px; cursor:pointer; font-size:12.8px; color:var(--text-dim);
@@ -571,15 +570,6 @@ td.remarks-cell{ max-width:230px; }
   text-align:center; padding:70px 20px; color:var(--text-faint);
 }
 .empty-state h3{ font-family:var(--display); color:var(--text-dim); margin-bottom:6px; font-size:16px;}
-
-/* device type */
-.device-badge{
-  display:inline-flex; align-items:center; gap:6px;
-  font-size:10.5px; font-family:var(--mono); padding:3px 8px; border-radius:6px;
-  border:1px solid var(--border-solid); white-space:nowrap;
-  background:var(--surface2);
-}
-.device-dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 
 /* SKU category tag */
 .sku-tag{
