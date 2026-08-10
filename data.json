@@ -4413,7 +4413,9 @@
           "phone": "+1-201-364-3492",
           "email": "jaeyoung.s@samsung.com"
         }
-      ]
+      ],
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-001",
@@ -4467,7 +4469,9 @@
           "phone": "+1-201-364-3492",
           "email": "jaeyoung.s@samsung.com"
         }
-      ]
+      ],
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-001",
@@ -4521,7 +4525,9 @@
           "phone": "+1-201-364-3492",
           "email": "jaeyoung.s@samsung.com"
         }
-      ]
+      ],
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-001",
@@ -4567,7 +4573,9 @@
           "phone": "+1-201-364-3492",
           "email": "jaeyoung.s@samsung.com"
         }
-      ]
+      ],
+      "group_parent": "kr-001",
+      "build_engineer": ""
     },
     {
       "group": "us-002",
