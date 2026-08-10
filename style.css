@@ -496,6 +496,7 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .meta-chip-build-eng{ background:#FBF6EF; border-color:#EEDFC5; }
 .meta-chip-build-eng .meta-label{ color:#B8873A; }
 .meta-chip-build-eng .meta-value{ font-weight:700; font-size:13.5px; color:#8A631F; }
+.build-eng-date{ font-weight:500; font-size:12px; color:#B8873A; }
 .mgr-primary{
   font-weight:700; font-size:13.5px; color:var(--accent-dim);
 }
