@@ -158,10 +158,9 @@
 <div id="groupEditModal">
   <div class="modal-card">
     <h2>법인 정보 수정</h2>
-    <p class="hint">법인명 / 국가 / 위치 / Support ID / 점검 방식 / 구성방식 / 담당자 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다.</p>
+    <p class="hint">법인명 / 국가 / 위치 / 점검 방식 / 구성방식 / 담당자 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다. Support ID / 구축 엔지니어 / 구축 일자는 Support ID별로 따로 관리하며, 각 Support ID 영역의 ✎ 버튼에서 수정합니다.</p>
     <div class="form-grid">
       <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
-      <div><label>Support ID</label><input id="ge_support"></div>
       <div><label>국가 (COUNTRY)</label><input id="ge_country" placeholder="예: 베트남"></div>
       <div><label>위치 (LOCATION)</label><input id="ge_location" placeholder="예: 하노이"></div>
       <div><label>점검 방식</label><input id="ge_check" placeholder="원격 (RC)"></div>
@@ -179,8 +178,6 @@
         <div id="ge_cust_list" class="cust-contact-list"></div>
         <button type="button" class="btn btn-ghost cust-add-btn" id="ge_cust_add_btn">＋ 담당자 추가</button>
       </div>
-      <div><label>구축 엔지니어</label><input id="ge_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
-      <div><label>구축 일자 (YYYY.MM)</label><input id="ge_build_date" placeholder="2026.07"></div>
       <div><label>담당 엔지니어 (정)</label><input id="ge_owner_primary" placeholder="주 담당자"></div>
       <div><label>담당 엔지니어 (부)</label><input id="ge_owner_secondary" placeholder="부 담당자"></div>
       <div class="full"><label>비고</label><textarea id="ge_remarks" placeholder="법인 관련 별도 코멘트"></textarea></div>
@@ -193,6 +190,24 @@
     </div>
   </div>
 </div>
+
+<div id="subGroupEditModal">
+  <div class="modal-card">
+    <h2>Support ID 정보 수정</h2>
+    <p class="hint" id="sgHint">Support ID / 구축 엔지니어 / 구축 일자는 같은 Support ID를 쓰는 자산 항목들에 공통으로 적용됩니다.</p>
+    <div class="form-grid">
+      <div><label>Support ID</label><input id="sg_support" placeholder="예: 12345678"></div>
+      <div><label>구축 엔지니어</label><input id="sg_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
+      <div><label>구축 일자 (YYYY.MM)</label><input id="sg_build_date" placeholder="2026.07"></div>
+    </div>
+    <div id="sgError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelSgBtn">취소</button>
+      <button class="btn btn-primary" id="saveSgBtn">저장</button>
+    </div>
+  </div>
+</div>
+
 
 <div id="custContactsModal">
   <div class="modal-card">
