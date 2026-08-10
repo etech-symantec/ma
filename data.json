@@ -4988,7 +4988,8 @@
       "config_mode": "Transparent",
       "group_remarks": "미국 HQ",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": "신호근"
     },
     {
       "group": "us-005",
@@ -5027,7 +5028,8 @@
       "config_mode": "Transparent",
       "group_remarks": "미국 HQ",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": "신호근"
     },
     {
       "group": "us-005",
@@ -5074,7 +5076,8 @@
       "config_mode": "Transparent",
       "group_remarks": "미국 HQ",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": "신호근"
     },
     {
       "group": "us-005",
@@ -5113,7 +5116,8 @@
       "config_mode": "Transparent",
       "group_remarks": "미국 HQ",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": "신호근"
     },
     {
       "group": "us-005",
@@ -5148,7 +5152,8 @@
       "config_mode": "Transparent",
       "group_remarks": "미국 HQ",
       "cust_contacts": [],
-      "group_parent": "kr-001"
+      "group_parent": "kr-001",
+      "build_engineer": "신호근"
     },
     {
       "group": "us-006",
