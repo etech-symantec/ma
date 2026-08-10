@@ -21911,7 +21911,15 @@
       "config_mode": "Transparent",
       "owner_primary": "윤태리",
       "owner_secondary": "신호근",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "손재영 프로",
+          "org": "삼성SDSA",
+          "phone": "",
+          "email": "jaeyoung.s@samsung.com"
+        }
+      ],
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
