@@ -20374,6 +20374,53 @@
       "end": "",
       "os_ver": "",
       "work_log": []
+    },
+    {
+      "id": 1786348497151,
+      "group": "custom-1786348497151",
+      "flag": "",
+      "owner": "한화큐셀",
+      "country": "미국",
+      "location": "조지아 애틀란타",
+      "check_method": "X",
+      "config_mode": "",
+      "owner_primary": "신호근",
+      "owner_secondary": "강성준",
+      "cust_contacts": [
+        {
+          "role": "운용",
+          "name": "함우철",
+          "org": "이테크시스템",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "role": "운용",
+          "name": "문다형",
+          "org": "한화시스템",
+          "phone": "",
+          "email": ""
+        }
+      ],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "is_parent": true,
+      "support_id": "",
+      "build_engineer": "",
+      "build_date": "",
+      "sku": "",
+      "sn": "",
+      "qty": "",
+      "start": "",
+      "end": "",
+      "os_ver": "",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "work_log": []
     }
   ],
   "users": [
