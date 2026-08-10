@@ -5347,7 +5347,7 @@
       "qty": "1",
       "start": "2026.4.1",
       "end": "2027.3.31",
-      "remarks": "H/W 유지보수 X",
+      "remarks": "H/W 유지보수 X\nxml빈줄이슈 > 4.1.4 fix예정\nwss cpl > 4.1.4 fix 예정",
       "deploy_date": "",
       "deploy_log": "24.12.05 신호근 11.0.2.1 신규",
       "mode": "",
@@ -5370,7 +5370,8 @@
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
-      "build_date": "2024.12"
+      "build_date": "2024.12",
+      "enable_pw_enc": null
     },
     {
       "group": "us-006",
