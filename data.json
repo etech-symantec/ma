@@ -14125,19 +14125,19 @@
       "tag_note": "우면 R&D 센터",
       "id": 266,
       "ip_enc": {
-        "iv": "lCWfJGpSgqtYtVLA",
-        "ct": "OM/kRKo0jyXFKmE=",
-        "tag": "XMVxZObiMsB5mjCxM7gJbw=="
+        "iv": "y5PLKDyeNpAq32J1",
+        "ct": "PfH63uxJ70G49Sw=",
+        "tag": "8DaDBZ25O9zN9g3/rwUZZw=="
       },
       "id_enc": {
-        "iv": "cb435rM8+UR0CXl+",
-        "ct": "40a2Ems=",
-        "tag": "7jqhjEEP0lD6+zI4Rx2Zcg=="
+        "iv": "frcgZduu3YjWXhij",
+        "ct": "4nkns0U=",
+        "tag": "Pbmko8ecKA8XYxyZf6VdBg=="
       },
       "pw_enc": {
-        "iv": "st/gBgXu0D5YnIGY",
-        "ct": "8QUIfzue4zvYP7C25E7jEys0CI0RBlVufMGQiqWvgVr9JS4=",
-        "tag": "N0NLUlp2gP8iAqSvpNt+rw=="
+        "iv": "MKsr42dyVWm0PCj2",
+        "ct": "UqXwhTdFMyjI36g=",
+        "tag": "K6g2c+vaYcZyyoKkYwcTsQ=="
       },
       "config_mode": "Explicit",
       "group_remarks": "",
@@ -14168,7 +14168,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "custom-msnzlh9m",
