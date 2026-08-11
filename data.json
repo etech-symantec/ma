@@ -3455,7 +3455,7 @@
       "os_ver": "6.7.5.12",
       "owner_primary": "신호근",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3484,7 +3484,11 @@
         }
       ],
       "country": "나이지리아",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "ng",
@@ -3505,7 +3509,7 @@
       "os_ver": "",
       "owner_primary": "신호근",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3526,7 +3530,11 @@
         }
       ],
       "country": "나이지리아",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "ng",
@@ -3547,7 +3555,7 @@
       "os_ver": "",
       "owner_primary": "신호근",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3568,7 +3576,11 @@
         }
       ],
       "country": "나이지리아",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "au-ccc",
