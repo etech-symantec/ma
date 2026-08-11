@@ -811,10 +811,23 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .date-field{ position:relative; display:flex; align-items:center; gap:0; }
 .date-field input:not(.date-native-input){ padding-right:38px; }
 .ml-done-check{
-  display:flex; align-items:center; gap:6px; margin-top:8px;
-  font-size:12.8px; color:var(--text-dim); cursor:pointer;
+  display:flex; align-items:center; gap:6px;
+  font-size:12.8px; color:var(--text-dim); cursor:pointer; white-space:nowrap;
 }
 .ml-done-check input{ cursor:pointer; }
+.ml-date-row{ display:flex; align-items:center; gap:10px; }
+.ml-date-row .date-field{ flex:1; }
+
+/* 점검 등록창(월별 점검) — 설명글 없이, 절반 크기로 심플하게 */
+#maintenanceLogModal .modal-card{ max-width:320px; padding:16px; }
+#maintenanceLogModal .modal-card h2{ font-size:14px; margin-bottom:12px; }
+#maintenanceLogModal .form-grid{ grid-template-columns:1fr; gap:10px; }
+#maintenanceLogModal .form-grid label{ font-size:10px; margin-bottom:4px; }
+#maintenanceLogModal .form-grid input, #maintenanceLogModal .form-grid textarea{ padding:6px 9px; font-size:12px; }
+#maintenanceLogModal .form-grid textarea{ min-height:40px; }
+#maintenanceLogModal .cp-error{ margin-top:8px; min-height:0; }
+#maintenanceLogModal .modal-actions{ margin-top:12px; gap:8px; }
+#maintenanceLogModal .modal-actions .btn{ padding:7px 12px; font-size:12px; }
 .date-pick-btn{
   position:absolute; right:4px; top:50%; transform:translateY(-50%);
   background:none; border:none; cursor:pointer; font-size:14px; padding:6px; line-height:1;
@@ -898,20 +911,22 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 
 /* 월별 등록 탭: 좌측 법인 정보 + 우측 1~12월 연간 스프레드시트 */
 .maint-year-table-wrap{ overflow-x:auto; }
-.maint-year-table{ table-layout:fixed; min-width:1080px; }
+.maint-year-table{ table-layout:fixed; min-width:1150px; }
 .maint-year-table th, .maint-year-table td{ padding:8px 8px; }
 .maint-year-table .maint-th-owner, .maint-year-table .maint-cell-owner{
-  width:150px; min-width:150px;
+  width:220px; min-width:220px;
   position:sticky; left:0; z-index:2;
   background:var(--surface2);
   box-shadow:1px 0 0 var(--border-solid);
 }
 .maint-year-table thead .maint-th-owner{ z-index:3; }
-.maint-year-table td.maint-cell-owner{ background:var(--surface); }
+.maint-year-table td.maint-cell-owner{ background:var(--surface); white-space:nowrap; overflow:hidden; }
 .maint-year-table tr:hover td.maint-cell-owner{ background:var(--surface2); }
 .maint-th-month{ width:64px; text-align:center !important; }
 .maint-year-table td:not(.maint-cell-owner){ text-align:center; }
 .maint-td-empty{ color:var(--text-faint); }
+.maint-year-table th{ font-weight:700; text-align:center; }
+.maint-year-table .maint-th-owner{ text-align:center; }
 
 .maint-dday{
   display:inline-block; font-family:var(--mono); font-size:11.5px; font-weight:700;
@@ -949,6 +964,7 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-table tr:last-child td{ border-bottom:none; }
 .maint-table tr:hover td{ background:var(--surface2); }
 .maint-row-owner{ font-weight:700; color:var(--text); }
+.maint-row-location{ font-weight:400; font-size:11.5px; color:var(--text-faint); }
 .maint-row-engineer{ color:var(--text-dim); font-size:12px; }
 .maint-row-note{ color:var(--text-faint); font-size:11.8px; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .maint-status-badge{
