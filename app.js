@@ -547,6 +547,39 @@ function licenseStatus(rec){
   if (days <= 90) return 'warn';
   return 'ok';
 }
+// 이 법인(gid) 및 모든 하위(자식, 손자…) 법인에 속한 실제 자산들의 라이선스 상태를 재귀적으로 모두 모은다.
+// 상위 법인은 자산을 직접 갖지 않는 경우가 많으므로, 카드 상단 배지는 이 결과를 바탕으로 계산해야
+// 하위 자산 상태를 반영할 수 있다.
+function collectSubtreeLicenseStatuses(gid, groupsMap, visited){
+  visited = visited || new Set();
+  if (visited.has(gid)) return [];
+  visited.add(gid);
+  const items = groupsMap.get(gid) || [];
+  let statuses = items.filter(r => !r.is_group_shell).map(r => licenseStatus(r));
+  groupChildrenOf(gid).filter(cg => groupsMap.has(cg)).forEach(cg => {
+    statuses = statuses.concat(collectSubtreeLicenseStatuses(cg, groupsMap, visited));
+  });
+  return statuses;
+}
+// 여러 자산의 상태를 하나의 대표 상태로 요약한다. 만료된 것과 만료되지 않은 것이 섞여 있으면
+// (일부 자산만 만료) 'partial'을 반환해 카드에 "일부 만료"로 표시한다.
+function aggregateLicenseStatus(statuses){
+  if (!statuses.length) return 'na';
+  const hasCrit = statuses.includes('crit');
+  const hasNonCrit = statuses.some(s => s !== 'crit');
+  if (hasCrit && hasNonCrit) return 'partial';
+  if (hasCrit) return 'crit';
+  if (statuses.includes('warn')) return 'warn';
+  if (statuses.includes('ok')) return 'ok';
+  return 'na';
+}
+function statusBadgeVisual(s){
+  if (s === 'crit') return { cls:'tag-x', color:'var(--red)' };
+  if (s === 'warn') return { cls:'', color:'var(--amber)' };
+  if (s === 'partial') return { cls:'tag-partial', color:'#B45309' };
+  if (s === 'ok') return { cls:'tag-o', color:'var(--green)' };
+  return { cls:'tag-o', color:'var(--text-faint)' };
+}
 function licenseBarPct(rec){
   const start = parseDate(rec.start), end = parseDate(rec.end);
   if (!start || !end || end <= start) return 100;
@@ -1594,13 +1627,15 @@ function renderMaintenance(){
   if (!wrap) return;
   if (!maintenanceYear) maintenanceYear = Math.max(2026, Number(currentYm().split('-')[0]));
   wrap.innerHTML = `
-    <div class="maint-header">
-      <h2>유지보수 점검 관리</h2>
-      <p class="maint-sub">등록된 법인들의 월별 점검 이력을 관리합니다 · 2026년 1월부터</p>
-    </div>
-    <div class="maint-tabs">
-      <button type="button" class="maint-tab-btn ${maintenanceTab==='entry'?'active':''}" data-maint-tab="entry">점검지</button>
-      <button type="button" class="maint-tab-btn ${maintenanceTab==='stats'?'active':''}" data-maint-tab="stats">통계</button>
+    <div class="maint-sticky-top">
+      <div class="maint-header">
+        <h2>유지보수 점검 관리</h2>
+        <p class="maint-sub">등록된 법인들의 월별 점검 이력을 관리합니다 · 2026년 1월부터</p>
+      </div>
+      <div class="maint-tabs">
+        <button type="button" class="maint-tab-btn ${maintenanceTab==='entry'?'active':''}" data-maint-tab="entry">점검지</button>
+        <button type="button" class="maint-tab-btn ${maintenanceTab==='stats'?'active':''}" data-maint-tab="stats">통계</button>
+      </div>
     </div>
     <div id="maintTabBody">${maintenanceTab==='entry' ? maintenanceEntryTabHtml() : maintenanceStatsTabHtml()}</div>
   `;
@@ -1777,11 +1812,7 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
   // "이름표" 역할만 하는 shell 레코드(상위 법인 자신에게 남는, 자산이 아닌 더미 레코드)는
   // 실제 자산 목록/건수/상태 계산에서 제외한다.
   const realItems = items.filter(r => !r.is_group_shell);
-  const worst = realItems.reduce((acc,r)=>{
-    const s = licenseStatus(r);
-    const rank = {crit:3,warn:2,ok:1,na:0};
-    return rank[s]>rank[acc]?s:acc;
-  },'na');
+  const worst = aggregateLicenseStatus(collectSubtreeLicenseStatuses(gid, groupsMap, new Set()));
 
   // Support ID가 하나뿐인 카드는 법인명 옆 배지가 이미 그 Support ID를 보여주므로
   // 하위 "SUPPORT ID / 항목 건수" 바는 중복 정보라 생략한다 (독립 법인/자식 법인 모두 동일).
@@ -1853,7 +1884,7 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
             </div>
-            <span class="badge ${worst==='crit'?'tag-x':worst==='warn'?'':'tag-o'}" style="color:${worst==='crit'?'var(--red)':worst==='warn'?'var(--amber)':worst==='ok'?'var(--green)':'var(--text-faint)'}">${statusLabel(worst)}</span>
+            <span class="badge ${statusBadgeVisual(worst).cls}" style="color:${statusBadgeVisual(worst).color}">${statusLabel(worst)}</span>
             <span class="chev ${isOpen?'open':''}">›</span>
           </div>
         </div>
@@ -2071,7 +2102,7 @@ function updateBulkMoveBar(){
   bar.classList.add('open');
 }
 
-function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료됨', na:'기간정보없음'}[s]; }
+function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료됨', partial:'일부 만료', na:'기간정보없음'}[s]; }
 function statusColorVar(s){ return {ok:'var(--green)', warn:'var(--amber)', crit:'var(--red)', na:'var(--text-faint)'}[s]; }
 
 function snLink(r, groupSupportId){
