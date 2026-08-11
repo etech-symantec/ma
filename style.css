@@ -552,7 +552,7 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
   padding:1.5px 6px; border-radius:4px; letter-spacing:.02em;
   background:var(--surface2); color:var(--text-faint); border:1px solid var(--border-solid);
 }
-.cust-role-tag[data-role="운용"]{ color:var(--accent-dim); background:#E6F4FD; border-color:#BFE4F8; }
+.cust-role-tag[data-role="운영"]{ color:var(--accent-dim); background:#E6F4FD; border-color:#BFE4F8; }
 .cust-role-tag[data-role="영업"]{ color:#B45309; background:#FEF3C7; border-color:#FDE4A8; }
 .cust-role-tag.cust-role-none{ color:var(--text-faint); background:var(--surface); border-style:dashed; }
 
