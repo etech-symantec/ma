@@ -226,29 +226,29 @@ aside.filters{
 }
 .panel-profile .activity-wrap{ order:2; }
 .panel-profile .my-assets-toggle{ order:3; }
-.profile-logout-btn{ order:4; }
 .profile-name{
   font-size:14.5px; font-weight:700; color:var(--text);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   flex:0 1 auto; min-width:0;
 }
+.profile-info-right{
+  flex:0 0 auto; display:flex; align-items:baseline; gap:8px; white-space:nowrap;
+}
+.profile-logout-text{
+  background:none; border:none; padding:0; margin:0; cursor:pointer;
+  font-size:11px; color:var(--text-faint); font-family:var(--body);
+  transition:color .15s;
+}
+.profile-logout-text:hover{ color:var(--red); }
 .profile-sub{
   font-size:11px; color:var(--text-faint); font-family:var(--mono); letter-spacing:.03em;
-  flex:0 0 auto; white-space:nowrap;
+  white-space:nowrap;
 }
 .panel-profile .activity-wrap{ flex-shrink:0; }
 .panel-profile .activity-wrap .icon-btn.icon-only{
   width:auto; min-width:34px; height:34px; padding:0 10px; border-radius:9px; font-size:16px; gap:4px;
   background:rgba(255,255,255,0.7);
 }
-.profile-logout-btn{
-  flex-shrink:0; width:34px; height:34px; border-radius:9px;
-  background:rgba(255,255,255,0.7); border:1px solid var(--border-solid);
-  color:var(--text-dim); cursor:pointer; font-size:15px;
-  display:flex; align-items:center; justify-content:center;
-  transition:all .15s;
-}
-.profile-logout-btn:hover{ color:var(--red); border-color:#F3B4B4; background:#fff; }
 
 /* 사용자 영역(panel-profile) 안에 들어간 My 버튼: 내용(글자+갯수)에 맞춰 가로폭이 자동으로 늘고 줄어든다 */
 .panel-profile .my-assets-toggle{
@@ -584,6 +584,7 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 }
 .badge.tag-o{ color:#0D8A5F; border-color:#A7E8CB; background:#E9FBF2; }
 .badge.tag-x{ color:var(--text-faint); }
+.badge.tag-partial{ color:#B45309; border-color:#FBD38D; background:#FFF7E6; }
 .chev{ color:var(--text-faint); transition:transform .18s; flex-shrink:0; margin-top:3px;}
 .chev.open{ transform:rotate(90deg); }
 
@@ -833,13 +834,14 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   transition:all .15s;
 }
 .ml-done-check:has(input:checked){ color:#2F8F52; border-color:#BFE3CC; background:#E4F5EA; }
-.ml-done-check input{ cursor:pointer; margin:0; flex-shrink:0; accent-color:var(--accent); }
+.ml-done-check input{ cursor:pointer; margin:0; flex-shrink:0; width:15px; height:15px; accent-color:var(--accent); }
 
 /* 점검 등록창(월별 점검) — 설명글 없이, 절반 크기로 심플하게 */
 #maintenanceLogModal .modal-card{ max-width:320px; padding:16px; }
 #maintenanceLogModal .modal-card h2{ font-size:14px; margin-bottom:12px; }
 #maintenanceLogModal .form-grid{ grid-template-columns:1fr; gap:10px; }
 #maintenanceLogModal .form-grid label{ font-size:10px; margin-bottom:4px; }
+#maintenanceLogModal .form-grid label.ml-done-check{ font-size:12px; margin-bottom:0; }
 #maintenanceLogModal .form-grid input, #maintenanceLogModal .form-grid textarea{ padding:6px 9px; font-size:12px; }
 #maintenanceLogModal .form-grid textarea{ min-height:40px; }
 #maintenanceLogModal .cp-error{ margin-top:8px; min-height:0; }
@@ -884,6 +886,12 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .modal-actions{ display:flex; gap:10px; margin-top:22px; justify-content:flex-end; }
 
 /* ---------- 유지보수(월별 점검) 페이지 ---------- */
+/* 헤더 + 탭을 하나로 묶어 스크롤 시 상단에 고정 (main.content 좌우 패딩만큼 음수 마진으로 폭을 맞추고 되돌려준다) */
+.maint-sticky-top{
+  position:sticky; top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px)); z-index:20;
+  background:var(--bg);
+  margin:0 -26px; padding:0 26px;
+}
 .maint-header{ margin-bottom:18px; }
 .maint-header h2{ font-family:var(--display); font-size:20px; color:var(--text); }
 .maint-sub{ font-size:12.5px; color:var(--text-faint); margin-top:4px; font-family:var(--mono); }
@@ -895,6 +903,9 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 .maint-tab-btn:hover{ color:var(--text-dim); }
 .maint-tab-btn.active{ color:var(--accent); border-bottom-color:var(--accent); }
+
+#maintTabBody{ padding-top:2px; }
+
 
 .maint-toolbar{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px; }
 .maint-toolbar label{ font-size:11px; color:var(--text-faint); font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em; margin-right:6px; }
