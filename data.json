@@ -15019,7 +15019,7 @@
       "sku": "ELK",
       "sn": "",
       "entitlement": "🔗",
-      "qty": "",
+      "qty": "1",
       "start": "",
       "end": "",
       "remarks": "",
@@ -15037,19 +15037,19 @@
       "tag_note": "우면 R&D 센터",
       "id": 279,
       "ip_enc": {
-        "iv": "fm2pWbv10wcYBPip",
-        "ct": "n3s/X15D27mzE8VyeHo+lA==",
-        "tag": "rJ//gZ8bLCR4hdqcNJ90Rg=="
+        "iv": "jdhxv/mPMlxsDj/q",
+        "ct": "P7YjBTGgIotcsKy8Z2+DUA==",
+        "tag": "eQLte14aGH5LFDRKJTx8Ug=="
       },
       "id_enc": {
-        "iv": "5EhuIaz1mbmn5byP",
-        "ct": "AsLRu1POGjtsLkxlYuwTd9E5k6Jyz0NoY1cOKo3mFmv7AzE=",
-        "tag": "nTSZaqV8st0Hnmma3ZCoMg=="
+        "iv": "wQMaDRKbd7dE71NO",
+        "ct": "rqoYBU8P/FLoPi9zXDSyaYj4DXIBI6Um1qisgeOkWtYymIQ=",
+        "tag": "uDI/6mzrI7eCK0SV9t+myQ=="
       },
       "pw_enc": {
-        "iv": "M1VsZbwxk3l0qio5",
-        "ct": "+7a6cpV2xuHxuywAwFGnS2dIEmVa2bx/XAeBFxhicugzHUooaeY5bNwM8xbK",
-        "tag": "SMKiYk8iVwzDsSxFYnGhFQ=="
+        "iv": "Nd/Fznl1PNgMPPG8",
+        "ct": "V08W/2b901LpJqpmkHRgA4SGlcAoeGUX2JbbBwbeLyzVAazvX0s2A/mSnoFs",
+        "tag": "w/Sl1P8ey7JrirQ9TSzL2Q=="
       },
       "config_mode": "Explicit",
       "group_remarks": "",
@@ -15080,7 +15080,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "custom-msnzlh9m",
