@@ -1204,16 +1204,19 @@ function monthsFrom202601To(ym){
   }
   return out;
 }
-// 유지보수 관리 대상 법인 목록 — 실제 자산이 하나라도 딸린 법인(사이트)만 대상으로 한다.
-// (자식 법인들의 대표 이름표 역할만 하는 "빈 상위 법인"은 자체적으로 점검할 자산이 없으므로 제외.)
+// 유지보수 관리 대상 법인 목록 — 독립법인(상위/하위 관계가 없는 법인) 또는 상위법인만 대상으로 한다.
+// 하위 법인(다른 법인 아래에 속한 자식 법인)은 상위 법인 단위로 함께 관리되므로 목록에서 제외한다.
+// (상위 법인 자체는 대표 이름표 역할이라 실제 자산 레코드가 없을 수 있으므로, 실제 자산 유무와
+//  무관하게 포함한다. 독립법인은 실제 자산이 있는 경우에만 대상으로 삼는다.)
 function maintenanceGroupList(){
   return allGroupIds()
     .map(gid => {
       const items = records.filter(r => r.group === gid);
+      const meta = groupMeta(items);
       const realItems = items.filter(r => !r.is_group_shell);
-      return { gid, meta: groupMeta(items), realItems };
+      return { gid, meta, realItems };
     })
-    .filter(g => g.realItems.length > 0)
+    .filter(g => !g.meta.group_parent && (g.meta.is_parent || g.realItems.length > 0))
     .sort((a, b) => a.meta.owner.localeCompare(b.meta.owner, 'ko'));
 }
 function maintenanceLogFor(gid, ym){
@@ -1236,7 +1239,12 @@ function maintenanceEntryTabHtml(){
   const rowsHtml = groups.map(g => {
     const log = maintenanceLogFor(g.gid, maintenanceYm);
     if (log && (log.date || '').trim()) doneCount++;
-    const engineer = [g.meta.owner_primary, g.meta.owner_secondary].filter(Boolean).join(' / ') || '—';
+    const engineer = (g.meta.owner_primary || g.meta.owner_secondary)
+      ? [
+          g.meta.owner_primary ? `<span class="mgr-primary">${esc(g.meta.owner_primary)}</span>` : '',
+          g.meta.owner_secondary ? `<span class="mgr-secondary">${esc(g.meta.owner_secondary)}</span>` : ''
+        ].filter(Boolean).join('')
+      : '—';
     const statusHtml = (log && (log.date||'').trim())
       ? `<span class="maint-status-badge done">✓ 점검완료</span>`
       : `<span class="maint-status-badge missing">미점검</span>`;
@@ -1246,7 +1254,7 @@ function maintenanceEntryTabHtml(){
     return `
       <tr data-maint-row="${esc(g.gid)}">
         <td data-label="법인"><div class="maint-row-owner">${esc(g.meta.owner)}</div><div class="maint-row-engineer">${esc(g.meta.country||'')}${g.meta.location?(' · '+esc(g.meta.location)):''}</div></td>
-        <td data-label="정 담당자" class="maint-row-engineer">${engineer}</td>
+        <td data-label="담당 엔지니어" class="maint-row-engineer">${engineer}</td>
         <td data-label="상태">${statusHtml}</td>
         <td data-label="점검일">${dateTxt}</td>
         <td data-label="등록 담당자">${managerTxt}</td>
@@ -1273,7 +1281,7 @@ function maintenanceEntryTabHtml(){
     <div class="maint-table-wrap">
       <table class="maint-table">
         <thead><tr>
-          <th>법인</th><th>정 담당자</th><th>상태</th><th>점검일</th><th>등록 담당자</th><th>비고</th><th></th>
+          <th>법인</th><th>담당 엔지니어</th><th>상태</th><th>점검일</th><th>등록 담당자</th><th>비고</th><th></th>
         </tr></thead>
         <tbody>${rowsHtml || `<tr><td colspan="7"><div class="maint-empty">등록된 법인이 없습니다. 먼저 좌측 ＋ 버튼으로 법인을 등록해 주세요.</div></td></tr>`}</tbody>
       </table>
@@ -1383,7 +1391,7 @@ function openMaintenanceLogModal(gid, ym){
   maintenanceEditTarget = { gid, ym };
   const log = maintenanceLogFor(gid, ym);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
-  document.getElementById('mlModalSub').textContent = `이 법인의 ${ymLabel(ym)} 점검일을 등록합니다. 등록은 이 법인의 정 담당자(${g.meta.owner_primary || '미지정'})가 하는 것을 기본으로 하되, 필요하면 다른 담당자 이름으로도 남길 수 있습니다.`;
+  document.getElementById('mlModalSub').textContent = `이 법인의 ${ymLabel(ym)} 점검일을 등록합니다. 등록은 이 법인의 담당 엔지니어 중 정 담당자(${g.meta.owner_primary || '미지정'})가 하는 것을 기본으로 하되, 필요하면 다른 담당자 이름으로도 남길 수 있습니다.`;
   document.getElementById('ml_date').value = log ? (log.date || '') : '';
   document.getElementById('ml_manager').value = log ? (log.manager || '') : (g.meta.owner_primary || '');
   document.getElementById('ml_note').value = log ? (log.note || '') : '';
