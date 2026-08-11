@@ -1299,7 +1299,7 @@ function maintenanceEntryTabHtml(){
     return `
       <tr>
         <td class="maint-cell-owner" data-label="사업장">
-          <div class="maint-row-owner">${esc(g.meta.owner)}${g.meta.location ? ' · ' + esc(g.meta.location) : ''}</div>
+          <span class="maint-row-owner">${esc(g.meta.owner)}</span>${g.meta.location ? `<span class="maint-row-location"> · ${esc(g.meta.location)}</span>` : ''}
         </td>
         <td data-label="계약만료 D-Day">${ddayHtml}</td>
         <td data-label="담당">${engineerHtml}</td>
@@ -1517,7 +1517,6 @@ function openMaintenanceLogModal(gid, ym){
   maintenanceEditTarget = { gid, ym };
   const log = maintenanceLogFor(gid, ym);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
-  document.getElementById('mlModalSub').textContent = `이 법인의 ${ymLabel(ym)} 점검일을 등록합니다. 등록은 이 법인의 담당 엔지니어 중 정 담당자(${g.meta.owner_primary || '미지정'})가 하는 것을 기본으로 하되, 필요하면 다른 담당자 이름으로도 남길 수 있습니다.`;
   // 점검일 기본값: 이미 등록된 점검이면 등록된 날짜를, 아니면 오늘(클릭한 날)을 기본값으로 잡는다.
   document.getElementById('ml_date').value = log ? (log.date || todayDots()) : todayDots();
   document.getElementById('ml_manager').value = log ? (log.manager || '') : (currentUserName() || g.meta.owner_primary || '');
