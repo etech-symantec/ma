@@ -167,15 +167,18 @@
       <div class="ge-row ge-row-3">
         <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
         <div><label>Support ID</label><input id="ge_support_id" placeholder="예: 12345678"></div>
-        <div>
+        <div class="parent-flag-cell">
           <label class="parent-flag-check"><input type="checkbox" id="ge_is_parent"> 이 법인은 상위 법인입니다</label>
-          <label>상위 법인 (부모)</label>
-          <select id="ge_parent_group">
-            <option value="">없음 (독립된 법인)</option>
-          </select>
         </div>
       </div>
-      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">이 법인 자체가 다른 법인들을 자식으로 둘 상위 법인이라면 "이 법인은 상위 법인입니다"에 체크하세요. 체크하면 이 법인은 대표 이름 역할만 하게 되어 Support ID / 구축 엔지니어 / 구축 일자 / 구성방식은 비활성화됩니다. 상위 법인(부모) 드롭다운에는 이렇게 상위 법인으로 체크된 법인만 나타납니다. 다른 법인을 상위(부모)로 지정하면, 두 법인은 부모-자식 관계로 연결됩니다. 이렇게 연결된 법인들은 법인 정보 영역에 서로의 Support ID를 모두 함께 보여줍니다 (예: 같은 그룹사의 여러 법인이 Support ID를 나눠 쓰는 경우). 관계가 없는 법인은 기존처럼 표시됩니다. 상위 법인으로 지정된 법인에 기존에 직접 연결되어 있던 Support ID/자산이 있다면, 대표 이름 역할만 하도록 자동으로 첫 번째 자식 법인 아래로 옮겨집니다.</p>
+      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">이 법인 자체가 다른 법인들을 자식으로 둘 상위 법인이라면 위의 "이 법인은 상위 법인입니다"에 체크하세요. 체크하면 이 법인은 대표 이름 역할만 하게 되어 Support ID / 구축 엔지니어 / 구축 일자 / 구성방식은 비활성화됩니다.</p>
+      <div class="ng-parent-select-row">
+        <label for="ge_parent_group">상위 법인 (부모) — 기본값은 "없음"입니다. 이 법인을 다른 법인의 하위(자식) 법인으로 등록할 때만 선택하세요. (목록에는 "상위 법인입니다"로 표시된 법인만 나타납니다) 다른 법인을 상위(부모)로 지정하면, 두 법인은 부모-자식 관계로 연결되어 서로의 Support ID를 함께 보여줍니다. 상위 법인으로 지정된 법인에 기존에 직접 연결되어 있던 Support ID/자산이 있다면, 자동으로 첫 번째 자식 법인 아래로 옮겨집니다.</label>
+        <select id="ge_parent_group">
+          <option value="">없음 (독립된 법인)</option>
+        </select>
+        <p class="ng-parent-warning" id="geParentWarning" style="display:none;"></p>
+      </div>
       <div class="ge-row ge-row-3">
         <div><label>국가 (COUNTRY)</label><input id="ge_country" placeholder="예: 베트남"></div>
         <div><label>위치 (LOCATION)</label><input id="ge_location" placeholder="예: 하노이"></div>
@@ -223,17 +226,20 @@
       <div class="ge-row ge-row-5">
         <div><label>법인 (OWNER)</label><input id="ng_owner" placeholder="예: 삼성전자 ○○법인"></div>
         <div><label>Support ID</label><input id="ng_support_id" placeholder="예: 12345678"></div>
-        <div>
-          <label class="parent-flag-check"><input type="checkbox" id="ng_is_parent"> 이 법인은 상위 법인입니다</label>
-          <label>상위 법인 (부모)</label>
-          <select id="ng_parent_group">
-            <option value="">없음 (독립된 법인)</option>
-          </select>
-        </div>
         <div><label>국가 (COUNTRY)</label><input id="ng_country" placeholder="예: 베트남"></div>
         <div><label>위치 (LOCATION)</label><input id="ng_location" placeholder="예: 하노이"></div>
+        <div class="parent-flag-cell">
+          <label class="parent-flag-check"><input type="checkbox" id="ng_is_parent"> 이 법인은 상위 법인입니다</label>
+        </div>
       </div>
-      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">새로 추가하는 법인이 다른 법인들을 자식으로 둘 상위 법인이라면 "이 법인은 상위 법인입니다"에 체크하세요. 체크하면 이 법인은 대표 이름 역할만 하게 되어 Support ID / 구축 엔지니어 / 구축 일자 / 구성방식은 비활성화됩니다. 상위 법인(부모) 드롭다운에는 이렇게 상위 법인으로 체크된 법인만 나타납니다.</p>
+      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">새로 추가하는 법인이 다른 법인들을 자식으로 둘 상위 법인이라면 위의 "이 법인은 상위 법인입니다"에 체크하세요. 체크하면 이 법인은 대표 이름 역할만 하게 되어 Support ID / 구축 엔지니어 / 구축 일자 / 구성방식은 비활성화됩니다.</p>
+      <div class="ng-parent-select-row">
+        <label for="ng_parent_group">상위 법인 (부모) — 기본값은 "없음"입니다. 이 법인을 다른 법인의 하위(자식) 법인으로 등록할 때만 선택하세요. (목록에는 "상위 법인입니다"로 표시된 법인만 나타납니다)</label>
+        <select id="ng_parent_group">
+          <option value="">없음 (독립된 법인)</option>
+        </select>
+        <p class="ng-parent-warning" id="ngParentWarning" style="display:none;"></p>
+      </div>
       <div class="ge-row ge-row-3">
         <div><label>구축 엔지니어</label><input id="ng_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
         <div><label>구축 일자 (YYYY.MM)</label><input id="ng_build_date" placeholder="2026.07"></div>
