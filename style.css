@@ -816,7 +816,12 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 .ml-done-check input{ cursor:pointer; }
 .ml-date-row{ display:flex; align-items:center; gap:10px; }
-.ml-date-row .date-field{ flex:1; }
+.ml-date-row .date-field{ flex:1; min-width:0; }
+.ml-done-check{
+  display:flex; align-items:center; gap:6px;
+  font-size:12.8px; color:var(--text-dim); cursor:pointer; white-space:nowrap;
+  flex-shrink:0;
+}
 
 /* 점검 등록창(월별 점검) — 설명글 없이, 절반 크기로 심플하게 */
 #maintenanceLogModal .modal-card{ max-width:320px; padding:16px; }
