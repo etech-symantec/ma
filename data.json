@@ -21,7 +21,7 @@
       "os_ver": "7.3.17.1",
       "owner_primary": "박동석",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -60,7 +60,11 @@
         "iv": "Vt1hLLYXW1dvqxh4",
         "ct": "pWkBXnw0GAtuHyQy",
         "tag": "GF5x6i+d4ftBVum4ibrjXw=="
-      }
+      },
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "jp-sds",
@@ -81,7 +85,7 @@
       "os_ver": "7.3.17.1",
       "owner_primary": "박동석",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -120,7 +124,11 @@
         "iv": "g5zrkufils9GF5Iw",
         "ct": "a5BlDtRZX07lpYro",
         "tag": "09tR+1qQkHAoWHGoHgTVKw=="
-      }
+      },
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "jp-sds",
@@ -141,7 +149,7 @@
       "os_ver": "",
       "owner_primary": "박동석",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -163,7 +171,11 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "일본"
+      "country": "일본",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "jp-sds",
@@ -184,7 +196,7 @@
       "os_ver": "3.3.4.1",
       "owner_primary": "박동석",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -223,7 +235,11 @@
         "iv": "TRAW4yCMt1euJX6Q",
         "ct": "Hgxo3wul7OpvJRSs",
         "tag": "nyYQmlSgyS8Mjx/ta6rsIw=="
-      }
+      },
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "jp-sds",
@@ -244,7 +260,7 @@
       "os_ver": "10.6.2.1",
       "owner_primary": "박동석",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -278,7 +294,11 @@
       ],
       "config_mode": "Explicit",
       "country": "일본",
-      "device_type": "RP"
+      "device_type": "RP",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "tw-ds",
