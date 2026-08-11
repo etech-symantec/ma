@@ -382,6 +382,11 @@ function boot(){
   updateUserBtnLabel();
   // 법인명 등에 실수로 HTML 이스케이프(&amp; 등)가 그대로 텍스트로 저장돼 있다면 원래 문자로 되돌린다.
   const entitiesFixed = migrateStrayHtmlEntities();
+  // 과거 버전에서 잘못 생성될 수 있었던 custom-NaN / dup-NaN 그룹을 먼저 분리한다.
+  // 이 보정은 owner 일관성 보정보다 반드시 먼저 실행되어야 서로 다른 법인명이 한 법인명으로 덮이지 않는다.
+  const brokenGroupFixed = repairKnownBrokenGeneratedGroups();
+  // 법인만 먼저 만든 뒤 생긴 빈 레코드는 실제 자산이 아니라 법인 정보를 보존하는 shell 레코드로 정리한다.
+  const shellFixed = migrateEmptyGroupPlaceholders();
   // 예전 버전에서 "자산 정보 직접 수정" 화면으로 법인명 등을 자산 하나만 따로 바꿀 수 있었던 적이
   // 있어서 같은 법인(그룹) 안에서 값이 어긋난 데이터가 있다면 그룹의 대표 값으로 다시 맞춘다.
   const ownerFixed = migrateOwnerConsistencyWithinGroups();
@@ -392,7 +397,7 @@ function boot(){
   const migrated = enforceParentsHaveNoDirectAssets();
   render();
   requestAnimationFrame(() => { syncGlobalHeaderHeight(); syncStickyOffsets(); });
-  if ((migrated || entitiesFixed || ownerFixed) && !viewOnly && sessionKey){
+  if ((migrated || entitiesFixed || brokenGroupFixed || shellFixed || ownerFixed) && !viewOnly && sessionKey){
     buildFilters();
     scheduleAutoSync();
   }
@@ -526,6 +531,96 @@ function groupRecords(list){
   return map;
 }
 
+
+// ---------- 안정적인 레코드 / 그룹 ID 생성 ----------
+// 예전 코드는 Math.max(...records.map(r=>r.id))에 의존했기 때문에 id 중 하나라도
+// 숫자로 변환할 수 없는 값(undefined/문자열 등)이 섞이면 newId가 NaN이 되고,
+// 이후 새 법인이 모두 같은 'custom-NaN' 그룹으로 합쳐질 수 있었다.
+function nextRecordId(){
+  let maxId = 0;
+  const used = new Set(records.map(r => String(r.id)));
+  records.forEach(r => {
+    const n = Number(r.id);
+    if (Number.isFinite(n) && n >= 0) maxId = Math.max(maxId, Math.floor(n));
+  });
+  let candidate = maxId + 1;
+  while (used.has(String(candidate))) candidate++;
+  return candidate;
+}
+
+function makeUniqueGroupId(prefix='custom'){
+  const used = new Set(records.map(r => String(r.group || '')));
+  const base = `${prefix}-${Date.now().toString(36)}`;
+  let gid = base;
+  let seq = 1;
+  while (used.has(gid)) gid = `${base}-${seq++}`;
+  return gid;
+}
+
+// 실제 자산 고유 정보가 하나도 없는 레코드는 '법인만 먼저 생성'할 때 만들어진
+// 자리표시자다. 화면에서 1건짜리 빈 자산으로 보이면 안 되므로 shell로 취급한다.
+function isAssetPayloadEmpty(r){
+  if (!r) return true;
+  const scalar = [r.sku,r.sn,r.qty,r.start,r.end,r.os_ver,r.remarks,r.deploy_date,r.mode];
+  const hasScalar = scalar.some(v => v !== null && v !== undefined && String(v).trim() !== '');
+  const hasSecret = !!(r.ip_enc || r.id_enc || r.pw_enc || r.enable_pw_enc);
+  const hasLog = Array.isArray(r.work_log) && r.work_log.length > 0;
+  return !hasScalar && !hasSecret && !hasLog;
+}
+
+function migrateEmptyGroupPlaceholders(){
+  let changed = false;
+  records.forEach(r => {
+    if (!r.is_group_shell && isAssetPayloadEmpty(r)){
+      r.is_group_shell = true;
+      changed = true;
+    }
+  });
+  return changed;
+}
+
+// 과거 ID 생성 실패로 생긴 'custom-NaN' / 'dup-NaN' 그룹만 매우 보수적으로 복구한다.
+// 서로 다른 owner가 한 그룹에 들어가 있으면 owner별로 분리하고, owner까지 같더라도
+// 빈 자리표시자가 여러 개라면 두 번째 자리표시자부터 독립 법인 그룹으로 분리한다.
+function repairKnownBrokenGeneratedGroups(){
+  let changed = false;
+  const badGroups = [...new Set(records.map(r=>String(r.group||'')))]
+    .filter(g => /^(custom|dup)-NaN(?:-|$)/.test(g));
+
+  badGroups.forEach(gid => {
+    const items = records.filter(r => String(r.group||'') === gid);
+    if (items.length <= 1) return;
+
+    const ownerBuckets = new Map();
+    items.forEach(r => {
+      const key = String(r.owner || '').trim() || '__EMPTY_OWNER__';
+      if (!ownerBuckets.has(key)) ownerBuckets.set(key, []);
+      ownerBuckets.get(key).push(r);
+    });
+
+    if (ownerBuckets.size > 1){
+      let first = true;
+      ownerBuckets.forEach(bucket => {
+        if (first){ first = false; return; }
+        const newGid = makeUniqueGroupId('recovered');
+        bucket.forEach(r => { r.group = newGid; r.group_parent = ''; });
+        changed = true;
+      });
+      return;
+    }
+
+    const placeholders = items.filter(isAssetPayloadEmpty);
+    if (placeholders.length > 1){
+      placeholders.slice(1).forEach(r => {
+        r.group = makeUniqueGroupId('recovered');
+        r.group_parent = '';
+        changed = true;
+      });
+    }
+  });
+  return changed;
+}
+
 function getGroupCustContacts(items){
   // Prefer the new multi-contact array field; fall back to legacy single
   // cust_contact/cust_phone/cust_email fields for older data.
@@ -656,7 +751,7 @@ function enforceParentsHaveNoDirectAssets(){
     // 자산이 아닌 "이름표" 전용 shell 레코드를 하나 남겨 둔다 (목록/테이블에는 표시되지 않음).
     if (!records.some(r => r.group === gid)){
       records.push({
-        id: Date.now() + Math.floor(Math.random()*1000),
+        id: nextRecordId(),
         group: gid,
         is_group_shell: true,
         flag: parentMetaSnapshot.flag || '',
@@ -933,12 +1028,13 @@ function bucketByTags(arr){
 function renderDashboard(){
   const wrap = document.getElementById('dashboardView');
   if (!wrap) return;
-  const total = records.length;
+  const assetRecords = records.filter(r=>!r.is_group_shell);
+  const total = assetRecords.length;
   const groupCount = new Set(records.map(r=>r.group)).size;
 
   // OS 버전별: 장비(SKU) 태그별로 나눠서, 같은 태그가 붙은 장비들의 버전만 모아서 보여준다.
   // (예: MC 태그가 붙은 장비들의 버전 모음, ISG 태그가 붙은 장비들의 버전 모음 …)
-  const validOsRecords = records.filter(r => osVersionTag(r.os_ver));
+  const validOsRecords = assetRecords.filter(r => osVersionTag(r.os_ver));
   const osTagGroups = SKU_TAG_KEYS
     .map(tag => ({ tag, items: validOsRecords.filter(r => skuKeywordMatches(r.sku).includes(tag)) }))
     .filter(g => g.items.length > 0)
@@ -952,10 +1048,10 @@ function renderDashboard(){
     ? dashboardSectionHtml('os_none', '태그 없음 · 버전별', 'dash-c1', bucketGroups(osNoTagItems, r => osVersionTag(r.os_ver)), true)
     : '';
 
-  const byTag = bucketByTags(records);
-  const byLocation = bucketGroups(records, r => r.location);
-  const byCountry = bucketGroups(records, r => countryOf(r));
-  const bySku = bucketGroups(records, r => r.sku);
+  const byTag = bucketByTags(assetRecords);
+  const byLocation = bucketGroups(assetRecords, r => r.location);
+  const byCountry = bucketGroups(assetRecords, r => countryOf(r));
+  const bySku = bucketGroups(assetRecords, r => r.sku);
 
   wrap.innerHTML = `
     <div class="dash-header">
@@ -1551,7 +1647,7 @@ function buildFilters(){
   const statuses = [['ok','정상'],['warn','만료임박'],['crit','만료됨'],['na','기간없음']];
   statusBox.innerHTML = statuses.map(([k,l])=>`
     <div class="filter-item ${activeStatusFilters.has(k)?'active':''}" data-status="${k}">
-      <span>${l}</span><span class="cnt">${records.filter(r=>licenseStatus(r)===k).length}</span>
+      <span>${l}</span><span class="cnt">${records.filter(r=>!r.is_group_shell && licenseStatus(r)===k).length}</span>
     </div>`).join('');
   statusBox.querySelectorAll('[data-status]').forEach(el=>{
     el.onclick = ()=>{
@@ -1599,7 +1695,7 @@ function buildFilters(){
 
   const kwBox = document.getElementById('skuKeywordFilters');
   kwBox.innerHTML = SKU_TAG_KEYS.map(k=>{
-    const cnt = records.filter(r=>skuKeywordMatches(r.sku).includes(k)).length;
+    const cnt = records.filter(r=>!r.is_group_shell && skuKeywordMatches(r.sku).includes(k)).length;
     return `
     <div class="filter-item ${activeSkuKeywordFilters.has(k)?'active':''}" data-skukw="${esc(k)}">
       <span>${esc(k)}</span><span class="cnt">${cnt}</span>
@@ -1721,7 +1817,7 @@ function openAddAssetToGroup(gid){
   set('f_check', meta.check_method);
   // Support ID가 이미 하나뿐이면 미리 채워 두고, 여러 개이거나 없으면 비워 둔다
   // (이 필드는 읽기 전용이며, Support ID를 바꾸려면 "법인 정보 수정"을 이용해야 한다).
-  const sids = ownSupportIds(items.filter(r=>!r.is_group_shell));
+  const sids = ownSupportIds(items);
   set('f_support', sids.length === 1 ? sids[0] : '');
 
   document.getElementById('addModalTitle').textContent = `"${meta.owner}" 법인에 자산 추가`;
@@ -1808,11 +1904,14 @@ document.getElementById('saveAddBtn').onclick = async () => {
     const items = records.filter(r=>r.group===addAssetTargetGid);
     if (!items.length){ addAssetTargetGid = null; document.getElementById('addModal').classList.remove('open'); return; }
     const meta = groupMeta(items);
-    const newId = Math.max(0,...records.map(r=>r.id)) + 1;
+    const newId = nextRecordId();
+    const newSupportId = val('f_support');
+    const supportItems = items.filter(r => (r.support_id||'').trim() === newSupportId);
+    const supportMeta = supportItems.length ? subGroupMeta(supportItems) : {build_engineer:'', build_date:''};
     const rec = {
       id:newId, group:addAssetTargetGid, flag: meta.flag || '',
       owner: meta.owner, country: meta.country, location: meta.location,
-      support_id:val('f_support'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
+      support_id:newSupportId, build_engineer:supportMeta.build_engineer || '', build_date:supportMeta.build_date || '', sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
       start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'), deploy_date:'',
       mode:'', os_ver:val('f_os'), owner_primary: meta.owner_primary, owner_secondary: meta.owner_secondary,
       check_method: meta.check_method, config_mode: meta.config_mode,
@@ -1835,8 +1934,8 @@ document.getElementById('saveAddBtn').onclick = async () => {
     return;
   }
 
-  const newId = Math.max(0,...records.map(r=>r.id)) + 1;
-  const gid = 'custom-' + newId;
+  const newId = nextRecordId();
+  const gid = makeUniqueGroupId('custom');
   const rec = {
     id:newId, group:gid, flag:'', owner:val('f_owner')||'(신규 항목)', country:val('f_country'), location:val('f_location'),
     support_id:val('f_support'), sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
@@ -1935,7 +2034,6 @@ function populateParentGroupSelect(gid, currentParent){
 // applyGeSidFieldState(체크박스 change 핸들러 포함)에서 참조한다.
 let geSubGroupsCache = [];
 let geOriginalConfigMode = '';
-let geOriginalParentGid = '';
 
 // "이 법인은 상위 법인입니다" 체크박스 상태와 Support ID 개수에 따라 Support ID / 구축 엔지니어 /
 // 구축 일자 / 구성방식 입력창을 활성화·비활성화하고 값을 채운다. 체크박스를 켜면(상위 법인)
@@ -2006,8 +2104,6 @@ function openGroupEditModal(gid){
   applyGeSidFieldState();
 
   populateParentGroupSelect(gid, meta.group_parent);
-  geOriginalParentGid = meta.group_parent || '';
-  updateGeParentWarning();
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
     ? meta.cust_contacts.slice(0,5)
     : [{role:'',name:'',org:'',phone:'',email:''}]
@@ -2026,24 +2122,7 @@ function updateGeCustSectionVisibility(){
   document.getElementById('ge_cust_add_btn').style.display = isChildNow ? 'none' : '';
   document.getElementById('geCustHiddenHint').style.display = isChildNow ? '' : 'none';
 }
-// "상위 법인 (부모)"가 선택되어 있으면 이 법인이 어떤 법인의 하위(자식)로 저장될지 눈에 잘
-// 띄게 경고 문구로 보여준다 — 실수로 원치 않는 상위 법인 아래로 들어가는 일을 막기 위함이다.
-function updateGeParentWarning(){
-  const sel = document.getElementById('ge_parent_group');
-  const warn = document.getElementById('geParentWarning');
-  if (sel.value){
-    const label = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : '';
-    warn.textContent = `⚠️ 이 법인은 "${label}" 법인의 하위(자식) 법인으로 저장됩니다. 독립된 법인으로 유지하려면 위 드롭다운을 "없음 (독립된 법인)"으로 바꿔 주세요.`;
-    warn.style.display = '';
-  } else {
-    warn.textContent = '';
-    warn.style.display = 'none';
-  }
-}
-document.getElementById('ge_parent_group').addEventListener('change', () => {
-  updateGeCustSectionVisibility();
-  updateGeParentWarning();
-});
+document.getElementById('ge_parent_group').addEventListener('change', updateGeCustSectionVisibility);
 
 document.getElementById('cancelGeBtn').onclick = () => {
   document.getElementById('groupEditModal').classList.remove('open');
@@ -2081,14 +2160,6 @@ document.getElementById('saveGeBtn').onclick = () => {
   // 방어적으로 한 번 더 확인: 자기 자신이나 자신의 하위 법인을 부모로 저장하지 않는다.
   const forbiddenParents = new Set([groupEditId, ...groupDescendantIds(groupEditId)]);
   const finalParentGid = (newParentGid && !forbiddenParents.has(newParentGid)) ? newParentGid : '';
-  // 상위 법인(부모)이 새로 선택되었거나 바뀌었다면(원래 상태와 다르면), 실수로 다른 법인
-  // 밑으로 들어가는 일이 없도록 저장 직전 한 번 더 명시적으로 확인받는다.
-  if (finalParentGid && finalParentGid !== geOriginalParentGid){
-    const sel = document.getElementById('ge_parent_group');
-    const parentLabel = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : finalParentGid;
-    const ok = confirm(`"${newOwner}" 법인을 "${parentLabel}" 법인의 하위(자식) 법인으로 저장합니다. 맞으면 확인, 독립된 법인으로 유지하려면 취소를 누르고 "상위 법인 (부모)"를 "없음"으로 바꿔 주세요.`);
-    if (!ok) return;
-  }
   captureCustContactsFromDom();
   // 하위 법인(부모가 지정된 법인)에는 고객사 담당자 정보가 필요 없으므로 저장하지 않는다.
   const newContacts = finalParentGid ? [] : geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
@@ -2189,25 +2260,7 @@ function updateNgCustSectionVisibility(){
   document.getElementById('ng_cust_add_btn').style.display = isChildNow ? 'none' : '';
   document.getElementById('ngCustHiddenHint').style.display = isChildNow ? '' : 'none';
 }
-// "상위 법인 (부모)"를 선택하면(직접 고르거나, "하위 법인 추가" 버튼으로 미리 채워졌거나) 이
-// 법인이 어떤 법인의 하위(자식)로 등록되는지 눈에 잘 띄게 경고 문구로 보여준다 — 실수로 원치
-// 않는 상위 법인 아래에 새 법인이 들어가는 일을 막기 위함이다.
-function updateNgParentWarning(){
-  const sel = document.getElementById('ng_parent_group');
-  const warn = document.getElementById('ngParentWarning');
-  if (sel.value){
-    const label = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : '';
-    warn.textContent = `⚠️ 이 법인은 "${label}" 법인의 하위(자식) 법인으로 등록됩니다. 독립된 법인으로 추가하려면 위 드롭다운을 "없음 (독립된 법인)"으로 바꿔 주세요.`;
-    warn.style.display = '';
-  } else {
-    warn.textContent = '';
-    warn.style.display = 'none';
-  }
-}
-document.getElementById('ng_parent_group').addEventListener('change', () => {
-  updateNgCustSectionVisibility();
-  updateNgParentWarning();
-});
+document.getElementById('ng_parent_group').addEventListener('change', updateNgCustSectionVisibility);
 
 // 상위 법인(부모) 선택 드롭다운을 현재 존재하는 법인 목록으로 채운다. 아직 만들어지지 않은
 // 새 법인이라 자기 자신을 제외할 필요는 없다. "이 법인은 상위 법인입니다" 체크박스로
@@ -2242,11 +2295,15 @@ function clearAddGroupForm(){
    'ng_config_mode','ng_owner_primary','ng_owner_secondary','ng_check','ng_remarks'
   ].forEach(id => { document.getElementById(id).value = ''; });
   document.getElementById('ng_is_parent').checked = false;
+  const parentSel = document.getElementById('ng_parent_group');
+  if (parentSel) parentSel.value = '';
 }
 
 function openAddGroupModal(presetParentGid){
   clearAddGroupForm();
   populateNewGroupParentSelect();
+  // 일반 '법인 추가'는 항상 독립 법인에서 시작한다. 이전 모달 선택값이 남아 부모로 저장되는 것을 차단한다.
+  document.getElementById('ng_parent_group').value = '';
   updateNgParentFlagState();
   if (presetParentGid){
     const sel = document.getElementById('ng_parent_group');
@@ -2254,7 +2311,6 @@ function openAddGroupModal(presetParentGid){
     // 법인일 때만) 미리 선택해 둔다.
     if ([...sel.options].some(o => o.value === presetParentGid)) sel.value = presetParentGid;
   }
-  updateNgParentWarning();
   ngCustContacts = [{role:'',name:'',org:'',phone:'',email:''}];
   renderNgCustContactRows();
   updateNgCustSectionVisibility();
@@ -2278,21 +2334,13 @@ document.getElementById('saveNgBtn').onclick = () => {
   }
   const parentGid = document.getElementById('ng_parent_group').value;
   const newIsParent = document.getElementById('ng_is_parent').checked;
-  // 상위 법인(부모)이 선택된 채로 저장하면 새 법인이 그 법인의 하위(자식)로 등록된다 — 실수로
-  // 다른 법인 밑에 들어가는 일이 없도록, 저장 직전 명시적으로 한 번 더 확인받는다.
-  if (parentGid){
-    const sel = document.getElementById('ng_parent_group');
-    const parentLabel = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : parentGid;
-    const ok = confirm(`"${newOwner}" 법인을 "${parentLabel}" 법인의 하위(자식) 법인으로 등록합니다. 맞으면 확인, 독립된 법인으로 추가하려면 취소를 누르고 "상위 법인 (부모)"를 "없음"으로 바꿔 주세요.`);
-    if (!ok) return;
-  }
   captureNgCustContactsFromDom();
   const contacts = parentGid ? [] : ngCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
 
-  const newId = Math.max(0,...records.map(r=>r.id)) + 1;
-  const gid = 'custom-' + newId;
+  const newId = nextRecordId();
+  const gid = makeUniqueGroupId('custom');
   const rec = {
-    id:newId, group:gid, flag:'',
+    id:newId, group:gid, is_group_shell:true, flag:'',
     owner:newOwner, country:val('ng_country'), location:val('ng_location'),
     check_method:val('ng_check'), config_mode:val('ng_config_mode'),
     owner_primary:val('ng_owner_primary'), owner_secondary:val('ng_owner_secondary'),
@@ -2470,7 +2518,10 @@ function deleteGroup(gid){
   const items = records.filter(r=>r.group===gid);
   if (!items.length) return;
   const meta = groupMeta(items);
-  if (!confirm(`"${meta.owner}" 법인의 자산 항목 ${items.length}건이 모두 삭제됩니다. 계속하시겠습니까?`)) return;
+  const realCount = items.filter(r=>!r.is_group_shell).length;
+  if (!confirm(`"${meta.owner}" 법인을 삭제하시겠습니까? 실제 자산 ${realCount}건이 함께 삭제됩니다.`)) return;
+  // 부모 법인을 삭제하면 자식 법인은 삭제하지 않고 독립 법인으로 전환한다.
+  records.forEach(r => { if (r.group_parent === gid) r.group_parent = ''; });
   records = records.filter(r=>r.group!==gid);
   expandedGroups.delete(gid);
   render();
@@ -2486,16 +2537,20 @@ function duplicateGroup(gid){
   const items = records.filter(r=>r.group===gid);
   if (!items.length) return;
   const meta = groupMeta(items);
-  if (!confirm(`"${meta.owner}" 법인의 자산 항목 ${items.length}건을 그대로 복사해서 바로 아래에 새 법인으로 추가할까요?`)) return;
+  const realCount = items.filter(r=>!r.is_group_shell).length;
+  if (!confirm(`"${meta.owner}" 법인을 복제해서 독립된 새 법인으로 추가할까요? 실제 자산 ${realCount}건이 함께 복사됩니다.`)) return;
 
-  let nextId = Math.max(0, ...records.map(r=>r.id)) + 1;
-  const newGid = 'dup-' + nextId;
+  let nextId = nextRecordId();
+  const newGid = makeUniqueGroupId('dup');
   const newOwnerName = meta.owner + ' (사본)';
   const newRecords = items.map(r => {
     const copy = JSON.parse(JSON.stringify(r)); // work_log, cust_contacts 등 배열/객체 필드까지 그대로 깊은 복사
     copy.id = nextId++;
     copy.group = newGid;
     copy.owner = newOwnerName;
+    // '새 법인 복제'는 원본의 부모 관계까지 복제하지 않는다. 항상 독립 법인으로 만든다.
+    copy.group_parent = '';
+    copy.is_parent = false;
     return copy;
   });
 
