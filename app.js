@@ -148,23 +148,21 @@ const dataReady = (async () => {
   console.error('데이터 로드 실패:', err);
 });
 
-let sessionKey = null;      // CryptoKey, present only after unlock
+let sessionKey = null;
 let viewOnly = false;
-let records = [];           // working array (mutable, in-memory)
-let users = [];              // registered users (working array, in-memory) — {id, name}
-let maintenanceLogs = [];    // 월별 점검 이력 (working array, in-memory) — {id, group, ym, date, manager, note, author, updated_at}
+let records = [];
+let users = [];
+let maintenanceLogs = [];
 let expandedGroups = new Set();
 let activeStatusFilters = new Set(['ok','warn','na']);
 let activeCountryFilter = null;
 let activeSkuKeywordFilters = new Set();
-let activeMyAssetsFilter = false; // 로그인한 사용자가 정 담당자인 사이트(법인)만 보기
-let workLogRecordId = null; // which record's modal is currently open
-let workLogEditId = null;   // work-log entry id currently being edited (null = adding new)
-let editingRecordId = null; // asset record id currently being edited via addModal (null = adding new)
-let addAssetTargetGid = null; // 특정 법인에 자산을 추가 중일 때 그 법인의 group id (null = 완전히 새 법인 추가)
+let activeMyAssetsFilter = false;
+let workLogRecordIds = [];
+let workLogEditId = null;
+let editingRecordId = null;
+let addAssetTargetGid = null;
 
-// SKU에 매칭되는 태그(MC/ASG/ISG 등)를 기반으로 이 자산을 대표하는 짧은 이름을 만든다.
-// SKU 자체가 비어 있을 때 등, 사람이 읽을 표시용 이름이 필요한 곳(이동/이력 안내 문구 등)에서 사용한다.
 function skuTagLabel(r){
   const tags = skuKeywordMatches(r.sku);
   return tags.length ? tags.join('/') : '미지정';
@@ -223,11 +221,6 @@ function skuBadge(sku){
 }
 
 // ---------- SKU keyword tags (filterable/searchable) ----------
-// A second, independent tagging layer: any of these rules matched against
-// the SKU string gets its own small tag rendered below the main SKU badge,
-// and doubles as a sidebar filter + search term. Each rule's displayed
-// "key" can differ from the text it matches (e.g. SKUs starting with
-// "IS-" are labeled "BCIS" rather than "IS").
 const SKU_TAG_RULES = [
   { key:'BCIS', test: sku => sku.toUpperCase().startsWith('IS-') },
   { key:'ASG',  test: sku => sku.toUpperCase().includes('ASG') },
@@ -333,8 +326,6 @@ async function encryptWithKey(plain, key){
   return { iv: bufToB64(iv.buffer), ct: bufToB64(ct.buffer), tag: bufToB64(tag.buffer) };
 }
 
-// 마스터 비밀번호로 한 번 잠금 해제하면, 그 세션 키를 24시간 동안 이 브라우저에 캐시해 둔다.
-// 캐시가 유효한 동안은 마스터 비밀번호 입력 화면 없이 자동으로 잠금 해제된 상태로 시작한다.
 const MASTER_KEY_CACHE_KEY = 'bcAssetMasterKeyCache';
 const MASTER_KEY_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24시간
 
@@ -355,8 +346,6 @@ function clearMasterKeyCache(){
   try{ localStorage.removeItem(MASTER_KEY_CACHE_KEY); }catch(e){}
 }
 
-// 캐시된 키로 조용히 잠금 해제를 시도한다. 캐시가 없거나 만료됐거나, data.json이 그 사이
-// 바뀌어 salt/iterations가 달라졌거나, 실제 복호화 검증에 실패하면 false를 반환하고 캐시를 지운다.
 async function tryUnlockFromCache(){
   let cached;
   try{ cached = JSON.parse(localStorage.getItem(MASTER_KEY_CACHE_KEY) || 'null'); }catch(e){ cached = null; }
@@ -381,7 +370,6 @@ async function tryUnlockFromCache(){
 
 async function tryUnlock(passphrase){
   const key = await deriveKey(passphrase, ENC_STORE.salt, ENC_STORE.iterations);
-  // verify against first record that actually has an encrypted field
   const probe = ENC_STORE.records.find(r => r.ip_enc || r.id_enc || r.pw_enc || r.enable_pw_enc);
   if (probe){
     const f = probe.ip_enc || probe.id_enc || probe.pw_enc || probe.enable_pw_enc;
@@ -430,24 +418,12 @@ function boot(){
   document.getElementById('lockOverlay').style.display = 'none';
   document.getElementById('app').classList.add('ready');
   updateUserBtnLabel();
-  // 법인명 등에 실수로 HTML 이스케이프(&amp; 등)가 그대로 텍스트로 저장돼 있다면 원래 문자로 되돌린다.
   const entitiesFixed = migrateStrayHtmlEntities();
-  // 과거 버전에서 잘못 생성될 수 있었던 custom-NaN / dup-NaN 그룹을 먼저 분리한다.
-  // 이 보정은 owner 일관성 보정보다 반드시 먼저 실행되어야 서로 다른 법인명이 한 법인명으로 덮이지 않는다.
   const brokenGroupFixed = repairKnownBrokenGeneratedGroups();
-  // 법인만 먼저 만든 뒤 생긴 빈 레코드는 실제 자산이 아니라 법인 정보를 보존하는 shell 레코드로 정리한다.
   const shellFixed = migrateEmptyGroupPlaceholders();
-  // 법인만 먼저 만들 때 shell에 입력해 둔 Support ID/구축 정보와, 이후 첫 자산(특히 이동된 자산)의
-  // 기존 Support ID가 충돌하면 새 법인에서 Support ID가 2개로 보일 수 있다. 이 경우 새 법인 생성 시
-  // 사용자가 지정한 shell의 Support ID를 우선값으로 보고 첫 실제 자산에 승계한다.
   const shellSupportFixed = normalizeShellSupportDefaults();
-  // 예전 버전에서 "자산 정보 직접 수정" 화면으로 법인명 등을 자산 하나만 따로 바꿀 수 있었던 적이
-  // 있어서 같은 법인(그룹) 안에서 값이 어긋난 데이터가 있다면 그룹의 대표 값으로 다시 맞춘다.
   const ownerFixed = migrateOwnerConsistencyWithinGroups();
-  // 예전 데이터에 남아 있는 고객사 담당자 구분 "운용" 표기를 "운영"으로 정리한다.
   migrateCustContactRoleLabels();
-  // 예전 데이터 중 상위 법인 자신에게 직접 연결된 Support ID/자산이 남아 있다면
-  // (규칙 도입 이전 데이터 등) 첫 번째 자식 법인으로 자동 이전한다.
   const migrated = enforceParentsHaveNoDirectAssets();
   render();
   requestAnimationFrame(() => { syncGlobalHeaderHeight(); syncStickyOffsets(); });
@@ -458,16 +434,6 @@ function boot(){
 }
 
 // ---------- date / status ----------
-// 법인명(owner)을 비롯한 국가/위치/점검방식/구성방식/담당 엔지니어/비고/상위 법인 등은 원래
-// "자산 하나하나"가 아니라 "법인(그룹) 전체"가 공유하는 정보다. 그런데 예전 버전에서는 "자산 정보
-// 직접 수정" 화면에서 법인명 등을 자산 하나만 골라 따로 바꿀 수 있었던 적이 있어서, 같은 그룹
-// 안인데도 자산 레코드마다 법인명이 서로 달라지는 데이터가 생길 수 있었다. 이 경우 화면에는
-// 카드 제목은 원래 법인명 그대로 보이지만, 그 안의 특정 자산 한 줄만 "다른 법인 아래에 잘못
-// 끼어든 것처럼" 보이는 문제가 생긴다. 여기서는 그렇게 어긋난 값들을 그룹의 대표 값(groupMeta
-// 기준)으로 다시 맞춰서, 같은 그룹의 모든 레코드가 항상 같은 값을 갖도록 정리한다.
-// (지금 버전에서는 자산 수정 화면에서 이 필드들을 바꿀 수 없게 막아 두었으므로, 앞으로 새로
-// 이런 데이터가 생기지는 않는다. 아래 마이그레이션은 이미 어긋나 있던 예전 데이터를 정리하는
-// 1회성 보정용이다.)
 const GROUP_COMMON_SCALAR_FIELDS = [
   'flag','owner','country','location','check_method','config_mode',
   'owner_primary','owner_secondary','group_remarks','group_parent','is_parent'
@@ -478,8 +444,6 @@ function migrateOwnerConsistencyWithinGroups(){
     const meta = groupMeta(items);
     items.forEach(r => {
       GROUP_COMMON_SCALAR_FIELDS.forEach(f => {
-        // groupMeta()가 실제 값이 하나도 없을 때 화면 표시용으로만 채우는 자리표시자
-        // ('(법인명 미확인)')는 데이터에 그대로 써넣지 않는다.
         if (f === 'owner' && meta.owner === '(법인명 미확인)') return;
         const target = meta[f];
         if (r[f] !== target && !(!r[f] && !target)){ r[f] = target; changed = true; }
@@ -489,10 +453,6 @@ function migrateOwnerConsistencyWithinGroups(){
   return changed;
 }
 
-// 예전 데이터(또는 외부에서 복사해 붙여넣은 값) 중 "A&amp;B 법인"처럼 HTML 이스케이프 문자열이
-// 실수로 그대로 텍스트에 저장돼 있으면, 화면에서는 esc()가 한 번 더 이스케이프해 버려
-// "A&amp;amp;B 법인"처럼 깨져 보인다. 그런 값이 있으면 원래 문자("A&B 법인")로 되돌려 둔다.
-// 이미 정상적으로 저장된 값("A&B 법인")은 이 패턴에 걸리지 않으므로 그대로 둔다.
 function unescapeStrayHtmlEntities(s){
   if (!s || typeof s !== 'string') return s;
   if (!/&(amp|lt|gt|quot|#39);/.test(s)) return s;
@@ -523,7 +483,6 @@ function migrateStrayHtmlEntities(){
   return changed;
 }
 
-// 예전 데이터에 저장된 고객사 담당자 구분 "운용" 표기를 새 표기인 "운영"으로 바꿔 둔다.
 function migrateCustContactRoleLabels(){
   records.forEach(r => {
     if (Array.isArray(r.cust_contacts)){
@@ -547,9 +506,7 @@ function licenseStatus(rec){
   if (days <= 90) return 'warn';
   return 'ok';
 }
-// 이 법인(gid) 및 모든 하위(자식, 손자…) 법인에 속한 실제 자산들의 라이선스 상태를 재귀적으로 모두 모은다.
-// 상위 법인은 자산을 직접 갖지 않는 경우가 많으므로, 카드 상단 배지는 이 결과를 바탕으로 계산해야
-// 하위 자산 상태를 반영할 수 있다.
+
 function collectSubtreeLicenseStatuses(gid, groupsMap, visited){
   visited = visited || new Set();
   if (visited.has(gid)) return [];
@@ -561,8 +518,7 @@ function collectSubtreeLicenseStatuses(gid, groupsMap, visited){
   });
   return statuses;
 }
-// 여러 자산의 상태를 하나의 대표 상태로 요약한다. 만료된 것과 만료되지 않은 것이 섞여 있으면
-// (일부 자산만 만료) 'partial'을 반환해 카드에 "일부 만료"로 표시한다.
+
 function aggregateLicenseStatus(statuses){
   if (!statuses.length) return 'na';
   const hasCrit = statuses.includes('crit');
@@ -587,7 +543,7 @@ function licenseBarPct(rec){
   const pct = ((now-start)/(end-start))*100;
   return Math.max(0, Math.min(100, pct));
 }
-// 오늘(자정 기준)로부터 라이선스 종료일까지 남은 일수. 종료일이 없으면 null.
+
 function daysUntilEnd(rec){
   const end = parseDate(rec.end);
   if (!end) return null;
@@ -620,9 +576,6 @@ function groupRecords(list){
 
 
 // ---------- 안정적인 레코드 / 그룹 ID 생성 ----------
-// 예전 코드는 Math.max(...records.map(r=>r.id))에 의존했기 때문에 id 중 하나라도
-// 숫자로 변환할 수 없는 값(undefined/문자열 등)이 섞이면 newId가 NaN이 되고,
-// 이후 새 법인이 모두 같은 'custom-NaN' 그룹으로 합쳐질 수 있었다.
 function nextRecordId(){
   let maxId = 0;
   const used = new Set(records.map(r => String(r.id)));
@@ -644,8 +597,6 @@ function makeUniqueGroupId(prefix='custom'){
   return gid;
 }
 
-// 실제 자산 고유 정보가 하나도 없는 레코드는 '법인만 먼저 생성'할 때 만들어진
-// 자리표시자다. 화면에서 1건짜리 빈 자산으로 보이면 안 되므로 shell로 취급한다.
 function isAssetPayloadEmpty(r){
   if (!r) return true;
   const scalar = [r.sku,r.sn,r.qty,r.start,r.end,r.os_ver,r.remarks,r.deploy_date,r.mode];
@@ -666,11 +617,6 @@ function migrateEmptyGroupPlaceholders(){
   return changed;
 }
 
-// 법인을 먼저 생성하면 Support ID/구축 엔지니어/구축 일자는 shell 레코드에 임시 보관된다.
-// 그 뒤 첫 자산을 '이동'으로 넣으면 자산이 원래 법인의 Support ID를 그대로 들고 와서
-// shell의 Support ID와 합쳐져 2개처럼 보일 수 있다. 새 법인에 실제 자산이 처음 생긴 시점에는
-// shell에 명시적으로 저장된 값을 그 법인의 기본 Support 정보로 보고 실제 자산으로 승계한다.
-// 이미 실제 자산이 여러 Support ID로 나뉜 법인은 의도된 다중 Support ID일 수 있으므로 건드리지 않는다.
 function normalizeShellSupportDefaults(){
   let changed = false;
   const gids = [...new Set(records.map(r => r.group))];
@@ -685,8 +631,6 @@ function normalizeShellSupportDefaults(){
     if (!shellSid) return;
 
     const realSids = new Set(real.map(r => (r.support_id||'').trim()).filter(Boolean));
-    // 실제 자산이 아직 Support ID가 없거나, 모두 하나의 동일한 옛 Support ID만 갖고 있으면
-    // 법인 생성 시 지정한 Support ID가 더 신뢰할 수 있는 값이다.
     if (realSids.size <= 1){
       real.forEach(r => {
         if ((r.support_id||'').trim() !== shellSid){ r.support_id = shellSid; changed = true; }
@@ -698,9 +642,6 @@ function normalizeShellSupportDefaults(){
   return changed;
 }
 
-// 과거 ID 생성 실패로 생긴 'custom-NaN' / 'dup-NaN' 그룹만 매우 보수적으로 복구한다.
-// 서로 다른 owner가 한 그룹에 들어가 있으면 owner별로 분리하고, owner까지 같더라도
-// 빈 자리표시자가 여러 개라면 두 번째 자리표시자부터 독립 법인 그룹으로 분리한다.
 function repairKnownBrokenGeneratedGroups(){
   let changed = false;
   const badGroups = [...new Set(records.map(r=>String(r.group||'')))]
@@ -741,8 +682,6 @@ function repairKnownBrokenGeneratedGroups(){
 }
 
 function getGroupCustContacts(items){
-  // Prefer the new multi-contact array field; fall back to legacy single
-  // cust_contact/cust_phone/cust_email fields for older data.
   const withArr = items.find(i => Array.isArray(i.cust_contacts) && i.cust_contacts.length);
   if (withArr) return withArr.cust_contacts.slice(0,5);
   const legacy = items.map(i => ({name:i.cust_contact||'', phone:i.cust_phone||'', email:i.cust_email||''}))
@@ -764,31 +703,23 @@ function groupMeta(items){
     cust_contacts: getGroupCustContacts(items),
     group_remarks: items.map(i=>i.group_remarks).find(Boolean) || '',
     group_parent: items.map(i=>i.group_parent).find(Boolean) || '',
-    // is_parent: 이 법인 자체가 (체크박스로 명시적으로 지정된) 상위 법인인지 여부.
-    // 실제로 이 법인을 부모로 지정한 자식 법인이 있는 경우(groupChildrenOf)는
-    // enforceParentsHaveNoDirectAssets에서 항상 true로 맞춰 준다.
     is_parent: items.some(i => !!i.is_parent)
   };
 }
 
-// ---------- 법인 간 부모-자식 관계 ----------
-// group_parent: 자식 법인 쪽 레코드들에 저장되는, 상위(부모) 법인의 group id.
-// (다른 그룹 공통 필드와 마찬가지로 같은 group의 모든 레코드에 동일하게 저장한다.)
-// 부모-자식으로 연결된 법인들은 서로 Support ID를 공유해서 보여주기 위해,
-// "가족"(부모 + 모든 자식, 자식의 자식까지 포함한 연결 요소) 단위로 묶어서 다룬다.
 function allGroupIds(){
   return [...new Set(records.map(r=>r.group))];
 }
 function groupParentOf(gid){
   const parent = records.filter(r=>r.group===gid).map(i=>i.group_parent).find(Boolean) || '';
-  // 부모로 지정됐던 법인이 그 사이 삭제됐다면(더 이상 존재하지 않으면) 관계가 끊긴 것으로 취급한다.
   if (parent && !records.some(r=>r.group===parent)) return '';
   return parent;
 }
+
 function groupChildrenOf(gid){
   return allGroupIds().filter(g => g!==gid && groupParentOf(g)===gid);
 }
-// gid의 모든 하위(자식, 손자…) 법인 id 집합 — 부모 선택 시 순환 관계를 막는 데 사용.
+
 function groupDescendantIds(gid){
   const result = new Set();
   const stack = [...groupChildrenOf(gid)];
@@ -800,14 +731,12 @@ function groupDescendantIds(gid){
   }
   return result;
 }
-// gid를 포함해 자신과 모든 하위(자식, 손자…) 법인에 속한 실제 자산(shell 레코드 제외)의 총 건수.
-// 상위 법인 카드의 "항목" 수치에 사용 — 상위 법인은 자산을 직접 갖지 않으므로 자기 자신의
-// 건수 대신 하위 법인 전체의 자산 총합을 보여줘야 의미가 있다.
+
 function groupTotalItemCount(gid){
   const ids = new Set([gid, ...groupDescendantIds(gid)]);
   return records.filter(r => ids.has(r.group) && !r.is_group_shell).length;
 }
-// gid를 포함해 부모-자식 관계로 연결된 모든 법인 id (연결 요소 전체)를 반환한다.
+
 function groupFamilyIds(gid){
   const visited = new Set();
   const stack = [gid];
@@ -821,23 +750,15 @@ function groupFamilyIds(gid){
   }
   return visited;
 }
-// 상위 법인은 대표 이름 역할만 하고, Support ID/자산은 항상 하위(자식) 법인에 속해야 한다.
-// 자식이 있는 법인(gid)에 그 자신에게 직접 붙어 있는 자산 항목이 남아 있다면,
-// (부모-자식 관계가 방금 새로 생겼거나, 예전 데이터에 남아 있던 경우 등) 첫 번째 자식 법인으로
-// 자동 이전한다 — 이동 시 자산 고유 정보(SKU/S/N/라이선스/IP 등)는 그대로 유지하고,
-// 법인 공통 정보(법인명/국가/위치/점검방식/구성방식/담당자/고객사담당자/상위법인)만 자식 법인 기준으로 맞춘다.
+
 function enforceParentsHaveNoDirectAssets(){
   let changed = false;
   allGroupIds().forEach(gid => {
     const children = groupChildrenOf(gid);
     if (!children.length) return;
-    // 실제로 자식 법인을 둔 법인은 (체크박스로 지정하지 않았더라도, 또는 예전 데이터라도)
-    // 항상 상위 법인으로 취급한다 — 상위 법인 드롭다운에 계속 나타나도록 플래그를 맞춰 둔다.
     records.filter(r => r.group === gid).forEach(r => { r.is_parent = true; });
-    // "이름표" 역할의 shell 레코드(is_group_shell)는 실제 자산이 아니므로 이전 대상에서 제외한다.
     const ownRecs = records.filter(r => r.group === gid && !r.is_group_shell);
     if (!ownRecs.length) return;
-    // 자식 법인이 사라지지 않도록, 이전 전에 부모 자신의 법인 정보(이름/국가/위치 등)를 스냅샷해 둔다.
     const parentMetaSnapshot = groupMeta(records.filter(r=>r.group===gid));
 
     const sortedChildren = children.slice().sort((a,b) => {
@@ -866,8 +787,6 @@ function enforceParentsHaveNoDirectAssets(){
       rec.is_parent = meta.is_parent;
     });
 
-    // 부모 법인 자신에게 자산이 하나도 남지 않았다면, 대표 이름/국가/위치 등을 계속 보여줄 수 있도록
-    // 자산이 아닌 "이름표" 전용 shell 레코드를 하나 남겨 둔다 (목록/테이블에는 표시되지 않음).
     if (!records.some(r => r.group === gid)){
       records.push({
         id: nextRecordId(),
@@ -894,13 +813,11 @@ function enforceParentsHaveNoDirectAssets(){
   });
   return changed;
 }
-// 이 법인이 다른 법인과 부모-자식 관계로 연결되어 있는지 (자기 자신만 있으면 false)
+
 function groupHasFamily(gid){
   return groupFamilyIds(gid).size > 1;
 }
-// gid 자신과, 부모를 따라 올라가는 모든 상위 법인까지 함께 펼친 상태로 만든다.
-// 자식 법인 카드는 부모 카드가 펼쳐져 있어야만 화면에 보이므로, 특정 법인을 확실히 보여주려면
-// 조상 법인까지 모두 펼쳐야 한다.
+
 function expandGroupWithAncestors(gid){
   let cur = gid;
   const guard = new Set();
@@ -910,18 +827,17 @@ function expandGroupWithAncestors(gid){
     cur = groupParentOf(cur);
   }
 }
-// gid 자신과 모든 하위(자식, 손자…) 법인까지 함께 펼친 상태로 만든다.
-// 부모 법인을 펼칠 때 중첩된 자식 법인 카드도 매번 따로 클릭하지 않아도 바로 펼쳐지도록 한다.
+
 function expandGroupWithDescendants(gid){
   expandedGroups.add(gid);
   groupDescendantIds(gid).forEach(cg => expandedGroups.add(cg));
 }
-// gid 자신과 모든 하위(자식, 손자…) 법인의 펼침 상태를 함께 접는다.
+
 function collapseGroupWithDescendants(gid){
   expandedGroups.delete(gid);
   groupDescendantIds(gid).forEach(cg => expandedGroups.delete(cg));
 }
-// 연결된 가족 전체(자기 자신 포함)에 속한 자산들의 Support ID를 모두 모아 중복 없이 반환.
+
 function familySupportIds(gid){
   const fam = groupFamilyIds(gid);
   const ids = new Set();
@@ -930,9 +846,7 @@ function familySupportIds(gid){
   });
   return [...ids].sort((a,b)=>a.localeCompare(b,'ko'));
 }
-// 이 법인 자신의 Support ID 목록. 실제 자산이 하나라도 있으면 shell 레코드의 임시 Support ID는
-// 표시/집계에서 제외한다. 실제 자산이 전혀 없는 '법인만 생성된 상태'에서만 shell 값을 대신 보여준다.
-// 이렇게 해야 첫 자산 이동 후 shell의 신규 SID + 자산의 기존 SID가 2개로 보이는 현상이 생기지 않는다.
+
 function ownSupportIds(items){
   const realItems = items.filter(r => !r.is_group_shell);
   const source = realItems.length ? realItems : items.filter(r => r.is_group_shell);
@@ -940,14 +854,12 @@ function ownSupportIds(items){
   source.forEach(r => { if ((r.support_id||'').trim()) ids.add(r.support_id.trim()); });
   return [...ids].sort((a,b)=>a.localeCompare(b,'ko'));
 }
-// 법인 정보에 표시할 Support ID 목록 — 부모-자식 관계가 있으면 가족 전체, 없으면 이 법인 자신의 것만.
+
 function displaySupportIds(gid, items){
   return groupHasFamily(gid) ? familySupportIds(gid) : ownSupportIds(items);
 }
 
 // ---------- Support ID 단위 하위 그룹 (같은 법인 안에서 Support ID가 여러 개인 경우) ----------
-// 법인(그룹)은 국가/위치/점검방식/구성방식/담당 엔지니어/고객사 담당자를 공유하고,
-// 그 아래 Support ID별로 구축 엔지니어/구축 일자와 자산 항목들을 따로 관리한다.
 function subGroupMeta(items){
   return {
     support_id: items.map(i=>i.support_id).find(Boolean) || '',
@@ -956,8 +868,6 @@ function subGroupMeta(items){
   };
 }
 function buildSubGroups(items){
-  // 실제 자산이 존재하는 법인에서는 shell은 법인 이름표/초기 입력 보관용일 뿐 Support ID 하위 그룹이 아니다.
-  // 실제 자산이 하나도 없을 때만 shell을 사용해 법인 생성 시 입력한 Support ID/구축 정보를 편집 가능하게 한다.
   const realItems = items.filter(r => !r.is_group_shell);
   const sourceItems = realItems.length ? realItems : items.filter(r => r.is_group_shell);
   const map = new Map();
@@ -983,9 +893,6 @@ function secretField(rec, kind){
   return `<span class="sec-val${extraCls}" id="disp_${id}" data-copy-id="${rec.id}" data-copy-kind="${kind}" title="클릭하여 복사">…</span>`;
 }
 
-// IP 주소 / 계정 ID / 비밀번호는 자산 하나에 여러 개(줄바꿈 또는 쉼표로 구분) 저장될 수 있으므로,
-// 잠금 해제 후에는 하나의 텍스트 블록이 아니라 각각 따로 클릭해서 복사할 수 있는
-// 칩(chip) 목록으로 풀어서 보여준다.
 function renderMultiValueChips(wrapEl, val){
   wrapEl.classList.remove('sec-val', 'locked', 'empty');
   wrapEl.classList.add('ip-chip-list');
@@ -1008,11 +915,10 @@ function renderMultiValueChips(wrapEl, val){
       }
     };
   });
-  // 개별 칩이 자체 클릭 핸들러를 가지므로, 칩 사이 여백을 클릭했을 때
-  // 예전 "전체 복사" 핸들러가 대신 실행되며 칩 목록을 깨뜨리지 않도록 비활성화한다.
+  
   wrapEl.onclick = null;
 }
-// (이전 이름 호환용 별칭)
+
 function renderIpChips(wrapEl, val){ renderMultiValueChips(wrapEl, val); }
 
 function flashCopied(el){
@@ -1051,19 +957,13 @@ function pencilSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fi
 function trashSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`; }
 function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>`; }
 function moveSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>`; }
-// 법인 카드 펼치기/접기 아이콘 — 단순 회전이 아니라 모양 자체를 다르게 해서 지금 상태와
-// 클릭했을 때 무슨 일이 일어나는지(펼쳐질지/접힐지) 한눈에 알 수 있게 한다.
-// 접힌 상태(펼치기 전): 오른쪽을 가리키는 옅은 화살표 — "눌러서 펼치기".
 function chevExpandSvg(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>`; }
-// 펼쳐진 상태: 강조색 원 배경 안에 위쪽 화살표 — "눌러서 접기"임이 뚜렷하게 보이도록 배경을 채운다.
 function chevCollapseSvg(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="var(--accent)" stroke="none"><circle cx="12" cy="12" r="11"/><path d="M8.5 13.5l3.5-3.5 3.5 3.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
 
 // ---------- 대시보드 (OS 버전별 / 태그별 / 위치별 / 국가별 / SKU별 현황 한눈에 보기) ----------
 let dashboardMode = false;
 let maintenanceMode = false;
 
-// keyFn으로 묶은 뒤, 각 그룹에 해당하는 원본 항목 배열도 함께 반환한다.
-// (건수만 필요한 곳은 count만 쓰고, 클릭 시 상세 법인 목록이 필요한 곳은 items를 쓴다.)
 function bucketGroups(arr, keyFn){
   const map = new Map();
   arr.forEach(item => {
@@ -1077,9 +977,6 @@ function bucketGroups(arr, keyFn){
     .sort((a,b) => b[1]-a[1]);
 }
 
-// 국가는 이제 별도 필드(country)로 입력받는다. 다만 이 필드가 도입되기 전 기존 데이터는
-// location 필드에 "국가 도시"처럼 섞여 들어가 있을 수 있어, country가 비어 있으면
-// location의 첫 단어를 국가로 대신 추정하는 이전 방식으로 대체(fallback)한다.
 function countryOf(r){
   const c = (r.country||'').trim();
   if (c) return c;
@@ -1088,9 +985,6 @@ function countryOf(r){
   return s.split(/\s+/)[0];
 }
 
-// OS 버전 필드는 자유 입력이라 "CentOS 7.4", "Windows Server 2016", 혹은 버전 표기가
-// 전혀 없는 값(제품명만 적혀 있거나 공란)이 섞여 있다. 대시보드에서는 실제 버전 번호를
-// 태그처럼 뽑아낼 수 있는 값만 모아서 보여주고, 버전 정보가 없는 값은 제외한다.
 function osVersionTag(osVer){
   const s = (osVer||'').trim();
   if (!s) return null;
@@ -1098,9 +992,8 @@ function osVersionTag(osVer){
   return m ? m[0] : null;
 }
 
-const DASH_VISIBLE_ROWS = 16; // 대시보드 각 카드에 기본으로 보이는 행 수 (기존 8행의 2배)
+const DASH_VISIBLE_ROWS = 16;
 
-// 특정 OS 버전 / SKU 항목을 클릭했을 때 그 아래에 펼쳐 보여줄 "사용 법인 목록".
 function dashboardCompanyListHtml(items){
   const owners = bucketGroups(items, r => r.owner).map(([owner,count]) => [owner, count]);
   if (!owners.length) return `<div class="dash-empty">법인 정보가 없습니다.</div>`;
@@ -1129,8 +1022,6 @@ function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable){
   let restHtml = '', moreBtnHtml = '';
   if (rest.length){
     const restId = `dashRest_${sectionKey}`;
-    // "더보기"로 펼쳐질 행들을 버튼보다 먼저(위에) 배치하고, 버튼은 그 아래에 둬서
-    // 펼친 뒤에도 "더보기" 버튼이 항상 카드 맨 아래에 위치하도록 한다.
     restHtml = `<div class="dash-more-rows" id="${restId}" style="display:none;">${rest.join('')}</div>`;
     moreBtnHtml = `<button type="button" class="dash-more-btn" data-dash-more-toggle="${restId}" data-more-label="외 ${rest.length}개 더보기" data-less-label="접기">외 ${rest.length}개 더보기</button>`;
   }
@@ -1143,8 +1034,6 @@ function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable){
     </div>`;
 }
 
-// 한 자산이 여러 태그에 동시에 매칭될 수 있으므로(예: ISG-100은 ISG와 SG 둘 다 매칭),
-// 태그별 통계는 bucketGroups처럼 항목당 버킷 하나가 아니라, 매칭되는 태그마다 항목을 중복해서 센다.
 function bucketByTags(arr){
   const map = new Map();
   arr.forEach(item => {
@@ -1166,9 +1055,6 @@ function renderDashboard(){
   const assetRecords = records.filter(r=>!r.is_group_shell);
   const total = assetRecords.length;
   const groupCount = new Set(records.map(r=>r.group)).size;
-
-  // OS 버전별: 장비(SKU) 태그별로 나눠서, 같은 태그가 붙은 장비들의 버전만 모아서 보여준다.
-  // (예: MC 태그가 붙은 장비들의 버전 모음, ISG 태그가 붙은 장비들의 버전 모음 …)
   const validOsRecords = assetRecords.filter(r => osVersionTag(r.os_ver));
   const osTagGroups = SKU_TAG_KEYS
     .map(tag => ({ tag, items: validOsRecords.filter(r => skuKeywordMatches(r.sku).includes(tag)) }))
@@ -1209,7 +1095,6 @@ function renderDashboard(){
   `;
 }
 
-// 목록 / 대시보드 / 유지보수 세 화면은 항상 하나만 보이므로 한 곳에서 전환한다.
 let currentViewMode = 'list'; // 'list' | 'dashboard' | 'maintenance'
 function setViewMode(mode){
   currentViewMode = mode;
@@ -1234,14 +1119,11 @@ function setViewMode(mode){
   if (mode === 'dashboard') renderDashboard();
   if (mode === 'maintenance') renderMaintenance();
 }
-// 기존 호출부(예: boot 이후 재렌더 로직)와의 호환을 위해 이름은 남겨 둔다.
+
 function setDashboardMode(on){ setViewMode(on ? 'dashboard' : 'list'); }
 
 document.getElementById('dashboardToggle').onclick = () => setViewMode(dashboardMode ? 'list' : 'dashboard');
 document.getElementById('maintenanceToggle').onclick = () => setViewMode(maintenanceMode ? 'list' : 'maintenance');
-
-// 대시보드는 매번 innerHTML을 통째로 새로 그리므로, 개별 행/버튼에 onclick을 직접 붙이지 않고
-// 컨테이너 하나에 위임(delegation)으로 클릭을 처리한다.
 document.getElementById('dashboardView').addEventListener('click', (e) => {
   const toggleRow = e.target.closest('[data-dash-toggle]');
   if (toggleRow){
@@ -1265,14 +1147,10 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
 });
 
 // ---------- 유지보수(법인별 월간 점검) 페이지 ----------
-// 2026년 1월부터, 등록된 각 법인(사이트)에 대해 그 달의 점검을 언제(누가) 했는지 기록하고
-// 통계(월별 완료율 / 법인별 점검율 / 누락 이력)를 볼 수 있게 한다.
-// 데이터는 records/users와 마찬가지로 maintenanceLogs 배열에 담아 GitHub와 함께 동기화된다.
-
-let maintenanceTab = 'entry'; // 'entry'(점검지) | 'stats'(통계)
-let maintenanceYear = null;   // 등록 탭에서 현재 보고 있는 연도(숫자). 한 화면에 이 연도의 1~12월이 모두 나온다.
-let maintenanceEditTarget = null; // 점검 등록 모달에서 현재 편집 중인 {gid, ym}
-let maintenanceMyFilter = false; // 유지보수 페이지: 내가 정 담당자인 법인만 보기
+let maintenanceTab = 'entry';
+let maintenanceYear = null;
+let maintenanceEditTarget = null;
+let maintenanceMyFilter = false;
 
 function pad2(n){ return String(n).padStart(2, '0'); }
 function currentYm(){
@@ -1284,8 +1162,7 @@ function ymLabel(ym){
   const [y, m] = ym.split('-');
   return `${y}년 ${Number(m)}월`;
 }
-// 2026-01부터 주어진 ym(포함)까지의 "YYYY-MM" 목록. 미래 달까지 잘못 넘어오는 경우를 대비해
-// 최소한 2026-01 하나는 항상 포함되도록 보정한다.
+
 function monthsFrom202601To(ym){
   const target = ym && /^\d{4}-\d{2}$/.test(ym) ? ym : currentYm();
   const [ey, em] = target.split('-').map(Number);
@@ -1299,10 +1176,7 @@ function monthsFrom202601To(ym){
   }
   return out;
 }
-// 유지보수 관리 대상 법인 목록 — 독립법인(상위/하위 관계가 없는 법인) 또는 상위법인만 대상으로 한다.
-// 하위 법인(다른 법인 아래에 속한 자식 법인)은 상위 법인 단위로 함께 관리되므로 목록에서 제외한다.
-// (상위 법인 자체는 대표 이름표 역할이라 실제 자산 레코드가 없을 수 있으므로, 실제 자산 유무와
-//  무관하게 포함한다. 독립법인은 실제 자산이 있는 경우에만 대상으로 삼는다.)
+
 function maintenanceGroupList(){
   return allGroupIds()
     .map(gid => {
@@ -1320,8 +1194,7 @@ function maintenanceLogFor(gid, ym){
 function maintenanceLogsForGroup(gid){
   return maintenanceLogs.filter(m => m.group === gid);
 }
-// "내가 정 담당자인 법인만" 필터가 켜져 있으면 그 조건을 적용한 목록을 반환한다.
-// (모달에서 특정 gid로 법인을 찾을 때는 필터와 무관하게 항상 전체 목록인 maintenanceGroupList()를 써야 한다.)
+
 function maintenanceVisibleGroupList(){
   const groups = maintenanceGroupList();
   if (!maintenanceMyFilter) return groups;
@@ -1335,20 +1208,14 @@ function setMaintenanceTab(tab){
   renderMaintenance();
 }
 
-// 점검지 탭: 좌측에 법인 정보, 우측에 선택한 연도의 1월~12월이 한 화면에 표(스프레드시트)로 나온다.
-// 각 달 칸을 클릭하면 그 법인 · 그 달의 점검 등록 모달(openMaintenanceLogModal)이 뜬다.
 const MAINT_MONTHS = [1,2,3,4,5,6,7,8,9,10,11,12];
 
 function maintenanceEntryTabHtml(){
   if (!maintenanceYear) maintenanceYear = Math.max(2026, currentYm().split('-').map(Number)[0]);
   const groups = maintenanceVisibleGroupList();
-  const me = currentUserName();
-  const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
   const thisYm = currentYm();
 
   const bodyRows = groups.map(g => {
-    // 계약만료 D-Day: 이 법인 및 하위(자식) 법인들에 포함된 모든 자산 중 라이선스 기간이
-    // 가장 짧게(가장 급하게) 남은 것을 기준으로 한다.
     let ddayHtml = `<span class="maint-dday na">-</span>`;
     let soonest = null;
     const familyGids = new Set([g.gid, ...groupDescendantIds(g.gid)]);
@@ -1411,10 +1278,6 @@ function maintenanceEntryTabHtml(){
           <button type="button" class="maint-ym-nav-btn" id="maintYearNextBtn" title="다음 연도">›</button>
         </div>
       </div>
-      <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
-        <span class="mat-label">내가 정인 법인만</span>
-        <span class="mat-count">${myCount}</span>
-      </button>
       <p class="maint-year-hint">각 달 칸을 클릭하면 점검일 · 점검 담당자 · 비고를 등록/수정할 수 있습니다. (완료 체크 안 하면 예약, 체크하면 완료로 표시)</p>
     </div>
     <div class="maint-table-wrap maint-year-table-wrap">
@@ -1433,9 +1296,6 @@ function maintenanceEntryTabHtml(){
     </div>`;
 }
 
-// 각 법인의 "평균 점검일"(1~31)을 계산해 날짜별 버킷으로 묶는다.
-// 법인마다 지금까지 등록된 점검일들의 평균을 하루 단위로 반올림해 하나의 날짜에 배치하고,
-// 같은 날짜에 몰린 법인이 많을수록 그 날짜가 "바쁜 시기"임을 막대 높이로 가늠할 수 있게 한다.
 function maintenanceAvgDayBuckets(groups){
   const buckets = Array.from({length:31}, () => []);
   groups.forEach(g => {
@@ -1471,8 +1331,6 @@ function maintenanceDayChartHtml(groups){
   return `<div class="maint-day-chart">${cols}</div>`;
 }
 
-// 담당자(정/부)별로 맡고 있는 법인을 점검 방식별로 집계한다.
-// 결과는 Map<이름, { methods: Map<점검방식, {primary, secondary}>, primaryGroups: string[], secondaryGroups: string[] }>
 function maintenanceUserSummaryData(){
   const groups = maintenanceGroupList();
   const users = new Map();
@@ -1554,7 +1412,6 @@ function maintenanceStatsTabHtml(){
   const groups = maintenanceVisibleGroupList();
   const months = monthsFrom202601To(currentYm());
 
-  // 월별 완료율 (최근 달이 위로 오도록 역순 표시)
   const trendRows = months.slice().reverse().map(ym => {
     const doneCount = groups.filter(g => {
       const log = maintenanceLogFor(g.gid, ym);
@@ -1570,24 +1427,15 @@ function maintenanceStatsTabHtml(){
       </div>`;
   }).join('');
 
-  const me = currentUserName();
-  const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
-
   return `
-    <div class="maint-toolbar">
-      <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
-        <span class="mat-label">내가 정인 법인만</span>
-        <span class="mat-count">${myCount}</span>
-      </button>
-    </div>
     <div class="maint-trend-row-2col">
       <div class="maint-trend-card">
         <h4>월별 점검 완료율 (2026.01 ~ ${esc(ymLabel(currentYm()))})</h4>
         ${trendRows || '<div class="dash-empty">데이터가 없습니다.</div>'}
       </div>
       <div class="maint-trend-card">
-        <h4>법인별 평균 점검일 분포 (1일 ~ 31일)</h4>
-        <p class="maint-day-hint">법인마다 지금까지의 점검일 평균을 날짜(1~31일)에 배치한 막대그래프입니다. 막대가 높을수록 그 날짜대에 점검이 몰려 있다는 뜻이며, 막대에 마우스를 올리면 어떤 법인이 해당하는지 볼 수 있습니다.</p>
+        <h4>법인별 평균 점검일 분포</h4>
+        <p class="maint-day-hint">법인마다 평균 점검일을 배치한 막대그래프입니다. 막대에 마우스를 올리면 어떤 법인이 해당하는지 볼 수 있습니다.</p>
         ${groups.length ? maintenanceDayChartHtml(groups) : '<div class="dash-empty">데이터가 없습니다.</div>'}
       </div>
     </div>
@@ -1602,8 +1450,16 @@ function renderMaintenance(){
   const wrap = document.getElementById('maintenanceView');
   if (!wrap) return;
   if (!maintenanceYear) maintenanceYear = Math.max(2026, Number(currentYm().split('-')[0]));
+  const me = currentUserName();
+  const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
   wrap.innerHTML = `
     <div class="maint-sticky-top">
+      <div class="maint-my-filter-row">
+        <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
+          <span class="mat-label">내가 정인 법인만</span>
+          <span class="mat-count">${myCount}</span>
+        </button>
+      </div>
       <div class="maint-header">
         <h2>유지보수 점검 관리</h2>
         <p class="maint-sub">등록된 법인들의 월별 점검 이력을 관리합니다 · 2026년 1월부터</p>
@@ -1645,7 +1501,6 @@ function renderMaintenance(){
     };
   }
 
-  // 연간 표의 각 달 칸을 클릭하면 그 법인 · 그 달의 점검 등록/수정 모달이 뜬다.
   wrap.querySelectorAll('[data-maint-cell]').forEach(cell => {
     cell.onclick = () => {
       const [gid, ym] = cell.dataset.maintCell.split('|');
@@ -1661,7 +1516,6 @@ function openMaintenanceLogModal(gid, ym){
   maintenanceEditTarget = { gid, ym };
   const log = maintenanceLogFor(gid, ym);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
-  // 점검일 기본값: 이미 등록된 점검이면 등록된 날짜를, 아니면 오늘(클릭한 날)을 기본값으로 잡는다.
   document.getElementById('ml_date').value = log ? (log.date || todayDots()) : todayDots();
   document.getElementById('ml_manager').value = log ? (log.manager || '') : (currentUserName() || g.meta.owner_primary || '');
   document.getElementById('ml_done').checked = log ? !!log.done : false;
@@ -1726,9 +1580,6 @@ document.getElementById('mlDeleteBtn').onclick = () => {
   scheduleAutoSync();
 };
 
-// 페이지 상단 필드별 드롭다운 필터 — 국가 / 위치 / Support ID / 점검 방식 / 구성방식 /
-// 담당 엔지니어 / 고객사 담당자 각각에 대해, 실제 등록된 값들을 옵션으로 보여주고
-// 하나를 고르면 그 값과 일치하는 자산만 남긴다.
 let topFieldFilters = { country:'', location:'', support_id:'', check_method:'', config_mode:'', engineer:'', cust_contact:'' };
 
 function uniqueValues(arr, keyFn){
@@ -1774,26 +1625,16 @@ function topFilterBarHtml(){
   return selectsHtml + resetBtn;
 }
 
-// 법인 카드 하나를 그려낸다. 부모-자식 관계가 있는 법인은 자식 법인 카드를 자신의
-// items 영역 안에 재귀적으로 중첩시켜, 부모를 펼치면 자식 법인들의 정보(법인 정보 + Support ID별 자산)가
-// 그대로 그 안에서 보이도록 한다. depth=0이면 최상위(독립 법인 또는 모회사), depth>0이면 중첩된 자식 법인.
 function groupCardHtml(gid, items, groupsMap, depth, visited){
   visited = visited ? new Set(visited) : new Set();
-  if (visited.has(gid)) return ''; // 데이터가 잘못 꼬여 순환 관계가 생긴 경우를 방어
+  if (visited.has(gid)) return '';
   visited.add(gid);
 
   const meta = groupMeta(items);
   const isOpen = expandedGroups.has(gid);
   const isChild = depth > 0;
-  // "이름표" 역할만 하는 shell 레코드(상위 법인 자신에게 남는, 자산이 아닌 더미 레코드)는
-  // 실제 자산 목록/건수/상태 계산에서 제외한다.
   const realItems = items.filter(r => !r.is_group_shell);
   const worst = aggregateLicenseStatus(collectSubtreeLicenseStatuses(gid, groupsMap, new Set()));
-
-  // Support ID가 하나뿐인 카드는 법인명 옆 배지가 이미 그 Support ID를 보여주므로
-  // 하위 "SUPPORT ID / 항목 건수" 바는 중복 정보라 생략한다 (독립 법인/자식 법인 모두 동일).
-  // Support ID가 여러 개인 카드만 각 Support ID를 구분하기 위해 그대로 보여준다.
-  // 자산이 하나도 없는(=자식 법인들의 대표 이름 역할만 하는) 상위 법인은 subGroups가 비어 있을 수 있다.
   const subGroups = buildSubGroups(realItems);
   const collapseSubHead = subGroups.length <= 1;
   const soloSubGroup = collapseSubHead ? (subGroups[0] || null) : null;
@@ -1801,8 +1642,6 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
 
   const isParentGroup = groupChildrenOf(gid).length > 0;
   const isParentDisplay = isParentGroup || meta.is_parent;
-  // 상위 법인은 자산을 직접 갖지 않으므로, "항목" 수치는 이 법인 자신의 것이 아니라
-  // 하위(자식, 손자…) 법인에 속한 모든 자산의 총합으로 보여준다.
   const displayItemCount = isParentDisplay ? groupTotalItemCount(gid) : realItems.length;
 
   const subgroupsHtml = subGroups.map(sg => `
@@ -1816,7 +1655,7 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
             </div>`}
             <table>
               <thead><tr>
-                ${canBulkMove() ? '<th class="col-select"></th>' : ''}
+                ${canSelectAssets() ? '<th class="col-select"></th>' : ''}
                 <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
                 <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
               </tr></thead>
@@ -1919,8 +1758,6 @@ function render(){
   } else {
     let html = '';
     for (const [gid, items] of groups){
-      // 부모가 있고 그 부모가 현재 화면(필터링된 목록)에도 있다면, 이 법인은 최상위가 아니라
-      // 부모 카드 안에 중첩되어 표시된다 (아래 groupCardHtml의 재귀 호출에서 그려짐).
       const parentGid = groupParentOf(gid);
       if (parentGid && groups.has(parentGid)) continue;
       html += groupCardHtml(gid, items, groups, 0);
@@ -2049,7 +1886,8 @@ function bulkMoveBarEl(){
     bar.innerHTML = `
       <span class="bmb-count" id="bmbCount"></span>
       <button type="button" class="btn btn-ghost" id="bmbClearBtn">선택 해제</button>
-      <button type="button" class="btn btn-primary" id="bmbMoveBtn">선택 항목 이동</button>
+      <button type="button" class="btn btn-ghost" id="bmbWorklogBtn" style="display:none;">선택 항목 작업 이력 등록</button>
+      <button type="button" class="btn btn-primary" id="bmbMoveBtn" style="display:none;">선택 항목 이동</button>
     `;
     document.body.appendChild(bar);
     document.getElementById('bmbClearBtn').onclick = () => {
@@ -2060,21 +1898,26 @@ function bulkMoveBarEl(){
       if (!selectedAssetIds.size) return;
       openMoveAssetModal([...selectedAssetIds]);
     };
+    document.getElementById('bmbWorklogBtn').onclick = () => {
+      if (!selectedAssetIds.size) return;
+      openWorkLogModal([...selectedAssetIds]);
+    };
   }
   return bar;
 }
 function updateBulkMoveBar(){
-  // 현재 목록에 더 이상 존재하지 않는 선택은 정리
   const validIds = new Set(records.map(r=>String(r.id)));
   [...selectedAssetIds].forEach(id => { if (!validIds.has(id)) selectedAssetIds.delete(id); });
 
-  if (!canBulkMove() || selectedAssetIds.size === 0){
+  if (!canSelectAssets() || selectedAssetIds.size === 0){
     const bar = document.getElementById('bulkMoveBar');
     if (bar) bar.classList.remove('open');
     return;
   }
   const bar = bulkMoveBarEl();
   document.getElementById('bmbCount').textContent = `${selectedAssetIds.size}개 항목 선택됨`;
+  document.getElementById('bmbMoveBtn').style.display = canBulkMove() ? '' : 'none';
+  document.getElementById('bmbWorklogBtn').style.display = currentUserName() ? '' : 'none';
   bar.classList.add('open');
 }
 
@@ -2151,12 +1994,6 @@ function groupRemarksHtml(meta){
   return `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
 }
 
-// 법인명 옆에 나란히 Support ID를 보여준다 (펼치지 않아도, 별도 줄 없이 바로 이름 옆에 보임).
-// - 부모-자식 관계가 없는 독립 법인, 자식 법인: 이 법인 자신의 Support ID만.
-// - 부모 법인(모회사, 자식 카드들이 안에 중첩되어 표시됨): 자기 자신의 Support ID를 먼저 보여주고,
-//   자식 법인에 더 있는 Support ID는 "외 N개"로 구분해서 보여준다 (부모 자신의 것과 헷갈리지 않도록).
-// editableSid가 주어지면(=Support ID가 하나뿐인 독립 법인이라 하위 Support ID 영역을 생략한 경우),
-// 그 배지를 클릭해서 바로 Support ID / 구축 엔지니어 / 구축 일자를 수정할 수 있게 한다.
 function supportIdTitleHtml(gid, items, isChild, editableSid){
   const ownSids = ownSupportIds(items);
 
@@ -2164,7 +2001,6 @@ function supportIdTitleHtml(gid, items, isChild, editableSid){
     return supportIdChipSimple(gid, ownSids, editableSid);
   }
 
-  // 부모 법인(가족 관계 있음)
   const familyAll = familySupportIds(gid);
   const extraCount = Math.max(0, familyAll.length - ownSids.length);
   if (!ownSids.length){
@@ -2179,7 +2015,6 @@ function supportIdTitleHtml(gid, items, isChild, editableSid){
   return `<span class="title-support-ids"><span class="family-sid-chip${singleEditable ? ' family-sid-chip--editable' : ''}"${attrs}><span class="meta-label">Support ID</span><span class="meta-value">${valueText}</span></span></span>`;
 }
 
-// Support ID 배지 하나를 그려낸다 (가족 관계 없이 자기 자신의 Support ID만 있는 일반적인 경우용).
 function supportIdChipSimple(gid, sids, editableSid){
   if (!sids.length) return '';
   if (sids.length === 1){
@@ -2193,15 +2028,13 @@ function supportIdChipSimple(gid, sids, editableSid){
   return `<span class="title-support-ids"><span class="family-sid-chip"><span class="meta-label">Support ID</span><span class="meta-value">${sids.map(s=>esc(s)).join(', ')}</span></span></span>`;
 }
 
-// (구) 부모-자식 관계가 있는 법인에서 "관계"(모회사/자회사) 칩을 보여주던 함수 — 더 이상 사용하지 않음.
-
 function rowHtml(r, groupSupportId){
   const status = licenseStatus(r);
   const pct = licenseBarPct(r);
   const logCount = (r.work_log||[]).length;
   return `
   <tr data-id="${r.id}">
-    ${canBulkMove() ? `<td class="col-select" data-label=""><input type="checkbox" class="asset-select-cb" data-select-asset="${r.id}" ${selectedAssetIds.has(String(r.id))?'checked':''} title="일괄 이동을 위해 선택"></td>` : ''}
+    ${canSelectAssets() ? `<td class="col-select" data-label=""><input type="checkbox" class="asset-select-cb" data-select-asset="${r.id}" ${selectedAssetIds.has(String(r.id))?'checked':''} title="일괄 이동/작업 이력 등록을 위해 선택"></td>` : ''}
     <td class="sku" data-label="SKU / 제품">${skuBadge(r.sku)}${skuKeywordTagsHtml(r.sku)}</td>
     <td class="sn" data-label="S/N">${snLink(r, groupSupportId)}</td>
     <td data-label="수량">${esc(r.qty)||''}</td>
@@ -2235,7 +2068,6 @@ function rowHtml(r, groupSupportId){
   </tr>`;
 }
 
-// 국가/법인 즐겨찾기 — 로그인한 사용자별로 이 브라우저에만 저장 (팀 공유 데이터 아님)
 function favCountriesKey(){
   return 'bcAssetFavCountries_' + (currentUserId || 'anon');
 }
@@ -2321,6 +2153,7 @@ function buildFilters(){
   });
 
   updateMyAssetsToggle();
+  updateExpandAllBtn();
 }
 
 function getMySiteGroupIds(){
@@ -2337,9 +2170,6 @@ function getMySiteGroupIds(){
   return ids;
 }
 
-// My 버튼에 표시할 갯수: 실제 자산이 걸린 "사이트(leaf 그룹)" 수가 아니라,
-// 하위 법인은 상위 법인에 묶어서 하나로 세는 "독립법인 + 상위법인" 수로 보여준다.
-// (유지보수 관리 페이지의 법인 목록 기준과 동일한 maintenanceGroupList()를 재사용한다.)
 function getMyTopLevelGroupCount(){
   const me = currentUserName();
   if (!me) return 0;
@@ -2355,6 +2185,15 @@ function updateMyAssetsToggle(){
   btn.classList.toggle('active', activeMyAssetsFilter);
   btn.disabled = !me;
   btn.title = me ? '내가 정 담당자인 사이트만 보기' : '로그인이 필요합니다.';
+}
+
+function updateExpandAllBtn(){
+  const btn = document.getElementById('expandAllBtn');
+  if (!btn) return;
+  const allOpen = expandedGroups.size > 0;
+  btn.textContent = allOpen ? '⊟' : '⊞';
+  btn.title = allOpen ? '전체 접기' : '전체 펼치기';
+  btn.classList.toggle('is-collapse-mode', allOpen);
 }
 
 function renderFiltersResetSlot(){
@@ -2397,10 +2236,6 @@ document.getElementById('expandAllBtn').onclick = () => {
 };
 
 // ---------- add / edit / delete record ----------
-// f_owner / f_country / f_location / f_support / f_check는 법인(그룹) 공통 정보이므로
-// 이 창에서는 항상 읽기 전용으로 보여주기만 한다(값을 바꾸려면 "법인 정보 수정" 이용).
-// 담당자(정/부)와 고객사 담당자는 더 이상 자산 단위로 입력받지 않으며, 법인 정보(공통 담당
-// 엔지니어 / 고객사 담당자)를 저장할 때 자동으로 함께 채워진다.
 const ASSET_FORM_IDS = ['f_owner','f_country','f_location','f_support','f_sku','f_sn','f_qty','f_start','f_end','f_os','f_check','f_ip','f_id','f_pw','f_enable_pw','f_remarks'];
 
 function clearAssetForm(){
@@ -2416,9 +2251,6 @@ document.getElementById('cancelAddBtn').onclick = () => {
   addAssetTargetGid = null;
 };
 
-// 특정 법인(gid)에 바로 자산을 추가한다. 법인명/국가/위치/점검방식/담당 엔지니어 등 법인 공통 정보는
-// 그 법인 기준으로 자동 채워지고 잠기며(변경하려면 "법인 정보 수정" 이용), Support ID와 자산 고유 정보만 입력한다.
-// 자식 법인을 둔 상위 법인(대표 이름 역할만 함)에는 자산을 직접 추가할 수 없다.
 function openAddAssetToGroup(gid){
   if (!isCurrentUserAdmin()){ alert('마스터만 자산을 추가할 수 있습니다.'); return; }
   if (viewOnly || !sessionKey){ alert('자산을 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
@@ -2435,8 +2267,6 @@ function openAddAssetToGroup(gid){
   set('f_country', meta.country);
   set('f_location', meta.location);
   set('f_check', meta.check_method);
-  // Support ID가 이미 하나뿐이면 미리 채워 두고, 여러 개이거나 없으면 비워 둔다
-  // (이 필드는 읽기 전용이며, Support ID를 바꾸려면 "법인 정보 수정"을 이용해야 한다).
   const sids = ownSupportIds(items);
   set('f_support', sids.length === 1 ? sids[0] : '');
 
@@ -2445,7 +2275,6 @@ function openAddAssetToGroup(gid){
   document.getElementById('addModal').classList.add('open');
 }
 
-// 마스터 관리자 전용: 작업이력을 남기지 않고 자산의 모든 필드를 바로 수정한다.
 async function openDirectEditModal(recId){
   if (!isCurrentUserAdmin()){ alert('마스터 관리자만 직접 수정할 수 있습니다.'); return; }
   if (viewOnly || !sessionKey){ alert('먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
@@ -2456,9 +2285,6 @@ async function openDirectEditModal(recId){
   addAssetTargetGid = null;
   clearAssetForm();
   const set = (id, v) => { document.getElementById(id).value = v || ''; };
-  // 법인/국가/위치/Support ID/점검 방식은 이 법인(그룹)의 공통 정보이므로, 이 자산 레코드
-  // 하나가 아니라 그룹 전체 기준 값(groupMeta)을 보여준다 — 항상 정확한 값을 보여주고,
-  // 그룹 안에서 값이 어긋나는 예전 방식의 데이터 불일치를 화면에 다시 노출하지 않기 위함이다.
   const meta = groupMeta(records.filter(r=>r.group===rec.group));
   set('f_owner', meta.owner==='(법인명 미확인)' ? '' : meta.owner);
   set('f_country', meta.country); set('f_location', meta.location); set('f_support', rec.support_id);
@@ -2491,12 +2317,9 @@ document.getElementById('saveAddBtn').onclick = async () => {
   const val = id => document.getElementById(id).value.trim();
 
   if (editingRecordId){
-    // 관리자 직접 수정: 작업이력을 남기지 않고 기존 레코드를 그대로 덮어쓴다.
     if (!isCurrentUserAdmin()){ alert('마스터 관리자만 직접 수정할 수 있습니다.'); return; }
     const rec = records.find(r=>String(r.id)===String(editingRecordId));
     if (!rec){ editingRecordId = null; document.getElementById('addModal').classList.remove('open'); return; }
-    // 법인/국가/위치/Support ID/점검 방식은 화면에서 항상 읽기 전용(그룹 공통 정보)이므로
-    // 여기서 폼 값으로 덮어쓰지 않고, 자산 고유 정보만 갱신한다.
     Object.assign(rec, {
       sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
       start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'),
@@ -2516,7 +2339,6 @@ document.getElementById('saveAddBtn').onclick = async () => {
   }
 
   if (addAssetTargetGid){
-    // 특정 법인에 자산 추가: 법인 공통 정보는 그 법인 기준으로 강제 적용하고, Support ID/자산 고유 정보만 입력받는다.
     if (groupChildrenOf(addAssetTargetGid).length || groupMeta(records.filter(r=>r.group===addAssetTargetGid)).is_parent){
       alert('상위 법인은 대표 이름 역할만 하므로 자산을 직접 추가할 수 없습니다.');
       return;
@@ -2528,8 +2350,6 @@ document.getElementById('saveAddBtn').onclick = async () => {
     const newSupportId = val('f_support');
     const realItemsBefore = items.filter(r => !r.is_group_shell);
     const supportItems = items.filter(r => (r.support_id||'').trim() === newSupportId);
-    // 첫 자산이라면 법인 생성 시 shell에 입력해 둔 구축 엔지니어/일자를 승계한다.
-    // 이후 자산은 해당 Support ID의 실제 자산 메타를 우선한다.
     const shellSupport = items.find(r => r.is_group_shell && (r.support_id||'').trim() === newSupportId);
     const supportMeta = supportItems.length
       ? subGroupMeta(realItemsBefore.length ? supportItems.filter(r=>!r.is_group_shell) : supportItems)
@@ -2589,7 +2409,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
 
 // ---------- group (title bar) edit / delete ----------
 let groupEditId = null;
-let geCustContacts = []; // working copy of {name,phone,email} rows while modal is open
+let geCustContacts = [];
 
 function renderCustContactRows(){
   const wrap = document.getElementById('ge_cust_list');
@@ -2642,9 +2462,6 @@ document.getElementById('ge_cust_add_btn').onclick = () => {
   renderCustContactRows();
 };
 
-// 상위 법인(부모) 선택 드롭다운을 현재 존재하는 법인 목록으로 채운다.
-// 자기 자신과, 자기 자신의 하위(자식/손자…) 법인은 골라도 순환 관계가 생기므로 목록에서 제외하고,
-// "이 법인은 상위 법인입니다" 체크박스로 상위 법인이라고 표시된 법인만 후보로 보여준다.
 function populateParentGroupSelect(gid, currentParent){
   const sel = document.getElementById('ge_parent_group');
   const excluded = new Set([gid, ...groupDescendantIds(gid)]);
@@ -2659,15 +2476,9 @@ function populateParentGroupSelect(gid, currentParent){
   sel.value = (currentParent && !excluded.has(currentParent)) ? currentParent : '';
 }
 
-// 현재 법인 정보 수정창에서 편집 중인 법인의 Support ID 하위 그룹 목록과, 체크박스를 켜기 전
-// 원래 갖고 있던 구성방식 값(체크 해제 시 복원용)을 담아 둔다. openGroupEditModal에서 채워지고
-// applyGeSidFieldState(체크박스 change 핸들러 포함)에서 참조한다.
 let geSubGroupsCache = [];
 let geOriginalConfigMode = '';
 
-// "이 법인은 상위 법인입니다" 체크박스 상태와 Support ID 개수에 따라 Support ID / 구축 엔지니어 /
-// 구축 일자 / 구성방식 입력창을 활성화·비활성화하고 값을 채운다. 체크박스를 켜면(상위 법인)
-// 네 필드 모두 비우고 잠근다 — 상위 법인은 대표 이름 역할만 하기 때문이다.
 function applyGeSidFieldState(){
   const sidInput = document.getElementById('ge_support_id');
   const engInput = document.getElementById('ge_build_engineer');
@@ -2720,16 +2531,10 @@ function openGroupEditModal(gid){
   document.getElementById('ge_remarks').value = meta.group_remarks || '';
   geOriginalConfigMode = meta.config_mode || '';
 
-  // Support ID / 구축 엔지니어 / 구축 일자 / 구성방식은 이 법인이 상위 법인이 아니고
-  // Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있다. Support ID가 여러 개면(각기 다른
-  // 구축 엔지니어/일자를 가질 수 있으므로) 각 Support ID 영역의 ✎ 버튼으로 안내한다.
-  // 다른 법인을 자식으로 둔 상위 법인(실제 관계)이거나 "이 법인은 상위 법인입니다"에 체크된
-  // 경우는 대표 이름 역할만 하며 Support ID를 직접 가질 수 없으므로 항상 잠근다.
   const hasChildren = groupChildrenOf(gid).length > 0;
   geSubGroupsCache = buildSubGroups(items);
   const isParentCb = document.getElementById('ge_is_parent');
   isParentCb.checked = hasChildren || !!meta.is_parent;
-  // 실제로 자식 법인이 있으면 상위 법인 상태를 해제할 수 없다.
   isParentCb.disabled = hasChildren;
   applyGeSidFieldState();
 
@@ -2744,8 +2549,6 @@ function openGroupEditModal(gid){
   document.getElementById('groupEditModal').classList.add('open');
 }
 
-// 하위 법인(부모가 지정된 법인)에는 고객사 담당자 정보가 필요 없으므로 해당 입력 영역을 숨긴다.
-// 모달이 열려 있는 동안 상위 법인 선택을 바꾸면 그에 맞춰 즉시 보이거나 숨겨진다.
 function updateGeCustSectionVisibility(){
   const isChildNow = !!document.getElementById('ge_parent_group').value;
   document.getElementById('ge_cust_list').style.display = isChildNow ? 'none' : '';
@@ -2774,8 +2577,6 @@ document.getElementById('saveGeBtn').onclick = () => {
   const newRemarks = val('ge_remarks');
   const newIsParent = document.getElementById('ge_is_parent').checked;
   const newParentGid = document.getElementById('ge_parent_group').value;
-  // Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐이었을 때만(입력창이 활성화된 경우만) 저장한다.
-  // 여러 개인 경우, 또는 이 법인이 다른 법인을 자식으로 둔 상위 법인인 경우는 여기서 건드리지 않는다.
   const sidInputEl = document.getElementById('ge_support_id');
   const engInputEl = document.getElementById('ge_build_engineer');
   const dateInputEl = document.getElementById('ge_build_date');
@@ -2787,11 +2588,11 @@ document.getElementById('saveGeBtn').onclick = () => {
     document.getElementById('geError').textContent = '구축 일자는 YYYY.MM 형식으로 입력해 주세요 (예: 2026.07).';
     return;
   }
-  // 방어적으로 한 번 더 확인: 자기 자신이나 자신의 하위 법인을 부모로 저장하지 않는다.
+  
   const forbiddenParents = new Set([groupEditId, ...groupDescendantIds(groupEditId)]);
   const finalParentGid = (newParentGid && !forbiddenParents.has(newParentGid)) ? newParentGid : '';
   captureCustContactsFromDom();
-  // 하위 법인(부모가 지정된 법인)에는 고객사 담당자 정보가 필요 없으므로 저장하지 않는다.
+  
   const newContacts = finalParentGid ? [] : geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
   records.forEach(r => {
     if (r.group === groupEditId){
@@ -2806,7 +2607,6 @@ document.getElementById('saveGeBtn').onclick = () => {
       r.group_parent = finalParentGid;
       r.is_parent = newIsParent;
       r.cust_contacts = newContacts;
-      // clear legacy single-contact fields now that the array field is authoritative
       r.cust_contact = ''; r.cust_phone = ''; r.cust_email = '';
       if (applySoloSid){
         r.support_id = newSupportId;
@@ -2815,8 +2615,6 @@ document.getElementById('saveGeBtn').onclick = () => {
       }
     }
   });
-  // 이 법인이 방금 어떤 법인의 첫 자식으로 새로 연결됐을 수 있으므로, 상위 법인 자신에게
-  // 남아 있는 직속 Support ID/자산이 있다면 자식 법인으로 자동 이전해 규칙을 지킨다.
   enforceParentsHaveNoDirectAssets();
   document.getElementById('groupEditModal').classList.remove('open');
   groupEditId = null;
@@ -2826,12 +2624,6 @@ document.getElementById('saveGeBtn').onclick = () => {
 };
 
 // ---------- 법인 추가 (좌측 패널 ＋ 버튼) ----------
-// 새 법인의 회사 단위 정보(법인/Support ID/상위 법인/국가/위치/구축 엔지니어/구축 일자/
-// 구성방식/담당 엔지니어/점검 방식/고객사 담당자/비고)만 입력받아 법인을 새로 만든다.
-// 실제 자산(SKU/S/N/라이선스/OS/IP/ID/PW 등)은 법인을 만든 뒤 각 법인 카드의
-// ＋(이 법인에 자산 추가) 버튼으로 따로 추가한다.
-let ngCustContacts = []; // 작업 중인 고객사 담당자 목록 (모달이 열려 있는 동안의 임시 상태)
-
 function renderNgCustContactRows(){
   const wrap = document.getElementById('ng_cust_list');
   const roleOptions = ['', '운영', '영업'];
@@ -2883,7 +2675,6 @@ document.getElementById('ng_cust_add_btn').onclick = () => {
   renderNgCustContactRows();
 };
 
-// 하위 법인(부모를 지정한 법인)에는 고객사 담당자 정보가 필요 없으므로 해당 입력 영역을 숨긴다.
 function updateNgCustSectionVisibility(){
   const isChildNow = !!document.getElementById('ng_parent_group').value;
   document.getElementById('ng_cust_list').style.display = isChildNow ? 'none' : '';
@@ -2892,9 +2683,6 @@ function updateNgCustSectionVisibility(){
 }
 document.getElementById('ng_parent_group').addEventListener('change', updateNgCustSectionVisibility);
 
-// 상위 법인(부모) 선택 드롭다운을 현재 존재하는 법인 목록으로 채운다. 아직 만들어지지 않은
-// 새 법인이라 자기 자신을 제외할 필요는 없다. "이 법인은 상위 법인입니다" 체크박스로
-// 상위 법인이라고 표시된 법인만 후보로 보여준다.
 function populateNewGroupParentSelect(){
   const sel = document.getElementById('ng_parent_group');
   const options = allGroupIds()
@@ -2907,9 +2695,6 @@ function populateNewGroupParentSelect(){
   sel.value = '';
 }
 
-// "이 법인은 상위 법인입니다" 체크박스 상태에 따라 Support ID / 구축 엔지니어 / 구축 일자 /
-// 구성방식 입력창을 활성화·비활성화한다. 체크하면(=새로 만드는 법인이 상위 법인이라면) 네
-// 필드 모두 비우고 잠근다 — 상위 법인은 대표 이름 역할만 하며 이 값들을 직접 갖지 않는다.
 function updateNgParentFlagState(){
   const isParent = document.getElementById('ng_is_parent').checked;
   ['ng_support_id','ng_build_engineer','ng_build_date','ng_config_mode'].forEach(id => {
@@ -2932,13 +2717,10 @@ function clearAddGroupForm(){
 function openAddGroupModal(presetParentGid){
   clearAddGroupForm();
   populateNewGroupParentSelect();
-  // 일반 '법인 추가'는 항상 독립 법인에서 시작한다. 이전 모달 선택값이 남아 부모로 저장되는 것을 차단한다.
   document.getElementById('ng_parent_group').value = '';
   updateNgParentFlagState();
   if (presetParentGid){
     const sel = document.getElementById('ng_parent_group');
-    // populateNewGroupParentSelect()가 채운 옵션 중에 실제로 존재할 때만(상위 법인으로 체크된
-    // 법인일 때만) 미리 선택해 둔다.
     if ([...sel.options].some(o => o.value === presetParentGid)) sel.value = presetParentGid;
   }
   ngCustContacts = [{role:'',name:'',org:'',phone:'',email:''}];
@@ -2981,7 +2763,6 @@ document.getElementById('saveNgBtn').onclick = () => {
     work_log:[],
   };
   records.push(rec);
-  // 방금 지정한 상위 법인에게 그 자신 소유의 직속 자산이 남아 있다면, 규칙에 따라 자식 법인으로 자동 이전한다.
   enforceParentsHaveNoDirectAssets();
   expandGroupWithAncestors(gid);
   document.getElementById('addGroupModal').classList.remove('open');
@@ -2991,7 +2772,7 @@ document.getElementById('saveNgBtn').onclick = () => {
 };
 
 // ---------- Support ID 하위 그룹 정보 수정 (Support ID / 구축 엔지니어 / 구축 일자) ----------
-let subGroupEditTarget = null; // { gid, sid } 편집 중인 하위 그룹
+let subGroupEditTarget = null;
 
 function openSubGroupEditModal(gid, sid){
   if (!isCurrentUserAdmin()){ alert('마스터만 Support ID 정보를 수정할 수 있습니다.'); return; }
@@ -3042,14 +2823,16 @@ document.getElementById('saveSgBtn').onclick = () => {
 };
 
 // ---------- 자산을 다른 법인으로 이동 ----------
-let moveAssetRecIds = []; // 이동 대상 자산 id 목록 (단건이든 여러 건이든 항상 배열로 보관)
-let selectedAssetIds = new Set(); // 목록에서 체크박스로 선택한 자산 id들 (일괄 이동용)
+let moveAssetRecIds = [];
+let selectedAssetIds = new Set();
 
 function canBulkMove(){
   return isCurrentUserAdmin() && !viewOnly && sessionKey;
 }
+function canSelectAssets(){
+  return canBulkMove() || !!currentUserName();
+}
 
-// recIdOrIds: 단일 id(문자열/숫자) 또는 id 배열 모두 허용
 function openMoveAssetModal(recIdOrIds){
   if (!isCurrentUserAdmin()){ alert('마스터만 자산을 다른 법인으로 이동할 수 있습니다.'); return; }
   if (viewOnly || !sessionKey){ alert('자산을 이동하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
@@ -3058,8 +2841,6 @@ function openMoveAssetModal(recIdOrIds){
   if (!recs.length) return;
 
   const sourceGids = new Set(recs.map(r=>r.group));
-  // 선택한 자산이 전부 같은 법인 소속이면 그 법인은 이동 대상에서 제외, 여러 법인에 걸쳐 있으면 전체 법인을 보여준다.
-  // 다른 법인을 자식으로 둔 상위 법인(대표 이름 역할만 함)은 Support ID/자산을 직접 가질 수 없으므로 이동 대상에서 제외한다.
   const allGids = [...new Set(records.map(r=>r.group))].filter(gid => groupChildrenOf(gid).length === 0);
   const targetGids = sourceGids.size === 1
     ? allGids.filter(gid => gid !== [...sourceGids][0])
@@ -3117,8 +2898,6 @@ document.getElementById('saveMaBtn').onclick = () => {
     : `선택한 ${recs.length}개 항목을 "${meta.owner}" 법인으로 옮길까요?`;
   if (!confirm(confirmMsg)) return;
 
-  // 대상이 '법인만 먼저 생성된 상태'라면 shell에 저장된 Support ID/구축 정보가 대상 법인의 기준값이다.
-  // 기존 자산을 이 법인으로 이동할 때 원래 법인의 Support ID를 끌고 오지 않고 대상 법인 값을 적용한다.
   const targetRealItemsBefore = targetItems.filter(r => !r.is_group_shell);
   const targetShell = targetItems.find(r => r.is_group_shell && (r.support_id||'').trim());
   const targetDefaultSupport = (!targetRealItemsBefore.length && targetShell)
@@ -3167,7 +2946,6 @@ function deleteGroup(gid){
   const meta = groupMeta(items);
   const realCount = items.filter(r=>!r.is_group_shell).length;
   if (!confirm(`"${meta.owner}" 법인을 삭제하시겠습니까? 실제 자산 ${realCount}건이 함께 삭제됩니다.`)) return;
-  // 부모 법인을 삭제하면 자식 법인은 삭제하지 않고 독립 법인으로 전환한다.
   records.forEach(r => { if (r.group_parent === gid) r.group_parent = ''; });
   records = records.filter(r=>r.group!==gid);
   expandedGroups.delete(gid);
@@ -3176,9 +2954,6 @@ function deleteGroup(gid){
   scheduleAutoSync();
 }
 
-// 마스터 전용: 이미 등록된 법인(그룹)의 자산 데이터를 그대로 복사해서
-// 원본 바로 아래에 새 법인으로 추가한다. 새로 생긴 법인의 값은
-// "법인 정보 수정"에서 필요한 만큼 고쳐 쓰면 된다.
 function duplicateGroup(gid){
   if (!isCurrentUserAdmin()){ alert('마스터만 법인을 복제할 수 있습니다.'); return; }
   const items = records.filter(r=>r.group===gid);
@@ -3191,17 +2966,15 @@ function duplicateGroup(gid){
   const newGid = makeUniqueGroupId('dup');
   const newOwnerName = meta.owner + ' (사본)';
   const newRecords = items.map(r => {
-    const copy = JSON.parse(JSON.stringify(r)); // work_log, cust_contacts 등 배열/객체 필드까지 그대로 깊은 복사
+    const copy = JSON.parse(JSON.stringify(r));
     copy.id = nextId++;
     copy.group = newGid;
     copy.owner = newOwnerName;
-    // '새 법인 복제'는 원본의 부모 관계까지 복제하지 않는다. 항상 독립 법인으로 만든다.
     copy.group_parent = '';
     copy.is_parent = false;
     return copy;
   });
 
-  // 원본 법인의 마지막 항목 바로 뒤에 끼워 넣어서, 화면에서도 원본 바로 아래에 나타나게 한다.
   let insertAt = records.length;
   for (let i = records.length - 1; i >= 0; i--){
     if (records[i].group === gid){ insertAt = i + 1; break; }
@@ -3224,8 +2997,8 @@ function duplicateGroup(gid){
 const CURRENT_USER_KEY = 'bcAssetCurrentUserId';
 let currentUserId = null;
 try{ currentUserId = localStorage.getItem(CURRENT_USER_KEY) || null; }catch(e){ currentUserId = null; }
-let agLoginPromptUserId = null; // 계정 게이트 목록에서 지금 비밀번호 입력창이 펼쳐진 계정
-let agLoginPromptMode = 'login'; // 'login' | 'delete' | 'changepw' — 펼쳐진 폼이 로그인/삭제확인/비밀번호변경 중 무엇인지
+let agLoginPromptUserId = null;
+let agLoginPromptMode = 'login';
 
 function saveCurrentUserId(id){
   try{ if (id) localStorage.setItem(CURRENT_USER_KEY, id); else localStorage.removeItem(CURRENT_USER_KEY); }catch(e){}
@@ -3250,7 +3023,7 @@ function updateSidebarProfile(){
     subEl.style.display = isAdmin ? '' : 'none';
   }
 }
-function updateUserBtnLabel(){ updateSidebarProfile(); } // (이전 이름 호환용 별칭)
+function updateUserBtnLabel(){ updateSidebarProfile(); }
 
 // ---------- 계정 게이트 (앱 진입 전 1단계 로그인 화면) ----------
 function showMasterGate(){
@@ -3261,8 +3034,6 @@ function showMasterGate(){
   if (p) p.focus();
 }
 
-// 계정 로그인이 끝난 뒤 호출된다. 24시간 이내에 마스터 비밀번호를 이미 입력해 캐시가 남아있으면
-// 마스터 비밀번호 화면 없이 바로 앱으로 들어가고, 그렇지 않으면 평소처럼 마스터 비밀번호 화면을 보여준다.
 async function proceedPastAccountGate(){
   await dataReady;
   const ok = await tryUnlockFromCache();
@@ -3403,8 +3174,6 @@ async function changeAccountPassword(uid, newPass){
   alert(`"${u.name}" 계정의 비밀번호가 변경되었습니다. 새 비밀번호로 로그인해 주세요.`);
 }
 
-// 계정 삭제: 비밀번호로 본인 확인이 끝난 뒤 호출됨.
-// 자산/작업이력 데이터 자체는 건드리지 않고 로그인용 계정 정보만 제거한다.
 function deleteAccount(uid){
   users = users.filter(x=>String(x.id)!==String(uid));
   if (String(currentUserId)===String(uid)){
@@ -3450,13 +3219,9 @@ document.getElementById('ag_register_btn').onclick = async () => {
   const pwSalt = bufToB64(crypto.getRandomValues(new Uint8Array(16)).buffer);
   const pwIterations = 150000;
   const pwHash = await hashPassword(pass, pwSalt, pwIterations);
-  // 이 시스템에 처음 만들어지는 계정은 자동으로 마스터 관리자 권한을 갖는다
-  // (팀에서 가장 먼저 계정을 만든 사람 = 관리자를 지정해 줄 사람이 아직 없으므로).
   const isAdmin = users.length === 0;
   users.push({ id, name, pwSalt, pwIterations, pwHash, isAdmin });
 
-  // 계정을 막 만든 사람은 이미 방금 비밀번호를 입력해 본인임이 확인된 상태이므로
-  // 바로 로그인 상태로 전환한다.
   currentUserId = id;
   saveCurrentUserId(id);
   scheduleAutoSync();
@@ -3466,12 +3231,9 @@ document.getElementById('ag_register_btn').onclick = async () => {
   await proceedPastAccountGate();
 };
 
-// 계정 목록은 비동기로 로드되므로, 로드되는 대로 게이트 화면에 그린다.
 document.getElementById('ag_user_list').innerHTML = `<div class="user-list-empty">계정 목록을 불러오는 중…</div>`;
 dataReady.then(renderAccountGateUserList);
 
-// 이미 이 브라우저에 로그인 기록이 있고(currentUserId) 그 계정이 실제로 존재하면,
-// 계정 게이트를 건너뛰고 바로 마스터 비밀번호 화면으로 넘어간다.
 dataReady.then(() => {
   if (currentUserId && users.some(u=>String(u.id)===String(currentUserId))){
     proceedPastAccountGate();
@@ -3487,8 +3249,6 @@ document.getElementById('logoutBtn').onclick = () => {
 
 
 // ---------- recent activity (최근 작업 이력 알림) ----------
-// 알림(최근 작업 이력)에서 한 번 클릭해서 확인한 항목은 다시 뜨지 않도록 "읽음/삭제" 상태를
-// 로그인한 사용자별로 이 브라우저에 저장해 둔다. (팀 공유 데이터 아님 — 즐겨찾기와 동일한 방식)
 function dismissedActivityKey(){
   return 'bcAssetDismissedActivity_' + (currentUserId || 'anon');
 }
@@ -3552,8 +3312,6 @@ function renderRecentActivity(){
       const gid = el.dataset.jumpGroup;
       const recId = el.dataset.jumpRec;
       const key = el.dataset.activityKey;
-
-      // 클릭한 항목은 알림 목록/뱃지에서 바로 사라지도록 "읽음" 처리한다.
       dismissActivity(key);
       updateActivityBadge();
 
@@ -3678,15 +3436,38 @@ async function githubApiPut(cfg, token, jsonObj, sha, message){
 }
 
 // ---------- work log ----------
-function openWorkLogModal(recId){
-  workLogRecordId = String(recId);
-  const rec = records.find(r=>String(r.id)===workLogRecordId);
-  if (!rec) return;
-  document.getElementById('wlSubtitle').textContent =
-    `${rec.sku||'장비'}${rec.sn? ' · S/N '+rec.sn : ''} — 비고와 별도로 구축/제거/교체/OS 변경/PM 이력을 남길 수 있습니다.`;
+function openWorkLogModal(recIdOrIds){
+  const ids = Array.isArray(recIdOrIds) ? recIdOrIds.map(String) : [String(recIdOrIds)];
+  const recs = records.filter(r => ids.includes(String(r.id)));
+  if (!recs.length) return;
+  workLogRecordIds = ids;
+  const isMulti = recs.length > 1;
+
+  const assetListEl = document.getElementById('wlAssetList');
+  const fieldChangeWrap = document.getElementById('wlFieldChangeWrap');
+  const historyWrap = document.getElementById('wlHistoryWrap');
+
+  if (isMulti){
+    document.getElementById('wlSubtitle').textContent =
+      `선택한 ${recs.length}개 자산에 같은 작업 이력을 한 번에 등록합니다. 비고와 별도로 구축/제거/교체/OS 변경/PM 이력을 남길 수 있습니다.`;
+    assetListEl.style.display = '';
+    assetListEl.innerHTML = `<div class="wl-asset-list-label">선택된 자산 (${recs.length}개)</div>` +
+      recs.map(r => `<div class="wl-asset-chip">${esc(r.sku || '장비')}${r.sn ? ' · ' + esc(r.sn) : ''}</div>`).join('');
+    if (fieldChangeWrap) fieldChangeWrap.style.display = 'none';
+    if (historyWrap) historyWrap.style.display = 'none';
+  } else {
+    const rec = recs[0];
+    document.getElementById('wlSubtitle').textContent =
+      `${rec.sku||'장비'}${rec.sn? ' · S/N '+rec.sn : ''} — 비고와 별도로 구축/제거/교체/OS 변경/PM 이력을 남길 수 있습니다.`;
+    assetListEl.style.display = 'none';
+    assetListEl.innerHTML = '';
+    if (fieldChangeWrap) fieldChangeWrap.style.display = '';
+    if (historyWrap) historyWrap.style.display = '';
+  }
+
   document.getElementById('wl_type').value = '장비 구축';
   document.getElementById('wl_date').value = '';
-  document.getElementById('wl_manager').value = '';
+  document.getElementById('wl_manager').value = currentUserName() || '';
   document.getElementById('wl_note').value = '';
   resetFieldChangeInputs();
   workLogEditId = null;
@@ -3708,8 +3489,6 @@ const WL_FIELD_DEFS = [
 ];
 function wlFieldDef(field){ return WL_FIELD_DEFS.find(d=>d.field===field); }
 
-// Working state while the modal is open: which fields the user has picked
-// to change, and whatever they've typed into each one so far.
 let wlChangeFields = [];
 let wlChangeValues = {};
 
@@ -3800,13 +3579,12 @@ function fieldChangesSummary(changes){
 }
 
 function fmtDateDots(nativeVal){
-  // nativeVal is "YYYY-MM-DD" from <input type="date">
   if (!nativeVal) return '';
   const [y,m,d] = nativeVal.split('-').map(Number);
   if (!y || !m || !d) return '';
   return `${y}.${m}.${d}`;
 }
-// 오늘 날짜를 "YYYY.M.D" 형식으로 반환한다 (점검일 기본값 등에 사용).
+
 function todayDots(){
   const now = new Date();
   return `${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()}`;
@@ -3827,8 +3605,9 @@ function setWorkLogFormMode(isEditing){
 }
 
 function renderWorkLogList(){
-  const rec = records.find(r=>String(r.id)===workLogRecordId);
   const listEl = document.getElementById('wlList');
+  if (workLogRecordIds.length !== 1){ listEl.innerHTML=''; return; }
+  const rec = records.find(r=>String(r.id)===workLogRecordIds[0]);
   if (!rec){ listEl.innerHTML=''; return; }
   const log = (rec.work_log||[]).slice().sort((a,b)=>{
     const da = parseDate(a.date), db = parseDate(b.date);
@@ -3871,8 +3650,6 @@ function renderWorkLogList(){
           const def = wlFieldDef(field);
           if (!def) return;
           wlChangeFields.push(field);
-          // Sensitive fields never had their plaintext stored on the entry —
-          // leave that row blank; re-enter a value only if changing it again.
           wlChangeValues[field] = def.sensitive ? '' : entry.field_changes[field];
         });
         renderWlChangeRows();
@@ -3900,13 +3677,33 @@ function renderWorkLogList(){
 }
 
 document.getElementById('wlAddBtn').onclick = async () => {
-  const rec = records.find(r=>String(r.id)===workLogRecordId);
-  if (!rec) return;
+  const targetRecs = records.filter(r => workLogRecordIds.includes(String(r.id)));
+  if (!targetRecs.length) return;
+
   const type = document.getElementById('wl_type').value;
   const date = document.getElementById('wl_date').value.trim();
   const manager = document.getElementById('wl_manager').value.trim();
   const note = document.getElementById('wl_note').value.trim();
   if (!date && !manager && !note){ alert('날짜, 담당자, 내용 중 하나 이상을 입력해 주세요.'); return; }
+
+  if (targetRecs.length > 1){
+    if (!currentUserId && !confirm('현재 로그인된 사용자가 없어 이 이력의 작성자가 "미상"으로 표시됩니다.\n로그인 없이 계속 저장할까요?\n\n(취소를 누르면 저장하지 않습니다 — 상단의 "👤 로그인"에서 먼저 본인 계정으로 로그인해 주세요.)')){
+      return;
+    }
+    const author = currentUserName();
+    targetRecs.forEach((rec, idx) => {
+      if (!Array.isArray(rec.work_log)) rec.work_log = [];
+      rec.work_log.push({ id: Date.now() + idx, type, date, manager, note, author });
+    });
+    document.getElementById('workLogModal').classList.remove('open');
+    workLogRecordIds = [];
+    selectedAssetIds.clear();
+    render();
+    scheduleAutoSync();
+    return;
+  }
+
+  const rec = targetRecs[0];
   if (!Array.isArray(rec.work_log)) rec.work_log = [];
 
   const applyToggled = document.getElementById('wl_apply_toggle').checked;
@@ -3966,6 +3763,6 @@ document.getElementById('wlCancelEditBtn').onclick = () => {
 
 document.getElementById('wlCloseBtn').onclick = () => {
   document.getElementById('workLogModal').classList.remove('open');
-  workLogRecordId = null;
+  workLogRecordIds = [];
   workLogEditId = null;
 };
