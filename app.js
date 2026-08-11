@@ -1425,6 +1425,85 @@ function maintenanceDayChartHtml(groups){
   return `<div class="maint-day-chart">${cols}</div>`;
 }
 
+// 담당자(정/부)별로 맡고 있는 법인을 점검 방식별로 집계한다.
+// 결과는 Map<이름, { methods: Map<점검방식, {primary, secondary}>, primaryGroups: string[], secondaryGroups: string[] }>
+function maintenanceUserSummaryData(){
+  const groups = maintenanceGroupList();
+  const users = new Map();
+  const ensure = (name) => {
+    if (!users.has(name)) users.set(name, { methods: new Map(), primaryGroups: [], secondaryGroups: [] });
+    return users.get(name);
+  };
+  groups.forEach(g => {
+    const method = (g.meta.check_method || '').trim() || '미지정';
+    const primary = (g.meta.owner_primary || '').trim();
+    const secondary = (g.meta.owner_secondary || '').trim();
+    if (primary){
+      const u = ensure(primary);
+      const m = u.methods.get(method) || { primary: 0, secondary: 0 };
+      m.primary += 1;
+      u.methods.set(method, m);
+      u.primaryGroups.push(g.meta.owner);
+    }
+    if (secondary){
+      const u = ensure(secondary);
+      const m = u.methods.get(method) || { primary: 0, secondary: 0 };
+      m.secondary += 1;
+      u.methods.set(method, m);
+      u.secondaryGroups.push(g.meta.owner);
+    }
+  });
+  return users;
+}
+
+function maintenanceUserSummaryHtml(){
+  const users = maintenanceUserSummaryData();
+  if (!users.size) return '<div class="dash-empty">담당자가 지정된 법인이 없습니다.</div>';
+
+  const rows = [...users.entries()].map(([name, u]) => {
+    const totalPrimary = u.primaryGroups.length;
+    const totalSecondary = u.secondaryGroups.length;
+    return { name, u, total: totalPrimary + totalSecondary, totalPrimary, totalSecondary };
+  }).sort((a, b) => b.total - a.total || a.name.localeCompare(b.name, 'ko'));
+
+  const cardsHtml = rows.map(({ name, u, totalPrimary, totalSecondary }) => {
+    const methodChips = [...u.methods.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0], 'ko'))
+      .map(([method, cnt]) => {
+        const bits = [];
+        if (cnt.primary) bits.push(`정 ${cnt.primary}`);
+        if (cnt.secondary) bits.push(`부 ${cnt.secondary}`);
+        return `<span class="maint-method-chip">${esc(method)} · ${bits.join(' / ')}</span>`;
+      }).join('');
+
+    const primaryChips = u.primaryGroups.length
+      ? u.primaryGroups.slice().sort((a,b)=>a.localeCompare(b,'ko')).map(o => `<span class="maint-site-chip primary">${esc(o)}</span>`).join('')
+      : `<span class="maint-td-empty">-</span>`;
+    const secondaryChips = u.secondaryGroups.length
+      ? u.secondaryGroups.slice().sort((a,b)=>a.localeCompare(b,'ko')).map(o => `<span class="maint-site-chip secondary">${esc(o)}</span>`).join('')
+      : `<span class="maint-td-empty">-</span>`;
+
+    return `
+      <div class="maint-user-card">
+        <div class="maint-user-card-head">
+          <span class="maint-user-name">${esc(name)}</span>
+          <span class="maint-user-total">정 ${totalPrimary} · 부 ${totalSecondary}</span>
+        </div>
+        <div class="maint-method-chips">${methodChips}</div>
+        <div class="maint-user-site-group">
+          <div class="maint-user-site-label">정 담당 법인</div>
+          <div class="maint-missed-list">${primaryChips}</div>
+        </div>
+        <div class="maint-user-site-group">
+          <div class="maint-user-site-label">부 담당 법인</div>
+          <div class="maint-missed-list">${secondaryChips}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  return `<div class="maint-user-summary-list">${cardsHtml}</div>`;
+}
+
 function maintenanceStatsTabHtml(){
   const groups = maintenanceVisibleGroupList();
   const months = monthsFrom202601To(currentYm());
@@ -1494,6 +1573,11 @@ function maintenanceStatsTabHtml(){
       <h4>법인별 평균 점검일 분포 (1일 ~ 31일)</h4>
       <p class="maint-day-hint">법인마다 지금까지의 점검일 평균을 날짜(1~31일)에 배치한 막대그래프입니다. 막대가 높을수록 그 날짜대에 점검이 몰려 있다는 뜻이며, 막대에 마우스를 올리면 어떤 법인이 해당하는지 볼 수 있습니다.</p>
       ${groups.length ? maintenanceDayChartHtml(groups) : '<div class="dash-empty">데이터가 없습니다.</div>'}
+    </div>
+    <div class="maint-trend-card">
+      <h4>담당자별 사이트 요약</h4>
+      <p class="maint-day-hint">담당자별로 정/부 담당 중인 법인 수를 점검 방식별로 모아 보여줍니다. 개인 필터(내가 정인 법인만)와 무관하게 전체 담당자 기준입니다.</p>
+      ${maintenanceUserSummaryHtml()}
     </div>
     <div class="maint-table-wrap">
       <table class="maint-table maint-group-stats-table">
