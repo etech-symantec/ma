@@ -1926,7 +1926,7 @@
       "os_ver": "2.5.4.1",
       "owner_primary": "신호근",
       "owner_secondary": "윤태리",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1966,7 +1966,9 @@
         "tag": "sEB/a1gsCrKR+632X2dlAw=="
       },
       "build_engineer": "신호근",
-      "build_date": "2026.01"
+      "build_date": "2026.01",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "uk-seuk",
@@ -1987,7 +1989,7 @@
       "os_ver": "7.4.13.1",
       "owner_primary": "신호근",
       "owner_secondary": "윤태리",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2027,7 +2029,9 @@
         "tag": "gc7b53ISXf9iYfWovJBYDA=="
       },
       "build_engineer": "신호근",
-      "build_date": "2026.01"
+      "build_date": "2026.01",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "uk-seuk",
@@ -2048,7 +2052,7 @@
       "os_ver": "4.1.3.2",
       "owner_primary": "신호근",
       "owner_secondary": "윤태리",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2083,7 +2087,9 @@
       "config_mode": "Explicit",
       "country": "영국",
       "build_engineer": "신호근",
-      "build_date": "2026.01"
+      "build_date": "2026.01",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "uk-seuk",
@@ -2104,7 +2110,7 @@
       "os_ver": "8.19.10",
       "owner_primary": "신호근",
       "owner_secondary": "윤태리",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2139,7 +2145,9 @@
       "config_mode": "Explicit",
       "country": "영국",
       "build_engineer": "신호근",
-      "build_date": "2026.01"
+      "build_date": "2026.01",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "uk-seuk",
@@ -2160,7 +2168,7 @@
       "os_ver": "",
       "owner_primary": "신호근",
       "owner_secondary": "윤태리",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -2183,7 +2191,9 @@
       "config_mode": "Explicit",
       "country": "영국",
       "build_engineer": "신호근",
-      "build_date": "2026.01"
+      "build_date": "2026.01",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "vn-sdv-new",
