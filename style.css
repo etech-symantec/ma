@@ -990,6 +990,8 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-trend-card{
   background:var(--surface); border:1px solid var(--border-solid); border-radius:12px; padding:16px 18px; margin-bottom:18px;
 }
+.maint-trend-row-2col{ display:flex; gap:16px; align-items:stretch; }
+.maint-trend-row-2col .maint-trend-card{ flex:1 1 50%; min-width:0; margin-bottom:18px; }
 .maint-trend-card h4{ font-size:13px; margin-bottom:12px; color:var(--text); }
 .maint-trend-row{ display:flex; align-items:center; gap:10px; margin-bottom:9px; }
 .maint-trend-label{ flex:0 0 70px; font-family:var(--mono); font-size:11.5px; color:var(--text-faint); }
@@ -1037,9 +1039,10 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-rate-cell.mid{ color:#C8933A; font-weight:700; }
 .maint-rate-cell.high{ color:#2F8F52; font-weight:700; }
 
-/* 담당자별 사이트 요약 카드 */
-.maint-user-summary-list{ display:flex; flex-direction:column; gap:10px; }
+/* 담당자별 사이트 요약 카드 — 담당자를 가로로 나열하고, 담당 법인은 카드 안에서 세로로 쌓는다 */
+.maint-user-summary-list{ display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; }
 .maint-user-card{
+  flex:1 1 240px; min-width:220px;
   border:1px solid var(--border-solid); border-radius:10px; padding:12px 14px;
   background:var(--surface2);
 }
@@ -1058,12 +1061,14 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   font-size:10px; color:var(--text-faint); margin-bottom:5px;
   font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em;
 }
-.maint-site-chip{
-  font-size:11px; color:var(--text-dim); background:var(--surface);
-  border:1px solid var(--border-solid); padding:2px 8px; border-radius:999px;
+.maint-site-list{ display:flex; flex-direction:column; gap:4px; }
+.maint-site-listitem{
+  font-size:11.5px; color:var(--text-dim); background:var(--surface);
+  border:1px solid var(--border-solid); border-radius:6px;
+  padding:4px 8px;
 }
-.maint-site-chip.primary{ color:#2F5FA3; border-color:#C9DCF2; background:#EAF2FC; }
-.maint-site-chip.secondary{ color:#7A6A2E; border-color:#EBDFB0; background:#FBF5E2; }
+.maint-site-listitem.primary{ color:#2F5FA3; border-color:#C9DCF2; background:#EAF2FC; }
+.maint-site-listitem.secondary{ color:#7A6A2E; border-color:#EBDFB0; background:#FBF5E2; }
 
 footer.foot{
   padding:26px; text-align:center; color:var(--text-faint); font-size:11.5px; font-family:var(--mono);
@@ -1071,6 +1076,9 @@ footer.foot{
 }
 
 @media (max-width: 880px){
+  .maint-trend-row-2col{ flex-direction:column; }
+  .maint-user-summary-list{ flex-direction:column; }
+  .maint-user-card{ flex:1 1 auto; }
   aside.filters{
     display:block; width:100%; position:static !important; max-height:none;
     padding:14px 16px; border-bottom:1px solid var(--border-solid);
