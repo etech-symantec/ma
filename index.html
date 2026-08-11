@@ -374,19 +374,21 @@
 </div>
 
 <div id="maintenanceLogModal">
-  <div class="modal-card">
+  <div class="modal-card ml-compact">
     <h2 id="mlModalTitle">월별 점검 등록</h2>
-    <p class="hint" id="mlModalSub">이 법인의 해당 월 점검일을 등록합니다. 등록은 이 법인의 정 담당자가 하는 것을 기본으로 하되, 필요하면 다른 담당자 이름으로도 남길 수 있습니다.</p>
     <div class="form-grid">
-      <div><label>점검일 (YYYY.M.D)</label>
-        <div class="date-field">
-          <input id="ml_date" placeholder="2026.8.10">
-          <button type="button" id="ml_date_pick_btn" class="date-pick-btn" title="달력에서 선택">📅</button>
-          <input type="date" id="ml_date_picker" class="date-native-input" tabindex="-1">
+      <div class="full">
+        <label>점검일</label>
+        <div class="ml-date-row">
+          <div class="date-field">
+            <input id="ml_date" placeholder="2026.8.10">
+            <button type="button" id="ml_date_pick_btn" class="date-pick-btn" title="달력에서 선택">📅</button>
+            <input type="date" id="ml_date_picker" class="date-native-input" tabindex="-1">
+          </div>
+          <label class="ml-done-check"><input type="checkbox" id="ml_done"> 완료</label>
         </div>
-        <label class="ml-done-check"><input type="checkbox" id="ml_done"> 점검 완료 (체크 안 하면 예약으로 표시)</label>
       </div>
-      <div><label>점검 담당자 (정)</label><input id="ml_manager" placeholder="점검을 진행한 담당자"></div>
+      <div class="full"><label>점검 담당자</label><input id="ml_manager" placeholder="점검을 진행한 담당자"></div>
       <div class="full"><label>비고 / 점검 내용</label><textarea id="ml_note" placeholder="점검 관련 메모 (선택)"></textarea></div>
     </div>
     <div id="mlError" class="cp-error"></div>
