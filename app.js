@@ -279,7 +279,7 @@ async function deriveKey(passphrase, saltB64, iterations){
     { name:'PBKDF2', salt: b64ToBuf(saltB64), iterations, hash:'SHA-256' },
     baseKey,
     { name:'AES-GCM', length:256 },
-    false,
+    true,
     ['encrypt','decrypt']
   );
 }
@@ -333,6 +333,52 @@ async function encryptWithKey(plain, key){
   return { iv: bufToB64(iv.buffer), ct: bufToB64(ct.buffer), tag: bufToB64(tag.buffer) };
 }
 
+// 마스터 비밀번호로 한 번 잠금 해제하면, 그 세션 키를 24시간 동안 이 브라우저에 캐시해 둔다.
+// 캐시가 유효한 동안은 마스터 비밀번호 입력 화면 없이 자동으로 잠금 해제된 상태로 시작한다.
+const MASTER_KEY_CACHE_KEY = 'bcAssetMasterKeyCache';
+const MASTER_KEY_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24시간
+
+function saveMasterKeyCache(key, saltB64, iterations){
+  crypto.subtle.exportKey('raw', key).then(raw => {
+    try{
+      localStorage.setItem(MASTER_KEY_CACHE_KEY, JSON.stringify({
+        keyB64: bufToB64(raw),
+        salt: saltB64,
+        iterations,
+        expiresAt: Date.now() + MASTER_KEY_CACHE_TTL_MS
+      }));
+    }catch(e){}
+  }).catch(()=>{});
+}
+
+function clearMasterKeyCache(){
+  try{ localStorage.removeItem(MASTER_KEY_CACHE_KEY); }catch(e){}
+}
+
+// 캐시된 키로 조용히 잠금 해제를 시도한다. 캐시가 없거나 만료됐거나, data.json이 그 사이
+// 바뀌어 salt/iterations가 달라졌거나, 실제 복호화 검증에 실패하면 false를 반환하고 캐시를 지운다.
+async function tryUnlockFromCache(){
+  let cached;
+  try{ cached = JSON.parse(localStorage.getItem(MASTER_KEY_CACHE_KEY) || 'null'); }catch(e){ cached = null; }
+  if (!cached || !cached.keyB64 || !cached.expiresAt) return false;
+  if (Date.now() > cached.expiresAt){ clearMasterKeyCache(); return false; }
+  if (!ENC_STORE || cached.salt !== ENC_STORE.salt || cached.iterations !== ENC_STORE.iterations){ clearMasterKeyCache(); return false; }
+  try{
+    const key = await crypto.subtle.importKey('raw', b64ToBuf(cached.keyB64), {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+    const probe = ENC_STORE.records.find(r => r.ip_enc || r.id_enc || r.pw_enc || r.enable_pw_enc);
+    if (probe){
+      const f = probe.ip_enc || probe.id_enc || probe.pw_enc || probe.enable_pw_enc;
+      const iv = b64ToBuf(f.iv);
+      const ct = new Uint8Array(b64ToBuf(f.ct));
+      const tag = new Uint8Array(b64ToBuf(f.tag));
+      const combined = new Uint8Array(ct.length+tag.length); combined.set(ct,0); combined.set(tag,ct.length);
+      await crypto.subtle.decrypt({name:'AES-GCM', iv}, key, combined.buffer);
+    }
+    sessionKey = key;
+    return true;
+  }catch(e){ clearMasterKeyCache(); return false; }
+}
+
 async function tryUnlock(passphrase){
   const key = await deriveKey(passphrase, ENC_STORE.salt, ENC_STORE.iterations);
   // verify against first record that actually has an encrypted field
@@ -348,6 +394,7 @@ async function tryUnlock(passphrase){
     }catch(e){ return false; }
   }
   sessionKey = key;
+  saveMasterKeyCache(key, ENC_STORE.salt, ENC_STORE.iterations);
   return true;
 }
 
@@ -3117,6 +3164,19 @@ function showMasterGate(){
   if (p) p.focus();
 }
 
+// 계정 로그인이 끝난 뒤 호출된다. 24시간 이내에 마스터 비밀번호를 이미 입력해 캐시가 남아있으면
+// 마스터 비밀번호 화면 없이 바로 앱으로 들어가고, 그렇지 않으면 평소처럼 마스터 비밀번호 화면을 보여준다.
+async function proceedPastAccountGate(){
+  await dataReady;
+  const ok = await tryUnlockFromCache();
+  if (ok){
+    viewOnly = false;
+    boot();
+  } else {
+    showMasterGate();
+  }
+}
+
 function renderAccountGateUserList(){
   const wrap = document.getElementById('ag_user_list');
   if (!wrap) return;
@@ -3224,7 +3284,7 @@ function renderAccountGateUserList(){
       currentUserId = uid;
       saveCurrentUserId(uid);
       agLoginPromptUserId = null;
-      showMasterGate();
+      await proceedPastAccountGate();
     };
   });
 }
@@ -3306,7 +3366,7 @@ document.getElementById('ag_register_btn').onclick = async () => {
 
   nameInput.value = ''; passInput.value = ''; pass2Input.value = '';
   errEl.textContent = '';
-  showMasterGate();
+  await proceedPastAccountGate();
 };
 
 // 계정 목록은 비동기로 로드되므로, 로드되는 대로 게이트 화면에 그린다.
@@ -3317,7 +3377,7 @@ dataReady.then(renderAccountGateUserList);
 // 계정 게이트를 건너뛰고 바로 마스터 비밀번호 화면으로 넘어간다.
 dataReady.then(() => {
   if (currentUserId && users.some(u=>String(u.id)===String(currentUserId))){
-    showMasterGate();
+    proceedPastAccountGate();
   }
 });
 
