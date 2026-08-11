@@ -5134,19 +5134,19 @@
       "tag_note": "싱가폴 (SDSAP)",
       "id": 125,
       "ip_enc": {
-        "iv": "8+mhTyjWHkBOjJa5",
-        "ct": "OuZM5J70wdkUIzyomQ==",
-        "tag": "5wwXBFC7B3SGdA0QZlsSzQ=="
+        "iv": "H6YH1TbpFZJWQYt+",
+        "ct": "2JnYHVeRTxL6j6mlfg==",
+        "tag": "NREhiNeCMhds+E9Rt7sb+g=="
       },
       "id_enc": {
-        "iv": "g7Ili2P0TM9ZW+5X",
-        "ct": "PSqJ7H8=",
-        "tag": "40z8GKbtHUSYYGFvtj9Ilw=="
+        "iv": "hfyYCuXsoXGbfI52",
+        "ct": "XOMPAA0=",
+        "tag": "x3hqpcDOuIX3IfgprzxMNA=="
       },
       "pw_enc": {
-        "iv": "gJ8+k3iL5dGVEWM4",
-        "ct": "hwULex115g6dswQPOHXau6ukbQ==",
-        "tag": "AX1h57ubWU7INJed0jK99A=="
+        "iv": "gsKc6a2JvyBgHz9H",
+        "ct": "Wmw2h6RLat+1OJPw0wxBnfY=",
+        "tag": "ASUz+xWtGYMzqjPmgS2qTw=="
       },
       "config_mode": "Transparent",
       "group_remarks": "",
@@ -5170,7 +5170,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2025.02"
+      "build_date": "2025.02",
+      "enable_pw_enc": null
     },
     {
       "group": "sg-001",
