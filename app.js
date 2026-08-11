@@ -1375,7 +1375,7 @@ function maintenanceEntryTabHtml(){
         <thead>
           <tr>
             <th class="maint-th-owner" rowspan="2">사업장</th>
-            <th rowspan="2">계약만료<br>D-Day</th>
+            <th rowspan="2" class="maint-th-dday">계약만료 D-Day</th>
             <th rowspan="2">담당</th>
             <th colspan="12">점검일자 (${maintenanceYear})</th>
           </tr>
