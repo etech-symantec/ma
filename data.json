@@ -15183,8 +15183,8 @@
       "owner": "삼성전자 미주법인",
       "country": "미국",
       "location": "뉴저지",
-      "check_method": "원격 (RC)",
-      "config_mode": "Transparent",
+      "check_method": "원격",
+      "config_mode": "",
       "owner_primary": "윤태리",
       "owner_secondary": "신호근",
       "cust_contacts": [
