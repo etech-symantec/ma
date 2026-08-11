@@ -239,6 +239,15 @@ aside.filters{
 }
 .profile-logout-btn:hover{ color:var(--red); border-color:#F3B4B4; background:#fff; }
 
+/* 사용자 영역(panel-profile) 안에 들어간 My 버튼: 내용(글자+갯수)에 맞춰 가로폭이 자동으로 늘고 줄어든다 */
+.panel-profile .my-assets-toggle{
+  flex:0 0 auto; width:auto; height:34px;
+  padding:0 10px; margin-bottom:0;
+  background:rgba(255,255,255,0.7);
+}
+.panel-profile .my-assets-toggle .mat-label{ font-size:12px; }
+.panel-profile .my-assets-toggle .mat-count{ font-size:10.5px; padding:1px 6px; min-width:18px; }
+
 /* 상단 필터행 맨 앞의 검색창 (콤팩트하게 절반 크기) */
 .tf-search{
   display:flex; align-items:center; gap:6px;
@@ -861,6 +870,19 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-toolbar input[type="month"]:focus{ border-color:var(--accent); }
 .maint-toolbar .maint-my-toggle{ flex:0 0 auto; min-width:150px; }
 
+/* 대상 월 이전/다음 화살표 */
+.maint-ym-field{ display:flex; align-items:center; }
+.maint-ym-control{ display:flex; align-items:center; gap:4px; }
+.maint-ym-nav-btn{
+  flex-shrink:0; width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
+  color:var(--text-dim); font-size:15px; line-height:1; cursor:pointer; font-family:var(--body);
+  transition:all .15s;
+}
+.maint-ym-nav-btn:hover{ color:var(--accent); border-color:var(--accent); background:#E6F4FD; }
+.maint-ym-nav-btn:disabled{ opacity:.4; cursor:not-allowed; }
+.maint-ym-nav-btn:disabled:hover{ color:var(--text-dim); border-color:var(--border-solid); background:var(--surface2); }
+
 .maint-summary-row{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
 .maint-summary-card{
   flex:1 1 160px; background:var(--surface); border:1px solid var(--border-solid); border-radius:12px;
@@ -910,6 +932,33 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-trend-fill.mid{ background:#C8933A; }
 .maint-trend-pct{ flex:0 0 60px; text-align:right; font-family:var(--mono); font-size:11.5px; color:var(--text-faint); }
 
+/* 법인별 평균 점검일 분포 (1일~31일) 막대그래프 */
+.maint-day-hint{ font-size:11.5px; color:var(--text-faint); margin:-6px 0 16px; line-height:1.5; }
+.maint-day-chart{
+  display:flex; align-items:flex-end; gap:2px;
+  height:130px; padding-top:22px;
+}
+.maint-day-col{
+  flex:1; min-width:0; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  cursor:default;
+}
+.maint-day-bar{
+  position:relative; width:100%; max-width:16px;
+  background:#5B84C4; border-radius:3px 3px 0 0; min-height:2px;
+  transition:background .15s;
+}
+.maint-day-bar.empty{ background:var(--border-solid); }
+.maint-day-col:hover .maint-day-bar:not(.empty){ background:var(--accent); }
+.maint-day-count{
+  position:absolute; top:-17px; left:50%; transform:translateX(-50%);
+  font-size:10px; font-family:var(--mono); font-weight:700; color:var(--text-dim);
+}
+.maint-day-daylabel{
+  margin-top:6px; font-size:9px; font-family:var(--mono); color:var(--text-faint);
+}
+.maint-day-daylabel.strong{ color:var(--text-dim); font-weight:700; }
+
 .maint-group-stats-table th, .maint-group-stats-table td{ font-size:12.3px; }
 .maint-missed-list{ display:flex; flex-wrap:wrap; gap:4px; }
 .maint-missed-chip{
@@ -947,4 +996,6 @@ footer.foot{
   .maint-table tr{ padding:12px 14px; border-bottom:1px solid var(--border-solid); }
   .maint-table td{ border:none; padding:4px 0; max-width:none; white-space:normal; }
   .maint-table td::before{ content:attr(data-label); display:block; font-size:9.5px; color:var(--text-faint); text-transform:uppercase; font-family:var(--mono); margin-bottom:2px;}
+  .maint-day-chart{ overflow-x:auto; min-width:100%; }
+  .maint-day-chart .maint-day-col{ flex:0 0 22px; }
 }
