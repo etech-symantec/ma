@@ -311,6 +311,8 @@ aside.filters{
 .my-assets-toggle:hover{ border-color:#C7CFDC; }
 .my-assets-toggle.active{ background:#E6F4FD; border-color:var(--accent); }
 .my-assets-toggle:disabled{ opacity:.5; cursor:not-allowed; }
+.mat-icon{ display:inline-flex; flex:0 0 auto; color:var(--text-faint); }
+.my-assets-toggle.active .mat-icon{ color:var(--accent-dim); }
 .mat-label{ flex:0 0 auto; font-size:12.5px; font-weight:600; color:var(--text-dim); white-space:nowrap; }
 .my-assets-toggle.active .mat-label{ color:var(--accent-dim); }
 .mat-count{
@@ -945,6 +947,11 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-toolbar{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px; }
 .maint-toolbar label{ font-size:11px; color:var(--text-faint); font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em; margin-right:6px; }
 .maint-toolbar .maint-my-toggle{ flex:0 0 auto; min-width:150px; }
+.maint-header-row .maint-my-toggle{
+  flex:0 0 auto; min-width:0; height:32px; padding:0 10px 0 9px; gap:6px;
+}
+.maint-header-row .maint-my-toggle .mat-label{ font-size:12px; }
+.maint-header-row .maint-my-toggle .mat-count{ font-size:10.5px; padding:1px 6px; min-width:16px; }
 .maint-year-hint{ flex:1 1 220px; font-size:11.5px; color:var(--text-faint); margin:0; }
 
 /* 연도 이전/다음 화살표 */
@@ -978,11 +985,11 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-year-table th, .maint-year-table td{ padding:8px 8px; }
 .maint-year-table thead th{
   position:sticky;
-  top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px) + var(--maint-sticky-top-h, 0px));
+  top:var(--maint-thead-top, 0px);
   z-index:6; background:var(--surface2);
 }
 .maint-year-table thead tr:last-child th{
-  top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px) + var(--maint-sticky-top-h, 0px) + var(--maint-thead-row1-h, 0px));
+  top:calc(var(--maint-thead-top, 0px) + var(--maint-thead-row1-h, 0px));
 }
 .maint-year-table .maint-th-owner, .maint-year-table .maint-cell-owner{
   width:220px; min-width:220px;
