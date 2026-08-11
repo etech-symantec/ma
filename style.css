@@ -160,6 +160,11 @@ a{color:var(--accent);}
 .icon-btn.icon-only.on:hover{ background:var(--accent); border-color:var(--accent); }
 .icon-btn.icon-only.on:hover::after{ opacity:1; }
 
+/* 전체 펼치기/닫기 버튼: 펼쳐진 상태(닫기 동작)일 때 아이콘과 색을 다르게 하여 현재 동작을 명확히 표시 */
+#expandAllBtn.is-collapse-mode{
+  color:var(--accent-dim); border-color:var(--accent-dim); background:#E6F4FD;
+}
+
 /* 최근 작업 이력 알림 드롭다운 */
 .activity-wrap{ position:relative; }
 .ra-badge{
@@ -760,6 +765,19 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   width:28px; height:28px; padding:0;
 }
 .worklog-empty{ color:var(--text-faint); font-size:12.5px; text-align:center; padding:16px 0; }
+.wl-asset-list{
+  display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
+  padding:10px 12px; margin-bottom:14px;
+}
+.wl-asset-list-label{
+  flex:0 0 100%; font-size:11px; color:var(--text-faint); font-family:var(--mono);
+  text-transform:uppercase; letter-spacing:.03em; margin-bottom:2px;
+}
+.wl-asset-chip{
+  font-size:11.8px; color:var(--text-dim); background:var(--surface); border:1px solid var(--border-solid);
+  border-radius:6px; padding:4px 9px; font-family:var(--mono);
+}
 .worklog-item .wl-changes{
   margin-top:6px; font-size:11.5px; color:var(--accent-dim); background:#E6F4FD;
   border-radius:6px; padding:5px 8px; line-height:1.5; font-family:var(--mono);
@@ -908,6 +926,7 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   background:var(--bg);
   margin:0 -26px; padding:0 26px;
 }
+.maint-my-filter-row{ display:flex; justify-content:flex-end; margin-bottom:10px; }
 .maint-header{ margin-bottom:18px; }
 .maint-header h2{ font-family:var(--display); font-size:20px; color:var(--text); }
 .maint-sub{ font-size:12.5px; color:var(--text-faint); margin-top:4px; font-family:var(--mono); }
