@@ -145,6 +145,21 @@ a{color:var(--accent);}
 .icon-btn:hover{ color:var(--text); border-color:#C7CFDC; }
 .icon-btn.on{ color:var(--accent); border-color:var(--accent); background:#E6F4FD; }
 
+/* 대시보드/유지보수처럼 "누르면 켜지고 다시 누르면 꺼지는" 토글 버튼임을 분명히 보여준다.
+   켜진 상태는 강조색으로 꽉 채우고, 마우스를 올리면 아이콘 대신 ✕(닫기)가 나타난다. */
+.icon-btn.icon-only.on{
+  position:relative;
+  background:var(--accent); border-color:var(--accent); color:#fff;
+  box-shadow:0 0 0 3px rgba(58,141,222,0.16);
+}
+.icon-btn.icon-only.on::after{
+  content:'✕'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:var(--accent); color:#fff; font-size:14px; font-weight:700; border-radius:inherit;
+  opacity:0; transition:opacity .12s ease;
+}
+.icon-btn.icon-only.on:hover{ background:var(--accent); border-color:var(--accent); }
+.icon-btn.icon-only.on:hover::after{ opacity:1; }
+
 /* 최근 작업 이력 알림 드롭다운 */
 .activity-wrap{ position:relative; }
 .ra-badge{
@@ -585,8 +600,9 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .badge.tag-o{ color:#0D8A5F; border-color:#A7E8CB; background:#E9FBF2; }
 .badge.tag-x{ color:var(--text-faint); }
 .badge.tag-partial{ color:#B45309; border-color:#FBD38D; background:#FFF7E6; }
-.chev{ color:var(--text-faint); transition:transform .18s; flex-shrink:0; margin-top:3px;}
-.chev.open{ transform:rotate(90deg); }
+.chev{ color:var(--text-faint); flex-shrink:0; margin-top:3px; display:flex; align-items:center; justify-content:center; width:22px; height:22px; }
+.chev svg{ display:block; }
+.chev.open{ color:var(--accent); }
 
 .items{ display:none; }
 .items.open{ display:block; }
@@ -1049,6 +1065,32 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   margin-top:6px; font-size:9px; font-family:var(--mono); color:var(--text-faint);
 }
 .maint-day-daylabel.strong{ color:var(--text-dim); font-weight:700; }
+
+/* 막대 위 커스텀 툴팁 (기본 title 속성 대신 예쁘게 스타일링) */
+.maint-day-col{ position:relative; }
+.maint-day-col::after{
+  content:attr(data-tip);
+  position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%) translateY(4px);
+  min-width:120px; max-width:220px; width:max-content;
+  background:#22262E; color:#F4F6FA; font-family:var(--body); font-size:11px; font-weight:500;
+  line-height:1.55; white-space:pre-line; text-align:left;
+  padding:8px 10px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.22);
+  opacity:0; pointer-events:none; z-index:30;
+  transition:opacity .12s ease, transform .12s ease;
+}
+.maint-day-col::before{
+  content:''; position:absolute; bottom:calc(100% + 4px); left:50%; transform:translateX(-50%);
+  border:6px solid transparent; border-top-color:#22262E;
+  opacity:0; pointer-events:none; transition:opacity .12s ease; z-index:30;
+}
+.maint-day-col:hover::after{ opacity:1; transform:translateX(-50%) translateY(0); }
+.maint-day-col:hover::before{ opacity:1; }
+.maint-day-col.tip-start::after{ left:0; transform:translateX(0) translateY(4px); }
+.maint-day-col.tip-start:hover::after{ transform:translateX(0) translateY(0); }
+.maint-day-col.tip-start::before{ left:16px; }
+.maint-day-col.tip-end::after{ left:auto; right:0; transform:translateX(0) translateY(4px); }
+.maint-day-col.tip-end:hover::after{ transform:translateX(0) translateY(0); }
+.maint-day-col.tip-end::before{ left:auto; right:16px; }
 
 .maint-group-stats-table th, .maint-group-stats-table td{ font-size:12.3px; }
 .maint-missed-list{ display:flex; flex-wrap:wrap; gap:4px; }
