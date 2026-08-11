@@ -1935,6 +1935,7 @@ function populateParentGroupSelect(gid, currentParent){
 // applyGeSidFieldState(체크박스 change 핸들러 포함)에서 참조한다.
 let geSubGroupsCache = [];
 let geOriginalConfigMode = '';
+let geOriginalParentGid = '';
 
 // "이 법인은 상위 법인입니다" 체크박스 상태와 Support ID 개수에 따라 Support ID / 구축 엔지니어 /
 // 구축 일자 / 구성방식 입력창을 활성화·비활성화하고 값을 채운다. 체크박스를 켜면(상위 법인)
@@ -2005,6 +2006,8 @@ function openGroupEditModal(gid){
   applyGeSidFieldState();
 
   populateParentGroupSelect(gid, meta.group_parent);
+  geOriginalParentGid = meta.group_parent || '';
+  updateGeParentWarning();
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
     ? meta.cust_contacts.slice(0,5)
     : [{role:'',name:'',org:'',phone:'',email:''}]
@@ -2023,7 +2026,24 @@ function updateGeCustSectionVisibility(){
   document.getElementById('ge_cust_add_btn').style.display = isChildNow ? 'none' : '';
   document.getElementById('geCustHiddenHint').style.display = isChildNow ? '' : 'none';
 }
-document.getElementById('ge_parent_group').addEventListener('change', updateGeCustSectionVisibility);
+// "상위 법인 (부모)"가 선택되어 있으면 이 법인이 어떤 법인의 하위(자식)로 저장될지 눈에 잘
+// 띄게 경고 문구로 보여준다 — 실수로 원치 않는 상위 법인 아래로 들어가는 일을 막기 위함이다.
+function updateGeParentWarning(){
+  const sel = document.getElementById('ge_parent_group');
+  const warn = document.getElementById('geParentWarning');
+  if (sel.value){
+    const label = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : '';
+    warn.textContent = `⚠️ 이 법인은 "${label}" 법인의 하위(자식) 법인으로 저장됩니다. 독립된 법인으로 유지하려면 위 드롭다운을 "없음 (독립된 법인)"으로 바꿔 주세요.`;
+    warn.style.display = '';
+  } else {
+    warn.textContent = '';
+    warn.style.display = 'none';
+  }
+}
+document.getElementById('ge_parent_group').addEventListener('change', () => {
+  updateGeCustSectionVisibility();
+  updateGeParentWarning();
+});
 
 document.getElementById('cancelGeBtn').onclick = () => {
   document.getElementById('groupEditModal').classList.remove('open');
@@ -2061,6 +2081,14 @@ document.getElementById('saveGeBtn').onclick = () => {
   // 방어적으로 한 번 더 확인: 자기 자신이나 자신의 하위 법인을 부모로 저장하지 않는다.
   const forbiddenParents = new Set([groupEditId, ...groupDescendantIds(groupEditId)]);
   const finalParentGid = (newParentGid && !forbiddenParents.has(newParentGid)) ? newParentGid : '';
+  // 상위 법인(부모)이 새로 선택되었거나 바뀌었다면(원래 상태와 다르면), 실수로 다른 법인
+  // 밑으로 들어가는 일이 없도록 저장 직전 한 번 더 명시적으로 확인받는다.
+  if (finalParentGid && finalParentGid !== geOriginalParentGid){
+    const sel = document.getElementById('ge_parent_group');
+    const parentLabel = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : finalParentGid;
+    const ok = confirm(`"${newOwner}" 법인을 "${parentLabel}" 법인의 하위(자식) 법인으로 저장합니다. 맞으면 확인, 독립된 법인으로 유지하려면 취소를 누르고 "상위 법인 (부모)"를 "없음"으로 바꿔 주세요.`);
+    if (!ok) return;
+  }
   captureCustContactsFromDom();
   // 하위 법인(부모가 지정된 법인)에는 고객사 담당자 정보가 필요 없으므로 저장하지 않는다.
   const newContacts = finalParentGid ? [] : geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
@@ -2161,7 +2189,25 @@ function updateNgCustSectionVisibility(){
   document.getElementById('ng_cust_add_btn').style.display = isChildNow ? 'none' : '';
   document.getElementById('ngCustHiddenHint').style.display = isChildNow ? '' : 'none';
 }
-document.getElementById('ng_parent_group').addEventListener('change', updateNgCustSectionVisibility);
+// "상위 법인 (부모)"를 선택하면(직접 고르거나, "하위 법인 추가" 버튼으로 미리 채워졌거나) 이
+// 법인이 어떤 법인의 하위(자식)로 등록되는지 눈에 잘 띄게 경고 문구로 보여준다 — 실수로 원치
+// 않는 상위 법인 아래에 새 법인이 들어가는 일을 막기 위함이다.
+function updateNgParentWarning(){
+  const sel = document.getElementById('ng_parent_group');
+  const warn = document.getElementById('ngParentWarning');
+  if (sel.value){
+    const label = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : '';
+    warn.textContent = `⚠️ 이 법인은 "${label}" 법인의 하위(자식) 법인으로 등록됩니다. 독립된 법인으로 추가하려면 위 드롭다운을 "없음 (독립된 법인)"으로 바꿔 주세요.`;
+    warn.style.display = '';
+  } else {
+    warn.textContent = '';
+    warn.style.display = 'none';
+  }
+}
+document.getElementById('ng_parent_group').addEventListener('change', () => {
+  updateNgCustSectionVisibility();
+  updateNgParentWarning();
+});
 
 // 상위 법인(부모) 선택 드롭다운을 현재 존재하는 법인 목록으로 채운다. 아직 만들어지지 않은
 // 새 법인이라 자기 자신을 제외할 필요는 없다. "이 법인은 상위 법인입니다" 체크박스로
@@ -2208,6 +2254,7 @@ function openAddGroupModal(presetParentGid){
     // 법인일 때만) 미리 선택해 둔다.
     if ([...sel.options].some(o => o.value === presetParentGid)) sel.value = presetParentGid;
   }
+  updateNgParentWarning();
   ngCustContacts = [{role:'',name:'',org:'',phone:'',email:''}];
   renderNgCustContactRows();
   updateNgCustSectionVisibility();
@@ -2231,6 +2278,14 @@ document.getElementById('saveNgBtn').onclick = () => {
   }
   const parentGid = document.getElementById('ng_parent_group').value;
   const newIsParent = document.getElementById('ng_is_parent').checked;
+  // 상위 법인(부모)이 선택된 채로 저장하면 새 법인이 그 법인의 하위(자식)로 등록된다 — 실수로
+  // 다른 법인 밑에 들어가는 일이 없도록, 저장 직전 명시적으로 한 번 더 확인받는다.
+  if (parentGid){
+    const sel = document.getElementById('ng_parent_group');
+    const parentLabel = sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].textContent : parentGid;
+    const ok = confirm(`"${newOwner}" 법인을 "${parentLabel}" 법인의 하위(자식) 법인으로 등록합니다. 맞으면 확인, 독립된 법인으로 추가하려면 취소를 누르고 "상위 법인 (부모)"를 "없음"으로 바꿔 주세요.`);
+    if (!ok) return;
+  }
   captureNgCustContactsFromDom();
   const contacts = parentGid ? [] : ngCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
 
