@@ -1178,6 +1178,7 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
 let maintenanceTab = 'entry'; // 'entry'(월별 등록) | 'stats'(통계)
 let maintenanceYm = null;     // 등록 탭에서 현재 선택된 "YYYY-MM"
 let maintenanceEditTarget = null; // 점검 등록 모달에서 현재 편집 중인 {gid, ym}
+let maintenanceMyFilter = false; // 유지보수 페이지: 내가 정 담당자인 법인만 보기
 
 function pad2(n){ return String(n).padStart(2, '0'); }
 function currentYm(){
@@ -1225,6 +1226,15 @@ function maintenanceLogFor(gid, ym){
 function maintenanceLogsForGroup(gid){
   return maintenanceLogs.filter(m => m.group === gid);
 }
+// "내가 정 담당자인 법인만" 필터가 켜져 있으면 그 조건을 적용한 목록을 반환한다.
+// (모달에서 특정 gid로 법인을 찾을 때는 필터와 무관하게 항상 전체 목록인 maintenanceGroupList()를 써야 한다.)
+function maintenanceVisibleGroupList(){
+  const groups = maintenanceGroupList();
+  if (!maintenanceMyFilter) return groups;
+  const me = currentUserName();
+  if (!me) return groups;
+  return groups.filter(g => g.meta.owner_primary === me);
+}
 
 function setMaintenanceTab(tab){
   maintenanceTab = tab;
@@ -1233,7 +1243,7 @@ function setMaintenanceTab(tab){
 
 function maintenanceEntryTabHtml(){
   if (!maintenanceYm) maintenanceYm = currentYm();
-  const groups = maintenanceGroupList();
+  const groups = maintenanceVisibleGroupList();
   const total = groups.length;
   let doneCount = 0;
   const rowsHtml = groups.map(g => {
@@ -1249,7 +1259,9 @@ function maintenanceEntryTabHtml(){
       ? `<span class="maint-status-badge done">✓ 점검완료</span>`
       : `<span class="maint-status-badge missing">미점검</span>`;
     const dateTxt = log && log.date ? esc(log.date) : '—';
-    const managerTxt = log && log.manager ? esc(log.manager) : (g.meta.owner_primary ? esc(g.meta.owner_primary) : '—');
+    // 등록 담당자 = 실제로 이 기록을 등록한 사람(log.author, 저장 시 로그인 사용자 이름으로 자동 기록됨).
+    // 아직 등록된 적이 없으면 비워 둔다(정 담당자 등으로 미리 채우지 않는다).
+    const registrantTxt = log && log.author ? esc(log.author) : '—';
     const noteTxt = log && log.note ? esc(log.note) : '';
     return `
       <tr data-maint-row="${esc(g.gid)}">
@@ -1257,7 +1269,7 @@ function maintenanceEntryTabHtml(){
         <td data-label="담당 엔지니어" class="maint-row-engineer">${engineer}</td>
         <td data-label="상태">${statusHtml}</td>
         <td data-label="점검일">${dateTxt}</td>
-        <td data-label="등록 담당자">${managerTxt}</td>
+        <td data-label="등록 담당자">${registrantTxt}</td>
         <td data-label="비고"><span class="maint-row-note" title="${noteTxt}">${noteTxt || '—'}</span></td>
         <td data-label="">
           <button type="button" class="maint-edit-btn" data-maint-edit="${esc(g.gid)}">${log ? '수정' : '등록'}</button>
@@ -1267,10 +1279,16 @@ function maintenanceEntryTabHtml(){
 
   const pct = total ? Math.round(doneCount/total*100) : 0;
   const missing = total - doneCount;
+  const me = currentUserName();
+  const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
 
   return `
     <div class="maint-toolbar">
       <div><label>점검 대상 월</label><input type="month" id="maintYmInput" min="2026-01" value="${esc(maintenanceYm)}"></div>
+      <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
+        <span class="mat-label">내가 정인 법인만</span>
+        <span class="mat-count">${myCount}</span>
+      </button>
     </div>
     <div class="maint-summary-row">
       <div class="maint-summary-card"><div class="ms-num">${total}</div><div class="ms-label">등록된 법인 수</div></div>
@@ -1289,7 +1307,7 @@ function maintenanceEntryTabHtml(){
 }
 
 function maintenanceStatsTabHtml(){
-  const groups = maintenanceGroupList();
+  const groups = maintenanceVisibleGroupList();
   const months = monthsFrom202601To(currentYm());
 
   // 월별 완료율 (최근 달이 위로 오도록 역순 표시)
@@ -1339,7 +1357,16 @@ function maintenanceStatsTabHtml(){
       </tr>`;
   }).join('');
 
+  const me = currentUserName();
+  const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
+
   return `
+    <div class="maint-toolbar">
+      <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
+        <span class="mat-label">내가 정인 법인만</span>
+        <span class="mat-count">${myCount}</span>
+      </button>
+    </div>
     <div class="maint-trend-card">
       <h4>월별 점검 완료율 (2026.01 ~ ${esc(ymLabel(currentYm()))})</h4>
       ${trendRows || '<div class="dash-empty">데이터가 없습니다.</div>'}
@@ -1376,6 +1403,15 @@ function renderMaintenance(){
   if (ymInput){
     ymInput.onchange = () => {
       if (ymInput.value){ maintenanceYm = ymInput.value; renderMaintenance(); }
+    };
+  }
+
+  const myToggle = document.getElementById('maintMyToggle');
+  if (myToggle){
+    myToggle.onclick = () => {
+      if (!currentUserName()) return;
+      maintenanceMyFilter = !maintenanceMyFilter;
+      renderMaintenance();
     };
   }
 
