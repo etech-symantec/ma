@@ -1477,10 +1477,10 @@ function maintenanceUserSummaryHtml(){
       }).join('');
 
     const primaryChips = u.primaryGroups.length
-      ? u.primaryGroups.slice().sort((a,b)=>a.localeCompare(b,'ko')).map(o => `<span class="maint-site-chip primary">${esc(o)}</span>`).join('')
+      ? u.primaryGroups.slice().sort((a,b)=>a.localeCompare(b,'ko')).map(o => `<div class="maint-site-listitem primary">${esc(o)}</div>`).join('')
       : `<span class="maint-td-empty">-</span>`;
     const secondaryChips = u.secondaryGroups.length
-      ? u.secondaryGroups.slice().sort((a,b)=>a.localeCompare(b,'ko')).map(o => `<span class="maint-site-chip secondary">${esc(o)}</span>`).join('')
+      ? u.secondaryGroups.slice().sort((a,b)=>a.localeCompare(b,'ko')).map(o => `<div class="maint-site-listitem secondary">${esc(o)}</div>`).join('')
       : `<span class="maint-td-empty">-</span>`;
 
     return `
@@ -1492,11 +1492,11 @@ function maintenanceUserSummaryHtml(){
         <div class="maint-method-chips">${methodChips}</div>
         <div class="maint-user-site-group">
           <div class="maint-user-site-label">정 담당 법인</div>
-          <div class="maint-missed-list">${primaryChips}</div>
+          <div class="maint-site-list">${primaryChips}</div>
         </div>
         <div class="maint-user-site-group">
           <div class="maint-user-site-label">부 담당 법인</div>
-          <div class="maint-missed-list">${secondaryChips}</div>
+          <div class="maint-site-list">${secondaryChips}</div>
         </div>
       </div>`;
   }).join('');
@@ -1565,14 +1565,16 @@ function maintenanceStatsTabHtml(){
         <span class="mat-count">${myCount}</span>
       </button>
     </div>
-    <div class="maint-trend-card">
-      <h4>월별 점검 완료율 (2026.01 ~ ${esc(ymLabel(currentYm()))})</h4>
-      ${trendRows || '<div class="dash-empty">데이터가 없습니다.</div>'}
-    </div>
-    <div class="maint-trend-card">
-      <h4>법인별 평균 점검일 분포 (1일 ~ 31일)</h4>
-      <p class="maint-day-hint">법인마다 지금까지의 점검일 평균을 날짜(1~31일)에 배치한 막대그래프입니다. 막대가 높을수록 그 날짜대에 점검이 몰려 있다는 뜻이며, 막대에 마우스를 올리면 어떤 법인이 해당하는지 볼 수 있습니다.</p>
-      ${groups.length ? maintenanceDayChartHtml(groups) : '<div class="dash-empty">데이터가 없습니다.</div>'}
+    <div class="maint-trend-row-2col">
+      <div class="maint-trend-card">
+        <h4>월별 점검 완료율 (2026.01 ~ ${esc(ymLabel(currentYm()))})</h4>
+        ${trendRows || '<div class="dash-empty">데이터가 없습니다.</div>'}
+      </div>
+      <div class="maint-trend-card">
+        <h4>법인별 평균 점검일 분포 (1일 ~ 31일)</h4>
+        <p class="maint-day-hint">법인마다 지금까지의 점검일 평균을 날짜(1~31일)에 배치한 막대그래프입니다. 막대가 높을수록 그 날짜대에 점검이 몰려 있다는 뜻이며, 막대에 마우스를 올리면 어떤 법인이 해당하는지 볼 수 있습니다.</p>
+        ${groups.length ? maintenanceDayChartHtml(groups) : '<div class="dash-empty">데이터가 없습니다.</div>'}
+      </div>
     </div>
     <div class="maint-trend-card">
       <h4>담당자별 사이트 요약</h4>
