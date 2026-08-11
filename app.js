@@ -33,12 +33,27 @@ function syncStickyOffsets(){
 
 function syncMaintTheadOffset(){
   const stickyTop = document.querySelector('.maint-sticky-top');
-  const stickyTopH = stickyTop ? Math.ceil(stickyTop.getBoundingClientRect().height) : 0;
-  document.documentElement.style.setProperty('--maint-sticky-top-h', stickyTopH + 'px');
+  if (!stickyTop) return;
+  // Read the sticky title/tabs bar's actual rendered bottom edge (works whether
+  // it's currently pinned or still in normal flow) instead of adding up separate
+  // header-height variables, which can drift out of sync and push the table
+  // header down into the middle of the rows.
+  const bottom = Math.max(0, Math.ceil(stickyTop.getBoundingClientRect().bottom));
+  document.documentElement.style.setProperty('--maint-thead-top', bottom + 'px');
   const row1 = document.querySelector('.maint-year-table thead tr:first-child');
   const row1H = row1 ? Math.ceil(row1.getBoundingClientRect().height) : 0;
   document.documentElement.style.setProperty('--maint-thead-row1-h', row1H + 'px');
 }
+let maintTheadRaf = null;
+function scheduleMaintTheadSync(){
+  if (maintTheadRaf) return;
+  maintTheadRaf = requestAnimationFrame(() => {
+    maintTheadRaf = null;
+    syncMaintTheadOffset();
+  });
+}
+window.addEventListener('scroll', scheduleMaintTheadSync, { passive: true });
+window.addEventListener('resize', scheduleMaintTheadSync);
 document.addEventListener('DOMContentLoaded', () => {
   syncStickyOffsets();
   requestAnimationFrame(syncStickyOffsets);
@@ -1468,6 +1483,7 @@ function renderMaintenance(){
         <div class="maint-header-row">
           <h2>유지보수 점검 관리</h2>
           <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
+            <span class="mat-icon" aria-hidden="true"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h12l-4.5 5.5v4L7 14v-5.5z"/></svg></span>
             <span class="mat-label">내 사업장만</span>
             <span class="mat-count">${myCount}</span>
           </button>
