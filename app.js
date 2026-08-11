@@ -1176,7 +1176,7 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
 // 데이터는 records/users와 마찬가지로 maintenanceLogs 배열에 담아 GitHub와 함께 동기화된다.
 
 let maintenanceTab = 'entry'; // 'entry'(월별 등록) | 'stats'(통계)
-let maintenanceYm = null;     // 등록 탭에서 현재 선택된 "YYYY-MM"
+let maintenanceYear = null;   // 등록 탭에서 현재 보고 있는 연도(숫자). 한 화면에 이 연도의 1~12월이 모두 나온다.
 let maintenanceEditTarget = null; // 점검 등록 모달에서 현재 편집 중인 {gid, ym}
 let maintenanceMyFilter = false; // 유지보수 페이지: 내가 정 담당자인 법인만 보기
 
@@ -1184,15 +1184,6 @@ function pad2(n){ return String(n).padStart(2, '0'); }
 function currentYm(){
   const d = new Date();
   return `${d.getFullYear()}-${pad2(d.getMonth()+1)}`;
-}
-// "YYYY-MM" 문자열을 delta개월만큼 이동시킨 "YYYY-MM"을 반환한다. (대상 월 앞/뒤 화살표용)
-function shiftYm(ym, delta){
-  const m0 = ym && /^\d{4}-\d{2}$/.test(ym) ? ym : currentYm();
-  const [y, m] = m0.split('-').map(Number);
-  const total = y * 12 + (m - 1) + delta;
-  const ny = Math.floor(total / 12);
-  const nm = ((total % 12) + 12) % 12 + 1;
-  return `${ny}-${pad2(nm)}`;
 }
 function ymLabel(ym){
   if (!ym) return '';
@@ -1250,74 +1241,106 @@ function setMaintenanceTab(tab){
   renderMaintenance();
 }
 
+// 월별 등록 탭: 좌측에 법인 정보, 우측에 선택한 연도의 1월~12월이 한 화면에 표(스프레드시트)로 나온다.
+// 각 달 칸을 클릭하면 그 법인 · 그 달의 점검 등록 모달(openMaintenanceLogModal)이 뜬다.
+const MAINT_MONTHS = [1,2,3,4,5,6,7,8,9,10,11,12];
+
 function maintenanceEntryTabHtml(){
-  if (!maintenanceYm) maintenanceYm = currentYm();
+  if (!maintenanceYear) maintenanceYear = Math.max(2026, currentYm().split('-').map(Number)[0]);
   const groups = maintenanceVisibleGroupList();
-  const total = groups.length;
-  let doneCount = 0;
-  const rowsHtml = groups.map(g => {
-    const log = maintenanceLogFor(g.gid, maintenanceYm);
-    if (log && (log.date || '').trim()) doneCount++;
-    const engineer = (g.meta.owner_primary || g.meta.owner_secondary)
+  const me = currentUserName();
+  const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
+  const thisYm = currentYm();
+
+  const bodyRows = groups.map(g => {
+    // 계약만료 D-Day: 이 법인 자체 항목들(자식 법인 제외) 중 가장 급하게 만료되는 라이선스 기준.
+    let ddayHtml = `<span class="maint-dday na">-</span>`;
+    let soonest = null;
+    g.realItems.forEach(r => {
+      const d = daysUntilEnd(r);
+      if (d === null) return;
+      if (soonest === null || d < soonest) soonest = d;
+    });
+    if (soonest !== null){
+      const cls = soonest < 0 ? 'crit' : (soonest <= 90 ? 'warn' : 'ok');
+      const label = soonest > 0 ? `D-${soonest}` : (soonest === 0 ? 'D-day' : `D+${Math.abs(soonest)}`);
+      ddayHtml = `<span class="maint-dday ${cls}">${label}</span>`;
+    }
+
+    const engineerHtml = (g.meta.owner_primary || g.meta.owner_secondary)
       ? [
           g.meta.owner_primary ? `<span class="mgr-primary">${esc(g.meta.owner_primary)}</span>` : '',
           g.meta.owner_secondary ? `<span class="mgr-secondary">${esc(g.meta.owner_secondary)}</span>` : ''
-        ].filter(Boolean).join('')
-      : '—';
-    const statusHtml = (log && (log.date||'').trim())
-      ? `<span class="maint-status-badge done">✓ 점검완료</span>`
-      : `<span class="maint-status-badge missing">미점검</span>`;
-    const dateTxt = log && log.date ? esc(log.date) : '—';
-    // 등록 담당자 = 실제로 이 기록을 등록한 사람(log.author, 저장 시 로그인 사용자 이름으로 자동 기록됨).
-    // 아직 등록된 적이 없으면 비워 둔다(정 담당자 등으로 미리 채우지 않는다).
-    const registrantTxt = log && log.author ? esc(log.author) : '—';
-    const noteTxt = log && log.note ? esc(log.note) : '';
+        ].filter(Boolean).join(' ')
+      : '<span class="maint-td-empty">-</span>';
+
+    const remarksTxt = (g.meta.group_remarks || '').trim();
+    const checkTxt = (g.meta.check_method || '').trim();
+
+    const monthCellsHtml = MAINT_MONTHS.map(m => {
+      const ym = `${maintenanceYear}-${pad2(m)}`;
+      const log = maintenanceLogFor(g.gid, ym);
+      const isCurrent = ym === thisYm;
+      const hasDate = log && (log.date || '').trim();
+      if (hasDate){
+        const d = parseDate(log.date);
+        const dayNum = d ? d.getDate() : '';
+        const tipBits = [`${ymLabel(ym)} 점검일 ${log.date}`];
+        if (log.manager) tipBits.push(`담당 ${log.manager}`);
+        if (log.note) tipBits.push(log.note);
+        return `<td class="maint-cell maint-cell-done ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(tipBits.join(' · '))}">
+          <span class="maint-cell-day">${esc(String(dayNum))}</span><span class="maint-cell-tag">완</span>
+        </td>`;
+      }
+      return `<td class="maint-cell maint-cell-blank ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(ymLabel(ym))} 점검 등록">
+        <span class="maint-cell-dash">–</span>
+      </td>`;
+    }).join('');
+
     return `
-      <tr data-maint-row="${esc(g.gid)}">
-        <td data-label="법인"><div class="maint-row-owner">${esc(g.meta.owner)}</div><div class="maint-row-engineer">${esc(g.meta.country||'')}${g.meta.location?(' · '+esc(g.meta.location)):''}</div></td>
-        <td data-label="담당 엔지니어" class="maint-row-engineer">${engineer}</td>
-        <td data-label="상태">${statusHtml}</td>
-        <td data-label="점검일">${dateTxt}</td>
-        <td data-label="등록 담당자">${registrantTxt}</td>
-        <td data-label="비고"><span class="maint-row-note" title="${noteTxt}">${noteTxt || '—'}</span></td>
-        <td data-label="">
-          <button type="button" class="maint-edit-btn" data-maint-edit="${esc(g.gid)}">${log ? '수정' : '등록'}</button>
+      <tr>
+        <td class="maint-cell-owner" data-label="사업장">
+          <div class="maint-row-owner">${esc(g.meta.owner)}</div>
+          ${g.meta.country ? `<div class="maint-row-engineer">${esc(g.meta.country)}${g.meta.location?(' · '+esc(g.meta.location)):''}</div>` : ''}
         </td>
+        <td data-label="계약만료 D-Day">${ddayHtml}</td>
+        <td data-label="담당">${engineerHtml}</td>
+        <td data-label="참고사항"><span class="maint-row-note" title="${esc(remarksTxt)}">${remarksTxt ? esc(remarksTxt) : '—'}</span></td>
+        <td data-label="점검방법">${checkTxt ? esc(checkTxt) : '—'}</td>
+        ${monthCellsHtml}
       </tr>`;
   }).join('');
 
-  const pct = total ? Math.round(doneCount/total*100) : 0;
-  const missing = total - doneCount;
-  const me = currentUserName();
-  const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
-
   return `
     <div class="maint-toolbar">
-      <div class="maint-ym-field">
-        <label>점검 대상 월</label>
-        <div class="maint-ym-control">
-          <button type="button" class="maint-ym-nav-btn" id="maintYmPrevBtn" title="이전 달" ${maintenanceYm<='2026-01'?'disabled':''}>‹</button>
-          <input type="month" id="maintYmInput" min="2026-01" value="${esc(maintenanceYm)}">
-          <button type="button" class="maint-ym-nav-btn" id="maintYmNextBtn" title="다음 달">›</button>
+      <div class="maint-year-field">
+        <label>연도</label>
+        <div class="maint-year-control">
+          <button type="button" class="maint-ym-nav-btn" id="maintYearPrevBtn" title="이전 연도" ${maintenanceYear<=2026?'disabled':''}>‹</button>
+          <span class="maint-year-value">${maintenanceYear}년</span>
+          <button type="button" class="maint-ym-nav-btn" id="maintYearNextBtn" title="다음 연도">›</button>
         </div>
       </div>
       <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
         <span class="mat-label">내가 정인 법인만</span>
         <span class="mat-count">${myCount}</span>
       </button>
+      <p class="maint-year-hint">각 달 칸을 클릭하면 점검일 · 점검 담당자 · 비고를 등록/수정할 수 있습니다.</p>
     </div>
-    <div class="maint-summary-row">
-      <div class="maint-summary-card"><div class="ms-num">${total}</div><div class="ms-label">등록된 법인 수</div></div>
-      <div class="maint-summary-card ms-ok"><div class="ms-num">${doneCount}</div><div class="ms-label">${ymLabel(maintenanceYm)} 점검 완료</div></div>
-      <div class="maint-summary-card ${missing>0?'ms-crit':''}"><div class="ms-num">${missing}</div><div class="ms-label">${ymLabel(maintenanceYm)} 미점검</div></div>
-      <div class="maint-summary-card"><div class="ms-num">${pct}%</div><div class="ms-label">이번 달 등록률</div></div>
-    </div>
-    <div class="maint-table-wrap">
-      <table class="maint-table">
-        <thead><tr>
-          <th>법인</th><th>담당 엔지니어</th><th>상태</th><th>점검일</th><th>등록 담당자</th><th>비고</th><th></th>
-        </tr></thead>
-        <tbody>${rowsHtml || `<tr><td colspan="7"><div class="maint-empty">등록된 법인이 없습니다. 먼저 좌측 ＋ 버튼으로 법인을 등록해 주세요.</div></td></tr>`}</tbody>
+    <div class="maint-table-wrap maint-year-table-wrap">
+      <table class="maint-table maint-year-table">
+        <thead>
+          <tr>
+            <th class="maint-th-owner" rowspan="2">사업장</th>
+            <th rowspan="2">계약만료<br>D-Day</th>
+            <th rowspan="2">담당</th>
+            <th rowspan="2">참고사항</th>
+            <th rowspan="2">점검방법</th>
+            <th colspan="12">점검일자 (${maintenanceYear})</th>
+          </tr>
+          <tr>${MAINT_MONTHS.map(m => `<th class="maint-th-month">${m}월</th>`).join('')}</tr>
+        </thead>
+        <tbody>${bodyRows || `<tr><td colspan="17"><div class="maint-empty">등록된 법인이 없습니다. 먼저 좌측 ＋ 버튼으로 법인을 등록해 주세요.</div></td></tr>`}</tbody>
       </table>
     </div>`;
 }
@@ -1442,7 +1465,7 @@ function maintenanceStatsTabHtml(){
 function renderMaintenance(){
   const wrap = document.getElementById('maintenanceView');
   if (!wrap) return;
-  if (!maintenanceYm) maintenanceYm = currentYm();
+  if (!maintenanceYear) maintenanceYear = Math.max(2026, Number(currentYm().split('-')[0]));
   wrap.innerHTML = `
     <div class="maint-header">
       <h2>유지보수 점검 관리</h2>
@@ -1459,26 +1482,18 @@ function renderMaintenance(){
     btn.onclick = () => setMaintenanceTab(btn.dataset.maintTab);
   });
 
-  const ymInput = document.getElementById('maintYmInput');
-  if (ymInput){
-    ymInput.onchange = () => {
-      if (ymInput.value){ maintenanceYm = ymInput.value; renderMaintenance(); }
-    };
-  }
-
-  const ymPrevBtn = document.getElementById('maintYmPrevBtn');
-  if (ymPrevBtn){
-    ymPrevBtn.onclick = () => {
-      const prev = shiftYm(maintenanceYm, -1);
-      if (prev < '2026-01') return;
-      maintenanceYm = prev;
+  const yearPrevBtn = document.getElementById('maintYearPrevBtn');
+  if (yearPrevBtn){
+    yearPrevBtn.onclick = () => {
+      if (maintenanceYear <= 2026) return;
+      maintenanceYear -= 1;
       renderMaintenance();
     };
   }
-  const ymNextBtn = document.getElementById('maintYmNextBtn');
-  if (ymNextBtn){
-    ymNextBtn.onclick = () => {
-      maintenanceYm = shiftYm(maintenanceYm, 1);
+  const yearNextBtn = document.getElementById('maintYearNextBtn');
+  if (yearNextBtn){
+    yearNextBtn.onclick = () => {
+      maintenanceYear += 1;
       renderMaintenance();
     };
   }
@@ -1492,8 +1507,12 @@ function renderMaintenance(){
     };
   }
 
-  wrap.querySelectorAll('[data-maint-edit]').forEach(btn => {
-    btn.onclick = () => openMaintenanceLogModal(btn.dataset.maintEdit, maintenanceYm);
+  // 연간 표의 각 달 칸을 클릭하면 그 법인 · 그 달의 점검 등록/수정 모달이 뜬다.
+  wrap.querySelectorAll('[data-maint-cell]').forEach(cell => {
+    cell.onclick = () => {
+      const [gid, ym] = cell.dataset.maintCell.split('|');
+      openMaintenanceLogModal(gid, ym);
+    };
   });
 }
 
