@@ -3837,7 +3837,7 @@
       "os_ver": "2.4.10.1",
       "owner_primary": "신호근",
       "owner_secondary": "강성준",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3864,7 +3864,9 @@
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
-      "build_date": "2024.10"
+      "build_date": "2024.10",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "seha",
@@ -3885,7 +3887,7 @@
       "os_ver": "2.4.10.1",
       "owner_primary": "신호근",
       "owner_secondary": "강성준",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3904,7 +3906,9 @@
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
-      "build_date": "2024.10"
+      "build_date": "2024.10",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "seha",
@@ -3925,7 +3929,7 @@
       "os_ver": "7.3.18.2",
       "owner_primary": "신호근",
       "owner_secondary": "강성준",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3952,7 +3956,9 @@
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
-      "build_date": "2024.10"
+      "build_date": "2024.10",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "seha",
@@ -3973,7 +3979,7 @@
       "os_ver": "7.3.18.2",
       "owner_primary": "신호근",
       "owner_secondary": "강성준",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -3992,7 +3998,9 @@
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
-      "build_date": "2024.10"
+      "build_date": "2024.10",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "seha",
@@ -4013,7 +4021,7 @@
       "os_ver": "",
       "owner_primary": "신호근",
       "owner_secondary": "강성준",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4028,7 +4036,9 @@
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
-      "build_date": "2024.10"
+      "build_date": "2024.10",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "seha",
@@ -4049,7 +4059,7 @@
       "os_ver": "3.3.5.2",
       "owner_primary": "신호근",
       "owner_secondary": "강성준",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4076,7 +4086,9 @@
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
-      "build_date": "2024.10"
+      "build_date": "2024.10",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "seha",
@@ -4097,7 +4109,7 @@
       "os_ver": "11.0.2.1",
       "owner_primary": "신호근",
       "owner_secondary": "강성준",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -4124,7 +4136,9 @@
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
-      "build_date": "2024.10"
+      "build_date": "2024.10",
+      "group_parent": "",
+      "is_parent": false
     },
     {
       "group": "us-005",
