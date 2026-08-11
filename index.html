@@ -128,11 +128,14 @@
     <h2 id="addModalTitle">새 자산 항목 추가</h2>
     <p class="hint">비밀번호/ID/IP는 잠금 해제된 상태에서만 암호화되어 저장됩니다.</p>
     <div class="form-grid">
-      <div><label>법인 (OWNER)</label><input id="f_owner" placeholder="예: 삼성전자 ○○법인"></div>
-      <div><label>국가 (COUNTRY)</label><input id="f_country" placeholder="예: 베트남"></div>
-      <div><label>위치 (LOCATION)</label><input id="f_location" placeholder="예: 하노이"></div>
-      <div><label>Support ID</label><input id="f_support"></div>
-      <div><label>점검 방식</label><input id="f_check" placeholder="원격 (RC)"></div>
+      <div class="ge-row ge-row-5">
+        <div><label>법인 (OWNER)</label><input id="f_owner" placeholder="예: 삼성전자 ○○법인" disabled></div>
+        <div><label>국가 (COUNTRY)</label><input id="f_country" placeholder="예: 베트남" disabled></div>
+        <div><label>위치 (LOCATION)</label><input id="f_location" placeholder="예: 하노이" disabled></div>
+        <div><label>Support ID</label><input id="f_support" disabled></div>
+        <div><label>점검 방식</label><input id="f_check" placeholder="원격 (RC)" disabled></div>
+      </div>
+      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">법인 / 국가 / 위치 / Support ID / 점검 방식은 이 법인(그룹)의 공통 정보로, 여기서는 확인만 가능합니다. 값을 바꾸려면 법인 카드의 "법인 정보 수정"을 이용해 주세요.</p>
       <div class="ge-row ge-row-5">
         <div><label>SKU / 제품</label><input id="f_sku"></div>
         <div><label>S/N</label><input id="f_sn"></div>
@@ -147,9 +150,6 @@
         <div><label>비밀번호 🔒</label><input id="f_pw"></div>
         <div><label>Enable 비밀번호 🔒 (선택)</label><input id="f_enable_pw" placeholder="필요한 경우만"></div>
       </div>
-      <div><label>담당자 (정)</label><input id="f_owner_primary" placeholder="주 담당자"></div>
-      <div><label>담당자 (부)</label><input id="f_owner_secondary" placeholder="부 담당자"></div>
-      <div class="full"><label>고객사 담당자</label><input id="f_cust"></div>
       <div class="full"><label>비고 / Remarks</label><textarea id="f_remarks"></textarea></div>
     </div>
     <div class="modal-actions">
