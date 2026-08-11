@@ -20892,14 +20892,29 @@
       "id": 1786349440902,
       "group": "custom-1786349440902",
       "flag": "",
-      "owner": "삼성전자 RnD",
+      "owner": "삼성전자 구미",
       "country": "한국",
-      "location": "우면",
-      "check_method": "",
-      "config_mode": "",
-      "owner_primary": "",
-      "owner_secondary": "",
-      "cust_contacts": [],
+      "location": "구미",
+      "check_method": "방문",
+      "config_mode": "Explicit",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "이상수 프로",
+          "org": "삼성SDS",
+          "phone": "010-8008-9079",
+          "email": "sangsoos.lee@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "최찬혁 프로",
+          "org": "미라콤",
+          "phone": "010-7466-3260",
+          "email": "cyoung.choi@miracom.co.kr"
+        }
+      ],
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
