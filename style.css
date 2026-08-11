@@ -926,8 +926,8 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   background:var(--bg);
   margin:0 -26px; padding:0 26px;
 }
-.maint-my-filter-row{ display:flex; justify-content:flex-end; margin-bottom:10px; }
 .maint-header{ margin-bottom:18px; }
+.maint-header-row{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
 .maint-header h2{ font-family:var(--display); font-size:20px; color:var(--text); }
 .maint-sub{ font-size:12.5px; color:var(--text-faint); margin-top:4px; font-family:var(--mono); }
 
@@ -976,13 +976,21 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-year-table-wrap{ overflow-x:auto; }
 .maint-year-table{ table-layout:fixed; min-width:1150px; }
 .maint-year-table th, .maint-year-table td{ padding:8px 8px; }
+.maint-year-table thead th{
+  position:sticky;
+  top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px) + var(--maint-sticky-top-h, 0px));
+  z-index:6; background:var(--surface2);
+}
+.maint-year-table thead tr:last-child th{
+  top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px) + var(--maint-sticky-top-h, 0px) + var(--maint-thead-row1-h, 0px));
+}
 .maint-year-table .maint-th-owner, .maint-year-table .maint-cell-owner{
   width:220px; min-width:220px;
   position:sticky; left:0; z-index:2;
   background:var(--surface2);
   box-shadow:1px 0 0 var(--border-solid);
 }
-.maint-year-table thead .maint-th-owner{ z-index:3; }
+.maint-year-table thead .maint-th-owner{ z-index:7; }
 .maint-year-table td.maint-cell-owner{ background:var(--surface); white-space:nowrap; overflow:hidden; }
 .maint-year-table tr:hover td.maint-cell-owner{ background:var(--surface2); }
 .maint-th-month{ width:64px; text-align:center !important; }
