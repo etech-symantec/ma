@@ -15743,10 +15743,10 @@
       "build_date": ""
     },
     {
-      "group": "kr-004",
-      "flag": "수원",
-      "owner": "삼성전자 수원사업장",
-      "location": "수원",
+      "group": "custom-mso09xln",
+      "flag": "",
+      "owner": "삼성전자 서울대 공동연구소",
+      "location": "서울대",
       "support_id": "356307",
       "sku": "SSP-S210-10 #1",
       "sn": "924710017",
@@ -15759,7 +15759,7 @@
       "deploy_log": "24.09.29 윤태리 2.4.9.1 신규",
       "mode": "Explicit",
       "os_ver": "2.4.9.1",
-      "owner_primary": "홍진영",
+      "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "방문",
       "cust_contact": "",
@@ -15783,38 +15783,9 @@
         "ct": "ppHAfV4=",
         "tag": "G/MhK3DAVQooc6916Zazcw=="
       },
-      "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반 / - 내방상세 / > 방문일시 : / > 방문목적 : A/S / > 접견자 : 김지수 프로",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "김호곤 프로",
-          "org": "삼성SDS",
-          "phone": "031-8062-4643 / 010-8585-2865",
-          "email": "hg1009.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "한승규 프로",
-          "org": "씨큐아이",
-          "phone": "010-9991-0497",
-          "email": "vwinstar.han@secui.com"
-        },
-        {
-          "role": "",
-          "name": "김지수 프로",
-          "org": "",
-          "phone": "010-9946-4734",
-          "email": "jisoo79.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "이균홍 프로",
-          "org": "",
-          "phone": "010-8160-3824",
-          "email": "great_gh.lee@samsung.com"
-        }
-      ],
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [],
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
@@ -15822,10 +15793,10 @@
       "build_date": ""
     },
     {
-      "group": "kr-004",
-      "flag": "수원",
-      "owner": "삼성전자 수원사업장",
-      "location": "수원",
+      "group": "custom-mso09xln",
+      "flag": "",
+      "owner": "삼성전자 서울대 공동연구소",
+      "location": "서울대",
       "support_id": "356307",
       "sku": "SSP-S210-10 #2",
       "sn": "924710025",
@@ -15838,7 +15809,7 @@
       "deploy_log": "24.09.29 윤태리 2.4.9.1 신규",
       "mode": "",
       "os_ver": "2.4.9.1",
-      "owner_primary": "홍진영",
+      "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "방문",
       "cust_contact": "",
@@ -15862,38 +15833,9 @@
         "ct": "8YAa5Kk=",
         "tag": "nuhxj+x/RttXkWjQWFVCig=="
       },
-      "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반 / - 내방상세 / > 방문일시 : / > 방문목적 : A/S / > 접견자 : 김지수 프로",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "김호곤 프로",
-          "org": "삼성SDS",
-          "phone": "031-8062-4643 / 010-8585-2865",
-          "email": "hg1009.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "한승규 프로",
-          "org": "씨큐아이",
-          "phone": "010-9991-0497",
-          "email": "vwinstar.han@secui.com"
-        },
-        {
-          "role": "",
-          "name": "김지수 프로",
-          "org": "",
-          "phone": "010-9946-4734",
-          "email": "jisoo79.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "이균홍 프로",
-          "org": "",
-          "phone": "010-8160-3824",
-          "email": "great_gh.lee@samsung.com"
-        }
-      ],
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [],
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
@@ -15901,10 +15843,10 @@
       "build_date": ""
     },
     {
-      "group": "kr-004",
-      "flag": "수원",
-      "owner": "삼성전자 수원사업장",
-      "location": "수원",
+      "group": "custom-mso09xln",
+      "flag": "",
+      "owner": "삼성전자 서울대 공동연구소",
+      "location": "서울대",
       "support_id": "356307",
       "sku": "ISG-Proxy 1",
       "sn": "0079998397",
@@ -15917,7 +15859,7 @@
       "deploy_log": "24.09.29 윤태리 7.3.17.1 신규 / 25.01.11 윤태리 7.3.17.1 > 7.3.21.1 mem bug",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "홍진영",
+      "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "방문",
       "cust_contact": "",
@@ -15941,38 +15883,9 @@
         "ct": "GhcsBWS7c99Fbt2t",
         "tag": "znDMfq8zGFwRcIeB5aYpsg=="
       },
-      "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반 / - 내방상세 / > 방문일시 : / > 방문목적 : A/S / > 접견자 : 김지수 프로",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "김호곤 프로",
-          "org": "삼성SDS",
-          "phone": "031-8062-4643 / 010-8585-2865",
-          "email": "hg1009.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "한승규 프로",
-          "org": "씨큐아이",
-          "phone": "010-9991-0497",
-          "email": "vwinstar.han@secui.com"
-        },
-        {
-          "role": "",
-          "name": "김지수 프로",
-          "org": "",
-          "phone": "010-9946-4734",
-          "email": "jisoo79.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "이균홍 프로",
-          "org": "",
-          "phone": "010-8160-3824",
-          "email": "great_gh.lee@samsung.com"
-        }
-      ],
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [],
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
@@ -15980,10 +15893,10 @@
       "build_date": ""
     },
     {
-      "group": "kr-004",
-      "flag": "수원",
-      "owner": "삼성전자 수원사업장",
-      "location": "수원",
+      "group": "custom-mso09xln",
+      "flag": "",
+      "owner": "삼성전자 서울대 공동연구소",
+      "location": "서울대",
       "support_id": "356307",
       "sku": "ISG-Proxy 2",
       "sn": "0079998397",
@@ -15996,7 +15909,7 @@
       "deploy_log": "24.09.29 윤태리 7.3.17.1 신규 / 25.01.11 윤태리 7.3.17.1 > 7.3.21.1 mem bug",
       "mode": "",
       "os_ver": "7.3.21.1",
-      "owner_primary": "홍진영",
+      "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "방문",
       "cust_contact": "",
@@ -16020,38 +15933,9 @@
         "ct": "DMeBtxS8+DjFt/gJ",
         "tag": "NBc/99pIlKa1wVfdjjqSYQ=="
       },
-      "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반 / - 내방상세 / > 방문일시 : / > 방문목적 : A/S / > 접견자 : 김지수 프로",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "김호곤 프로",
-          "org": "삼성SDS",
-          "phone": "031-8062-4643 / 010-8585-2865",
-          "email": "hg1009.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "한승규 프로",
-          "org": "씨큐아이",
-          "phone": "010-9991-0497",
-          "email": "vwinstar.han@secui.com"
-        },
-        {
-          "role": "",
-          "name": "김지수 프로",
-          "org": "",
-          "phone": "010-9946-4734",
-          "email": "jisoo79.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "이균홍 프로",
-          "org": "",
-          "phone": "010-8160-3824",
-          "email": "great_gh.lee@samsung.com"
-        }
-      ],
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [],
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
@@ -16059,10 +15943,10 @@
       "build_date": ""
     },
     {
-      "group": "kr-004",
-      "flag": "수원",
-      "owner": "삼성전자 수원사업장",
-      "location": "수원",
+      "group": "custom-mso09xln",
+      "flag": "",
+      "owner": "삼성전자 서울대 공동연구소",
+      "location": "서울대",
       "support_id": "356307",
       "sku": "SG-S400-30-PR-STANDARD",
       "sn": "0814320140",
@@ -16075,7 +15959,7 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "6.7.4.10",
-      "owner_primary": "홍진영",
+      "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "방문",
       "cust_contact": "",
@@ -16099,38 +15983,9 @@
         "ct": "Suhkyqs2XnFDgEMGk5N+M7DUTyuc0Lc/",
         "tag": "pzhoaFVz9D2wWlzzfwh59w=="
       },
-      "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반 / - 내방상세 / > 방문일시 : / > 방문목적 : A/S / > 접견자 : 김지수 프로",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "김호곤 프로",
-          "org": "삼성SDS",
-          "phone": "031-8062-4643 / 010-8585-2865",
-          "email": "hg1009.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "한승규 프로",
-          "org": "씨큐아이",
-          "phone": "010-9991-0497",
-          "email": "vwinstar.han@secui.com"
-        },
-        {
-          "role": "",
-          "name": "김지수 프로",
-          "org": "",
-          "phone": "010-9946-4734",
-          "email": "jisoo79.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "이균홍 프로",
-          "org": "",
-          "phone": "010-8160-3824",
-          "email": "great_gh.lee@samsung.com"
-        }
-      ],
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [],
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
@@ -16138,10 +15993,10 @@
       "build_date": ""
     },
     {
-      "group": "kr-004",
-      "flag": "수원",
-      "owner": "삼성전자 수원사업장",
-      "location": "수원",
+      "group": "custom-mso09xln",
+      "flag": "",
+      "owner": "삼성전자 서울대 공동연구소",
+      "location": "서울대",
       "support_id": "356307",
       "sku": "SG-S400-30-PR-STANDARD",
       "sn": "2914320073",
@@ -16154,7 +16009,7 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "6.7.4.10",
-      "owner_primary": "홍진영",
+      "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "방문",
       "cust_contact": "",
@@ -16170,38 +16025,9 @@
       },
       "id_enc": null,
       "pw_enc": null,
-      "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반 / - 내방상세 / > 방문일시 : / > 방문목적 : A/S / > 접견자 : 김지수 프로",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "김호곤 프로",
-          "org": "삼성SDS",
-          "phone": "031-8062-4643 / 010-8585-2865",
-          "email": "hg1009.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "한승규 프로",
-          "org": "씨큐아이",
-          "phone": "010-9991-0497",
-          "email": "vwinstar.han@secui.com"
-        },
-        {
-          "role": "",
-          "name": "김지수 프로",
-          "org": "",
-          "phone": "010-9946-4734",
-          "email": "jisoo79.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "이균홍 프로",
-          "org": "",
-          "phone": "010-8160-3824",
-          "email": "great_gh.lee@samsung.com"
-        }
-      ],
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [],
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
@@ -16209,10 +16035,10 @@
       "build_date": ""
     },
     {
-      "group": "kr-004",
-      "flag": "수원",
-      "owner": "삼성전자 수원사업장",
-      "location": "수원",
+      "group": "custom-mso09xln",
+      "flag": "",
+      "owner": "삼성전자 서울대 공동연구소",
+      "location": "서울대",
       "support_id": "356307",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52569532-1-1",
@@ -16225,7 +16051,7 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "홍진영",
+      "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "방문",
       "cust_contact": "",
@@ -16237,38 +16063,9 @@
       "ip_enc": null,
       "id_enc": null,
       "pw_enc": null,
-      "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반 / - 내방상세 / > 방문일시 : / > 방문목적 : A/S / > 접견자 : 김지수 프로",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "김호곤 프로",
-          "org": "삼성SDS",
-          "phone": "031-8062-4643 / 010-8585-2865",
-          "email": "hg1009.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "한승규 프로",
-          "org": "씨큐아이",
-          "phone": "010-9991-0497",
-          "email": "vwinstar.han@secui.com"
-        },
-        {
-          "role": "",
-          "name": "김지수 프로",
-          "org": "",
-          "phone": "010-9946-4734",
-          "email": "jisoo79.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "이균홍 프로",
-          "org": "",
-          "phone": "010-8160-3824",
-          "email": "great_gh.lee@samsung.com"
-        }
-      ],
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [],
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
@@ -16276,10 +16073,10 @@
       "build_date": ""
     },
     {
-      "group": "kr-004",
-      "flag": "수원",
-      "owner": "삼성전자 수원사업장",
-      "location": "수원",
+      "group": "custom-mso09xln",
+      "flag": "",
+      "owner": "삼성전자 서울대 공동연구소",
+      "location": "서울대",
       "support_id": "356307",
       "sku": "RNW-SVC-BCWF",
       "sn": "Q2XJR-5ZN6V",
@@ -16292,7 +16089,7 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "홍진영",
+      "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "방문",
       "cust_contact": "",
@@ -16304,38 +16101,9 @@
       "ip_enc": null,
       "id_enc": null,
       "pw_enc": null,
-      "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반 / - 내방상세 / > 방문일시 : / > 방문목적 : A/S / > 접견자 : 김지수 프로",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "김호곤 프로",
-          "org": "삼성SDS",
-          "phone": "031-8062-4643 / 010-8585-2865",
-          "email": "hg1009.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "한승규 프로",
-          "org": "씨큐아이",
-          "phone": "010-9991-0497",
-          "email": "vwinstar.han@secui.com"
-        },
-        {
-          "role": "",
-          "name": "김지수 프로",
-          "org": "",
-          "phone": "010-9946-4734",
-          "email": "jisoo79.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "이균홍 프로",
-          "org": "",
-          "phone": "010-8160-3824",
-          "email": "great_gh.lee@samsung.com"
-        }
-      ],
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [],
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
@@ -16343,10 +16111,10 @@
       "build_date": ""
     },
     {
-      "group": "kr-004",
-      "flag": "수원",
-      "owner": "삼성전자 수원사업장",
-      "location": "수원",
+      "group": "custom-mso09xln",
+      "flag": "",
+      "owner": "삼성전자 서울대 공동연구소",
+      "location": "서울대",
       "support_id": "356307",
       "sku": "IS-AWAA-SWG-1000-2500-1Y",
       "sn": "",
@@ -16359,7 +16127,7 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "",
-      "owner_primary": "홍진영",
+      "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "방문",
       "cust_contact": "",
@@ -16371,38 +16139,9 @@
       "ip_enc": null,
       "id_enc": null,
       "pw_enc": null,
-      "config_mode": "Explicit",
-      "group_remarks": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반 / - 내방상세 / > 방문일시 : / > 방문목적 : A/S / > 접견자 : 김지수 프로",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "김호곤 프로",
-          "org": "삼성SDS",
-          "phone": "031-8062-4643 / 010-8585-2865",
-          "email": "hg1009.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "한승규 프로",
-          "org": "씨큐아이",
-          "phone": "010-9991-0497",
-          "email": "vwinstar.han@secui.com"
-        },
-        {
-          "role": "",
-          "name": "김지수 프로",
-          "org": "",
-          "phone": "010-9946-4734",
-          "email": "jisoo79.kim@samsung.com"
-        },
-        {
-          "role": "",
-          "name": "이균홍 프로",
-          "org": "",
-          "phone": "010-8160-3824",
-          "email": "great_gh.lee@samsung.com"
-        }
-      ],
+      "config_mode": "",
+      "group_remarks": "",
+      "cust_contacts": [],
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
