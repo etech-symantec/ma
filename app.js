@@ -40,9 +40,6 @@ function syncMaintTheadOffset(){
   // header down into the middle of the rows.
   const bottom = Math.max(0, Math.ceil(stickyTop.getBoundingClientRect().bottom));
   document.documentElement.style.setProperty('--maint-thead-top', bottom + 'px');
-  const row1 = document.querySelector('.maint-year-table thead tr:first-child');
-  const row1H = row1 ? Math.ceil(row1.getBoundingClientRect().height) : 0;
-  document.documentElement.style.setProperty('--maint-thead-row1-h', row1H + 'px');
 }
 let maintTheadRaf = null;
 function scheduleMaintTheadSync(){
@@ -1305,16 +1302,16 @@ function maintenanceEntryTabHtml(){
       </div>
       <p class="maint-year-hint">각 달 칸을 클릭하면 점검일 · 점검 담당자 · 비고를 등록/수정할 수 있습니다. (완료 체크 안 하면 예약, 체크하면 완료로 표시)</p>
     </div>
+    <div class="maint-table-caption">점검일자 (${maintenanceYear})</div>
     <div class="maint-table-wrap maint-year-table-wrap">
       <table class="maint-table maint-year-table">
         <thead>
           <tr>
-            <th class="maint-th-owner" rowspan="2">사업장</th>
-            <th rowspan="2" class="maint-th-dday">계약만료 D-Day</th>
-            <th rowspan="2">담당</th>
-            <th colspan="12">점검일자 (${maintenanceYear})</th>
+            <th class="maint-th-owner">사업장</th>
+            <th class="maint-th-dday">계약만료 D-Day</th>
+            <th>담당</th>
+            ${MAINT_MONTHS.map(m => `<th class="maint-th-month">${m}월</th>`).join('')}
           </tr>
-          <tr>${MAINT_MONTHS.map(m => `<th class="maint-th-month">${m}월</th>`).join('')}</tr>
         </thead>
         <tbody>${bodyRows || `<tr><td colspan="15"><div class="maint-empty">등록된 법인이 없습니다. 먼저 좌측 ＋ 버튼으로 법인을 등록해 주세요.</div></td></tr>`}</tbody>
       </table>
