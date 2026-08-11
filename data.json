@@ -1330,7 +1330,7 @@
       "os_ver": "7.3.17.1",
       "owner_primary": "김상문",
       "owner_secondary": "윤태리",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1371,7 +1371,11 @@
           "email": "jaeyuni.kim@samsung.com"
         }
       ],
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "th-tse",
@@ -1392,7 +1396,7 @@
       "os_ver": "",
       "owner_primary": "김상문",
       "owner_secondary": "윤태리",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1420,7 +1424,11 @@
           "phone": "02-6155-8523",
           "email": "jaeyuni.kim@samsung.com"
         }
-      ]
+      ],
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "th-tse",
@@ -1441,7 +1449,7 @@
       "os_ver": "10.6.2.1",
       "owner_primary": "김상문",
       "owner_secondary": "윤태리",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1481,7 +1489,11 @@
           "phone": "02-6155-8523",
           "email": "jaeyuni.kim@samsung.com"
         }
-      ]
+      ],
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "pl-sepm",
