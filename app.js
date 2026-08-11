@@ -1269,11 +1269,8 @@ function maintenanceEntryTabHtml(){
       ddayHtml = `<span class="maint-dday ${cls}">${label}</span>`;
     }
 
-    const engineerHtml = (g.meta.owner_primary || g.meta.owner_secondary)
-      ? [
-          g.meta.owner_primary ? `<span class="mgr-primary">${esc(g.meta.owner_primary)}</span>` : '',
-          g.meta.owner_secondary ? `<span class="mgr-secondary">${esc(g.meta.owner_secondary)}</span>` : ''
-        ].filter(Boolean).join(' ')
+    const engineerHtml = g.meta.owner_primary
+      ? `<span class="mgr-primary">${esc(g.meta.owner_primary)}</span>`
       : '<span class="maint-td-empty">-</span>';
 
     const monthCellsHtml = MAINT_MONTHS.map(m => {
@@ -1284,11 +1281,14 @@ function maintenanceEntryTabHtml(){
       if (hasDate){
         const d = parseDate(log.date);
         const dayNum = d ? d.getDate() : '';
-        const tipBits = [`${ymLabel(ym)} 점검일 ${log.date}`];
+        const isDone = !!log.done;
+        const tipBits = [`${ymLabel(ym)} 점검일 ${log.date}`, isDone ? '완료' : '예약'];
         if (log.manager) tipBits.push(`담당 ${log.manager}`);
         if (log.note) tipBits.push(log.note);
-        return `<td class="maint-cell maint-cell-done ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(tipBits.join(' · '))}">
-          <span class="maint-cell-day">${esc(String(dayNum))}</span><span class="maint-cell-tag">완</span>
+        const statusCls = isDone ? 'maint-cell-done' : 'maint-cell-reserved';
+        const statusTag = isDone ? '완' : '예';
+        return `<td class="maint-cell ${statusCls} ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(tipBits.join(' · '))}">
+          <span class="maint-cell-day">${esc(String(dayNum))}</span><span class="maint-cell-tag">${statusTag}</span>
         </td>`;
       }
       return `<td class="maint-cell maint-cell-blank ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(ymLabel(ym))} 점검 등록">
@@ -1299,8 +1299,7 @@ function maintenanceEntryTabHtml(){
     return `
       <tr>
         <td class="maint-cell-owner" data-label="사업장">
-          <div class="maint-row-owner">${esc(g.meta.owner)}</div>
-          ${g.meta.country ? `<div class="maint-row-engineer">${esc(g.meta.country)}${g.meta.location?(' · '+esc(g.meta.location)):''}</div>` : ''}
+          <div class="maint-row-owner">${esc(g.meta.owner)}${g.meta.location ? ' · ' + esc(g.meta.location) : ''}</div>
         </td>
         <td data-label="계약만료 D-Day">${ddayHtml}</td>
         <td data-label="담당">${engineerHtml}</td>
@@ -1322,7 +1321,7 @@ function maintenanceEntryTabHtml(){
         <span class="mat-label">내가 정인 법인만</span>
         <span class="mat-count">${myCount}</span>
       </button>
-      <p class="maint-year-hint">각 달 칸을 클릭하면 점검일 · 점검 담당자 · 비고를 등록/수정할 수 있습니다.</p>
+      <p class="maint-year-hint">각 달 칸을 클릭하면 점검일 · 점검 담당자 · 비고를 등록/수정할 수 있습니다. (완료 체크 안 하면 예약, 체크하면 완료로 표시)</p>
     </div>
     <div class="maint-table-wrap maint-year-table-wrap">
       <table class="maint-table maint-year-table">
@@ -1519,9 +1518,10 @@ function openMaintenanceLogModal(gid, ym){
   const log = maintenanceLogFor(gid, ym);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
   document.getElementById('mlModalSub').textContent = `이 법인의 ${ymLabel(ym)} 점검일을 등록합니다. 등록은 이 법인의 담당 엔지니어 중 정 담당자(${g.meta.owner_primary || '미지정'})가 하는 것을 기본으로 하되, 필요하면 다른 담당자 이름으로도 남길 수 있습니다.`;
-  // 점검일 기본값은 항상 오늘(클릭한 날)로 잡는다. 점검 담당자 기본값은 로그인한 사용자 이름이다.
-  document.getElementById('ml_date').value = todayDots();
-  document.getElementById('ml_manager').value = currentUserName() || (g.meta.owner_primary || '');
+  // 점검일 기본값: 이미 등록된 점검이면 등록된 날짜를, 아니면 오늘(클릭한 날)을 기본값으로 잡는다.
+  document.getElementById('ml_date').value = log ? (log.date || todayDots()) : todayDots();
+  document.getElementById('ml_manager').value = log ? (log.manager || '') : (currentUserName() || g.meta.owner_primary || '');
+  document.getElementById('ml_done').checked = log ? !!log.done : false;
   document.getElementById('ml_note').value = log ? (log.note || '') : '';
   document.getElementById('mlError').textContent = '';
   document.getElementById('mlDeleteBtn').style.display = log ? '' : 'none';
@@ -1550,6 +1550,7 @@ document.getElementById('saveMlBtn').onclick = () => {
   const date = document.getElementById('ml_date').value.trim();
   const manager = document.getElementById('ml_manager').value.trim();
   const note = document.getElementById('ml_note').value.trim();
+  const done = document.getElementById('ml_done').checked;
   const errEl = document.getElementById('mlError');
   if (!date){ errEl.textContent = '점검일을 입력해 주세요.'; return; }
   if (parseDate(date) === null){ errEl.textContent = '점검일 형식이 올바르지 않습니다. 예: 2026.8.10'; return; }
@@ -1563,6 +1564,7 @@ document.getElementById('saveMlBtn').onclick = () => {
   log.date = date;
   log.manager = manager;
   log.note = note;
+  log.done = done;
   log.author = currentUserName() || log.author || '';
   log.updated_at = Date.now();
 
