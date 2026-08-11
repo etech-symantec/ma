@@ -326,40 +326,46 @@
     <p class="hint" id="wlSubtitle">비고와 별도로, 이 장비에 대한 구축/제거/교체/OS 변경/PM 이력을 남길 수 있습니다.</p>
     <p class="hint" style="margin-top:-14px;">등록된 자산 항목의 세부 정보(라이선스 기간/OS 버전/IP/계정ID/비밀번호/비고)는 직접 수정할 수 없으며, 아래처럼 작업 이력을 남기면서만 변경할 수 있습니다. 변경 이력이 그대로 남으므로 누가 언제 무엇을 바꿨는지 추적할 수 있습니다. (점검 방식은 법인 단위 정보라 "법인 정보 수정"에서 변경합니다.)</p>
 
+    <div id="wlAssetList" class="wl-asset-list" style="display:none;"></div>
+
     <div class="form-grid">
-      <div><label>작업 구분</label>
-        <select id="wl_type">
-          <option value="라이선스 갱신">라이선스 갱신</option>
-          <option value="장비 구축">장비 구축</option>
-          <option value="장비 제거">장비 제거</option>
-          <option value="장비 교체">장비 교체</option>
-          <option value="OS 업그레이드">OS 업그레이드</option>
-          <option value="OS 다운그레이드">OS 다운그레이드</option>
-          <option value="PM">PM</option>
-        </select>
-      </div>
-      <div><label>날짜 (YYYY.M.D)</label>
-        <div class="date-field">
-          <input id="wl_date" placeholder="2026.7.30">
-          <button type="button" id="wl_date_pick_btn" class="date-pick-btn" title="달력에서 선택">📅</button>
-          <input type="date" id="wl_date_picker" class="date-native-input" tabindex="-1">
+      <div class="ge-row ge-row-3">
+        <div><label>작업 구분</label>
+          <select id="wl_type">
+            <option value="라이선스 갱신">라이선스 갱신</option>
+            <option value="장비 구축">장비 구축</option>
+            <option value="장비 제거">장비 제거</option>
+            <option value="장비 교체">장비 교체</option>
+            <option value="OS 업그레이드">OS 업그레이드</option>
+            <option value="OS 다운그레이드">OS 다운그레이드</option>
+            <option value="PM">PM</option>
+          </select>
         </div>
+        <div><label>날짜 (YYYY.M.D)</label>
+          <div class="date-field">
+            <input id="wl_date" placeholder="2026.7.30">
+            <button type="button" id="wl_date_pick_btn" class="date-pick-btn" title="달력에서 선택">📅</button>
+            <input type="date" id="wl_date_picker" class="date-native-input" tabindex="-1">
+          </div>
+        </div>
+        <div><label>담당자</label><input id="wl_manager" placeholder="작업 담당자"></div>
       </div>
-      <div><label>담당자</label><input id="wl_manager" placeholder="작업 담당자"></div>
       <div class="full"><label>내용 / 멘트</label><textarea id="wl_note" placeholder="간단한 작업 내용"></textarea></div>
     </div>
 
-    <label class="wl-fieldchange-toggle">
-      <input type="checkbox" id="wl_apply_toggle">
-      이 이력에 맞춰 자산 정보도 함께 변경
-    </label>
-    <div id="wl_fieldchange_section" style="display:none;">
-      <div class="wl-fieldchange-add">
-        <select id="wl_field_select"></select>
-        <button type="button" class="btn btn-ghost wl-fc-add-btn" id="wl_field_add_btn">＋ 항목 추가</button>
+    <div id="wlFieldChangeWrap">
+      <label class="wl-fieldchange-toggle">
+        <input type="checkbox" id="wl_apply_toggle">
+        이 이력에 맞춰 자산 정보도 함께 변경
+      </label>
+      <div id="wl_fieldchange_section" style="display:none;">
+        <div class="wl-fieldchange-add">
+          <select id="wl_field_select"></select>
+          <button type="button" class="btn btn-ghost wl-fc-add-btn" id="wl_field_add_btn">＋ 항목 추가</button>
+        </div>
+        <div id="wl_fieldchange_rows" class="wl-fc-list"></div>
+        <p class="hint" id="wlSensitiveHint" style="margin-top:10px; margin-bottom:0;">IP / 계정 ID / 비밀번호(🔒)는 보안을 위해 변경된 실제 값이 이력에 표시되지 않고, "변경됨"으로만 기록됩니다. 실제 값은 자산 목록에서 잠금 해제 후 👁 로 확인하세요.</p>
       </div>
-      <div id="wl_fieldchange_rows" class="wl-fc-list"></div>
-      <p class="hint" id="wlSensitiveHint" style="margin-top:10px; margin-bottom:0;">IP / 계정 ID / 비밀번호(🔒)는 보안을 위해 변경된 실제 값이 이력에 표시되지 않고, "변경됨"으로만 기록됩니다. 실제 값은 자산 목록에서 잠금 해제 후 👁 로 확인하세요.</p>
     </div>
 
     <div class="modal-actions">
@@ -367,7 +373,9 @@
       <button class="btn btn-primary" id="wlAddBtn" style="flex:none;">이력 추가</button>
     </div>
 
-    <div id="wlList" class="worklog-list"></div>
+    <div id="wlHistoryWrap">
+      <div id="wlList" class="worklog-list"></div>
+    </div>
 
     <div class="modal-actions">
       <button class="btn btn-ghost" id="wlCloseBtn">닫기</button>
