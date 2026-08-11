@@ -5003,19 +5003,19 @@
       "tag_note": "싱가폴 (SDSAP)",
       "id": 123,
       "ip_enc": {
-        "iv": "wKg1ehYBuegv+egG",
-        "ct": "0fWXM9l/CbxRqXWrJw==",
-        "tag": "8H7MVuZyi7WVO1QEG3l9MA=="
+        "iv": "Lfq/fj68vV5aZ1to",
+        "ct": "rSMbeaVhfT5qxuoF8g==",
+        "tag": "wEB4q82KeEaQK56xguKECA=="
       },
       "id_enc": {
-        "iv": "ex8zITpos0J2Ekum",
-        "ct": "d2EZbYc=",
-        "tag": "cJmvOqqTgYNN1iu2k4L9Cw=="
+        "iv": "/GqXVgZd0iCjN1aS",
+        "ct": "MCCDOEw=",
+        "tag": "qVEHYS3ZCqOJHZnhEJbHqQ=="
       },
       "pw_enc": {
-        "iv": "o+1m/UXBYUPWPH6s",
-        "ct": "mp0PHyB3oKnRMjJ9bHNrKsuLKw==",
-        "tag": "qY9Wj19j5l14A4IhTnEnGw=="
+        "iv": "NMF7UzPoxWogTJZE",
+        "ct": "l8LPUE6RMuB6zeTMe3W6r00=",
+        "tag": "0sZR5XCTcxiIWyQSARUHJw=="
       },
       "config_mode": "Transparent",
       "group_remarks": "",
@@ -5039,7 +5039,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2025.02"
+      "build_date": "2025.02",
+      "enable_pw_enc": null
     },
     {
       "group": "sg-001",
