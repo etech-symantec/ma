@@ -5364,64 +5364,6 @@
       "location": "천진",
       "support_id": "937842",
       "sku": "RP-V200-1Y",
-      "sn": "27484597",
-      "entitlement": "🔗",
-      "qty": "1",
-      "start": "2022.2.1",
-      "end": "2023.1.31",
-      "remarks": "",
-      "deploy_date": "2022-03-10",
-      "deploy_log": "신호근",
-      "mode": "",
-      "os_ver": "10.6.2.1",
-      "owner_primary": "윤태리",
-      "owner_secondary": "박동석",
-      "check_method": "X",
-      "cust_contact": "",
-      "cust_phone": "",
-      "cust_email": "",
-      "tag": "O",
-      "tag_note": "심천",
-      "id": 134,
-      "ip_enc": {
-        "iv": "ad2q+4B48zb1alEd",
-        "ct": "AK0bsSn4ndh0j+PzP/Xu",
-        "tag": "LePPyhu2Zb5Hxpfs99x7Vg=="
-      },
-      "id_enc": {
-        "iv": "Sw+zumEMn2W4Kc69",
-        "ct": "5yuk7eQ=",
-        "tag": "8oM/DVEpLdgyOz5ODuL4dw=="
-      },
-      "pw_enc": {
-        "iv": "9VJ8Yxs/xIJPQH8i",
-        "ct": "YLdJw6bHGB3umqU=",
-        "tag": "tCJ322pwqTkL/MUNQ6ivhw=="
-      },
-      "config_mode": "Explicit",
-      "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "",
-          "name": "yifeng.guo",
-          "org": "",
-          "phone": "",
-          "email": "yifeng.guo@samsung.com"
-        }
-      ],
-      "country": "중국",
-      "group_parent": "",
-      "is_parent": false,
-      "build_engineer": "강성준",
-      "build_date": "2023.05"
-    },
-    {
-      "group": "cn-001",
-      "flag": "",
-      "owner": "삼성디스플레이 SDT",
-      "location": "천진",
-      "support_id": "937842",
-      "sku": "RP-V200-1Y",
       "sn": "27484606",
       "entitlement": "🔗",
       "qty": "1",
