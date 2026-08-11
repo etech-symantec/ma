@@ -859,6 +859,7 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   padding:7px 10px; color:var(--text); font-size:13px; outline:none; font-family:var(--body);
 }
 .maint-toolbar input[type="month"]:focus{ border-color:var(--accent); }
+.maint-toolbar .maint-my-toggle{ flex:0 0 auto; min-width:150px; }
 
 .maint-summary-row{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
 .maint-summary-card{
