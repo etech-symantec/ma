@@ -319,7 +319,7 @@
       "os_ver": "7.3.21.1",
       "owner_primary": "윤태리",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -373,7 +373,11 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "대만"
+      "country": "대만",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "tw-ds",
@@ -394,7 +398,7 @@
       "os_ver": "",
       "owner_primary": "윤태리",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -436,7 +440,11 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "대만"
+      "country": "대만",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "tw-ds",
@@ -457,7 +465,7 @@
       "os_ver": "10.6.2.1",
       "owner_primary": "윤태리",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -511,7 +519,11 @@
         }
       ],
       "config_mode": "Explicit",
-      "country": "대만"
+      "country": "대만",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-sdn-cama",
