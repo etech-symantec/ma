@@ -777,33 +777,12 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .form-grid input:focus, .form-grid textarea:focus, .form-grid select:focus{ border-color:var(--accent); }
 .form-grid .full{ grid-column:1/-1; }
 
-/* 법인 추가/수정창 — "이 법인은 상위 법인입니다" 체크박스. 셀 안에서 세로 중앙에 오도록 한다. */
+/* 법인 추가/수정창 — "이 법인은 상위 법인입니다" 체크박스. 상위 법인(부모) select 바로 위에 놓인다. */
 .parent-flag-check{
-  display:flex; align-items:center; gap:6px; font-size:11.5px;
+  display:flex; align-items:center; gap:6px; margin-bottom:7px; font-size:11.5px;
   color:var(--text-dim); cursor:pointer; text-transform:none; letter-spacing:normal; font-family:var(--body);
 }
 .parent-flag-check input{ width:auto; margin:0; flex-shrink:0; }
-.parent-flag-cell{ display:flex; align-items:center; }
-
-/* 법인 추가/수정창 — "상위 법인 (부모)" 선택 영역. 실수로 잘못 선택하는 일이 없도록
-   체크박스와는 분리된, 눈에 잘 띄는 전체 너비의 별도 줄로 보여준다. */
-.form-grid .ng-parent-select-row{
-  grid-column:1/-1; background:#FFF8E8; border:1px solid #F0DFAF; border-radius:10px;
-  padding:12px 14px; display:flex; flex-direction:column; gap:6px;
-}
-.ng-parent-select-row label{
-  font-size:11.5px; font-weight:600; color:var(--text-dim); text-transform:none;
-  letter-spacing:normal; font-family:var(--body); line-height:1.5;
-}
-.ng-parent-select-row select{
-  width:100%; border:1px solid var(--border); border-radius:8px; background:#fff;
-  padding:9px 11px; color:var(--text); font-size:13px; outline:none; font-family:var(--body);
-}
-.ng-parent-select-row select:focus{ border-color:var(--accent); }
-.ng-parent-warning{
-  margin:2px 0 0; padding:8px 10px; border-radius:8px; background:#FDECEC; border:1px solid #F3B4B4;
-  color:#B42318; font-size:12px; font-weight:600; line-height:1.5;
-}
 
 /* 법인 정보 수정창 — 요청한 3열/2열 행 배치. 각 행은 form-grid(2열) 안에서 전체 너비를 차지하고,
    행 내부에서 자체적으로 3열 또는 2열 그리드를 이룬다. */
