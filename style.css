@@ -810,6 +810,11 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 .date-field{ position:relative; display:flex; align-items:center; gap:0; }
 .date-field input:not(.date-native-input){ padding-right:38px; }
+.ml-done-check{
+  display:flex; align-items:center; gap:6px; margin-top:8px;
+  font-size:12.8px; color:var(--text-dim); cursor:pointer;
+}
+.ml-done-check input{ cursor:pointer; }
 .date-pick-btn{
   position:absolute; right:4px; top:50%; transform:translateY(-50%);
   background:none; border:none; cursor:pointer; font-size:14px; padding:6px; line-height:1;
@@ -929,6 +934,10 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-cell-done .maint-cell-day{ font-family:var(--mono); font-weight:700; color:#2F8F52; font-size:12.5px; }
 .maint-cell-done .maint-cell-tag{ font-size:9.5px; color:#2F8F52; margin-left:2px; }
 .maint-cell-blank .maint-cell-dash{ color:var(--text-faint); font-size:12px; }
+.maint-cell-reserved{ background:#FBF3E1; }
+.maint-cell-reserved:hover{ background:#F6E9C9; }
+.maint-cell-reserved .maint-cell-day{ font-family:var(--mono); font-weight:700; color:#C8933A; font-size:12.5px; }
+.maint-cell-reserved .maint-cell-tag{ font-size:9.5px; color:#C8933A; margin-left:2px; }
 
 .maint-th-owner{ vertical-align:middle; }
 .maint-table{ width:100%; border-collapse:collapse; font-size:12.8px; }
