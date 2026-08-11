@@ -863,16 +863,13 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 
 .maint-toolbar{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px; }
 .maint-toolbar label{ font-size:11px; color:var(--text-faint); font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em; margin-right:6px; }
-.maint-toolbar input[type="month"]{
-  background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
-  padding:7px 10px; color:var(--text); font-size:13px; outline:none; font-family:var(--body);
-}
-.maint-toolbar input[type="month"]:focus{ border-color:var(--accent); }
 .maint-toolbar .maint-my-toggle{ flex:0 0 auto; min-width:150px; }
+.maint-year-hint{ flex:1 1 220px; font-size:11.5px; color:var(--text-faint); margin:0; }
 
-/* 대상 월 이전/다음 화살표 */
-.maint-ym-field{ display:flex; align-items:center; }
-.maint-ym-control{ display:flex; align-items:center; gap:4px; }
+/* 연도 이전/다음 화살표 */
+.maint-year-field{ display:flex; align-items:center; }
+.maint-year-control{ display:flex; align-items:center; gap:8px; }
+.maint-year-value{ font-size:14.5px; font-weight:700; color:var(--text); font-family:var(--display); min-width:52px; text-align:center; }
 .maint-ym-nav-btn{
   flex-shrink:0; width:28px; height:28px; display:flex; align-items:center; justify-content:center;
   background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
@@ -894,7 +891,46 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-summary-card.ms-crit .ms-num{ color:var(--red); }
 .maint-summary-card.ms-ok .ms-num{ color:#4CA36A; }
 
-.maint-table-wrap{ background:var(--surface); border:1px solid var(--border-solid); border-radius:12px; overflow:hidden; }
+/* 월별 등록 탭: 좌측 법인 정보 + 우측 1~12월 연간 스프레드시트 */
+.maint-year-table-wrap{ overflow-x:auto; }
+.maint-year-table{ table-layout:fixed; min-width:1080px; }
+.maint-year-table th, .maint-year-table td{ padding:8px 8px; }
+.maint-year-table .maint-th-owner, .maint-year-table .maint-cell-owner{
+  width:150px; min-width:150px;
+  position:sticky; left:0; z-index:2;
+  background:var(--surface2);
+  box-shadow:1px 0 0 var(--border-solid);
+}
+.maint-year-table thead .maint-th-owner{ z-index:3; }
+.maint-year-table td.maint-cell-owner{ background:var(--surface); }
+.maint-year-table tr:hover td.maint-cell-owner{ background:var(--surface2); }
+.maint-th-month{ width:64px; text-align:center !important; }
+.maint-year-table td:not(.maint-cell-owner){ text-align:center; }
+.maint-td-empty{ color:var(--text-faint); }
+
+.maint-dday{
+  display:inline-block; font-family:var(--mono); font-size:11.5px; font-weight:700;
+  padding:2px 8px; border-radius:999px;
+}
+.maint-dday.crit{ color:var(--red); background:#FCE8E8; }
+.maint-dday.warn{ color:#C8933A; background:#FBF0DD; }
+.maint-dday.ok{ color:#2F8F52; background:#E4F5EA; }
+.maint-dday.na{ color:var(--text-faint); background:var(--surface2); }
+
+.maint-cell{
+  cursor:pointer; border-left:1px solid var(--border); vertical-align:middle;
+  transition:background .12s;
+}
+.maint-cell:hover{ background:var(--surface2); }
+.maint-cell.is-current{ background:#FBF6E4; }
+.maint-cell.is-current:hover{ background:#F6EDC9; }
+.maint-cell-done{ background:#EAF5EE; }
+.maint-cell-done:hover{ background:#DBEFE1; }
+.maint-cell-done .maint-cell-day{ font-family:var(--mono); font-weight:700; color:#2F8F52; font-size:12.5px; }
+.maint-cell-done .maint-cell-tag{ font-size:9.5px; color:#2F8F52; margin-left:2px; }
+.maint-cell-blank .maint-cell-dash{ color:var(--text-faint); font-size:12px; }
+
+.maint-th-owner{ vertical-align:middle; }
 .maint-table{ width:100%; border-collapse:collapse; font-size:12.8px; }
 .maint-table th{
   text-align:left; font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.03em;
@@ -991,11 +1027,17 @@ footer.foot{
   tbody td::before{ content:attr(data-label); display:block; font-size:9.5px; color:var(--text-faint); text-transform:uppercase; font-family:var(--mono); margin-bottom:2px;}
   .form-grid{ grid-template-columns:1fr; }
   .form-grid .ge-row-3, .form-grid .ge-row-2, .form-grid .ge-row-5{ grid-template-columns:1fr; }
-  .maint-table, .maint-table thead, .maint-table tbody, .maint-table tr, .maint-table td{ display:block; }
-  .maint-table thead{ display:none; }
-  .maint-table tr{ padding:12px 14px; border-bottom:1px solid var(--border-solid); }
-  .maint-table td{ border:none; padding:4px 0; max-width:none; white-space:normal; }
-  .maint-table td::before{ content:attr(data-label); display:block; font-size:9.5px; color:var(--text-faint); text-transform:uppercase; font-family:var(--mono); margin-bottom:2px;}
+  .maint-table:not(.maint-year-table),
+  .maint-table:not(.maint-year-table) thead,
+  .maint-table:not(.maint-year-table) tbody,
+  .maint-table:not(.maint-year-table) tr,
+  .maint-table:not(.maint-year-table) td{ display:block; }
+  .maint-table:not(.maint-year-table) thead{ display:none; }
+  .maint-table:not(.maint-year-table) tr{ padding:12px 14px; border-bottom:1px solid var(--border-solid); }
+  .maint-table:not(.maint-year-table) td{ border:none; padding:4px 0; max-width:none; white-space:normal; }
+  .maint-table:not(.maint-year-table) td::before{ content:attr(data-label); display:block; font-size:9.5px; color:var(--text-faint); text-transform:uppercase; font-family:var(--mono); margin-bottom:2px;}
+  /* 연간 표(월별 등록)는 카드형으로 바꾸지 않고, 좌측 법인 열을 고정한 채 가로 스크롤로 본다 */
+  .maint-year-table-wrap{ -webkit-overflow-scrolling:touch; }
   .maint-day-chart{ overflow-x:auto; min-width:100%; }
   .maint-day-chart .maint-day-col{ flex:0 0 22px; }
 }
