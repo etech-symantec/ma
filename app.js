@@ -1051,6 +1051,12 @@ function pencilSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fi
 function trashSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`; }
 function clipboardSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>`; }
 function moveSvg(){ return `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>`; }
+// 법인 카드 펼치기/접기 아이콘 — 단순 회전이 아니라 모양 자체를 다르게 해서 지금 상태와
+// 클릭했을 때 무슨 일이 일어나는지(펼쳐질지/접힐지) 한눈에 알 수 있게 한다.
+// 접힌 상태(펼치기 전): 오른쪽을 가리키는 옅은 화살표 — "눌러서 펼치기".
+function chevExpandSvg(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>`; }
+// 펼쳐진 상태: 강조색 원 배경 안에 위쪽 화살표 — "눌러서 접기"임이 뚜렷하게 보이도록 배경을 채운다.
+function chevCollapseSvg(){ return `<svg width="15" height="15" viewBox="0 0 24 24" fill="var(--accent)" stroke="none"><circle cx="12" cy="12" r="11"/><path d="M8.5 13.5l3.5-3.5 3.5 3.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`; }
 
 // ---------- 대시보드 (OS 버전별 / 태그별 / 위치별 / 국가별 / SKU별 현황 한눈에 보기) ----------
 let dashboardMode = false;
@@ -1217,8 +1223,14 @@ function setViewMode(mode){
   if (contentEl) contentEl.style.display = (mode === 'list') ? '' : 'none';
   if (dashEl) dashEl.style.display = (mode === 'dashboard') ? '' : 'none';
   if (maintEl) maintEl.style.display = (mode === 'maintenance') ? '' : 'none';
-  if (dashBtn) dashBtn.classList.toggle('on', mode === 'dashboard');
-  if (maintBtn) maintBtn.classList.toggle('on', mode === 'maintenance');
+  if (dashBtn){
+    dashBtn.classList.toggle('on', mode === 'dashboard');
+    dashBtn.title = mode === 'dashboard' ? '대시보드 닫기 (다시 클릭)' : '대시보드 보기';
+  }
+  if (maintBtn){
+    maintBtn.classList.toggle('on', mode === 'maintenance');
+    maintBtn.title = mode === 'maintenance' ? '유지보수 점검 관리 닫기 (다시 클릭)' : '유지보수 점검 관리';
+  }
   if (mode === 'dashboard') renderDashboard();
   if (mode === 'maintenance') renderMaintenance();
 }
@@ -1446,13 +1458,12 @@ function maintenanceDayChartHtml(groups){
     const day = idx + 1;
     const hasData = entries.length > 0;
     const heightPct = hasData ? Math.max(8, Math.round((entries.length / maxCount) * 100)) : 2;
-    const names = entries
-      .slice().sort((a,b)=>a.avg-b.avg)
-      .map(e => `${e.owner} (평균 ${e.avg.toFixed(1)}일)`)
-      .join(', ');
-    const tip = hasData ? `${day}일 평균: ${names}` : `${day}일: 없음`;
+    const sortedEntries = entries.slice().sort((a,b)=>a.avg-b.avg);
+    const names = sortedEntries.map(e => `${e.owner} · 평균 ${e.avg.toFixed(1)}일`).join('\n');
+    const tip = hasData ? `${day}일 (${entries.length}개 법인)\n${names}` : `${day}일 · 데이터 없음`;
+    const edgeCls = day <= 5 ? ' tip-start' : (day >= 27 ? ' tip-end' : '');
     return `
-      <div class="maint-day-col" title="${esc(tip)}">
+      <div class="maint-day-col${edgeCls}" data-tip="${esc(tip)}">
         <div class="maint-day-bar ${hasData?'':'empty'}" style="height:${heightPct}%;">${hasData?`<span class="maint-day-count">${entries.length}</span>`:''}</div>
         <div class="maint-day-daylabel ${day%5===0||day===1?'strong':''}">${day}</div>
       </div>`;
@@ -1559,37 +1570,6 @@ function maintenanceStatsTabHtml(){
       </div>`;
   }).join('');
 
-  // 법인별 점검율 (2026-01 이후 전체 기간 기준) — 낮은 순으로 정렬해 관리가 필요한 법인이 위로 오게 한다.
-  const groupStats = groups.map(g => {
-    const doneMonths = months.filter(ym => {
-      const log = maintenanceLogFor(g.gid, ym);
-      return log && (log.date||'').trim();
-    });
-    const missedMonths = months.filter(ym => !doneMonths.includes(ym));
-    const rate = months.length ? Math.round(doneMonths.length/months.length*100) : 0;
-    const logsSorted = maintenanceLogsForGroup(g.gid).filter(l=>(l.date||'').trim()).sort((a,b)=>{
-      const da = parseDate(a.date), db = parseDate(b.date);
-      if (da && db) return db - da;
-      return 0;
-    });
-    const lastCheck = logsSorted.length ? logsSorted[0].date : '';
-    return { gid: g.gid, owner: g.meta.owner, rate, missedMonths, lastCheck };
-  }).sort((a,b) => a.rate - b.rate);
-
-  const groupRowsHtml = groupStats.map(s => {
-    const rateCls = s.rate >= 80 ? 'high' : (s.rate >= 50 ? 'mid' : 'low');
-    const missedHtml = s.missedMonths.length
-      ? `<div class="maint-missed-list">${s.missedMonths.slice(0,6).map(ym=>`<span class="maint-missed-chip">${esc(ymLabel(ym))}</span>`).join('')}${s.missedMonths.length>6?`<span class="maint-missed-chip">외 ${s.missedMonths.length-6}개월</span>`:''}</div>`
-      : `<span class="maint-status-badge done">누락 없음</span>`;
-    return `
-      <tr>
-        <td data-label="법인"><div class="maint-row-owner">${esc(s.owner)}</div></td>
-        <td data-label="점검율" class="maint-rate-cell ${rateCls}">${s.rate}%</td>
-        <td data-label="최근 점검일">${s.lastCheck ? esc(s.lastCheck) : '—'}</td>
-        <td data-label="누락된 월">${missedHtml}</td>
-      </tr>`;
-  }).join('');
-
   const me = currentUserName();
   const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
 
@@ -1615,12 +1595,6 @@ function maintenanceStatsTabHtml(){
       <h4>담당자별 사이트 요약</h4>
       <p class="maint-day-hint">담당자별로 정/부 담당 중인 법인 수를 점검 방식별로 모아 보여줍니다. 개인 필터(내가 정인 법인만)와 무관하게 전체 담당자 기준입니다.</p>
       ${maintenanceUserSummaryHtml()}
-    </div>
-    <div class="maint-table-wrap">
-      <table class="maint-table maint-group-stats-table">
-        <thead><tr><th>법인</th><th>점검율 (2026.01~)</th><th>최근 점검일</th><th>누락된 월</th></tr></thead>
-        <tbody>${groupRowsHtml || `<tr><td colspan="4"><div class="maint-empty">등록된 법인이 없습니다.</div></td></tr>`}</tbody>
-      </table>
     </div>`;
 }
 
@@ -1887,7 +1861,7 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
             </div>
             <span class="badge ${statusBadgeVisual(worst).cls}" style="color:${statusBadgeVisual(worst).color}">${statusLabel(worst)}</span>
-            <span class="chev ${isOpen?'open':''}">›</span>
+            <span class="chev ${isOpen?'open':''}" title="${isOpen?'접기':'펼치기'}">${isOpen ? chevCollapseSvg() : chevExpandSvg()}</span>
           </div>
         </div>
         <div class="items ${isOpen?'open':''}">
@@ -3270,7 +3244,11 @@ function updateSidebarProfile(){
   if (!nameEl) return;
   const name = currentUserName();
   nameEl.textContent = name || '로그인 필요';
-  if (subEl) subEl.textContent = isCurrentUserAdmin() ? '👑 마스터' : '로그인됨';
+  if (subEl){
+    const isAdmin = isCurrentUserAdmin();
+    subEl.textContent = isAdmin ? '👑 마스터' : '';
+    subEl.style.display = isAdmin ? '' : 'none';
+  }
 }
 function updateUserBtnLabel(){ updateSidebarProfile(); } // (이전 이름 호환용 별칭)
 
