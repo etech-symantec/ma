@@ -1185,6 +1185,15 @@ function currentYm(){
   const d = new Date();
   return `${d.getFullYear()}-${pad2(d.getMonth()+1)}`;
 }
+// "YYYY-MM" 문자열을 delta개월만큼 이동시킨 "YYYY-MM"을 반환한다. (대상 월 앞/뒤 화살표용)
+function shiftYm(ym, delta){
+  const m0 = ym && /^\d{4}-\d{2}$/.test(ym) ? ym : currentYm();
+  const [y, m] = m0.split('-').map(Number);
+  const total = y * 12 + (m - 1) + delta;
+  const ny = Math.floor(total / 12);
+  const nm = ((total % 12) + 12) % 12 + 1;
+  return `${ny}-${pad2(nm)}`;
+}
 function ymLabel(ym){
   if (!ym) return '';
   const [y, m] = ym.split('-');
@@ -1284,7 +1293,14 @@ function maintenanceEntryTabHtml(){
 
   return `
     <div class="maint-toolbar">
-      <div><label>점검 대상 월</label><input type="month" id="maintYmInput" min="2026-01" value="${esc(maintenanceYm)}"></div>
+      <div class="maint-ym-field">
+        <label>점검 대상 월</label>
+        <div class="maint-ym-control">
+          <button type="button" class="maint-ym-nav-btn" id="maintYmPrevBtn" title="이전 달" ${maintenanceYm<='2026-01'?'disabled':''}>‹</button>
+          <input type="month" id="maintYmInput" min="2026-01" value="${esc(maintenanceYm)}">
+          <button type="button" class="maint-ym-nav-btn" id="maintYmNextBtn" title="다음 달">›</button>
+        </div>
+      </div>
       <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
         <span class="mat-label">내가 정인 법인만</span>
         <span class="mat-count">${myCount}</span>
@@ -1304,6 +1320,45 @@ function maintenanceEntryTabHtml(){
         <tbody>${rowsHtml || `<tr><td colspan="7"><div class="maint-empty">등록된 법인이 없습니다. 먼저 좌측 ＋ 버튼으로 법인을 등록해 주세요.</div></td></tr>`}</tbody>
       </table>
     </div>`;
+}
+
+// 각 법인의 "평균 점검일"(1~31)을 계산해 날짜별 버킷으로 묶는다.
+// 법인마다 지금까지 등록된 점검일들의 평균을 하루 단위로 반올림해 하나의 날짜에 배치하고,
+// 같은 날짜에 몰린 법인이 많을수록 그 날짜가 "바쁜 시기"임을 막대 높이로 가늠할 수 있게 한다.
+function maintenanceAvgDayBuckets(groups){
+  const buckets = Array.from({length:31}, () => []);
+  groups.forEach(g => {
+    const days = maintenanceLogsForGroup(g.gid)
+      .map(l => parseDate(l.date))
+      .filter(Boolean)
+      .map(d => d.getDate());
+    if (!days.length) return;
+    const avg = days.reduce((a,b)=>a+b, 0) / days.length;
+    const day = Math.min(31, Math.max(1, Math.round(avg)));
+    buckets[day-1].push({ owner: g.meta.owner, avg });
+  });
+  return buckets;
+}
+
+function maintenanceDayChartHtml(groups){
+  const buckets = maintenanceAvgDayBuckets(groups);
+  const maxCount = Math.max(1, ...buckets.map(b => b.length));
+  const cols = buckets.map((entries, idx) => {
+    const day = idx + 1;
+    const hasData = entries.length > 0;
+    const heightPct = hasData ? Math.max(8, Math.round((entries.length / maxCount) * 100)) : 2;
+    const names = entries
+      .slice().sort((a,b)=>a.avg-b.avg)
+      .map(e => `${e.owner} (평균 ${e.avg.toFixed(1)}일)`)
+      .join(', ');
+    const tip = hasData ? `${day}일 평균: ${names}` : `${day}일: 없음`;
+    return `
+      <div class="maint-day-col" title="${esc(tip)}">
+        <div class="maint-day-bar ${hasData?'':'empty'}" style="height:${heightPct}%;">${hasData?`<span class="maint-day-count">${entries.length}</span>`:''}</div>
+        <div class="maint-day-daylabel ${day%5===0||day===1?'strong':''}">${day}</div>
+      </div>`;
+  }).join('');
+  return `<div class="maint-day-chart">${cols}</div>`;
 }
 
 function maintenanceStatsTabHtml(){
@@ -1371,6 +1426,11 @@ function maintenanceStatsTabHtml(){
       <h4>월별 점검 완료율 (2026.01 ~ ${esc(ymLabel(currentYm()))})</h4>
       ${trendRows || '<div class="dash-empty">데이터가 없습니다.</div>'}
     </div>
+    <div class="maint-trend-card">
+      <h4>법인별 평균 점검일 분포 (1일 ~ 31일)</h4>
+      <p class="maint-day-hint">법인마다 지금까지의 점검일 평균을 날짜(1~31일)에 배치한 막대그래프입니다. 막대가 높을수록 그 날짜대에 점검이 몰려 있다는 뜻이며, 막대에 마우스를 올리면 어떤 법인이 해당하는지 볼 수 있습니다.</p>
+      ${groups.length ? maintenanceDayChartHtml(groups) : '<div class="dash-empty">데이터가 없습니다.</div>'}
+    </div>
     <div class="maint-table-wrap">
       <table class="maint-table maint-group-stats-table">
         <thead><tr><th>법인</th><th>점검율 (2026.01~)</th><th>최근 점검일</th><th>누락된 월</th></tr></thead>
@@ -1403,6 +1463,23 @@ function renderMaintenance(){
   if (ymInput){
     ymInput.onchange = () => {
       if (ymInput.value){ maintenanceYm = ymInput.value; renderMaintenance(); }
+    };
+  }
+
+  const ymPrevBtn = document.getElementById('maintYmPrevBtn');
+  if (ymPrevBtn){
+    ymPrevBtn.onclick = () => {
+      const prev = shiftYm(maintenanceYm, -1);
+      if (prev < '2026-01') return;
+      maintenanceYm = prev;
+      renderMaintenance();
+    };
+  }
+  const ymNextBtn = document.getElementById('maintYmNextBtn');
+  if (ymNextBtn){
+    ymNextBtn.onclick = () => {
+      maintenanceYm = shiftYm(maintenanceYm, 1);
+      renderMaintenance();
     };
   }
 
@@ -2104,12 +2181,21 @@ function getMySiteGroupIds(){
   return ids;
 }
 
+// My 버튼에 표시할 갯수: 실제 자산이 걸린 "사이트(leaf 그룹)" 수가 아니라,
+// 하위 법인은 상위 법인에 묶어서 하나로 세는 "독립법인 + 상위법인" 수로 보여준다.
+// (유지보수 관리 페이지의 법인 목록 기준과 동일한 maintenanceGroupList()를 재사용한다.)
+function getMyTopLevelGroupCount(){
+  const me = currentUserName();
+  if (!me) return 0;
+  return maintenanceGroupList().filter(g => g.meta.owner_primary === me).length;
+}
+
 function updateMyAssetsToggle(){
   const btn = document.getElementById('myAssetsToggle');
   const cntEl = document.getElementById('myAssetsCount');
   if (!btn || !cntEl) return;
   const me = currentUserName();
-  cntEl.textContent = getMySiteGroupIds().size;
+  cntEl.textContent = getMyTopLevelGroupCount();
   btn.classList.toggle('active', activeMyAssetsFilter);
   btn.disabled = !me;
   btn.title = me ? '내가 정 담당자인 사이트만 보기' : '로그인이 필요합니다.';
