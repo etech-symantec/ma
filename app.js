@@ -387,6 +387,10 @@ function boot(){
   const brokenGroupFixed = repairKnownBrokenGeneratedGroups();
   // 법인만 먼저 만든 뒤 생긴 빈 레코드는 실제 자산이 아니라 법인 정보를 보존하는 shell 레코드로 정리한다.
   const shellFixed = migrateEmptyGroupPlaceholders();
+  // 법인만 먼저 만들 때 shell에 입력해 둔 Support ID/구축 정보와, 이후 첫 자산(특히 이동된 자산)의
+  // 기존 Support ID가 충돌하면 새 법인에서 Support ID가 2개로 보일 수 있다. 이 경우 새 법인 생성 시
+  // 사용자가 지정한 shell의 Support ID를 우선값으로 보고 첫 실제 자산에 승계한다.
+  const shellSupportFixed = normalizeShellSupportDefaults();
   // 예전 버전에서 "자산 정보 직접 수정" 화면으로 법인명 등을 자산 하나만 따로 바꿀 수 있었던 적이
   // 있어서 같은 법인(그룹) 안에서 값이 어긋난 데이터가 있다면 그룹의 대표 값으로 다시 맞춘다.
   const ownerFixed = migrateOwnerConsistencyWithinGroups();
@@ -397,7 +401,7 @@ function boot(){
   const migrated = enforceParentsHaveNoDirectAssets();
   render();
   requestAnimationFrame(() => { syncGlobalHeaderHeight(); syncStickyOffsets(); });
-  if ((migrated || entitiesFixed || brokenGroupFixed || shellFixed || ownerFixed) && !viewOnly && sessionKey){
+  if ((migrated || entitiesFixed || brokenGroupFixed || shellFixed || shellSupportFixed || ownerFixed) && !viewOnly && sessionKey){
     buildFilters();
     scheduleAutoSync();
   }
@@ -574,6 +578,38 @@ function migrateEmptyGroupPlaceholders(){
     if (!r.is_group_shell && isAssetPayloadEmpty(r)){
       r.is_group_shell = true;
       changed = true;
+    }
+  });
+  return changed;
+}
+
+// 법인을 먼저 생성하면 Support ID/구축 엔지니어/구축 일자는 shell 레코드에 임시 보관된다.
+// 그 뒤 첫 자산을 '이동'으로 넣으면 자산이 원래 법인의 Support ID를 그대로 들고 와서
+// shell의 Support ID와 합쳐져 2개처럼 보일 수 있다. 새 법인에 실제 자산이 처음 생긴 시점에는
+// shell에 명시적으로 저장된 값을 그 법인의 기본 Support 정보로 보고 실제 자산으로 승계한다.
+// 이미 실제 자산이 여러 Support ID로 나뉜 법인은 의도된 다중 Support ID일 수 있으므로 건드리지 않는다.
+function normalizeShellSupportDefaults(){
+  let changed = false;
+  const gids = [...new Set(records.map(r => r.group))];
+  gids.forEach(gid => {
+    const items = records.filter(r => r.group === gid);
+    const shells = items.filter(r => r.is_group_shell);
+    const real = items.filter(r => !r.is_group_shell);
+    if (!shells.length || !real.length) return;
+
+    const shell = shells.find(r => (r.support_id||'').trim()) || shells[0];
+    const shellSid = (shell.support_id||'').trim();
+    if (!shellSid) return;
+
+    const realSids = new Set(real.map(r => (r.support_id||'').trim()).filter(Boolean));
+    // 실제 자산이 아직 Support ID가 없거나, 모두 하나의 동일한 옛 Support ID만 갖고 있으면
+    // 법인 생성 시 지정한 Support ID가 더 신뢰할 수 있는 값이다.
+    if (realSids.size <= 1){
+      real.forEach(r => {
+        if ((r.support_id||'').trim() !== shellSid){ r.support_id = shellSid; changed = true; }
+        if (shell.build_engineer && r.build_engineer !== shell.build_engineer){ r.build_engineer = shell.build_engineer; changed = true; }
+        if (shell.build_date && r.build_date !== shell.build_date){ r.build_date = shell.build_date; changed = true; }
+      });
     }
   });
   return changed;
@@ -806,16 +842,19 @@ function collapseGroupWithDescendants(gid){
 function familySupportIds(gid){
   const fam = groupFamilyIds(gid);
   const ids = new Set();
-  records.forEach(r => {
-    if (fam.has(r.group) && (r.support_id||'').trim()) ids.add(r.support_id.trim());
+  fam.forEach(fg => {
+    ownSupportIds(records.filter(r => r.group === fg)).forEach(sid => ids.add(sid));
   });
   return [...ids].sort((a,b)=>a.localeCompare(b,'ko'));
 }
-// 이 법인 자신의 자산들만 놓고 본 Support ID 목록(부모-자식 관계가 없는 독립 법인용).
-// 같은 법인 안에서도 Support ID가 여러 개일 수 있으므로 중복 없이 전부 모은다.
+// 이 법인 자신의 Support ID 목록. 실제 자산이 하나라도 있으면 shell 레코드의 임시 Support ID는
+// 표시/집계에서 제외한다. 실제 자산이 전혀 없는 '법인만 생성된 상태'에서만 shell 값을 대신 보여준다.
+// 이렇게 해야 첫 자산 이동 후 shell의 신규 SID + 자산의 기존 SID가 2개로 보이는 현상이 생기지 않는다.
 function ownSupportIds(items){
+  const realItems = items.filter(r => !r.is_group_shell);
+  const source = realItems.length ? realItems : items.filter(r => r.is_group_shell);
   const ids = new Set();
-  items.forEach(r => { if ((r.support_id||'').trim()) ids.add(r.support_id.trim()); });
+  source.forEach(r => { if ((r.support_id||'').trim()) ids.add(r.support_id.trim()); });
   return [...ids].sort((a,b)=>a.localeCompare(b,'ko'));
 }
 // 법인 정보에 표시할 Support ID 목록 — 부모-자식 관계가 있으면 가족 전체, 없으면 이 법인 자신의 것만.
@@ -834,8 +873,12 @@ function subGroupMeta(items){
   };
 }
 function buildSubGroups(items){
+  // 실제 자산이 존재하는 법인에서는 shell은 법인 이름표/초기 입력 보관용일 뿐 Support ID 하위 그룹이 아니다.
+  // 실제 자산이 하나도 없을 때만 shell을 사용해 법인 생성 시 입력한 Support ID/구축 정보를 편집 가능하게 한다.
+  const realItems = items.filter(r => !r.is_group_shell);
+  const sourceItems = realItems.length ? realItems : items.filter(r => r.is_group_shell);
   const map = new Map();
-  for (const it of items){
+  for (const it of sourceItems){
     const key = (it.support_id||'').trim();
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(it);
@@ -1906,8 +1949,18 @@ document.getElementById('saveAddBtn').onclick = async () => {
     const meta = groupMeta(items);
     const newId = nextRecordId();
     const newSupportId = val('f_support');
+    const realItemsBefore = items.filter(r => !r.is_group_shell);
     const supportItems = items.filter(r => (r.support_id||'').trim() === newSupportId);
-    const supportMeta = supportItems.length ? subGroupMeta(supportItems) : {build_engineer:'', build_date:''};
+    // 첫 자산이라면 법인 생성 시 shell에 입력해 둔 구축 엔지니어/일자를 승계한다.
+    // 이후 자산은 해당 Support ID의 실제 자산 메타를 우선한다.
+    const shellSupport = items.find(r => r.is_group_shell && (r.support_id||'').trim() === newSupportId);
+    const supportMeta = supportItems.length
+      ? subGroupMeta(realItemsBefore.length ? supportItems.filter(r=>!r.is_group_shell) : supportItems)
+      : {build_engineer:'', build_date:''};
+    if (shellSupport && !realItemsBefore.length){
+      supportMeta.build_engineer = shellSupport.build_engineer || supportMeta.build_engineer || '';
+      supportMeta.build_date = shellSupport.build_date || supportMeta.build_date || '';
+    }
     const rec = {
       id:newId, group:addAssetTargetGid, flag: meta.flag || '',
       owner: meta.owner, country: meta.country, location: meta.location,
@@ -2458,10 +2511,10 @@ function openMoveAssetModal(recIdOrIds){
     const rec = recs[0];
     const curMeta = groupMeta(records.filter(r=>r.group===rec.group));
     hintEl.textContent =
-      `현재 "${curMeta.owner}" 법인에 속한 "${rec.sku || skuTagLabel(rec)}" 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / Support ID / 구축 엔지니어 / 구축 일자 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.`;
+      `현재 "${curMeta.owner}" 법인에 속한 "${rec.sku || skuTagLabel(rec)}" 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 유지됩니다. 대상 법인이 새로 만든 법인이고 Support ID/구축 정보가 미리 지정되어 있으면 그 값을 따르고, 그 외에는 기존 Support ID/구축 정보를 유지합니다.`;
   } else {
     hintEl.textContent =
-      `선택한 ${recs.length}개 자산 항목을 한 번에 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / Support ID / 구축 엔지니어 / 구축 일자 / 비고 등 자산 고유 정보는 각 항목별로 그대로 유지되고, 법인명·국가·위치·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 일괄 변경됩니다.`;
+      `선택한 ${recs.length}개 자산 항목을 한 번에 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 유지됩니다. 대상 법인이 새로 만든 법인이고 Support ID/구축 정보가 미리 지정되어 있으면 그 값을 따르고, 그 외에는 기존 Support ID/구축 정보를 유지합니다.`;
   }
   document.getElementById('moveAssetModal').classList.add('open');
 }
@@ -2487,6 +2540,18 @@ document.getElementById('saveMaBtn').onclick = () => {
     : `선택한 ${recs.length}개 항목을 "${meta.owner}" 법인으로 옮길까요?`;
   if (!confirm(confirmMsg)) return;
 
+  // 대상이 '법인만 먼저 생성된 상태'라면 shell에 저장된 Support ID/구축 정보가 대상 법인의 기준값이다.
+  // 기존 자산을 이 법인으로 이동할 때 원래 법인의 Support ID를 끌고 오지 않고 대상 법인 값을 적용한다.
+  const targetRealItemsBefore = targetItems.filter(r => !r.is_group_shell);
+  const targetShell = targetItems.find(r => r.is_group_shell && (r.support_id||'').trim());
+  const targetDefaultSupport = (!targetRealItemsBefore.length && targetShell)
+    ? {
+        support_id:(targetShell.support_id||'').trim(),
+        build_engineer:targetShell.build_engineer||'',
+        build_date:targetShell.build_date||''
+      }
+    : null;
+
   for (const rec of recs){
     rec.group = targetGid;
     rec.flag = meta.flag;
@@ -2501,6 +2566,11 @@ document.getElementById('saveMaBtn').onclick = () => {
     rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
     rec.group_remarks = meta.group_remarks;
     rec.group_parent = meta.group_parent;
+    if (targetDefaultSupport){
+      rec.support_id = targetDefaultSupport.support_id;
+      rec.build_engineer = targetDefaultSupport.build_engineer;
+      rec.build_date = targetDefaultSupport.build_date;
+    }
     selectedAssetIds.delete(String(rec.id));
   }
 
