@@ -1211,7 +1211,7 @@
       "os_ver": "7.3.21.1",
       "owner_primary": "강성준",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1252,7 +1252,11 @@
       ],
       "country": "인도",
       "config_mode": "Explicit",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "in-shi",
@@ -1273,7 +1277,7 @@
       "os_ver": "",
       "owner_primary": "강성준",
       "owner_secondary": "김상문",
-      "check_method": "원격 (RC)",
+      "check_method": "원격",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -1301,7 +1305,11 @@
         }
       ],
       "country": "인도",
-      "config_mode": "Explicit"
+      "config_mode": "Explicit",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "th-tse",
