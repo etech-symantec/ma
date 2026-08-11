@@ -15152,10 +15152,10 @@
       "sku": "PAC 2",
       "sn": "",
       "entitlement": "🔗",
-      "qty": "",
+      "qty": "1",
       "start": "",
       "end": "",
-      "remarks": "",
+      "remarks": "윈도우 서버",
       "deploy_date": "",
       "deploy_log": "",
       "mode": "",
@@ -15201,7 +15201,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "kr-004",
