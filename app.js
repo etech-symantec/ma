@@ -1175,7 +1175,7 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
 // 통계(월별 완료율 / 법인별 점검율 / 누락 이력)를 볼 수 있게 한다.
 // 데이터는 records/users와 마찬가지로 maintenanceLogs 배열에 담아 GitHub와 함께 동기화된다.
 
-let maintenanceTab = 'entry'; // 'entry'(월별 등록) | 'stats'(통계)
+let maintenanceTab = 'entry'; // 'entry'(점검지) | 'stats'(통계)
 let maintenanceYear = null;   // 등록 탭에서 현재 보고 있는 연도(숫자). 한 화면에 이 연도의 1~12월이 모두 나온다.
 let maintenanceEditTarget = null; // 점검 등록 모달에서 현재 편집 중인 {gid, ym}
 let maintenanceMyFilter = false; // 유지보수 페이지: 내가 정 담당자인 법인만 보기
@@ -1241,7 +1241,7 @@ function setMaintenanceTab(tab){
   renderMaintenance();
 }
 
-// 월별 등록 탭: 좌측에 법인 정보, 우측에 선택한 연도의 1월~12월이 한 화면에 표(스프레드시트)로 나온다.
+// 점검지 탭: 좌측에 법인 정보, 우측에 선택한 연도의 1월~12월이 한 화면에 표(스프레드시트)로 나온다.
 // 각 달 칸을 클릭하면 그 법인 · 그 달의 점검 등록 모달(openMaintenanceLogModal)이 뜬다.
 const MAINT_MONTHS = [1,2,3,4,5,6,7,8,9,10,11,12];
 
@@ -1253,10 +1253,12 @@ function maintenanceEntryTabHtml(){
   const thisYm = currentYm();
 
   const bodyRows = groups.map(g => {
-    // 계약만료 D-Day: 이 법인 자체 항목들(자식 법인 제외) 중 가장 급하게 만료되는 라이선스 기준.
+    // 계약만료 D-Day: 이 법인 및 하위(자식) 법인들에 포함된 모든 자산 중 라이선스 기간이
+    // 가장 짧게(가장 급하게) 남은 것을 기준으로 한다.
     let ddayHtml = `<span class="maint-dday na">-</span>`;
     let soonest = null;
-    g.realItems.forEach(r => {
+    const familyGids = new Set([g.gid, ...groupDescendantIds(g.gid)]);
+    records.filter(r => familyGids.has(r.group) && !r.is_group_shell).forEach(r => {
       const d = daysUntilEnd(r);
       if (d === null) return;
       if (soonest === null || d < soonest) soonest = d;
@@ -1273,9 +1275,6 @@ function maintenanceEntryTabHtml(){
           g.meta.owner_secondary ? `<span class="mgr-secondary">${esc(g.meta.owner_secondary)}</span>` : ''
         ].filter(Boolean).join(' ')
       : '<span class="maint-td-empty">-</span>';
-
-    const remarksTxt = (g.meta.group_remarks || '').trim();
-    const checkTxt = (g.meta.check_method || '').trim();
 
     const monthCellsHtml = MAINT_MONTHS.map(m => {
       const ym = `${maintenanceYear}-${pad2(m)}`;
@@ -1305,8 +1304,6 @@ function maintenanceEntryTabHtml(){
         </td>
         <td data-label="계약만료 D-Day">${ddayHtml}</td>
         <td data-label="담당">${engineerHtml}</td>
-        <td data-label="참고사항"><span class="maint-row-note" title="${esc(remarksTxt)}">${remarksTxt ? esc(remarksTxt) : '—'}</span></td>
-        <td data-label="점검방법">${checkTxt ? esc(checkTxt) : '—'}</td>
         ${monthCellsHtml}
       </tr>`;
   }).join('');
@@ -1334,13 +1331,11 @@ function maintenanceEntryTabHtml(){
             <th class="maint-th-owner" rowspan="2">사업장</th>
             <th rowspan="2">계약만료<br>D-Day</th>
             <th rowspan="2">담당</th>
-            <th rowspan="2">참고사항</th>
-            <th rowspan="2">점검방법</th>
             <th colspan="12">점검일자 (${maintenanceYear})</th>
           </tr>
           <tr>${MAINT_MONTHS.map(m => `<th class="maint-th-month">${m}월</th>`).join('')}</tr>
         </thead>
-        <tbody>${bodyRows || `<tr><td colspan="17"><div class="maint-empty">등록된 법인이 없습니다. 먼저 좌측 ＋ 버튼으로 법인을 등록해 주세요.</div></td></tr>`}</tbody>
+        <tbody>${bodyRows || `<tr><td colspan="15"><div class="maint-empty">등록된 법인이 없습니다. 먼저 좌측 ＋ 버튼으로 법인을 등록해 주세요.</div></td></tr>`}</tbody>
       </table>
     </div>`;
 }
@@ -1472,7 +1467,7 @@ function renderMaintenance(){
       <p class="maint-sub">등록된 법인들의 월별 점검 이력을 관리합니다 · 2026년 1월부터</p>
     </div>
     <div class="maint-tabs">
-      <button type="button" class="maint-tab-btn ${maintenanceTab==='entry'?'active':''}" data-maint-tab="entry">월별 등록</button>
+      <button type="button" class="maint-tab-btn ${maintenanceTab==='entry'?'active':''}" data-maint-tab="entry">점검지</button>
       <button type="button" class="maint-tab-btn ${maintenanceTab==='stats'?'active':''}" data-maint-tab="stats">통계</button>
     </div>
     <div id="maintTabBody">${maintenanceTab==='entry' ? maintenanceEntryTabHtml() : maintenanceStatsTabHtml()}</div>
@@ -1524,8 +1519,9 @@ function openMaintenanceLogModal(gid, ym){
   const log = maintenanceLogFor(gid, ym);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
   document.getElementById('mlModalSub').textContent = `이 법인의 ${ymLabel(ym)} 점검일을 등록합니다. 등록은 이 법인의 담당 엔지니어 중 정 담당자(${g.meta.owner_primary || '미지정'})가 하는 것을 기본으로 하되, 필요하면 다른 담당자 이름으로도 남길 수 있습니다.`;
-  document.getElementById('ml_date').value = log ? (log.date || '') : '';
-  document.getElementById('ml_manager').value = log ? (log.manager || '') : (g.meta.owner_primary || '');
+  // 점검일 기본값은 항상 오늘(클릭한 날)로 잡는다. 점검 담당자 기본값은 로그인한 사용자 이름이다.
+  document.getElementById('ml_date').value = todayDots();
+  document.getElementById('ml_manager').value = currentUserName() || (g.meta.owner_primary || '');
   document.getElementById('ml_note').value = log ? (log.note || '') : '';
   document.getElementById('mlError').textContent = '';
   document.getElementById('mlDeleteBtn').style.display = log ? '' : 'none';
@@ -3651,6 +3647,11 @@ function fmtDateDots(nativeVal){
   const [y,m,d] = nativeVal.split('-').map(Number);
   if (!y || !m || !d) return '';
   return `${y}.${m}.${d}`;
+}
+// 오늘 날짜를 "YYYY.M.D" 형식으로 반환한다 (점검일 기본값 등에 사용).
+function todayDots(){
+  const now = new Date();
+  return `${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()}`;
 }
 
 document.getElementById('wl_date_pick_btn').onclick = () => {
