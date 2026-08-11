@@ -28,6 +28,16 @@ function syncStickyOffsets(){
   const topbar = document.querySelector('.am-topbar');
   const topbarH = topbar ? Math.ceil(topbar.getBoundingClientRect().height) : 0;
   document.documentElement.style.setProperty('--topbar-h', topbarH + 'px');
+  syncMaintTheadOffset();
+}
+
+function syncMaintTheadOffset(){
+  const stickyTop = document.querySelector('.maint-sticky-top');
+  const stickyTopH = stickyTop ? Math.ceil(stickyTop.getBoundingClientRect().height) : 0;
+  document.documentElement.style.setProperty('--maint-sticky-top-h', stickyTopH + 'px');
+  const row1 = document.querySelector('.maint-year-table thead tr:first-child');
+  const row1H = row1 ? Math.ceil(row1.getBoundingClientRect().height) : 0;
+  document.documentElement.style.setProperty('--maint-thead-row1-h', row1H + 'px');
 }
 document.addEventListener('DOMContentLoaded', () => {
   syncStickyOffsets();
@@ -1441,7 +1451,7 @@ function maintenanceStatsTabHtml(){
     </div>
     <div class="maint-trend-card">
       <h4>담당자별 사이트 요약</h4>
-      <p class="maint-day-hint">담당자별로 정/부 담당 중인 법인 수를 점검 방식별로 모아 보여줍니다. 개인 필터(내가 정인 법인만)와 무관하게 전체 담당자 기준입니다.</p>
+      <p class="maint-day-hint">담당자별로 정/부 담당 중인 법인 수를 점검 방식별로 모아 보여줍니다. 개인 필터(내 사업장만)와 무관하게 전체 담당자 기준입니다.</p>
       ${maintenanceUserSummaryHtml()}
     </div>`;
 }
@@ -1454,14 +1464,14 @@ function renderMaintenance(){
   const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
   wrap.innerHTML = `
     <div class="maint-sticky-top">
-      <div class="maint-my-filter-row">
-        <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
-          <span class="mat-label">내가 정인 법인만</span>
-          <span class="mat-count">${myCount}</span>
-        </button>
-      </div>
       <div class="maint-header">
-        <h2>유지보수 점검 관리</h2>
+        <div class="maint-header-row">
+          <h2>유지보수 점검 관리</h2>
+          <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
+            <span class="mat-label">내 사업장만</span>
+            <span class="mat-count">${myCount}</span>
+          </button>
+        </div>
         <p class="maint-sub">등록된 법인들의 월별 점검 이력을 관리합니다 · 2026년 1월부터</p>
       </div>
       <div class="maint-tabs">
@@ -1507,6 +1517,9 @@ function renderMaintenance(){
       openMaintenanceLogModal(gid, ym);
     };
   });
+
+  syncMaintTheadOffset();
+  requestAnimationFrame(syncMaintTheadOffset);
 }
 
 function openMaintenanceLogModal(gid, ym){
@@ -2191,7 +2204,7 @@ function updateExpandAllBtn(){
   const btn = document.getElementById('expandAllBtn');
   if (!btn) return;
   const allOpen = expandedGroups.size > 0;
-  btn.textContent = allOpen ? '⊟' : '⊞';
+  btn.textContent = allOpen ? '⬆️' : '⬇️';
   btn.title = allOpen ? '전체 접기' : '전체 펼치기';
   btn.classList.toggle('is-collapse-mode', allOpen);
 }
