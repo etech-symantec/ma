@@ -14885,48 +14885,6 @@
       "country": "한국"
     },
     {
-      "group": "kr-018",
-      "flag": "서초",
-      "owner": "삼성 벤처투자",
-      "location": "서초",
-      "support_id": "2065519",
-      "sku": "IS-AWAA-SWG-1000-2500-1Y",
-      "sn": "QQ57N-4CLRU",
-      "entitlement": "🔗",
-      "qty": "2000",
-      "start": "2022.1.1",
-      "end": "2023.12.31",
-      "remarks": "BCWF-2500-4999, 9000장비 3대 사용",
-      "deploy_date": "",
-      "deploy_log": "",
-      "mode": "",
-      "os_ver": "",
-      "owner_primary": "김상문",
-      "owner_secondary": "홍진영",
-      "check_method": "방문",
-      "cust_contact": "",
-      "cust_phone": "",
-      "cust_email": "",
-      "tag": "O",
-      "tag_note": "물산상사",
-      "id": 364,
-      "ip_enc": null,
-      "id_enc": null,
-      "pw_enc": null,
-      "config_mode": "Explicit",
-      "group_remarks": "",
-      "cust_contacts": [
-        {
-          "role": "운영",
-          "name": "지은규 책임 (고객/점검/운영/서초)",
-          "org": "",
-          "phone": "010-6282-5322",
-          "email": "eunkyu.ji@samsung.com"
-        }
-      ],
-      "country": "한국"
-    },
-    {
       "group": "dup-441",
       "flag": "",
       "owner": "삼성 ICT 상암센터",
