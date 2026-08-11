@@ -983,13 +983,14 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-year-table-wrap{ overflow-x:auto; }
 .maint-year-table{ table-layout:fixed; min-width:1150px; }
 .maint-year-table th, .maint-year-table td{ padding:8px 8px; }
+.maint-table-caption{
+  font-size:11.5px; color:var(--text-faint); font-family:var(--mono);
+  text-align:right; margin-bottom:6px;
+}
 .maint-year-table thead th{
   position:sticky;
   top:var(--maint-thead-top, 0px);
   z-index:6; background:var(--surface2);
-}
-.maint-year-table thead tr:last-child th{
-  top:calc(var(--maint-thead-top, 0px) + var(--maint-thead-row1-h, 0px));
 }
 .maint-year-table .maint-th-owner, .maint-year-table .maint-cell-owner{
   width:220px; min-width:220px;
