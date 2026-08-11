@@ -979,24 +979,24 @@ function secretField(rec, kind){
   const encKey = kind+'_enc';
   if (!rec[encKey]) return `<span class="sec-val empty">—</span>`;
   const id = rec.id + '_' + kind;
-  const extraCls = kind === 'ip' ? ' sec-val-ip' : '';
+  const extraCls = (kind === 'ip' || kind === 'id' || kind === 'pw') ? ' sec-val-ip' : '';
   return `<span class="sec-val${extraCls}" id="disp_${id}" data-copy-id="${rec.id}" data-copy-kind="${kind}" title="클릭하여 복사">…</span>`;
 }
 
-// IP 주소는 자산 하나에 여러 개(줄바꿈 또는 쉼표로 구분) 저장될 수 있으므로,
+// IP 주소 / 계정 ID / 비밀번호는 자산 하나에 여러 개(줄바꿈 또는 쉼표로 구분) 저장될 수 있으므로,
 // 잠금 해제 후에는 하나의 텍스트 블록이 아니라 각각 따로 클릭해서 복사할 수 있는
 // 칩(chip) 목록으로 풀어서 보여준다.
-function renderIpChips(wrapEl, val){
+function renderMultiValueChips(wrapEl, val){
   wrapEl.classList.remove('sec-val', 'locked', 'empty');
   wrapEl.classList.add('ip-chip-list');
   wrapEl.removeAttribute('title');
-  const ips = (val||'').split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
-  if (!ips.length){
+  const vals = (val||'').split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+  if (!vals.length){
     wrapEl.innerHTML = `<span class="ip-chip-empty">—</span>`;
     wrapEl.onclick = null;
     return;
   }
-  wrapEl.innerHTML = ips.map(ip => `<span class="ip-chip" title="클릭하여 복사">${esc(ip)}</span>`).join('');
+  wrapEl.innerHTML = vals.map(v => `<span class="ip-chip" title="클릭하여 복사">${esc(v)}</span>`).join('');
   wrapEl.querySelectorAll('.ip-chip').forEach(chip=>{
     chip.onclick = async (e) => {
       e.stopPropagation();
@@ -1012,6 +1012,8 @@ function renderIpChips(wrapEl, val){
   // 예전 "전체 복사" 핸들러가 대신 실행되며 칩 목록을 깨뜨리지 않도록 비활성화한다.
   wrapEl.onclick = null;
 }
+// (이전 이름 호환용 별칭)
+function renderIpChips(wrapEl, val){ renderMultiValueChips(wrapEl, val); }
 
 function flashCopied(el){
   const original = el.textContent;
@@ -1035,8 +1037,8 @@ async function populateSecretFields(){
     const rec = records.find(r=>String(r.id)===String(id));
     if (!rec) continue;
     const val = await decryptField(rec[kind+'_enc']);
-    if (kind === 'ip'){
-      renderIpChips(el, val);
+    if (kind === 'ip' || kind === 'id' || kind === 'pw'){
+      renderMultiValueChips(el, val);
       continue;
     }
     el.textContent = val;
@@ -2193,7 +2195,7 @@ function supportIdTitleHtml(gid, items, isChild, editableSid){
   const extraCount = Math.max(0, familyAll.length - ownSids.length);
   if (!ownSids.length){
     if (!familyAll.length) return '';
-    return `<span class="title-support-ids"><span class="family-sid-chip"><span class="meta-label">Support ID</span><span class="meta-value">하위 법인 ${familyAll.length}개</span></span></span>`;
+    return `<span class="title-support-ids"><span class="family-sid-chip"><span class="meta-label">Support ID</span><span class="meta-value">${familyAll.map(s=>esc(s)).join(', ')}</span></span></span>`;
   }
   const singleEditable = ownSids.length === 1 && extraCount === 0 && editableSid && ownSids[0] === editableSid && isCurrentUserAdmin();
   const attrs = singleEditable
@@ -3722,8 +3724,8 @@ const WL_FIELD_DEFS = [
   { field:'os_ver',      label:'OS 버전', type:'text' },
   { field:'remarks',     label:'비고', type:'textarea' },
   { field:'ip',  label:'IP 주소 (여러 개면 줄바꿈으로 구분)', type:'textarea', sensitive:true, encField:'ip_enc' },
-  { field:'id',  label:'계정 ID', type:'text', sensitive:true, encField:'id_enc' },
-  { field:'pw',  label:'비밀번호', type:'text', sensitive:true, encField:'pw_enc' },
+  { field:'id',  label:'계정 ID (여러 개면 줄바꿈으로 구분)', type:'textarea', sensitive:true, encField:'id_enc' },
+  { field:'pw',  label:'비밀번호 (여러 개면 줄바꿈으로 구분)', type:'textarea', sensitive:true, encField:'pw_enc' },
   { field:'enable_pw', label:'Enable 비밀번호', type:'text', sensitive:true, encField:'enable_pw_enc' },
 ];
 function wlFieldDef(field){ return WL_FIELD_DEFS.find(d=>d.field===field); }
