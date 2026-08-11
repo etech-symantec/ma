@@ -79,6 +79,7 @@
 
       <div class="panel-top-actions">
         <button type="button" class="icon-btn icon-only" id="dashboardToggle" title="대시보드 보기">📊</button>
+        <button type="button" class="icon-btn icon-only" id="maintenanceToggle" title="유지보수 점검 관리">🛠️</button>
         <button type="button" class="my-assets-toggle" id="myAssetsToggle">
           <span class="mat-label">My</span>
           <span class="mat-count" id="myAssetsCount">0</span>
@@ -117,6 +118,9 @@
     </main>
     <main class="content" id="dashboardView" style="display:none;">
       <!-- 대시보드가 여기에 그려짐 -->
+    </main>
+    <main class="content" id="maintenanceView" style="display:none;">
+      <!-- 유지보수 페이지가 여기에 그려짐 -->
     </main>
   </div>
 
@@ -365,6 +369,30 @@
 
     <div class="modal-actions">
       <button class="btn btn-ghost" id="wlCloseBtn">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div id="maintenanceLogModal">
+  <div class="modal-card">
+    <h2 id="mlModalTitle">월별 점검 등록</h2>
+    <p class="hint" id="mlModalSub">이 법인의 해당 월 점검일을 등록합니다. 등록은 이 법인의 정 담당자가 하는 것을 기본으로 하되, 필요하면 다른 담당자 이름으로도 남길 수 있습니다.</p>
+    <div class="form-grid">
+      <div><label>점검일 (YYYY.M.D)</label>
+        <div class="date-field">
+          <input id="ml_date" placeholder="2026.8.10">
+          <button type="button" id="ml_date_pick_btn" class="date-pick-btn" title="달력에서 선택">📅</button>
+          <input type="date" id="ml_date_picker" class="date-native-input" tabindex="-1">
+        </div>
+      </div>
+      <div><label>점검 담당자 (정)</label><input id="ml_manager" placeholder="점검을 진행한 담당자"></div>
+      <div class="full"><label>비고 / 점검 내용</label><textarea id="ml_note" placeholder="점검 관련 메모 (선택)"></textarea></div>
+    </div>
+    <div id="mlError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="mlDeleteBtn" style="display:none;">등록 취소</button>
+      <button class="btn btn-ghost" id="cancelMlBtn">닫기</button>
+      <button class="btn btn-primary" id="saveMlBtn">저장</button>
     </div>
   </div>
 </div>
