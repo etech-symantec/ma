@@ -20887,6 +20887,60 @@
       "end": "",
       "os_ver": "",
       "work_log": []
+    },
+    {
+      "id": 1786349440902,
+      "group": "custom-1786349440902",
+      "flag": "",
+      "owner": "삼성전자 R&D",
+      "country": "한국",
+      "location": "우면",
+      "check_method": "방문",
+      "config_mode": "Explicit",
+      "owner_primary": "김상문",
+      "owner_secondary": "박동석",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "원정현",
+          "org": "미라콤",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "김호일",
+          "org": "미라콤",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "role": "",
+          "name": "김영민",
+          "org": "미라콤",
+          "phone": "",
+          "email": ""
+        }
+      ],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "is_parent": false,
+      "support_id": "15688920",
+      "build_engineer": "신호근",
+      "build_date": "2026.05",
+      "sku": "",
+      "sn": "",
+      "qty": "",
+      "start": "",
+      "end": "",
+      "os_ver": "",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "work_log": []
     }
   ],
   "users": [
