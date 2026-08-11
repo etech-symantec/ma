@@ -382,6 +382,9 @@ function boot(){
   updateUserBtnLabel();
   // 법인명 등에 실수로 HTML 이스케이프(&amp; 등)가 그대로 텍스트로 저장돼 있다면 원래 문자로 되돌린다.
   const entitiesFixed = migrateStrayHtmlEntities();
+  // 예전 버전에서 "자산 정보 직접 수정" 화면으로 법인명 등을 자산 하나만 따로 바꿀 수 있었던 적이
+  // 있어서 같은 법인(그룹) 안에서 값이 어긋난 데이터가 있다면 그룹의 대표 값으로 다시 맞춘다.
+  const ownerFixed = migrateOwnerConsistencyWithinGroups();
   // 예전 데이터에 남아 있는 고객사 담당자 구분 "운용" 표기를 "운영"으로 정리한다.
   migrateCustContactRoleLabels();
   // 예전 데이터 중 상위 법인 자신에게 직접 연결된 Support ID/자산이 남아 있다면
@@ -389,13 +392,44 @@ function boot(){
   const migrated = enforceParentsHaveNoDirectAssets();
   render();
   requestAnimationFrame(() => { syncGlobalHeaderHeight(); syncStickyOffsets(); });
-  if ((migrated || entitiesFixed) && !viewOnly && sessionKey){
+  if ((migrated || entitiesFixed || ownerFixed) && !viewOnly && sessionKey){
     buildFilters();
     scheduleAutoSync();
   }
 }
 
 // ---------- date / status ----------
+// 법인명(owner)을 비롯한 국가/위치/점검방식/구성방식/담당 엔지니어/비고/상위 법인 등은 원래
+// "자산 하나하나"가 아니라 "법인(그룹) 전체"가 공유하는 정보다. 그런데 예전 버전에서는 "자산 정보
+// 직접 수정" 화면에서 법인명 등을 자산 하나만 골라 따로 바꿀 수 있었던 적이 있어서, 같은 그룹
+// 안인데도 자산 레코드마다 법인명이 서로 달라지는 데이터가 생길 수 있었다. 이 경우 화면에는
+// 카드 제목은 원래 법인명 그대로 보이지만, 그 안의 특정 자산 한 줄만 "다른 법인 아래에 잘못
+// 끼어든 것처럼" 보이는 문제가 생긴다. 여기서는 그렇게 어긋난 값들을 그룹의 대표 값(groupMeta
+// 기준)으로 다시 맞춰서, 같은 그룹의 모든 레코드가 항상 같은 값을 갖도록 정리한다.
+// (지금 버전에서는 자산 수정 화면에서 이 필드들을 바꿀 수 없게 막아 두었으므로, 앞으로 새로
+// 이런 데이터가 생기지는 않는다. 아래 마이그레이션은 이미 어긋나 있던 예전 데이터를 정리하는
+// 1회성 보정용이다.)
+const GROUP_COMMON_SCALAR_FIELDS = [
+  'flag','owner','country','location','check_method','config_mode',
+  'owner_primary','owner_secondary','group_remarks','group_parent','is_parent'
+];
+function migrateOwnerConsistencyWithinGroups(){
+  let changed = false;
+  groupRecords(records).forEach((items) => {
+    const meta = groupMeta(items);
+    items.forEach(r => {
+      GROUP_COMMON_SCALAR_FIELDS.forEach(f => {
+        // groupMeta()가 실제 값이 하나도 없을 때 화면 표시용으로만 채우는 자리표시자
+        // ('(법인명 미확인)')는 데이터에 그대로 써넣지 않는다.
+        if (f === 'owner' && meta.owner === '(법인명 미확인)') return;
+        const target = meta[f];
+        if (r[f] !== target && !(!r[f] && !target)){ r[f] = target; changed = true; }
+      });
+    });
+  });
+  return changed;
+}
+
 // 예전 데이터(또는 외부에서 복사해 붙여넣은 값) 중 "A&amp;B 법인"처럼 HTML 이스케이프 문자열이
 // 실수로 그대로 텍스트에 저장돼 있으면, 화면에서는 esc()가 한 번 더 이스케이프해 버려
 // "A&amp;amp;B 법인"처럼 깨져 보인다. 그런 값이 있으면 원래 문자("A&B 법인")로 되돌려 둔다.
@@ -1706,9 +1740,14 @@ async function openDirectEditModal(recId){
   addAssetTargetGid = null;
   clearAssetForm();
   const set = (id, v) => { document.getElementById(id).value = v || ''; };
-  set('f_owner', rec.owner); set('f_country', rec.country); set('f_location', rec.location); set('f_support', rec.support_id);
+  // 법인/국가/위치/Support ID/점검 방식은 이 법인(그룹)의 공통 정보이므로, 이 자산 레코드
+  // 하나가 아니라 그룹 전체 기준 값(groupMeta)을 보여준다 — 항상 정확한 값을 보여주고,
+  // 그룹 안에서 값이 어긋나는 예전 방식의 데이터 불일치를 화면에 다시 노출하지 않기 위함이다.
+  const meta = groupMeta(records.filter(r=>r.group===rec.group));
+  set('f_owner', meta.owner==='(법인명 미확인)' ? '' : meta.owner);
+  set('f_country', meta.country); set('f_location', meta.location); set('f_support', rec.support_id);
   set('f_sku', rec.sku); set('f_sn', rec.sn); set('f_qty', rec.qty);
-  set('f_start', rec.start); set('f_end', rec.end); set('f_os', rec.os_ver); set('f_check', rec.check_method);
+  set('f_start', rec.start); set('f_end', rec.end); set('f_os', rec.os_ver); set('f_check', meta.check_method);
   set('f_remarks', rec.remarks);
   set('f_ip', rec.ip_enc ? await decryptField(rec.ip_enc) : '');
   set('f_id', rec.id_enc ? await decryptField(rec.id_enc) : '');
@@ -1740,11 +1779,12 @@ document.getElementById('saveAddBtn').onclick = async () => {
     if (!isCurrentUserAdmin()){ alert('마스터 관리자만 직접 수정할 수 있습니다.'); return; }
     const rec = records.find(r=>String(r.id)===String(editingRecordId));
     if (!rec){ editingRecordId = null; document.getElementById('addModal').classList.remove('open'); return; }
+    // 법인/국가/위치/Support ID/점검 방식은 화면에서 항상 읽기 전용(그룹 공통 정보)이므로
+    // 여기서 폼 값으로 덮어쓰지 않고, 자산 고유 정보만 갱신한다.
     Object.assign(rec, {
-      owner: val('f_owner')||rec.owner, country:val('f_country'), location:val('f_location'), support_id:val('f_support'),
       sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
       start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'),
-      os_ver:val('f_os'), check_method:val('f_check'),
+      os_ver:val('f_os'),
       ip_enc: await encryptField(val('f_ip')),
       id_enc: await encryptField(val('f_id')),
       pw_enc: await encryptField(val('f_pw')),
