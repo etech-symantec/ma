@@ -814,18 +814,15 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 .date-field{ position:relative; display:flex; align-items:center; gap:0; }
 .date-field input:not(.date-native-input){ padding-right:38px; }
+.ml-date-row{ display:flex; align-items:center; gap:8px; flex-wrap:nowrap; }
+.ml-date-row .date-field{ flex:1 1 auto; min-width:0; }
+.ml-date-row .date-field input:not(.date-native-input){ min-width:0; box-sizing:border-box; }
 .ml-done-check{
-  display:flex; align-items:center; gap:6px;
-  font-size:12.8px; color:var(--text-dim); cursor:pointer; white-space:nowrap;
+  flex:0 0 auto;
+  display:flex; align-items:center; gap:4px;
+  font-size:12px; color:var(--text-dim); cursor:pointer; white-space:nowrap;
 }
-.ml-done-check input{ cursor:pointer; }
-.ml-date-row{ display:flex; align-items:center; gap:10px; }
-.ml-date-row .date-field{ flex:1; min-width:0; }
-.ml-done-check{
-  display:flex; align-items:center; gap:6px;
-  font-size:12.8px; color:var(--text-dim); cursor:pointer; white-space:nowrap;
-  flex-shrink:0;
-}
+.ml-done-check input{ cursor:pointer; margin:0; flex-shrink:0; }
 
 /* 점검 등록창(월별 점검) — 설명글 없이, 절반 크기로 심플하게 */
 #maintenanceLogModal .modal-card{ max-width:320px; padding:16px; }
