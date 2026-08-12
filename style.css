@@ -903,7 +903,7 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 
   display:block !important;
   width:100% !important;
-  max-width:390px !important;
+  max-width:430px !important;
 
   margin:0 !important;
   padding:18px !important;
@@ -1714,4 +1714,96 @@ footer.foot{
 /* 미완료 사유는 붉은 계열 */
 .maint-cell-incomplete .maint-cell-note{
   color:#C95A5A;
+}
+.maint-header-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-shrink:0;
+}
+
+.maint-license-notice-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+
+  height:32px;
+  padding:0 11px;
+
+  border:1px solid #F0D79A;
+  border-radius:8px;
+
+  background:#FFF8E8;
+  color:#9A6B12;
+
+  font-size:11.5px;
+  font-weight:700;
+
+  text-decoration:none;
+  white-space:nowrap;
+
+  transition:
+    background .15s,
+    border-color .15s,
+    color .15s;
+}
+
+.maint-license-notice-btn:hover{
+  background:#FFF1C9;
+  border-color:#E8C76F;
+  color:#7E550B;
+}
+
+.maint-license-notice-icon{
+  font-size:12px;
+}
+
+/* 미계약 */
+.maint-cell-uncontracted{
+  background:#EEF1F6 !important;
+}
+
+.maint-cell-uncontracted:hover{
+  background:#E3E8F0 !important;
+}
+
+.maint-cell-uncontracted-label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:3px 7px;
+  border-radius:999px;
+
+  color:#616B7D;
+  background:#E3E8F0;
+  border:1px solid #CDD4DF;
+
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:700;
+}
+
+.ml-uncontracted-check:hover{
+  background:#F4F5F7;
+  border-color:#C7CFDC;
+}
+
+.ml-uncontracted-check:has(input:checked){
+  color:#4B5563;
+  background:#E9EDF2;
+  border-color:#BBC3CF;
+}
+
+.ml-uncontracted-check input:checked{
+  background:#64748B;
+  border-color:#64748B;
+}
+
+/* 미계약일 때 점검 내용 비활성화 */
+#ml_note:disabled{
+  background:#F1F3F5 !important;
+  color:#A0A8B4 !important;
+  cursor:not-allowed;
 }
