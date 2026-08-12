@@ -261,7 +261,11 @@ const SKU_TAG_RULES = [
   { key:'MC',   test: sku => sku.toUpperCase().startsWith('MC-') || sku.toUpperCase().includes('-MC') },
   { key:'RP',   test: sku => sku.toUpperCase().includes('RP') },
   { key:'ISG',  test: sku => sku.toUpperCase().startsWith('SSP-S') },
-  { key:'SG',   test: sku => sku.toUpperCase().includes('SG') && !sku.toUpperCase().startsWith('ASG-S') },
+  { key:'SG', test: sku =>
+      sku.toUpperCase().includes('SG') &&
+      !sku.toUpperCase().includes('ISG-') &&
+      !sku.toUpperCase().startsWith('ASG-S')
+  },
   { key:'PS',   test: sku => sku.toUpperCase().includes('PS') },
   { key:'SSP',  test: sku => sku.toUpperCase().includes('SSP') },
   { key:'VA',   test: sku => sku.toUpperCase().includes('VA') },
@@ -270,8 +274,14 @@ const SKU_TAG_RULES = [
   { key:'BCWF', test: sku => sku.toUpperCase().includes('BCWF') },
   { key:'WSS',  test: sku => sku.toUpperCase().includes('WSS') },
   { key:'WPS',  test: sku => sku.toUpperCase() === 'WEB-PROTECT-SUB' },
-  { key:'CA',   test: sku => sku.toUpperCase().startsWith('CAS-') },
-  { key:'MA',   test: sku => sku.toUpperCase().startsWith('MA-') },
+  { key:'CA', test: sku => {
+      const s = sku.toUpperCase();
+      return s.startsWith('CAS-') || s.startsWith('ISG-CA');
+  }},
+  { key:'MA', test: sku => {
+      const s = sku.toUpperCase();
+      return s.startsWith('MA-') || s.startsWith('ISG-MA');
+  }},
   { key:'AV', test: sku => sku.toUpperCase().startsWith('FI-') },
 ];
 const SKU_TAG_KEYS = SKU_TAG_RULES.map(r => r.key);
