@@ -1429,6 +1429,26 @@ function maintenanceEntryTabHtml(){
       const log = maintenanceLogFor(g.gid, ym);
       const isCurrent = ym === thisYm;
       const hasDate = log && (log.date || '').trim();
+      const isIncomplete = !!(log && log.incomplete);
+      if (isIncomplete){
+        const tipBits = [
+          `${ymLabel(ym)} 미완료`
+        ];
+        if (log.manager){
+          tipBits.push(`담당 ${log.manager}`);
+        }
+        if (log.note){
+          tipBits.push(log.note);
+        }
+        return `
+          <td class="maint-cell maint-cell-incomplete ${isCurrent ? 'is-current' : ''}"
+              data-maint-cell="${esc(g.gid)}|${ym}"
+              title="${esc(tipBits.join(' · '))}">
+      
+            <span class="maint-cell-incomplete-label">미완료</span>
+          </td>
+        `;
+      }
       if (hasDate){
         const d = parseDate(log.date);
         const dayNum = d ? d.getDate() : '';
@@ -1801,10 +1821,26 @@ function openMaintenanceLogModal(gid, ym){
   maintenanceEditTarget = { gid, ym };
   const log = maintenanceLogFor(gid, ym);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
-  document.getElementById('ml_date').value = log ? (log.date || todayDots()) : todayDots();
-  document.getElementById('ml_manager').value = log ? (log.manager || '') : (currentUserName() || g.meta.owner_primary || '');
-  document.getElementById('ml_done').checked = log ? !!log.done : false;
-  document.getElementById('ml_note').value = log ? (log.note || '') : '';
+  document.getElementById('ml_date').value =
+    log && !log.incomplete
+      ? (log.date || todayDots())
+      : (log ? '' : todayDots());
+  
+  document.getElementById('ml_manager').value =
+    log
+      ? (log.manager || '')
+      : (currentUserName() || g.meta.owner_primary || '');
+  
+  document.getElementById('ml_done').checked =
+    log ? !!log.done : false;
+  
+  document.getElementById('ml_incomplete').checked =
+    log ? !!log.incomplete : false;
+  
+  document.getElementById('ml_note').value =
+    log ? (log.note || '') : '';
+  
+  syncMaintenanceStatusControls();
   document.getElementById('mlError').textContent = '';
   document.getElementById('mlDeleteBtn').style.display = log ? '' : 'none';
   document.getElementById('maintenanceLogModal').classList.add('open');
@@ -1814,6 +1850,63 @@ function closeMaintenanceLogModal(){
   document.getElementById('maintenanceLogModal').classList.remove('open');
   maintenanceEditTarget = null;
 }
+
+function syncMaintenanceStatusControls(){
+  const doneEl = document.getElementById('ml_done');
+  const incompleteEl = document.getElementById('ml_incomplete');
+
+  const dateEl = document.getElementById('ml_date');
+  const datePicker = document.getElementById('ml_date_picker');
+  const dateBtn = document.getElementById('ml_date_pick_btn');
+
+  const dateRow = document.getElementById('mlDateRow');
+  const requiredHint = document.getElementById('mlNoteRequired');
+
+  if (!doneEl || !incompleteEl) return;
+
+  const incomplete = incompleteEl.checked;
+
+  dateEl.disabled = incomplete;
+  datePicker.disabled = incomplete;
+  dateBtn.disabled = incomplete;
+
+  if (dateRow){
+    dateRow.classList.toggle('is-incomplete', incomplete);
+  }
+
+  if (requiredHint){
+    requiredHint.style.display = incomplete ? 'inline' : 'none';
+  }
+
+  if (incomplete){
+    dateEl.value = '';
+    datePicker.value = '';
+  } else if (!dateEl.value.trim()){
+    dateEl.value = todayDots();
+  }
+}
+
+document.getElementById('ml_done').addEventListener('change', () => {
+  const doneEl = document.getElementById('ml_done');
+  const incompleteEl = document.getElementById('ml_incomplete');
+
+  if (doneEl.checked){
+    incompleteEl.checked = false;
+  }
+
+  syncMaintenanceStatusControls();
+});
+
+document.getElementById('ml_incomplete').addEventListener('change', () => {
+  const doneEl = document.getElementById('ml_done');
+  const incompleteEl = document.getElementById('ml_incomplete');
+
+  if (incompleteEl.checked){
+    doneEl.checked = false;
+  }
+
+  syncMaintenanceStatusControls();
+});
 
 document.getElementById('cancelMlBtn').onclick = closeMaintenanceLogModal;
 
@@ -1829,13 +1922,33 @@ document.getElementById('ml_date_picker').addEventListener('change', (e) => {
 document.getElementById('saveMlBtn').onclick = () => {
   if (!maintenanceEditTarget) return;
   const { gid, ym } = maintenanceEditTarget;
-  const date = document.getElementById('ml_date').value.trim();
+  let date = document.getElementById('ml_date').value.trim();
   const manager = document.getElementById('ml_manager').value.trim();
   const note = document.getElementById('ml_note').value.trim();
+  
   const done = document.getElementById('ml_done').checked;
+  const incomplete = document.getElementById('ml_incomplete').checked;
   const errEl = document.getElementById('mlError');
-  if (!date){ errEl.textContent = '점검일을 입력해 주세요.'; return; }
-  if (parseDate(date) === null){ errEl.textContent = '점검일 형식이 올바르지 않습니다. 예: 2026.8.10'; return; }
+  if (incomplete){
+    // 미완료는 점검일 없음
+    date = '';
+    // 미완료 사유는 반드시 입력
+    if (!note){
+      errEl.textContent = '미완료인 경우 비고에 미완료 사유를 반드시 입력해 주세요.';
+      document.getElementById('ml_note').focus();
+      return;
+    }
+  } else {
+    if (!date){
+      errEl.textContent = '점검일을 입력해 주세요.';
+      return;
+    }
+    if (parseDate(date) === null){
+      errEl.textContent =
+        '점검일 형식이 올바르지 않습니다. 예: 2026.8.10';
+      return;
+    }
+  }
   errEl.textContent = '';
 
   let log = maintenanceLogFor(gid, ym);
@@ -1846,7 +1959,8 @@ document.getElementById('saveMlBtn').onclick = () => {
   log.date = date;
   log.manager = manager;
   log.note = note;
-  log.done = done;
+  log.done = incomplete ? false : done;
+  log.incomplete = incomplete;
   log.author = currentUserName() || log.author || '';
   log.updated_at = Date.now();
 
