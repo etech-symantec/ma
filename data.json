@@ -13860,6 +13860,19 @@
       "uncontracted": false,
       "author": "윤태리",
       "updated_at": 1786523285227
+    },
+    {
+      "id": 1786523291411,
+      "group": "vn-semv",
+      "ym": "2026-05",
+      "date": "2026.5.7",
+      "manager": "윤태리",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1786523291411
     }
   ]
 }
