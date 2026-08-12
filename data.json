@@ -14250,6 +14250,19 @@
       "uncontracted": false,
       "author": "윤태리",
       "updated_at": 1786523542827
+    },
+    {
+      "id": 1786523556090,
+      "group": "in-shi",
+      "ym": "2026-01",
+      "date": "2026.1.6",
+      "manager": "강성준",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1786523556090
     }
   ]
 }
