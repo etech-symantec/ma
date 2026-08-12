@@ -12877,6 +12877,18 @@
       "done": true,
       "author": "신호근",
       "updated_at": 1786507620332
+    },
+    {
+      "id": 1786512877337,
+      "group": "seha",
+      "ym": "2026-06",
+      "date": "",
+      "manager": "신호근",
+      "note": "원격불가",
+      "done": false,
+      "incomplete": true,
+      "author": "신호근",
+      "updated_at": 1786512877337
     }
   ]
 }
