@@ -1029,11 +1029,42 @@ function osVersionTag(osVer){
 const DASH_VISIBLE_ROWS = 16;
 
 function dashboardCompanyListHtml(items){
-  const owners = bucketGroups(items, r => r.owner).map(([owner,count]) => [owner, count]);
-  if (!owners.length) return `<div class="dash-empty">법인 정보가 없습니다.</div>`;
-  return `<ul class="dash-company-list">${owners.map(([owner,count]) =>
-    `<li><span class="dash-company-name">${esc(owner)}</span><span class="dash-company-count">${count}건</span></li>`
-  ).join('')}</ul>`;
+  const ownerMap = new Map();
+
+  items.forEach(r => {
+    const owner = (r.owner || '').trim();
+    if (!owner) return;
+
+    if (!ownerMap.has(owner)){
+      ownerMap.set(owner, {
+        owner,
+        count: 0,
+        gid: r.group
+      });
+    }
+
+    ownerMap.get(owner).count++;
+  });
+
+  const owners = [...ownerMap.values()]
+    .sort((a, b) => a.owner.localeCompare(b.owner, 'ko'));
+
+  if (!owners.length){
+    return `<div class="dash-empty">법인 정보가 없습니다.</div>`;
+  }
+
+  return `
+    <ul class="dash-company-list">
+      ${owners.map(({owner, count, gid}) => `
+        <li class="dash-company-jump"
+            data-dash-company="${esc(owner)}"
+            data-dash-gid="${esc(gid)}"
+            title="${esc(owner)} 자산 페이지로 이동">
+          <span class="dash-company-name">${esc(owner)}</span>
+          <span class="dash-company-count">${count}건</span>
+        </li>
+      `).join('')}
+    </ul>`;
 }
 
 function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable){
@@ -1159,6 +1190,61 @@ function setDashboardMode(on){ setViewMode(on ? 'dashboard' : 'list'); }
 document.getElementById('dashboardToggle').onclick = () => setViewMode(dashboardMode ? 'list' : 'dashboard');
 document.getElementById('maintenanceToggle').onclick = () => setViewMode(maintenanceMode ? 'list' : 'maintenance');
 document.getElementById('dashboardView').addEventListener('click', (e) => {
+
+  // 대시보드에 펼쳐진 법인명을 클릭하면 해당 법인 자산 화면으로 이동
+  const companyJump = e.target.closest('[data-dash-company]');
+
+  if (companyJump){
+    e.stopPropagation();
+
+    const owner = companyJump.dataset.dashCompany;
+    const gid = companyJump.dataset.dashGid;
+
+    // 다른 필터 때문에 대상 법인이 안 보이는 문제 방지
+    activeStatusFilters = new Set(['ok', 'warn', 'crit', 'na']);
+    activeSkuKeywordFilters = new Set();
+    activeMyAssetsFilter = false;
+
+    Object.keys(topFieldFilters).forEach(k => {
+      topFieldFilters[k] = '';
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+
+    // 해당 법인만 표시
+    activeCountryFilter = owner;
+
+    // 해당 법인을 펼친 상태로 전환
+    expandGroupWithAncestors(gid);
+
+    // 자산 목록 화면으로 이동
+    setViewMode('list');
+    render();
+
+    // 해당 법인 위치로 자동 스크롤 + 강조
+    requestAnimationFrame(() => {
+      const target = document.querySelector(
+        `.group-card[data-gid="${CSS.escape(gid)}"]`
+      );
+
+      if (target){
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+        target.classList.add('activity-highlight-flash');
+
+        setTimeout(() => {
+          target.classList.remove('activity-highlight-flash');
+        }, 1800);
+      }
+    });
+
+    return;
+  }
+
   const toggleRow = e.target.closest('[data-dash-toggle]');
   if (toggleRow){
     const detail = document.getElementById(toggleRow.dataset.dashToggle);
