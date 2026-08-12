@@ -4028,7 +4028,7 @@ function dashboardCountryLocationSectionHtml(items){
           </span>
 
           <div class="dash-bar-track">
-            <div class="dash-bar-fill dash-c3"
+            <div class="dash-bar-fill dash-geo-bar-company"
                  style="width:${Math.max(
                    5,
                    Math.round(company.count / companyMax * 100)
@@ -4056,7 +4056,7 @@ function dashboardCountryLocationSectionHtml(items){
             </span>
 
             <div class="dash-bar-track">
-              <div class="dash-bar-fill dash-c3"
+              <div class="dash-bar-fill dash-geo-bar-location"
                    style="width:${Math.max(
                      5,
                      Math.round(locationData.count / locationMax * 100)
@@ -4093,7 +4093,7 @@ function dashboardCountryLocationSectionHtml(items){
           </span>
 
           <div class="dash-bar-track">
-            <div class="dash-bar-fill dash-c4"
+            <div class="dash-bar-fill dash-geo-bar-country"
                  style="width:${Math.max(
                    5,
                    Math.round(countryData.count / countryMax * 100)
