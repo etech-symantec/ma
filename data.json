@@ -371,16 +371,7 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "work_log": [
-        {
-          "id": 1786516244313,
-          "type": "OS 업그레이드",
-          "date": "2026.8.13",
-          "manager": "테스트",
-          "note": "테스트입니당",
-          "author": "테스트"
-        }
-      ]
+      "work_log": []
     },
     {
       "group": "tw-ds",
