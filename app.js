@@ -1150,6 +1150,13 @@ function renderDashboard(){
 
   const byTag = bucketByTags(assetRecords)
     .filter(([label]) => label !== 'SSP');
+  const byCountryLocation = bucketGroups(assetRecords, r => {
+    const country = countryOf(r) || '미상';
+    const location = (r.location || '').trim() || '위치 미상';
+  
+    return `${country} / ${location}`;
+  });
+  
   const bySku = bucketGroups(assetRecords, r => r.sku);
 
   wrap.innerHTML = `
@@ -1173,7 +1180,13 @@ function renderDashboard(){
         true
       )}
     
-      ${dashboardCountryLocationHtml(assetRecords)}
+      ${dashboardSectionHtml(
+        'countryLocation',
+        '국가/위치별 현황 · 클릭하면 사용 법인 표시',
+        'dash-c3',
+        byCountryLocation,
+        true
+      )}
     
       ${dashboardSectionHtml(
         'sku',
@@ -1265,24 +1278,6 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
       }
     });
 
-    return;
-  }
-
-  const countryToggle = e.target.closest('[data-dash-country-toggle]');
-  
-  if (countryToggle){
-    const target = document.getElementById(
-      countryToggle.dataset.dashCountryToggle
-    );
-  
-    if (target){
-      const opening = target.style.display === 'none';
-  
-      target.style.display = opening ? 'block' : 'none';
-  
-      countryToggle.classList.toggle('open', opening);
-    }
-  
     return;
   }
 
@@ -3931,96 +3926,3 @@ document.getElementById('wlCloseBtn').onclick = () => {
   workLogRecordIds = [];
   workLogEditId = null;
 };
-
-function dashboardCountryLocationHtml(items){
-  const countryMap = new Map();
-
-  items.forEach(r => {
-    const country = countryOf(r) || '미상';
-    const location = (r.location || '').trim() || '위치 미상';
-
-    if (!countryMap.has(country)){
-      countryMap.set(country, {
-        count: 0,
-        locations: new Map()
-      });
-    }
-
-    const c = countryMap.get(country);
-    c.count++;
-
-    if (!c.locations.has(location)){
-      c.locations.set(location, 0);
-    }
-
-    c.locations.set(
-      location,
-      c.locations.get(location) + 1
-    );
-  });
-
-  const countries = [...countryMap.entries()]
-    .sort((a, b) => b[1].count - a[1].count);
-
-  if (!countries.length){
-    return `
-      <div class="dash-card">
-        <h4>국가/위치별 현황</h4>
-        <div class="dash-empty">데이터가 없습니다.</div>
-      </div>
-    `;
-  }
-
-  const max = Math.max(...countries.map(([, data]) => data.count));
-
-  const rows = countries.map(([country, data], index) => {
-
-    const locationRows = [...data.locations.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([location, count]) => `
-        <div class="dash-location-tree-item">
-          <span class="dash-tree-branch">└</span>
-          <span class="dash-location-name">${esc(location)}</span>
-          <span class="dash-location-count">${count}건</span>
-        </div>
-      `).join('');
-
-    return `
-      <div class="dash-country-block">
-
-        <div class="dash-row dash-row-clickable dash-country-row"
-             data-dash-country-toggle="dashCountryLocation_${index}">
-
-          <span class="dash-row-caret">▾</span>
-
-          <span class="dash-row-label"
-                title="${esc(country)}">
-            ${esc(country)}
-          </span>
-
-          <div class="dash-bar-track">
-            <div class="dash-bar-fill dash-c4"
-                 style="width:${Math.max(5, Math.round(data.count / max * 100))}%">
-            </div>
-          </div>
-
-          <span class="dash-row-count">${data.count}</span>
-        </div>
-
-        <div class="dash-location-tree"
-             id="dashCountryLocation_${index}"
-             style="display:none;">
-          ${locationRows}
-        </div>
-
-      </div>
-    `;
-  }).join('');
-
-  return `
-    <div class="dash-card">
-      <h4>국가/위치별 현황</h4>
-      ${rows}
-    </div>
-  `;
-}
