@@ -1103,20 +1103,45 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   background:var(--surface2);
   box-shadow:0 1px 0 var(--border-solid);
 }
-.maint-year-table .maint-th-owner, .maint-year-table .maint-cell-owner{
-  width:220px; min-width:220px;
-  position:sticky; left:0; z-index:2;
+.maint-year-table .maint-th-owner,
+.maint-year-table .maint-cell-owner{
+  width:220px;
+  min-width:220px;
+
+  position:sticky;
+  left:0;
+  z-index:2;
+
   background:var(--surface2);
   box-shadow:1px 0 0 var(--border-solid);
 }
 .maint-year-table thead .maint-th-owner{ z-index:7; }
 .maint-year-table td.maint-cell-owner{ background:var(--surface); white-space:nowrap; overflow:hidden; }
 .maint-year-table tr:hover td.maint-cell-owner{ background:var(--surface2); }
-.maint-th-month{ width:64px; text-align:center !important; }
 .maint-year-table td:not(.maint-cell-owner){ text-align:center; }
 .maint-td-empty{ color:var(--text-faint); }
 .maint-year-table thead th{ font-weight:700; text-align:center !important; }
-.maint-th-dday{ white-space:nowrap; }
+/* 계약만료 D-DAY */
+.maint-year-table .maint-th-dday{
+  width:115px;
+  min-width:115px;
+  white-space:nowrap;
+}
+
+/* 담당 */
+.maint-year-table th:nth-child(3){
+  width:90px;
+  min-width:90px;
+  white-space:nowrap;
+}
+
+/* 1월 ~ 12월
+   고정폭을 없애면 남은 공간을 12개 월이 동일하게 나눠 사용 */
+.maint-year-table .maint-th-month{
+  width:auto;
+  min-width:0;
+  text-align:center !important;
+}
 
 .maint-dday{
   display:inline-block; font-family:var(--mono); font-size:11.5px; font-weight:700;
