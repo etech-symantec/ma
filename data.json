@@ -13639,6 +13639,19 @@
       "uncontracted": false,
       "author": "윤태리",
       "updated_at": 1786523103579
+    },
+    {
+      "id": 1786523122779,
+      "group": "cn-001",
+      "ym": "2026-01",
+      "date": "2026.1.8",
+      "manager": "강성준",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1786523122779
     }
   ]
 }
