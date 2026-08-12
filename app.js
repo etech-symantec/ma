@@ -4388,26 +4388,82 @@ document.getElementById('wl_apply_toggle').addEventListener('change', async (e) 
 async function applyFieldChanges(rec){
   const changes = [];
   const fieldChanges = {};
+
+  // 작업 이력 삭제 시 원복하기 위한 변경 전/후 실제 값
+  const rollbackChanges = {};
+
   for (const field of wlChangeFields){
     const def = wlFieldDef(field);
     if (!def) continue;
-    const val = (wlChangeValues[field]||'').trim();
+
+    const val = (wlChangeValues[field] || '').trim();
     if (!val) continue;
+
     if (def.sensitive){
-      const orig = (wlOriginalValues[field]||'').trim();
+      const orig = (wlOriginalValues[field] || '').trim();
+
       if (val === orig) continue;
-      changes.push({ field, label:def.label, sensitive:true });
+
+      // 변경 전 암호화 데이터 백업
+      const beforeEnc = rec[def.encField]
+        ? JSON.parse(JSON.stringify(rec[def.encField]))
+        : null;
+
+      // 변경 후 암호화
+      const afterEnc = await encryptField(val);
+
+      rec[def.encField] = afterEnc;
+
+      changes.push({
+        field,
+        label:def.label,
+        sensitive:true
+      });
+
+      // 기존 field_changes 구조 유지
       fieldChanges[field] = true;
-      rec[def.encField] = await encryptField(val);
+
+      // 삭제 시 사용할 실제 원복 데이터
+      rollbackChanges[field] = {
+        sensitive:true,
+        encField:def.encField,
+        before:beforeEnc,
+        after:afterEnc
+          ? JSON.parse(JSON.stringify(afterEnc))
+          : null
+      };
+
     } else {
-      const from = rec[field] || '—';
-      if (val === rec[field]) continue;
-      changes.push({ field, label:def.label, from, to:val });
+
+      const before = rec[field] ?? '';
+
+      if (val === before) continue;
+
+      changes.push({
+        field,
+        label:def.label,
+        from:before || '—',
+        to:val
+      });
+
       fieldChanges[field] = val;
+
+      // 변경 전/후 값 저장
+      rollbackChanges[field] = {
+        sensitive:false,
+        before:before,
+        after:val
+      };
+
       rec[field] = val;
     }
   }
-  return { changes, fieldChanges };
+
+  return {
+    changes,
+    fieldChanges,
+    rollbackChanges
+  };
 }
 
 function fieldChangesSummary(changes){
@@ -4456,6 +4512,126 @@ document.getElementById('wl_date_picker').addEventListener('change', (e) => {
 function setWorkLogFormMode(isEditing){
   document.getElementById('wlAddBtn').textContent = isEditing ? '수정 완료' : '이력 추가';
   document.getElementById('wlCancelEditBtn').style.display = isEditing ? '' : 'none';
+}
+
+function cloneRollbackValue(v){
+  if (v === undefined) return undefined;
+  if (v === null) return null;
+
+  return JSON.parse(JSON.stringify(v));
+}
+
+
+function sameRollbackValue(a, b){
+  return JSON.stringify(a ?? null) ===
+         JSON.stringify(b ?? null);
+}
+
+
+/*
+  작업 이력이 자산에 반영했던 변경값을
+  삭제 시 변경 전 상태로 되돌린다.
+*/
+async function revertWorkLogChanges(rec, entry){
+
+  const rollback = entry?.rollback_changes;
+
+  if (!rollback || !Object.keys(rollback).length){
+    return {
+      reverted:0,
+      skipped:0
+    };
+  }
+
+  let reverted = 0;
+  let skipped = 0;
+
+  for (const [field, snap] of Object.entries(rollback)){
+
+    if (!snap) continue;
+
+    /* ===============================
+       IP / ID / PW 등 민감정보
+       =============================== */
+    if (snap.sensitive){
+
+      const def = wlFieldDef(field);
+
+      const encField =
+        snap.encField ||
+        (def ? def.encField : null);
+
+      if (!encField){
+        skipped++;
+        continue;
+      }
+
+      /*
+        현재 값이 이 작업 이력에서 만든 값과
+        동일할 때만 되돌린다.
+
+        이후 다른 작업이력에서 다시 변경된 값이면
+        덮어쓰지 않는다.
+      */
+      if (
+        sameRollbackValue(
+          rec[encField],
+          snap.after
+        )
+      ){
+
+        rec[encField] =
+          cloneRollbackValue(snap.before);
+
+        reverted++;
+
+      } else {
+
+        skipped++;
+      }
+
+      continue;
+    }
+
+
+    /* ===============================
+       일반 필드
+       =============================== */
+
+    const currentValue =
+      rec[field] ?? '';
+
+    const afterValue =
+      snap.after ?? '';
+
+    /*
+      현재 자산값이 삭제하려는 작업 이력의
+      변경 후 값인 경우에만 원복
+    */
+    if (
+      String(currentValue) ===
+      String(afterValue)
+    ){
+
+      rec[field] =
+        snap.before ?? '';
+
+      reverted++;
+
+    } else {
+
+      /*
+        그 이후 다른 작업에서 값이 변경된 것으로 판단.
+        최신 변경값 보호.
+      */
+      skipped++;
+    }
+  }
+
+  return {
+    reverted,
+    skipped
+  };
 }
 
 function renderWorkLogList(){
@@ -4513,20 +4689,96 @@ function renderWorkLogList(){
     };
   });
   listEl.querySelectorAll('[data-wl-delete]').forEach(btn=>{
-    btn.onclick = () => {
+  
+    btn.onclick = async () => {
+  
       const entryId = btn.dataset.wlDelete;
-      if (!confirm('이 작업 이력을 삭제하시겠습니까?')) return;
-      rec.work_log = (rec.work_log||[]).filter(e=>String(e.id)!==String(entryId));
-      if (String(workLogEditId)===String(entryId)){
+  
+      const entry = (rec.work_log || []).find(
+        e => String(e.id) === String(entryId)
+      );
+  
+      if (!entry) return;
+  
+  
+      /*
+        기존 버전에서 생성된 변경 이력은
+        변경 전 값이 없으므로 안전하게 자동 원복 불가
+      */
+      if (
+        entry.field_changes &&
+        Object.keys(entry.field_changes).length &&
+        !entry.rollback_changes
+      ){
+        alert(
+          '이 작업 이력은 변경 전 값이 저장되기 이전에 생성된 이력이라\n' +
+          '자동 원복할 수 없습니다.\n\n' +
+          '기존 변경값을 직접 확인한 후 처리해 주세요.'
+        );
+  
+        return;
+      }
+  
+  
+      const hasChanges =
+        entry.rollback_changes &&
+        Object.keys(entry.rollback_changes).length;
+  
+  
+      const message = hasChanges
+        ? '이 작업 이력을 삭제하시겠습니까?\n\n이 작업 이력에서 변경된 자산 정보도 변경 전 값으로 원복됩니다.'
+        : '이 작업 이력을 삭제하시겠습니까?';
+  
+  
+      if (!confirm(message)) return;
+  
+  
+      /*
+        먼저 자산값 원복
+      */
+      const result =
+        await revertWorkLogChanges(rec, entry);
+  
+  
+      /*
+        그 다음 이력 삭제
+      */
+      rec.work_log = (rec.work_log || []).filter(
+        e => String(e.id) !== String(entryId)
+      );
+  
+  
+      if (
+        String(workLogEditId) ===
+        String(entryId)
+      ){
         workLogEditId = null;
+  
         document.getElementById('wl_date').value = '';
         document.getElementById('wl_manager').value = '';
         document.getElementById('wl_note').value = '';
+  
+        resetFieldChangeInputs();
         setWorkLogFormMode(false);
       }
+  
+  
       renderWorkLogList();
       render();
       scheduleAutoSync();
+  
+  
+      /*
+        해당 작업 이후 다른 작업 이력에서
+        같은 항목을 다시 변경한 경우는 최신값 보호
+      */
+      if (result.skipped > 0){
+        alert(
+          `작업 이력은 삭제되었습니다.\n\n` +
+          `${result.reverted}개 항목은 변경 전 값으로 원복되었습니다.\n` +
+          `${result.skipped}개 항목은 이후 다른 변경이 있어 현재 값을 유지했습니다.`
+        );
+      }
     };
   });
 }
@@ -4562,7 +4814,9 @@ document.getElementById('wlAddBtn').onclick = async () => {
   if (!Array.isArray(rec.work_log)) rec.work_log = [];
 
   const applyToggled = document.getElementById('wl_apply_toggle').checked;
-  let changeSummary = '', fieldChanges = {};
+  let changeSummary = '';
+  let fieldChanges = {};
+  let rollbackChanges = {};
   if (applyToggled){
     const sensitiveTouched = wlChangeFields.some(f => {
       const def = wlFieldDef(f);
@@ -4579,13 +4833,44 @@ document.getElementById('wlAddBtn').onclick = async () => {
     }
     changeSummary = fieldChangesSummary(result.changes);
     fieldChanges = result.fieldChanges;
+    rollbackChanges = result.rollbackChanges;
   }
 
   if (workLogEditId){
     const entry = rec.work_log.find(e=>String(e.id)===String(workLogEditId));
     if (entry){
       entry.type=type; entry.date=date; entry.manager=manager; entry.note=note;
-      if (applyToggled){ entry.field_changes = fieldChanges; entry.change_summary = changeSummary; }
+      if (applyToggled){
+        entry.field_changes = fieldChanges;
+        entry.change_summary = changeSummary;
+      
+        /*
+          기존 이력이 이미 값을 변경했던 경우
+          최초 변경 전 값은 유지하고,
+          최종 변경 후 값만 갱신한다.
+        */
+        const existingRollback = entry.rollback_changes || {};
+      
+        Object.entries(rollbackChanges).forEach(([field, snap]) => {
+      
+          if (existingRollback[field]){
+      
+            // 최초 변경 전 값은 그대로 유지
+            existingRollback[field].after =
+              snap.after !== undefined
+                ? JSON.parse(JSON.stringify(snap.after))
+                : snap.after;
+      
+          } else {
+      
+            existingRollback[field] =
+              JSON.parse(JSON.stringify(snap));
+          }
+      
+        });
+      
+        entry.rollback_changes = existingRollback;
+      }
       else { delete entry.field_changes; delete entry.change_summary; }
     }
     workLogEditId = null;
@@ -4594,8 +4879,23 @@ document.getElementById('wlAddBtn').onclick = async () => {
     if (!currentUserId && !confirm('현재 로그인된 사용자가 없어 이 이력의 작성자가 "미상"으로 표시됩니다.\n로그인 없이 계속 저장할까요?\n\n(취소를 누르면 저장하지 않습니다 — 상단의 "👤 로그인"에서 먼저 본인 계정으로 로그인해 주세요.)')){
       return;
     }
-    const entry = { id: Date.now(), type, date, manager, note, author: currentUserName() };
-    if (applyToggled){ entry.field_changes = fieldChanges; entry.change_summary = changeSummary; }
+    const entry = {
+      id: Date.now(),
+      type,
+      date,
+      manager,
+      note,
+      author: currentUserName()
+    };
+    
+    if (applyToggled){
+      entry.field_changes = fieldChanges;
+      entry.change_summary = changeSummary;
+    
+      // 삭제 시 실제 자산값 원복용
+      entry.rollback_changes = rollbackChanges;
+    }
+    
     rec.work_log.push(entry);
   }
   document.getElementById('wl_date').value = '';
