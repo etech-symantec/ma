@@ -371,20 +371,7 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "work_log": [
-        {
-          "id": 1786523736244,
-          "type": "장비 구축",
-          "date": "",
-          "manager": "윤태리",
-          "note": "",
-          "author": "윤태리",
-          "field_changes": {
-            "os_ver": "7.3.21.1"
-          },
-          "change_summary": "OS 버전: 7.3.21.2 → 7.3.21.1"
-        }
-      ]
+      "work_log": []
     },
     {
       "group": "tw-ds",
