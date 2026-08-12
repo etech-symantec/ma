@@ -1214,7 +1214,7 @@ function renderDashboard(){
   `;
 }
 
-let currentViewMode = 'list'; // 'list' | 'dashboard' | 'maintenance'
+let currentViewMode = 'list'; // 'list' | 'dashboard' | 'maintenance' | 'history'
 function setViewMode(mode){
   currentViewMode = mode;
   dashboardMode = (mode === 'dashboard');
@@ -1222,11 +1222,14 @@ function setViewMode(mode){
   const contentEl = document.getElementById('content');
   const dashEl = document.getElementById('dashboardView');
   const maintEl = document.getElementById('maintenanceView');
+  const histEl = document.getElementById('workHistoryView');
   const dashBtn = document.getElementById('dashboardToggle');
   const maintBtn = document.getElementById('maintenanceToggle');
+  const histBtn = document.getElementById('workHistoryToggle');
   if (contentEl) contentEl.style.display = (mode === 'list') ? '' : 'none';
   if (dashEl) dashEl.style.display = (mode === 'dashboard') ? '' : 'none';
   if (maintEl) maintEl.style.display = (mode === 'maintenance') ? '' : 'none';
+  if (histEl) histEl.style.display = (mode === 'history') ? '' : 'none';
   if (dashBtn){
     dashBtn.classList.toggle('on', mode === 'dashboard');
     dashBtn.title = mode === 'dashboard' ? '대시보드 닫기 (다시 클릭)' : '대시보드 보기';
@@ -1235,14 +1238,20 @@ function setViewMode(mode){
     maintBtn.classList.toggle('on', mode === 'maintenance');
     maintBtn.title = mode === 'maintenance' ? '유지보수 점검 관리 닫기 (다시 클릭)' : '유지보수 점검 관리';
   }
+  if (histBtn){
+    histBtn.classList.toggle('on', mode === 'history');
+    histBtn.title = mode === 'history' ? '작업 이력 전체보기 닫기 (다시 클릭)' : '작업 이력 전체보기';
+  }
   if (mode === 'dashboard') renderDashboard();
   if (mode === 'maintenance') renderMaintenance();
+  if (mode === 'history') renderWorkHistoryPage();
 }
 
 function setDashboardMode(on){ setViewMode(on ? 'dashboard' : 'list'); }
 
 document.getElementById('dashboardToggle').onclick = () => setViewMode(dashboardMode ? 'list' : 'dashboard');
 document.getElementById('maintenanceToggle').onclick = () => setViewMode(maintenanceMode ? 'list' : 'maintenance');
+document.getElementById('workHistoryToggle').onclick = () => setViewMode(currentViewMode === 'history' ? 'list' : 'history');
 document.getElementById('dashboardView').addEventListener('click', (e) => {
   const companyJump = e.target.closest('[data-dash-company]');
   if (companyJump){
@@ -3918,6 +3927,121 @@ function getRecentWorkLogEntries(limit){
   });
   all.sort((a,b) => (b.entry.id||0) - (a.entry.id||0));
   return all.slice(0, limit);
+}
+
+// ---------- 작업 이력 전체보기 페이지 ----------
+let whSearch = '';
+let whTypeFilter = '';
+let whSort = 'desc';
+
+function getAllWorkLogEntries(){
+  const all = [];
+  records.forEach(r => {
+    (r.work_log||[]).forEach(entry => {
+      all.push({
+        entry, recId:r.id, recGroup:r.group, recOwner:r.owner,
+        recLabel:r.sku || skuTagLabel(r), recSn:r.sn||'',
+        key: activityKeyOf(r.id, entry.id),
+      });
+    });
+  });
+  return all;
+}
+
+function whAllTypes(){
+  const set = new Set();
+  getAllWorkLogEntries().forEach(({entry}) => { if (entry.type) set.add(entry.type); });
+  return [...set];
+}
+
+function renderWorkHistoryPage(){
+  const wrap = document.getElementById('workHistoryView');
+  if (!wrap) return;
+
+  const types = whAllTypes();
+  const total = getAllWorkLogEntries().length;
+
+  wrap.innerHTML = `
+    <div class="maint-sticky-top">
+      <div class="maint-header">
+        <div class="maint-header-row">
+          <h2>작업 이력 전체보기</h2>
+        </div>
+        <p class="maint-sub">등록된 모든 자산의 작업 이력을 한 곳에서 확인합니다 · 총 ${total}건</p>
+      </div>
+      <div class="wh-toolbar">
+        <div class="tf-search wh-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="whSearchInput" placeholder="법인·자산·담당자·내용으로 검색" value="${esc(whSearch)}">
+        </div>
+        <select id="whTypeSelect" class="wh-select">
+          <option value="">전체 구분</option>
+          ${types.map(t=>`<option value="${esc(t)}" ${whTypeFilter===t?'selected':''}>${esc(t)}</option>`).join('')}
+        </select>
+        <select id="whSortSelect" class="wh-select">
+          <option value="desc" ${whSort==='desc'?'selected':''}>최신순</option>
+          <option value="asc" ${whSort==='asc'?'selected':''}>오래된순</option>
+        </select>
+      </div>
+    </div>
+    <div class="wh-list" id="whListEl"></div>`;
+
+  document.getElementById('whSearchInput').oninput = (e) => { whSearch = e.target.value; renderWhList(); };
+  document.getElementById('whTypeSelect').onchange = (e) => { whTypeFilter = e.target.value; renderWhList(); };
+  document.getElementById('whSortSelect').onchange = (e) => { whSort = e.target.value; renderWhList(); };
+
+  renderWhList();
+}
+
+function renderWhList(){
+  const listEl = document.getElementById('whListEl');
+  if (!listEl) return;
+
+  let items = getAllWorkLogEntries();
+  if (whTypeFilter) items = items.filter(({entry}) => entry.type === whTypeFilter);
+  if (whSearch.trim()){
+    const q = whSearch.trim().toLowerCase();
+    items = items.filter(({entry, recOwner, recLabel, recSn}) =>
+      [recOwner, recLabel, recSn, entry.manager, entry.author, entry.note, entry.type]
+        .some(v => (v||'').toLowerCase().includes(q))
+    );
+  }
+  items.sort((a,b) => whSort === 'desc' ? (b.entry.id||0)-(a.entry.id||0) : (a.entry.id||0)-(b.entry.id||0));
+
+  listEl.innerHTML = items.length ? items.map(({entry, recId, recGroup, recOwner, recLabel, recSn}) => `
+    <div class="wh-item" data-jump-group="${esc(recGroup)}" data-jump-rec="${esc(recId)}">
+      <div class="wh-top">
+        <span class="ra-type">${esc(entry.type)}</span>
+        <span class="ra-date">${esc(entry.date)||'날짜 미기재'}</span>
+      </div>
+      <div class="ra-asset">${esc(recOwner)} · ${esc(recLabel)||'—'}${recSn ? ' · S/N '+esc(recSn) : ''}</div>
+      <div class="ra-note">${esc(entry.note)||'—'}</div>
+      ${entry.change_summary ? `<div class="ra-changes">
+        <div class="ra-changes-label">🔧 자산 정보 변경</div>
+        ${changeSummaryRowsHtml(entry.change_summary)}
+      </div>` : ''}
+      <div class="ra-author">담당자: ${esc(entry.manager)||'미기재'} · 작성: ${esc(entry.author)||'미상'}</div>
+    </div>`).join('')
+    : `<div class="ra-empty wh-empty">조건에 맞는 작업 이력이 없습니다.</div>`;
+
+  listEl.querySelectorAll('[data-jump-group]').forEach(el=>{
+    el.onclick = () => {
+      const gid = el.dataset.jumpGroup;
+      const recId = el.dataset.jumpRec;
+      setViewMode('list');
+      expandGroupWithAncestors(gid);
+      render();
+      requestAnimationFrame(()=>{
+        const row = document.querySelector(`tr[data-id="${CSS.escape(recId)}"]`);
+        const target = row || document.querySelector(`.group-card[data-gid="${CSS.escape(gid)}"]`);
+        if (target){
+          target.scrollIntoView({behavior:'smooth', block:'center'});
+          target.classList.add('activity-highlight-flash');
+          setTimeout(()=> target.classList.remove('activity-highlight-flash'), 1800);
+        }
+      });
+    };
+  });
 }
 
 function updateActivityBadge(){
