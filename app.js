@@ -1148,9 +1148,8 @@ function renderDashboard(){
     ? dashboardSectionHtml('os_none', '태그 없음 · 버전별', 'dash-c1', bucketGroups(osNoTagItems, r => osVersionTag(r.os_ver)), true)
     : '';
 
-  const byTag = bucketByTags(assetRecords);
-  const byLocation = bucketGroups(assetRecords, r => r.location);
-  const byCountry = bucketGroups(assetRecords, r => countryOf(r));
+  const byTag = bucketByTags(assetRecords)
+    .filter(([label]) => label !== 'SSP');
   const bySku = bucketGroups(assetRecords, r => r.sku);
 
   wrap.innerHTML = `
@@ -1166,10 +1165,23 @@ function renderDashboard(){
     </div>
 
     <div class="dash-grid" style="margin-top:16px;">
-      ${dashboardSectionHtml('tag', '태그별 · 클릭하면 사용 법인 표시', 'dash-c2', byTag, true)}
-      ${dashboardSectionHtml('location', '위치별', 'dash-c3', byLocation, false)}
-      ${dashboardSectionHtml('country', '국가별', 'dash-c4', byCountry, false)}
-      ${dashboardSectionHtml('sku', 'SKU별 · 클릭하면 사용 법인 표시', 'dash-c5', bySku, true)}
+      ${dashboardSectionHtml(
+        'tag',
+        '태그별 · 클릭하면 사용 법인 표시',
+        'dash-c2',
+        byTag,
+        true
+      )}
+    
+      ${dashboardCountryLocationHtml(assetRecords)}
+    
+      ${dashboardSectionHtml(
+        'sku',
+        'SKU별 · 클릭하면 사용 법인 표시',
+        'dash-c5',
+        bySku,
+        true
+      )}
     </div>
   `;
 }
@@ -1204,10 +1216,7 @@ function setDashboardMode(on){ setViewMode(on ? 'dashboard' : 'list'); }
 document.getElementById('dashboardToggle').onclick = () => setViewMode(dashboardMode ? 'list' : 'dashboard');
 document.getElementById('maintenanceToggle').onclick = () => setViewMode(maintenanceMode ? 'list' : 'maintenance');
 document.getElementById('dashboardView').addEventListener('click', (e) => {
-
-  // 대시보드에 펼쳐진 법인명을 클릭하면 해당 법인 자산 화면으로 이동
   const companyJump = e.target.closest('[data-dash-company]');
-
   if (companyJump){
     e.stopPropagation();
 
@@ -1256,6 +1265,24 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
       }
     });
 
+    return;
+  }
+
+  const countryToggle = e.target.closest('[data-dash-country-toggle]');
+  
+  if (countryToggle){
+    const target = document.getElementById(
+      countryToggle.dataset.dashCountryToggle
+    );
+  
+    if (target){
+      const opening = target.style.display === 'none';
+  
+      target.style.display = opening ? 'block' : 'none';
+  
+      countryToggle.classList.toggle('open', opening);
+    }
+  
     return;
   }
 
@@ -3904,3 +3931,96 @@ document.getElementById('wlCloseBtn').onclick = () => {
   workLogRecordIds = [];
   workLogEditId = null;
 };
+
+function dashboardCountryLocationHtml(items){
+  const countryMap = new Map();
+
+  items.forEach(r => {
+    const country = countryOf(r) || '미상';
+    const location = (r.location || '').trim() || '위치 미상';
+
+    if (!countryMap.has(country)){
+      countryMap.set(country, {
+        count: 0,
+        locations: new Map()
+      });
+    }
+
+    const c = countryMap.get(country);
+    c.count++;
+
+    if (!c.locations.has(location)){
+      c.locations.set(location, 0);
+    }
+
+    c.locations.set(
+      location,
+      c.locations.get(location) + 1
+    );
+  });
+
+  const countries = [...countryMap.entries()]
+    .sort((a, b) => b[1].count - a[1].count);
+
+  if (!countries.length){
+    return `
+      <div class="dash-card">
+        <h4>국가/위치별 현황</h4>
+        <div class="dash-empty">데이터가 없습니다.</div>
+      </div>
+    `;
+  }
+
+  const max = Math.max(...countries.map(([, data]) => data.count));
+
+  const rows = countries.map(([country, data], index) => {
+
+    const locationRows = [...data.locations.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .map(([location, count]) => `
+        <div class="dash-location-tree-item">
+          <span class="dash-tree-branch">└</span>
+          <span class="dash-location-name">${esc(location)}</span>
+          <span class="dash-location-count">${count}건</span>
+        </div>
+      `).join('');
+
+    return `
+      <div class="dash-country-block">
+
+        <div class="dash-row dash-row-clickable dash-country-row"
+             data-dash-country-toggle="dashCountryLocation_${index}">
+
+          <span class="dash-row-caret">▾</span>
+
+          <span class="dash-row-label"
+                title="${esc(country)}">
+            ${esc(country)}
+          </span>
+
+          <div class="dash-bar-track">
+            <div class="dash-bar-fill dash-c4"
+                 style="width:${Math.max(5, Math.round(data.count / max * 100))}%">
+            </div>
+          </div>
+
+          <span class="dash-row-count">${data.count}</span>
+        </div>
+
+        <div class="dash-location-tree"
+             id="dashCountryLocation_${index}"
+             style="display:none;">
+          ${locationRows}
+        </div>
+
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="dash-card">
+      <h4>국가/위치별 현황</h4>
+      ${rows}
+    </div>
+  `;
+}
