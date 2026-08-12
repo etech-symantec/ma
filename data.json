@@ -13415,6 +13415,19 @@
       "uncontracted": false,
       "author": "윤태리",
       "updated_at": 1786521247928
+    },
+    {
+      "id": 1786521254214,
+      "group": "kr-010",
+      "ym": "2026-04",
+      "date": "2026.4.3",
+      "manager": "윤태리",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1786521254214
     }
   ]
 }
