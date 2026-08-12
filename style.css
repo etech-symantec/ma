@@ -1260,6 +1260,27 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-toolbar{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px; }
 .maint-toolbar label{ font-size:11px; color:var(--text-faint); font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em; margin-right:6px; }
 .maint-toolbar .maint-my-toggle{ flex:0 0 auto; min-width:150px; }
+
+/* 작업 이력 전체보기 페이지 */
+.wh-toolbar{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:14px 0 16px; }
+.wh-search{ flex:1 1 260px; }
+.wh-select{
+  flex:0 0 auto; padding:8px 10px; font-size:12.5px; color:var(--text-dim);
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px; outline:none;
+}
+.wh-select:focus{ border-color:var(--accent); }
+.wh-list{ display:flex; flex-direction:column; gap:10px; padding:4px 0 40px; }
+.wh-item{
+  background:var(--surface); border:1px solid var(--border-solid); border-radius:12px;
+  padding:14px 16px; cursor:pointer; transition:border-color .12s, box-shadow .12s;
+}
+.wh-item:hover{ border-color:var(--accent); box-shadow:0 1px 6px rgba(0,0,0,0.06); }
+.wh-item .ra-asset{ font-size:13px; font-weight:600; color:var(--text); margin-top:4px; }
+.wh-item .ra-note{ font-size:12.8px; margin-top:5px; }
+.wh-item .ra-changes{ margin-top:9px; }
+.wh-item .ra-author{ margin-top:8px; }
+.wh-top{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.wh-empty{ padding:40px 10px; }
 .maint-header-row .maint-my-toggle{
   flex:0 0 auto; min-width:0; height:32px; padding:0 10px 0 9px; gap:6px;
 }
