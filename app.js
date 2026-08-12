@@ -1538,6 +1538,7 @@ function maintenanceUserSummaryData(){
       m.primary += 1;
       u.methods.set(method, m);
       u.primaryGroups.push({
+        gid: g.gid,
         owner: g.meta.owner,
         method: g.meta.check_method || '미지정'
       });
@@ -1548,6 +1549,7 @@ function maintenanceUserSummaryData(){
       m.secondary += 1;
       u.methods.set(method, m);
       u.secondaryGroups.push({
+        gid: g.gid,
         owner: g.meta.owner,
         method: g.meta.check_method || '미지정'
       });
@@ -1581,8 +1583,12 @@ function maintenanceUserSummaryHtml(){
           .slice()
           .sort((a, b) => a.owner.localeCompare(b.owner, 'ko'))
           .map(g => `
-            <div class="maint-site-listitem primary">
+            <div class="maint-site-listitem primary maint-site-clickable"
+                 data-maint-site-gid="${esc(g.gid)}"
+                 title="${esc(g.owner)} 자산 목록으로 이동">
+    
               <span class="maint-site-name">${esc(g.owner)}</span>
+    
               <span class="maint-site-method"
                     data-method="${esc(g.method)}">
                 ${esc(g.method)}
@@ -1595,8 +1601,12 @@ function maintenanceUserSummaryHtml(){
           .slice()
           .sort((a, b) => a.owner.localeCompare(b.owner, 'ko'))
           .map(g => `
-            <div class="maint-site-listitem secondary">
+            <div class="maint-site-listitem secondary maint-site-clickable"
+                 data-maint-site-gid="${esc(g.gid)}"
+                 title="${esc(g.owner)} 자산 목록으로 이동">
+    
               <span class="maint-site-name">${esc(g.owner)}</span>
+    
               <span class="maint-site-method"
                     data-method="${esc(g.method)}">
                 ${esc(g.method)}
@@ -1624,6 +1634,53 @@ function maintenanceUserSummaryHtml(){
   }).join('');
 
   return `<div class="maint-user-summary-list">${cardsHtml}</div>`;
+}
+
+function jumpToAssetGroup(gid){
+  if (!gid) return;
+
+  // 다른 필터 때문에 대상 법인이 사라지지 않도록 초기화
+  activeStatusFilters = new Set(['ok', 'warn', 'crit', 'na']);
+  activeSkuKeywordFilters = new Set();
+  activeMyAssetsFilter = false;
+  activeCountryFilter = null;
+
+  Object.keys(topFieldFilters).forEach(k => {
+    topFieldFilters[k] = '';
+  });
+
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput){
+    searchInput.value = '';
+  }
+
+  // 대상 법인 + 상위 법인까지 펼치기
+  expandGroupWithAncestors(gid);
+
+  // 자산 목록 화면으로 전환
+  setViewMode('list');
+
+  render();
+
+  // 해당 법인 위치로 이동
+  requestAnimationFrame(() => {
+    const target = document.querySelector(
+      `.group-card[data-gid="${CSS.escape(gid)}"]`
+    );
+
+    if (!target) return;
+
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    target.classList.add('activity-highlight-flash');
+
+    setTimeout(() => {
+      target.classList.remove('activity-highlight-flash');
+    }, 1800);
+  });
 }
 
 function maintenanceStatsTabHtml(){
@@ -1724,6 +1781,12 @@ function renderMaintenance(){
     cell.onclick = () => {
       const [gid, ym] = cell.dataset.maintCell.split('|');
       openMaintenanceLogModal(gid, ym);
+    };
+  });
+
+  wrap.querySelectorAll('[data-maint-site-gid]').forEach(site => {
+    site.onclick = () => {
+      jumpToAssetGroup(site.dataset.maintSiteGid);
     };
   });
 
