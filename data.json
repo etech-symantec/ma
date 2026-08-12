@@ -12989,6 +12989,57 @@
       "deploy_date": "",
       "mode": "",
       "work_log": []
+    },
+    {
+      "id": 1786349440906,
+      "group": "custom-mspt0fl7",
+      "flag": "",
+      "owner": "동우화인켐",
+      "country": "대한민국",
+      "location": "평택",
+      "support_id": "546252",
+      "build_engineer": "홍진영",
+      "build_date": "2024.03",
+      "sku": "SSP-S410-40B",
+      "sn": "1123700021",
+      "qty": "1",
+      "start": "",
+      "end": "",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "os_ver": "",
+      "owner_primary": "홍진영",
+      "owner_secondary": "",
+      "check_method": "",
+      "config_mode": "Inline",
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "김태형 선임",
+          "org": "동우화인켐",
+          "phone": "010-3753-3920",
+          "email": "taehyeongkim@dwchem.co.kr"
+        },
+        {
+          "role": "운영",
+          "name": "전달수 책임",
+          "org": "동우화인켐",
+          "phone": "01087717383",
+          "email": "dsjeon@dwchem.co.kr"
+        }
+      ],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "is_parent": false,
+      "work_log": [],
+      "ip_enc": null,
+      "id_enc": null,
+      "pw_enc": null,
+      "enable_pw_enc": null
     }
   ],
   "users": [
