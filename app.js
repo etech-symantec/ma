@@ -4258,28 +4258,56 @@ function wlFieldDef(field){ return WL_FIELD_DEFS.find(d=>d.field===field); }
 
 let wlChangeFields = [];
 let wlChangeValues = {};
+let wlOriginalValues = {};
+
+// 현재 등록된 자산 정보를 그대로 불러와 wlChangeFields/Values에 채워 넣는다.
+// (체크박스를 켜면 모든 항목이 현재 값으로 채워진 상태로 보이고, 그 중 원하는 항목만 고쳐서 저장하면 된다.)
+async function populateAllWlFieldsFromRecord(rec){
+  wlChangeFields = WL_FIELD_DEFS.map(d => d.field);
+  wlChangeValues = {};
+  wlOriginalValues = {};
+  for (const def of WL_FIELD_DEFS){
+    let current = '';
+    if (def.sensitive){
+      current = rec[def.encField] ? await decryptField(rec[def.encField]) : '';
+    } else {
+      current = rec[def.field] || '';
+    }
+    wlChangeValues[def.field] = current;
+    wlOriginalValues[def.field] = current;
+  }
+  renderWlChangeRows();
+}
+
+function getWlSingleRecord(){
+  if (!workLogRecordIds || workLogRecordIds.length !== 1) return null;
+  return records.find(r => String(r.id) === String(workLogRecordIds[0])) || null;
+}
 
 function renderWlFieldSelect(){
   const sel = document.getElementById('wl_field_select');
   const available = WL_FIELD_DEFS.filter(d => !wlChangeFields.includes(d.field));
-  sel.innerHTML = `<option value="">변경할 항목 선택…</option>` +
+  sel.innerHTML = `<option value="">제거한 항목 다시 추가…</option>` +
     available.map(d=>`<option value="${d.field}">${esc(d.label)}${d.sensitive?' 🔒':''}</option>`).join('');
 }
 
 function renderWlChangeRows(){
   const wrap = document.getElementById('wl_fieldchange_rows');
+  const locked = viewOnly || !sessionKey;
   wrap.innerHTML = wlChangeFields.map(field=>{
     const def = wlFieldDef(field);
     if (!def) return '';
+    const isLockedSensitive = def.sensitive && locked;
     const val = esc(wlChangeValues[field]||'');
+    const placeholder = isLockedSensitive ? '잠금 해제 후 수정 가능' : '';
     const inputHtml = def.type==='textarea'
-      ? `<textarea class="wl-fc-input" data-field="${field}">${val}</textarea>`
-      : `<input class="wl-fc-input" data-field="${field}" value="${val}">`;
+      ? `<textarea class="wl-fc-input" data-field="${field}" placeholder="${placeholder}" ${isLockedSensitive?'disabled':''}>${val}</textarea>`
+      : `<input class="wl-fc-input" data-field="${field}" value="${val}" placeholder="${placeholder}" ${isLockedSensitive?'disabled':''}>`;
     return `
     <div class="wl-fc-row">
       <label>${esc(def.label)}${def.sensitive?' 🔒':''}</label>
       ${inputHtml}
-      <button type="button" class="cc-remove-btn" data-remove="${field}" title="이 항목 제거">✕</button>
+      <button type="button" class="cc-remove-btn" data-remove="${field}" title="이 항목 표시 안 함">✕</button>
     </div>`;
   }).join('');
   wrap.querySelectorAll('.wl-fc-input').forEach(el=>{
@@ -4296,12 +4324,23 @@ function renderWlChangeRows(){
   renderWlFieldSelect();
 }
 
-document.getElementById('wl_field_add_btn').onclick = () => {
+document.getElementById('wl_field_add_btn').onclick = async () => {
   const sel = document.getElementById('wl_field_select');
   const field = sel.value;
   if (!field || wlChangeFields.includes(field)) return;
   wlChangeFields.push(field);
-  if (wlChangeValues[field] === undefined) wlChangeValues[field] = '';
+  if (wlChangeValues[field] === undefined){
+    const def = wlFieldDef(field);
+    const rec = getWlSingleRecord();
+    let current = '';
+    if (rec && def){
+      current = def.sensitive
+        ? (rec[def.encField] ? await decryptField(rec[def.encField]) : '')
+        : (rec[field] || '');
+    }
+    wlChangeValues[field] = current;
+    wlOriginalValues[field] = current;
+  }
   renderWlChangeRows();
 };
 
@@ -4310,11 +4349,23 @@ function resetFieldChangeInputs(){
   document.getElementById('wl_fieldchange_section').style.display = 'none';
   wlChangeFields = [];
   wlChangeValues = {};
+  wlOriginalValues = {};
   renderWlChangeRows();
 }
 
-document.getElementById('wl_apply_toggle').addEventListener('change', (e) => {
+document.getElementById('wl_apply_toggle').addEventListener('change', async (e) => {
   document.getElementById('wl_fieldchange_section').style.display = e.target.checked ? '' : 'none';
+  if (e.target.checked){
+    const rec = getWlSingleRecord();
+    if (rec){
+      await populateAllWlFieldsFromRecord(rec);
+    }
+  } else {
+    wlChangeFields = [];
+    wlChangeValues = {};
+    wlOriginalValues = {};
+    renderWlChangeRows();
+  }
 });
 
 async function applyFieldChanges(rec){
@@ -4326,6 +4377,8 @@ async function applyFieldChanges(rec){
     const val = (wlChangeValues[field]||'').trim();
     if (!val) continue;
     if (def.sensitive){
+      const orig = (wlOriginalValues[field]||'').trim();
+      if (val === orig) continue;
       changes.push({ field, label:def.label, sensitive:true });
       fieldChanges[field] = true;
       rec[def.encField] = await encryptField(val);
@@ -4417,7 +4470,7 @@ function renderWorkLogList(){
     </div>`).join('');
 
   listEl.querySelectorAll('[data-wl-edit]').forEach(btn=>{
-    btn.onclick = () => {
+    btn.onclick = async () => {
       const entryId = btn.dataset.wlEdit;
       const entry = (rec.work_log||[]).find(e=>String(e.id)===String(entryId));
       if (!entry) return;
@@ -4430,11 +4483,12 @@ function renderWorkLogList(){
       if (entry.field_changes && Object.keys(entry.field_changes).length){
         document.getElementById('wl_apply_toggle').checked = true;
         document.getElementById('wl_fieldchange_section').style.display = '';
+        // 현재 등록된 자산 정보를 전부 채운 뒤, 이 이력에 실제로 기록됐던 변경값(비민감 항목)만 덮어씌운다.
+        await populateAllWlFieldsFromRecord(rec);
         Object.keys(entry.field_changes).forEach(field => {
           const def = wlFieldDef(field);
-          if (!def) return;
-          wlChangeFields.push(field);
-          wlChangeValues[field] = def.sensitive ? '' : entry.field_changes[field];
+          if (!def || def.sensitive) return;
+          wlChangeValues[field] = entry.field_changes[field];
         });
         renderWlChangeRows();
       }
