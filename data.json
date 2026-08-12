@@ -12941,6 +12941,47 @@
       "deploy_date": "",
       "mode": "",
       "work_log": []
+    },
+    {
+      "id": 1786349440905,
+      "group": "custom-mspt0fl7",
+      "is_group_shell": true,
+      "flag": "",
+      "owner": "동우화인켐",
+      "country": "대한민국",
+      "location": "평택",
+      "check_method": "",
+      "config_mode": "Inline",
+      "owner_primary": "홍진영",
+      "owner_secondary": "",
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "김태형 선임",
+          "org": "동우화인켐",
+          "phone": "",
+          "email": ""
+        }
+      ],
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "is_parent": false,
+      "support_id": "546252",
+      "build_engineer": "홍진영",
+      "build_date": "2024.03",
+      "sku": "",
+      "sn": "",
+      "qty": "",
+      "start": "",
+      "end": "",
+      "os_ver": "",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "work_log": []
     }
   ],
   "users": [
