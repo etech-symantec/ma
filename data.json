@@ -12950,7 +12950,7 @@
       "owner": "동우화인켐",
       "country": "대한민국",
       "location": "평택",
-      "check_method": "",
+      "check_method": "방문",
       "config_mode": "Inline",
       "owner_primary": "홍진영",
       "owner_secondary": "",
@@ -13011,7 +13011,7 @@
       "os_ver": "",
       "owner_primary": "홍진영",
       "owner_secondary": "",
-      "check_method": "",
+      "check_method": "방문",
       "config_mode": "Inline",
       "cust_contacts": [
         {
