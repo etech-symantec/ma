@@ -64,7 +64,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "cust_memo": "테스트"
     },
     {
       "group": "jp-sds",
@@ -128,7 +129,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "cust_memo": "테스트"
     },
     {
       "group": "jp-sds",
@@ -175,7 +177,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "cust_memo": "테스트"
     },
     {
       "group": "jp-sds",
@@ -239,7 +242,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "cust_memo": "테스트"
     },
     {
       "group": "jp-sds",
@@ -298,7 +302,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "cust_memo": "테스트"
     },
     {
       "group": "tw-ds",
