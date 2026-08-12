@@ -1428,6 +1428,20 @@ function maintenanceEntryTabHtml(){
       const ym = `${maintenanceYear}-${pad2(m)}`;
       const log = maintenanceLogFor(g.gid, ym);
       const isCurrent = ym === thisYm;
+      const isUncontracted = !!(log && log.uncontracted);
+      if (isUncontracted){
+        return `
+          <td class="maint-cell maint-cell-uncontracted ${isCurrent?'is-current':''}"
+              data-maint-cell="${esc(g.gid)}|${ym}"
+              title="${esc(ymLabel(ym))} · 미계약">
+      
+            <span class="maint-cell-uncontracted-label">
+              미계약
+            </span>
+      
+          </td>
+        `;
+      }
       const hasDate = log && (log.date || '').trim();
       const isIncomplete = !!(log && log.incomplete);
       if (isIncomplete){
@@ -1777,11 +1791,38 @@ function renderMaintenance(){
       <div class="maint-header">
         <div class="maint-header-row">
           <h2>유지보수 점검 관리</h2>
-          <button type="button" class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}" id="maintMyToggle" ${!me?'disabled':''} title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
-            <span class="mat-icon" aria-hidden="true"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h12l-4.5 5.5v4L7 14v-5.5z"/></svg></span>
-            <span class="mat-label">내 사업장만</span>
-            <span class="mat-count">${myCount}</span>
-          </button>
+        
+          <div class="maint-header-actions">
+        
+            <a class="maint-license-notice-btn"
+               href="https://etech-sym.notion.site/license-expiry"
+               target="_blank"
+               rel="noopener noreferrer"
+               title="라이선스 만료 2달 전 공지글 새 탭에서 열기">
+              <span class="maint-license-notice-icon">🔔</span>
+              <span>라이선스 만료 2달 전 공지글</span>
+            </a>
+        
+            <button type="button"
+                    class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}"
+                    id="maintMyToggle"
+                    ${!me?'disabled':''}
+                    title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
+              <span class="mat-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" width="12" height="12"
+                     fill="none" stroke="currentColor"
+                     stroke-width="1.6"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="M2 3h12l-4.5 5.5v4L7 14v-5.5z"/>
+                </svg>
+              </span>
+        
+              <span class="mat-label">내 사업장만</span>
+              <span class="mat-count">${myCount}</span>
+            </button>
+        
+          </div>
         </div>
         <p class="maint-sub">등록된 법인들의 월별 점검 이력을 관리합니다 · 2026년 1월부터</p>
       </div>
@@ -1862,6 +1903,9 @@ function openMaintenanceLogModal(gid, ym){
   document.getElementById('ml_incomplete').checked =
     log ? !!log.incomplete : false;
   
+  document.getElementById('ml_uncontracted').checked =
+    log ? !!log.uncontracted : false;
+  
   document.getElementById('ml_note').value =
     log ? (log.note || '') : '';
   
@@ -1879,55 +1923,86 @@ function closeMaintenanceLogModal(){
 function syncMaintenanceStatusControls(){
   const doneEl = document.getElementById('ml_done');
   const incompleteEl = document.getElementById('ml_incomplete');
+  const uncontractedEl = document.getElementById('ml_uncontracted');
 
   const dateEl = document.getElementById('ml_date');
   const datePicker = document.getElementById('ml_date_picker');
   const dateBtn = document.getElementById('ml_date_pick_btn');
 
+  const noteEl = document.getElementById('ml_note');
+
   const dateRow = document.getElementById('mlDateRow');
   const requiredHint = document.getElementById('mlNoteRequired');
 
-  if (!doneEl || !incompleteEl) return;
+  if (!doneEl || !incompleteEl || !uncontractedEl) return;
 
   const incomplete = incompleteEl.checked;
+  const uncontracted = uncontractedEl.checked;
 
-  dateEl.disabled = incomplete;
-  datePicker.disabled = incomplete;
-  dateBtn.disabled = incomplete;
+  /* 미완료 또는 미계약이면 날짜 비활성화 */
+  const disableDate = incomplete || uncontracted;
+
+  dateEl.disabled = disableDate;
+  datePicker.disabled = disableDate;
+  dateBtn.disabled = disableDate;
+
+  /* 미계약은 비고/내용까지 비활성화 */
+  noteEl.disabled = uncontracted;
 
   if (dateRow){
     dateRow.classList.toggle('is-incomplete', incomplete);
+    dateRow.classList.toggle('is-uncontracted', uncontracted);
   }
 
+  /* 미완료일 때만 비고 필수 */
   if (requiredHint){
     requiredHint.style.display = incomplete ? 'inline' : 'none';
   }
 
-  if (incomplete){
+  if (uncontracted){
+    /* 미계약은 날짜와 내용 자체를 비움 */
     dateEl.value = '';
     datePicker.value = '';
-  } else if (!dateEl.value.trim()){
+    noteEl.value = '';
+  }
+  else if (incomplete){
+    /* 미완료는 날짜만 비움, 비고는 입력 가능 */
+    dateEl.value = '';
+    datePicker.value = '';
+  }
+  else if (!dateEl.value.trim()){
     dateEl.value = todayDots();
   }
 }
 
 document.getElementById('ml_done').addEventListener('change', () => {
   const doneEl = document.getElementById('ml_done');
-  const incompleteEl = document.getElementById('ml_incomplete');
 
   if (doneEl.checked){
-    incompleteEl.checked = false;
+    document.getElementById('ml_incomplete').checked = false;
+    document.getElementById('ml_uncontracted').checked = false;
   }
 
   syncMaintenanceStatusControls();
 });
 
 document.getElementById('ml_incomplete').addEventListener('change', () => {
-  const doneEl = document.getElementById('ml_done');
   const incompleteEl = document.getElementById('ml_incomplete');
 
   if (incompleteEl.checked){
-    doneEl.checked = false;
+    document.getElementById('ml_done').checked = false;
+    document.getElementById('ml_uncontracted').checked = false;
+  }
+
+  syncMaintenanceStatusControls();
+});
+
+document.getElementById('ml_uncontracted').addEventListener('change', () => {
+  const uncontractedEl = document.getElementById('ml_uncontracted');
+
+  if (uncontractedEl.checked){
+    document.getElementById('ml_done').checked = false;
+    document.getElementById('ml_incomplete').checked = false;
   }
 
   syncMaintenanceStatusControls();
@@ -1953,13 +2028,16 @@ document.getElementById('saveMlBtn').onclick = () => {
   
   const done = document.getElementById('ml_done').checked;
   const incomplete = document.getElementById('ml_incomplete').checked;
+  const uncontracted = document.getElementById('ml_uncontracted').checked;
   const errEl = document.getElementById('mlError');
-  if (incomplete){
-    // 미완료는 점검일 없음
+  if (uncontracted){
     date = '';
-    // 미완료 사유는 반드시 입력
+    note = '';
+  }
+  else if (incomplete){
+    date = '';
     if (!note){
-      errEl.textContent = '미완료인 경우 비고에 미완료 사유를 반드시 입력해 주세요.';
+      errEl.textContent = '미완료 사유를 반드시 입력해 주세요.';
       document.getElementById('ml_note').focus();
       return;
     }
@@ -1985,7 +2063,10 @@ document.getElementById('saveMlBtn').onclick = () => {
   log.manager = manager;
   log.note = note;
   log.done = incomplete ? false : done;
-  log.incomplete = incomplete;
+
+  log.done = uncontracted ? false : done;
+  log.incomplete = uncontracted ? false : incomplete;
+  log.uncontracted = uncontracted;
   log.author = currentUserName() || log.author || '';
   log.updated_at = Date.now();
 
