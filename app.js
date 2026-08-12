@@ -2196,7 +2196,7 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
           </div>
           <div class="group-badges">
             <div class="group-title-actions">
-              ${isCurrentUserAdmin() && !(isParentGroup || meta.is_parent) ? `<button class="wl-action-btn icon-only" data-group-add-asset="${gid}" title="이 법인에 자산 추가">＋</button>` : ''}
+              ${currentUserName() && !(isParentGroup || meta.is_parent) ? `<button class="wl-action-btn icon-only" data-group-add-asset="${gid}" title="이 법인에 자산 추가">＋</button>` : ''}
               ${isCurrentUserAdmin() && (isParentGroup || meta.is_parent) ? `<button class="wl-action-btn icon-only" data-group-add-child="${gid}" title="이 법인을 상위 법인으로 하는 하위 법인 추가">↳＋</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/점검방식/구성방식/상위 법인/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
@@ -2891,7 +2891,7 @@ document.getElementById('cancelAddBtn').onclick = () => {
 };
 
 function openAddAssetToGroup(gid){
-  if (!isCurrentUserAdmin()){ alert('마스터만 자산을 추가할 수 있습니다.'); return; }
+  if (!currentUserName()){ alert('로그인 후 이용해 주세요.'); return; }
   if (viewOnly || !sessionKey){ alert('자산을 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
   if (groupChildrenOf(gid).length || groupMeta(records.filter(r=>r.group===gid)).is_parent){ alert('상위 법인은 대표 이름 역할만 하므로 자산을 직접 추가할 수 없습니다. 해당 자산이 속할 자식 법인(Support ID)에 추가해 주세요.'); return; }
   const items = records.filter(r=>r.group===gid);
