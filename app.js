@@ -3953,15 +3953,39 @@ let whSort = 'desc';
 
 function getAllWorkLogEntries(){
   const all = [];
+
   records.forEach(r => {
+    /* 현재 유효한 작업 이력 */
     (r.work_log||[]).forEach(entry => {
       all.push({
-        entry, recId:r.id, recGroup:r.group, recOwner:r.owner,
-        recLabel:r.sku || skuTagLabel(r), recSn:r.sn||'',
+        entry,
+        recId:r.id,
+        recGroup:r.group,
+        recOwner:r.owner,
+        recLabel:r.sku || skuTagLabel(r),
+        recSn:r.sn||'',
         key: activityKeyOf(r.id, entry.id),
+        deleted:false,
+        historyTs: Number(entry.updated_at || entry.id || 0)
+      });
+    });
+
+    /* 삭제된 작업 이력 감사 로그 */
+    (r.deleted_work_log||[]).forEach(entry => {
+      all.push({
+        entry,
+        recId:r.id,
+        recGroup:r.group,
+        recOwner:r.owner,
+        recLabel:r.sku || skuTagLabel(r),
+        recSn:r.sn||'',
+        key: `deleted:${r.id}:${entry.history_id || entry.deleted_at || entry.id}`,
+        deleted:true,
+        historyTs: Number(entry.deleted_at || entry.history_id || entry.id || 0)
       });
     });
   });
+
   return all;
 }
 
@@ -4018,27 +4042,44 @@ function renderWhList(){
   if (whTypeFilter) items = items.filter(({entry}) => entry.type === whTypeFilter);
   if (whSearch.trim()){
     const q = whSearch.trim().toLowerCase();
-    items = items.filter(({entry, recOwner, recLabel, recSn}) =>
-      [recOwner, recLabel, recSn, entry.manager, entry.author, entry.note, entry.type]
-        .some(v => (v||'').toLowerCase().includes(q))
+    items = items.filter(({entry, recOwner, recLabel, recSn, deleted}) =>
+      [
+        recOwner, recLabel, recSn,
+        entry.manager, entry.author, entry.note, entry.type,
+        entry.deleted_by,
+        deleted ? '삭제 삭제됨' : ''
+      ].some(v => (v||'').toLowerCase().includes(q))
     );
   }
-  items.sort((a,b) => whSort === 'desc' ? (b.entry.id||0)-(a.entry.id||0) : (a.entry.id||0)-(b.entry.id||0));
+  items.sort((a,b) => whSort === 'desc'
+    ? (b.historyTs||0) - (a.historyTs||0)
+    : (a.historyTs||0) - (b.historyTs||0));
 
-  listEl.innerHTML = items.length ? items.map(({entry, recId, recGroup, recOwner, recLabel, recSn}) => `
-    <div class="wh-item" data-jump-group="${esc(recGroup)}" data-jump-rec="${esc(recId)}">
-      <div class="wh-top">
-        <span class="ra-type">${esc(entry.type)}</span>
-        <span class="ra-date">${esc(entry.date)||'날짜 미기재'}</span>
-      </div>
-      <div class="ra-asset">${esc(recOwner)} · ${esc(recLabel)||'—'}${recSn ? ' · S/N '+esc(recSn) : ''}</div>
-      <div class="ra-note">${esc(entry.note)||'—'}</div>
-      ${entry.change_summary ? `<div class="ra-changes">
-        <div class="ra-changes-label">🔧 자산 정보 변경</div>
-        ${changeSummaryRowsHtml(entry.change_summary)}
-      </div>` : ''}
-      <div class="ra-author">담당자: ${esc(entry.manager)||'미기재'} · 작성: ${esc(entry.author)||'미상'}</div>
-    </div>`).join('')
+  listEl.innerHTML = items.length ? items.map(({entry, recId, recGroup, recOwner, recLabel, recSn, deleted}) => {
+    const deletedAtText = deleted && entry.deleted_at
+      ? new Date(entry.deleted_at).toLocaleString('ko-KR')
+      : '';
+    const revert = entry.delete_revert_result || null;
+    const revertText = deleted && revert
+      ? `삭제 시 자산 정보 원복 ${Number(revert.reverted||0)}건${Number(revert.skipped||0) ? ` · 유지 ${Number(revert.skipped||0)}건` : ''}`
+      : '';
+
+    return `
+      <div class="wh-item ${deleted?'wh-item-deleted':''}" data-jump-group="${esc(recGroup)}" data-jump-rec="${esc(recId)}">
+        <div class="wh-top">
+          <span class="ra-type">${esc(entry.type)}${deleted ? '<span class="wh-deleted-badge">삭제됨</span>' : ''}</span>
+          <span class="ra-date">${esc(entry.date)||'날짜 미기재'}</span>
+        </div>
+        <div class="ra-asset">${esc(recOwner)} · ${esc(recLabel)||'—'}${recSn ? ' · S/N '+esc(recSn) : ''}</div>
+        <div class="ra-note">${esc(entry.note)||'—'}</div>
+        ${entry.change_summary ? `<div class="ra-changes">
+          <div class="ra-changes-label">🔧 자산 정보 변경${deleted ? ' · 삭제 시 원복 처리' : ''}</div>
+          ${changeSummaryRowsHtml(entry.change_summary)}
+        </div>` : ''}
+        <div class="ra-author">담당자: ${esc(entry.manager)||'미기재'} · 작성: ${esc(entry.author)||'미상'}</div>
+        ${deleted ? `<div class="wh-delete-meta">삭제: ${esc(entry.deleted_by)||'미상'} · ${esc(deletedAtText)||'시간 미기재'}${revertText ? ` · ${esc(revertText)}` : ''}</div>` : ''}
+      </div>`;
+  }).join('')
     : `<div class="ra-empty wh-empty">조건에 맞는 작업 이력이 없습니다.</div>`;
 
   listEl.querySelectorAll('[data-jump-group]').forEach(el=>{
@@ -4603,6 +4644,24 @@ function renderWorkLogList(){
       if (!confirm(message)) return;
 
       const result = await revertWorkLogChanges(rec, entry);
+
+      /*
+        작업 이력 자체는 현재 이력 목록에서는 제거하되,
+        삭제 감사 로그에는 원본을 그대로 보존한다.
+      */
+      if (!Array.isArray(rec.deleted_work_log)) rec.deleted_work_log = [];
+
+      const deletedSnapshot = cloneRollbackValue(entry) || {};
+      deletedSnapshot.history_id = Date.now();
+      deletedSnapshot.deleted_at = Date.now();
+      deletedSnapshot.deleted_by = currentUserName() || '';
+      deletedSnapshot.delete_revert_result = {
+        reverted: Number(result.reverted || 0),
+        skipped: Number(result.skipped || 0)
+      };
+
+      rec.deleted_work_log.push(deletedSnapshot);
+
       rec.work_log = (rec.work_log || []).filter(e => String(e.id) !== String(entryId));
 
       if (String(workLogEditId) === String(entryId)){
