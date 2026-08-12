@@ -264,7 +264,7 @@ const SKU_TAG_RULES = [
   { key:'SG', test: sku => {
       const s = sku.toUpperCase();
   
-      return s.startsWith('ISG-PROXY') ||
+      return s.startsWith('ISG-PR') ||
              (
                s.includes('SG') &&
                !s.includes('ISG-') &&
