@@ -1807,3 +1807,18 @@ footer.foot{
   color:#A0A8B4 !important;
   cursor:not-allowed;
 }
+#maintenanceLogModal .ml-uncontracted-check:hover{
+  background:#F4F5F7;
+  border-color:#C7CFDC;
+}
+
+#maintenanceLogModal .ml-uncontracted-check:has(input:checked){
+  color:#4B5563;
+  background:#E9EDF2;
+  border-color:#BBC3CF;
+}
+
+#maintenanceLogModal .ml-uncontracted-check input:checked{
+  background:#64748B;
+  border-color:#64748B;
+}
