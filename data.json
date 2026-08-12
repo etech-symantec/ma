@@ -13162,6 +13162,19 @@
       "uncontracted": true,
       "author": "신호근",
       "updated_at": 1786515982245
+    },
+    {
+      "id": 1786515984132,
+      "group": "custom-1786348497151",
+      "ym": "2026-11",
+      "date": "",
+      "manager": "신호근",
+      "note": "",
+      "done": false,
+      "incomplete": false,
+      "uncontracted": true,
+      "author": "신호근",
+      "updated_at": 1786515984132
     }
   ]
 }
