@@ -1935,6 +1935,30 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
 function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const mySiteGroupIds = getMySiteGroupIds();
+
+  // 좌측 사이트에서 상위 법인을 선택한 경우
+  // 상위 법인 + 모든 하위 법인까지 필터 대상에 포함
+  let activeSiteGroupIds = null;
+
+  if (activeCountryFilter){
+    const selectedGid = allGroupIds().find(gid => {
+      const items = records.filter(r => r.group === gid);
+      if (!items.length) return false;
+
+      const meta = groupMeta(items);
+
+      return !meta.group_parent &&
+             meta.owner === activeCountryFilter;
+    });
+
+    if (selectedGid){
+      activeSiteGroupIds = new Set([
+        selectedGid,
+        ...groupDescendantIds(selectedGid)
+      ]);
+    }
+  }
+
   let list = records.filter(r => {
     if (!activeStatusFilters.has(licenseStatus(r))) return false;
     if (activeSkuKeywordFilters.size){
@@ -1945,9 +1969,9 @@ function render(){
       if (!mySiteGroupIds.has(r.group)) return false;
     }
     if (activeCountryFilter){
-      const grpItems = records.filter(x=>x.group===r.group);
-      const meta = groupMeta(grpItems);
-      if (meta.owner !== activeCountryFilter) return false;
+      if (!activeSiteGroupIds || !activeSiteGroupIds.has(r.group)){
+        return false;
+      }
     }
     if (topFieldFilters.country && (r.country||'').trim() !== topFieldFilters.country) return false;
     if (topFieldFilters.location && (r.location||'').trim() !== topFieldFilters.location) return false;
