@@ -3944,6 +3944,10 @@ function renderRecentActivity(){
       <div class="ra-top"><span class="ra-type">${esc(entry.type)}</span><span class="ra-date">${esc(entry.date)||''}</span></div>
       <div class="ra-asset">${esc(recOwner)} · ${esc(recLabel)||'—'}</div>
       <div class="ra-note">${esc(entry.note)||'—'}</div>
+      ${entry.change_summary ? `<div class="ra-changes">
+        <div class="ra-changes-label">🔧 자산 정보 변경</div>
+        ${changeSummaryRowsHtml(entry.change_summary)}
+      </div>` : ''}
       <div class="ra-author">작성: ${esc(entry.author)||'미상'}</div>
     </div>`).join('');
   wrap.querySelectorAll('[data-jump-group]').forEach(el=>{
@@ -4215,6 +4219,23 @@ async function applyFieldChanges(rec){
 function fieldChangesSummary(changes){
   if (!changes || !changes.length) return '';
   return changes.map(c => c.sensitive ? `${c.label} 변경됨` : `${c.label}: ${c.from} → ${c.to}`).join(' · ');
+}
+
+function changeSummaryRowsHtml(summary){
+  if (!summary) return '';
+  return summary.split(' · ').map(seg=>{
+    const m = seg.match(/^(.+?):\s*(.+?)\s*→\s*(.+)$/);
+    if (m){
+      const label = m[1], from = m[2], to = m[3];
+      return `<div class="ra-change-row">
+        <span class="ra-change-label">${esc(label)}</span>
+        <span class="ra-change-before" title="변경 전">${esc(from)}</span>
+        <span class="ra-change-arrow">→</span>
+        <span class="ra-change-after" title="변경 후">${esc(to)}</span>
+      </div>`;
+    }
+    return `<div class="ra-change-row"><span class="ra-change-label">${esc(seg)}</span></div>`;
+  }).join('');
 }
 
 function fmtDateDots(nativeVal){
