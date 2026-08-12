@@ -18,7 +18,7 @@
       "deploy_date": "",
       "deploy_log": "24.03.11 박동석 6.7.5.12 > 7.3.17.1",
       "mode": "Explicit",
-      "os_ver": "7.3.17.1",
+      "os_ver": "7.3.17.4",
       "owner_primary": "박동석",
       "owner_secondary": "김상문",
       "check_method": "원격",
@@ -43,7 +43,27 @@
         "ct": "9lXR8Ejhr7HBTQWYhE5Co7rxKw==",
         "tag": "fFZu5EWtMDhjWxREemfxpQ=="
       },
-      "work_log": [],
+      "work_log": [
+        {
+          "id": 1786547230645,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "신호근",
+          "note": "",
+          "author": "신호근",
+          "field_changes": {
+            "os_ver": "7.3.17.4"
+          },
+          "change_summary": "OS 버전: 7.3.17.1 → 7.3.17.4",
+          "rollback_changes": {
+            "os_ver": {
+              "sensitive": false,
+              "before": "7.3.17.1",
+              "after": "7.3.17.4"
+            }
+          }
+        }
+      ],
       "group_remarks": "",
       "cust_contacts": [
         {
