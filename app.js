@@ -2490,7 +2490,10 @@ function custContactsSummaryHtml(gid, meta){
   </span>`;
 }
 
+let custContactsViewGid = null;
+
 function openCustContactsModal(gid){
+  custContactsViewGid = gid;
   const items = records.filter(r=>r.group===gid);
   if (!items.length) return;
   const meta = groupMeta(items);
@@ -2510,8 +2513,108 @@ function openCustContactsModal(gid){
       ${rows.length ? `<div class="ccm-details">${rows.join('')}</div>` : ''}
     </div>`;
   }).join('') || `<div class="user-list-empty">등록된 담당자가 없습니다.</div>`;
+
+  // 고객사 담당자는 다른 자산 세부 정보와 달리 작업 이력 없이 누구나(로그인 시) 바로 수정할 수 있습니다.
+  document.getElementById('custContactsEditBtn').style.display = currentUserName() ? '' : 'none';
+  setCustContactsEditMode(false);
   document.getElementById('custContactsModal').classList.add('open');
 }
+
+function setCustContactsEditMode(isEdit){
+  document.getElementById('custContactsModalList').style.display = isEdit ? 'none' : '';
+  document.getElementById('custEditWrap').style.display = isEdit ? '' : 'none';
+  document.getElementById('custContactsViewActions').style.display = isEdit ? 'none' : '';
+  document.getElementById('custContactsEditActions').style.display = isEdit ? '' : 'none';
+}
+
+document.getElementById('custContactsEditBtn').onclick = () => {
+  if (!currentUserName()){ alert('로그인 후 이용해 주세요.'); return; }
+  if (!custContactsViewGid) return;
+  const items = records.filter(r=>r.group===custContactsViewGid);
+  if (!items.length) return;
+  const meta = groupMeta(items);
+  cceCustContacts = (meta.cust_contacts && meta.cust_contacts.length
+    ? meta.cust_contacts.slice(0,5)
+    : [{role:'',name:'',org:'',phone:'',email:''}]
+  ).map(c=>({...c}));
+  renderCceCustRows();
+  setCustContactsEditMode(true);
+};
+
+document.getElementById('custContactsCancelEditBtn').onclick = () => {
+  if (custContactsViewGid) openCustContactsModal(custContactsViewGid);
+};
+
+document.getElementById('custContactsSaveEditBtn').onclick = () => {
+  if (!currentUserName()){ alert('로그인 후 이용해 주세요.'); return; }
+  if (!custContactsViewGid) return;
+  captureCceCustContactsFromDom();
+  const newContacts = cceCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
+  records.forEach(r => {
+    if (r.group === custContactsViewGid){
+      r.cust_contacts = newContacts;
+      r.cust_contact = ''; r.cust_phone = ''; r.cust_email = '';
+    }
+  });
+  render();
+  buildFilters();
+  scheduleAutoSync();
+  openCustContactsModal(custContactsViewGid);
+};
+
+let cceCustContacts = [];
+
+function renderCceCustRows(){
+  const wrap = document.getElementById('cce_cust_list');
+  const roleOptions = ['', '운영', '영업'];
+  wrap.innerHTML = cceCustContacts.map((c,idx)=>`
+    <div class="cust-contact-row" data-idx="${idx}">
+      <div class="cc-row-top">
+        <select class="cc-role">
+          ${roleOptions.map(r=>`<option value="${esc(r)}" ${c.role===r?'selected':''}>${r?esc(r):'구분'}</option>`).join('')}
+        </select>
+        <input class="cc-name" placeholder="이름" value="${esc(c.name||'')}">
+        <button type="button" class="cc-remove-btn" data-remove="${idx}" title="이 담당자 삭제">✕</button>
+      </div>
+      <div class="cc-row-bottom">
+        <input class="cc-org" placeholder="소속" value="${esc(c.org||'')}">
+        <input class="cc-phone" placeholder="연락처" value="${esc(c.phone||'')}">
+        <input class="cc-email" placeholder="이메일" value="${esc(c.email||'')}">
+      </div>
+    </div>`).join('');
+  wrap.querySelectorAll('[data-remove]').forEach(btn=>{
+    btn.onclick = () => {
+      captureCceCustContactsFromDom();
+      cceCustContacts.splice(Number(btn.dataset.remove),1);
+      renderCceCustRows();
+    };
+  });
+  updateCceCustAddBtnState();
+}
+
+function captureCceCustContactsFromDom(){
+  const rows = document.querySelectorAll('#cce_cust_list .cust-contact-row');
+  cceCustContacts = Array.from(rows).map(row=>({
+    role: row.querySelector('.cc-role').value,
+    name: row.querySelector('.cc-name').value.trim(),
+    org: row.querySelector('.cc-org').value.trim(),
+    phone: row.querySelector('.cc-phone').value.trim(),
+    email: row.querySelector('.cc-email').value.trim(),
+  }));
+}
+
+function updateCceCustAddBtnState(){
+  const btn = document.getElementById('cce_cust_add_btn');
+  btn.style.display = cceCustContacts.length >= 5 ? 'none' : '';
+}
+
+document.getElementById('cce_cust_add_btn').onclick = () => {
+  captureCceCustContactsFromDom();
+  if (cceCustContacts.length >= 5) return;
+  cceCustContacts.push({role:'', name:'', org:'', phone:'', email:''});
+  renderCceCustRows();
+};
+
 document.getElementById('custContactsModalCloseBtn').onclick = () => {
   document.getElementById('custContactsModal').classList.remove('open');
 };
