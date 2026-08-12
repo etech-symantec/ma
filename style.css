@@ -979,7 +979,7 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 
 /* 점검 등록창(월별 점검) — 설명글 없이, 절반 크기로 심플하게 */
-#maintenanceLogModal .modal-card{ max-width:320px; padding:16px; }
+#maintenanceLogModal .modal-card{ max-width:390px; padding:16px; }
 #maintenanceLogModal .modal-card h2{ font-size:14px; margin-bottom:12px; }
 #maintenanceLogModal .form-grid{ grid-template-columns:1fr; gap:10px; }
 #maintenanceLogModal .form-grid label{ font-size:10px; margin-bottom:4px; }
@@ -1168,6 +1168,26 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-cell-reserved:hover{ background:#F6E9C9; }
 .maint-cell-reserved .maint-cell-day{ font-family:var(--mono); font-weight:700; color:#C8933A; font-size:12.5px; }
 .maint-cell-reserved .maint-cell-tag{ font-size:9.5px; color:#C8933A; margin-left:2px; }
+/* 미완료 점검 */
+.maint-cell-incomplete{
+  background:#FDECEC !important;
+}
+.maint-cell-incomplete:hover{
+  background:#FADDDD !important;
+}
+.maint-cell-incomplete-label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:3px 7px;
+  border-radius:999px;
+  color:#C62828;
+  background:#F8D7D7;
+  border:1px solid #EFBABA;
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:700;
+}
 
 .maint-th-owner{ vertical-align:middle; }
 .maint-table{ width:100%; border-collapse:collapse; font-size:12.8px; }
@@ -1478,4 +1498,75 @@ footer.foot{
 .maint-site-clickable:hover .maint-site-name{
   text-decoration:underline;
   text-underline-offset:2px;
+}
+.ml-status-checks{
+  display:flex;
+  align-items:stretch;
+  gap:6px;
+}
+
+.ml-status-check{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+
+  min-width:66px;
+  height:34px;
+  padding:0 9px;
+
+  border:1px solid var(--border-solid);
+  border-radius:8px;
+
+  background:#fff;
+  color:var(--text-dim);
+
+  font-size:11.5px;
+  font-weight:700;
+  cursor:pointer;
+
+  white-space:nowrap;
+}
+
+.ml-status-check input{
+  width:15px !important;
+  height:15px !important;
+  margin:0 !important;
+}
+
+/* 완료 */
+.ml-done-check:has(input:checked){
+  color:#2F8F52;
+  background:#EAF7EF;
+  border-color:#A9D8B8;
+}
+
+/* 미완료 */
+.ml-incomplete-check:has(input:checked){
+  color:#C62828;
+  background:#FDECEC;
+  border-color:#EFBABA;
+}
+
+.ml-incomplete-check input{
+  accent-color:#D92D20;
+}
+
+/* 미완료 선택 시 날짜 */
+.ml-date-row.is-incomplete .date-field input{
+  background:#F1F3F5;
+  color:#A0A8B4;
+}
+
+.ml-date-row.is-incomplete .date-pick-btn{
+  opacity:.3;
+  cursor:not-allowed;
+}
+
+.ml-required-hint{
+  display:none;
+  margin-left:5px;
+  color:#D92D20;
+  font-size:9px;
+  font-weight:700;
 }
