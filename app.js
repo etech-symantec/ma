@@ -1153,10 +1153,15 @@ function renderDashboard(){
     .filter(([label]) => label !== 'SSP');  
   const bySku = bucketGroups(assetRecords, r => {
     const sku = (r.sku || '').trim();
+    const s = sku.toUpperCase();
   
-    if (sku.toUpperCase().startsWith('ISG-PROXY')){
-      return 'ISG-Proxy';
-    }
+    if (s.startsWith('ISG-PROXY'))    return 'ISG-Proxy';
+    if (s.startsWith('SSP-S210-10'))  return 'SSP-S210-10';
+    if (s.startsWith('SSP-S410-20B')) return 'SSP-S410-20B';
+    if (s.startsWith('SSP-S410-40B')) return 'SSP-S410-40B';
+    if (s.startsWith('ISG-CA'))       return 'ISG-CA';
+    if (s.startsWith('ISG-MA'))       return 'ISG-MA';
+    if (s.startsWith('PAC'))          return 'PAC';
   
     return sku;
   });
