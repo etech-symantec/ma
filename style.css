@@ -1460,3 +1460,22 @@ footer.foot{
 .dash-geo-bar-company{
   background:#E8C982;
 }
+
+.maint-site-clickable{
+  cursor:pointer;
+  transition:
+    transform .12s,
+    box-shadow .12s,
+    border-color .12s;
+}
+
+.maint-site-clickable:hover{
+  transform:translateY(-1px);
+  box-shadow:0 2px 7px rgba(0,0,0,.08);
+  border-color:var(--accent);
+}
+
+.maint-site-clickable:hover .maint-site-name{
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
