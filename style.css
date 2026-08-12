@@ -1669,3 +1669,70 @@ footer.foot{
 .ml-status-checks{
   flex-shrink:0;
 }
+
+/* =========================================================
+   점검 등록창 하단 버튼 위치 강제 정상화
+   ========================================================= */
+
+#maintenanceLogModal .modal-actions{
+  position:static !important;
+  top:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  left:auto !important;
+  inset:auto !important;
+  transform:none !important;
+
+  display:flex !important;
+  align-items:center;
+  justify-content:flex-end;
+
+  width:100% !important;
+  margin:14px 0 0 !important;
+  padding:0 !important;
+  gap:7px;
+
+  box-sizing:border-box;
+}
+
+/* 등록 취소는 왼쪽, 닫기/저장은 오른쪽 */
+#maintenanceLogModal #mlDeleteBtn{
+  margin-right:auto;
+}
+
+#maintenanceLogModal .modal-actions .btn{
+  position:static !important;
+  transform:none !important;
+
+  flex:0 0 auto !important;
+  width:auto !important;
+  min-width:58px;
+
+  padding:7px 12px !important;
+  border-radius:8px;
+  font-size:11.5px !important;
+}
+
+/* 등록 취소 */
+#maintenanceLogModal #mlDeleteBtn{
+  color:#C62828;
+  border-color:#E9B2B2;
+  background:#FFF;
+}
+
+#maintenanceLogModal #mlDeleteBtn:hover{
+  background:#FDECEC;
+}
+
+/* 닫기 */
+#maintenanceLogModal #cancelMlBtn{
+  background:#FFF;
+  color:var(--text-dim);
+}
+
+/* 저장 */
+#maintenanceLogModal #saveMlBtn{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#FFF;
+}
