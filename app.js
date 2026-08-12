@@ -1159,6 +1159,7 @@ function renderDashboard(){
     if (s.startsWith('SSP-S210-10'))  return 'SSP-S210-10';
     if (s.startsWith('SSP-S410-20B')) return 'SSP-S410-20B';
     if (s.startsWith('SSP-S410-40B')) return 'SSP-S410-40B';
+    if (s.startsWith('SSP-S410-10-')) return 'SSP-S410-10';
     if (s.startsWith('SSP-S410-20-')) return 'SSP-S410-20';
     if (s.startsWith('SSP-S410-40-')) return 'SSP-S410-40';
     if (s.startsWith('SG-S200'))      return 'SG-S200';
@@ -1166,10 +1167,13 @@ function renderDashboard(){
     if (s.startsWith('SG-S500'))      return 'SG-S500';
     if (s.startsWith('MC-S400'))      return 'MC-S400';
     if (s.startsWith('RP-S500'))      return 'RP-S500';
+    if (s.startsWith('MC-V'))         return 'MC-VA';
+    if (s.startsWith('RP-V'))         return 'RP-VA';
     if (s.startsWith('ISG-CA'))       return 'ISG-CA';
     if (s.startsWith('ISG-MA'))       return 'ISG-MA';
     if (s.startsWith('PAC'))          return 'PAC';
     if (s.startsWith('BCWF'))         return 'BCWF';
+    if (s.includes('-BCWF-'))         return 'BCWF';
     if (s.startsWith('IS-'))          return 'BCIS';
   
     return sku;
