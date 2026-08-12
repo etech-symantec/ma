@@ -371,20 +371,7 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "work_log": [
-        {
-          "id": 1786523706213,
-          "type": "OS 업그레이드",
-          "date": "",
-          "manager": "윤태리",
-          "note": "21.1 > 21.2",
-          "author": "윤태리",
-          "field_changes": {
-            "os_ver": "7.3.21.2"
-          },
-          "change_summary": "OS 버전: 7.3.21.1 → 7.3.21.2"
-        }
-      ]
+      "work_log": []
     },
     {
       "group": "tw-ds",
