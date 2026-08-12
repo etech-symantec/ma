@@ -317,7 +317,7 @@
       "qty": "1",
       "start": "2026.1.1",
       "end": "2026.12.31",
-      "remarks": "25.03.03 disk failing, RMA 승인 25.03.05",
+      "remarks": "25.03.03 disk failing\nRMA 승인 25.03.05",
       "deploy_date": "",
       "deploy_log": "23.02.09 윤태리 7.3.3.3>7.3.11.3 / 23.11.11 윤태리 7.3.11.3>7.3.16.2 (no internet) / 25.06.07 윤태리 7.3.16.2>7.3.21.1 (mem bug)",
       "mode": "Explicit",
@@ -332,19 +332,19 @@
       "tag_note": "대만",
       "id": 6,
       "ip_enc": {
-        "iv": "wQ08iZYfbHwCMkJN",
-        "ct": "pspdF4NiXfDR/OliwQ==",
-        "tag": "Hjef5XKRdDkL453WTSiYpQ=="
+        "iv": "0tTqPl+Y5iLCY2Qf",
+        "ct": "MAc4tnl748nhuooPvg==",
+        "tag": "TZhoC/rCNnSqqaPphIIKkQ=="
       },
       "id_enc": {
-        "iv": "Enrm75rRE7Xiq5hR",
-        "ct": "MEh2qqfss6U=",
-        "tag": "T5klJSMUjrrKW7hpjaStKg=="
+        "iv": "neJSmfeVhHZhqR72",
+        "ct": "SXF0PuYwees=",
+        "tag": "PwcVNT2Dv23oR8V13bB+SA=="
       },
       "pw_enc": {
-        "iv": "lXUIeaQtr1KDHkV/",
-        "ct": "PmMTDYJZdQ==",
-        "tag": "lLpYMRnAg6G95HXVunXi+A=="
+        "iv": "k/AQiGq3UEcQTew8",
+        "ct": "YPbk1NxZkw==",
+        "tag": "g9rUZI9Z1gu+pWH+KP7G4w=="
       },
       "group_remarks": "",
       "cust_contacts": [
@@ -376,7 +376,8 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "work_log": []
+      "work_log": [],
+      "enable_pw_enc": null
     },
     {
       "group": "tw-ds",
