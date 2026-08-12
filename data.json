@@ -13600,6 +13600,19 @@
       "uncontracted": false,
       "author": "윤태리",
       "updated_at": 1786522911804
+    },
+    {
+      "id": 1786523057123,
+      "group": "in-sdn-cama",
+      "ym": "2026-05",
+      "date": "2026.5.20",
+      "manager": "윤태리",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1786523057123
     }
   ]
 }
