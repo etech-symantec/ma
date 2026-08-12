@@ -930,52 +930,11 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
     color .15s;
 }
 
-/* 체크박스 */
-.ml-done-check input{
-  appearance:none;
-  -webkit-appearance:none;
-
-  width:15px !important;
-  height:15px !important;
-  flex:0 0 15px;
-
-  margin:0 !important;
-  padding:0 !important;
-
-  border:1.5px solid #AEB8C5;
-  border-radius:4px;
-  background:#fff;
-
-  position:relative;
-  cursor:pointer;
-}
-
 /* 체크된 상태 */
 .ml-done-check:has(input:checked){
   color:#2F8F52;
   background:#EAF7EF;
   border-color:#A9D8B8;
-}
-
-.ml-done-check input:checked{
-  background:#2F8F52;
-  border-color:#2F8F52;
-}
-
-.ml-done-check input:checked::after{
-  content:'';
-  position:absolute;
-
-  left:4px;
-  top:1px;
-
-  width:4px;
-  height:8px;
-
-  border:solid #fff;
-  border-width:0 2px 2px 0;
-
-  transform:rotate(45deg);
 }
 
 /* 점검 등록창(월별 점검) — 설명글 없이, 절반 크기로 심플하게 */
@@ -1569,4 +1528,144 @@ footer.foot{
   color:#D92D20;
   font-size:9px;
   font-weight:700;
+}
+
+/* =========================================================
+   점검 등록 - 완료 / 미완료 버튼 최종 스타일
+   ========================================================= */
+
+.ml-status-checks{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex:0 0 auto;
+}
+
+/* 완료 / 미완료 공통 버튼 */
+.ml-status-check{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px;
+
+  width:auto !important;
+  min-width:68px;
+  height:34px;
+
+  margin:0 !important;
+  padding:0 10px !important;
+
+  border:1px solid var(--border-solid);
+  border-radius:8px;
+
+  background:#fff;
+  color:var(--text-dim);
+
+  font-size:11.5px !important;
+  font-weight:700;
+  line-height:1;
+
+  cursor:pointer;
+  white-space:nowrap;
+  user-select:none;
+
+  transition:
+    background .15s,
+    border-color .15s,
+    color .15s;
+}
+
+/* 완료 / 미완료 체크박스 공통 */
+.ml-status-check input{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+
+  width:15px !important;
+  height:15px !important;
+  min-width:15px;
+  flex:0 0 15px;
+
+  margin:0 !important;
+  padding:0 !important;
+
+  position:relative;
+
+  border:1.5px solid #AEB8C5;
+  border-radius:4px;
+  background:#fff;
+
+  cursor:pointer;
+}
+
+/* 체크 표시 */
+.ml-status-check input:checked::after{
+  content:'';
+
+  position:absolute;
+  left:4px;
+  top:1px;
+
+  width:4px;
+  height:8px;
+
+  border:solid #fff;
+  border-width:0 2px 2px 0;
+
+  transform:rotate(45deg);
+}
+
+
+/* =========================
+   완료
+   ========================= */
+
+.ml-done-check:hover{
+  border-color:#A9D8B8;
+  background:#F4FBF6;
+}
+
+.ml-done-check:has(input:checked){
+  color:#2F8F52;
+  border-color:#A9D8B8;
+  background:#EAF7EF;
+}
+
+.ml-done-check input:checked{
+  background:#2F8F52;
+  border-color:#2F8F52;
+}
+
+
+/* =========================
+   미완료
+   ========================= */
+
+.ml-incomplete-check:hover{
+  border-color:#E9B2B2;
+  background:#FFF5F5;
+}
+
+.ml-incomplete-check:has(input:checked){
+  color:#C62828;
+  border-color:#E9B2B2;
+  background:#FDECEC;
+}
+
+.ml-incomplete-check input:checked{
+  background:#D64545;
+  border-color:#D64545;
+}
+.ml-date-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.ml-date-row .date-field{
+  flex:1 1 auto;
+  min-width:0;
+}
+
+.ml-status-checks{
+  flex-shrink:0;
 }
