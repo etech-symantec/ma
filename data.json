@@ -12863,9 +12863,9 @@
       "date": "2026.4.29",
       "manager": "신호근",
       "note": "",
-      "done": false,
+      "done": true,
       "author": "신호근",
-      "updated_at": 1786507607691
+      "updated_at": 1786507610556
     }
   ]
 }
