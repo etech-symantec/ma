@@ -1149,14 +1149,7 @@ function renderDashboard(){
     : '';
 
   const byTag = bucketByTags(assetRecords)
-    .filter(([label]) => label !== 'SSP');
-  const byCountryLocation = bucketGroups(assetRecords, r => {
-    const country = countryOf(r) || '미상';
-    const location = (r.location || '').trim() || '위치 미상';
-  
-    return `${country} / ${location}`;
-  });
-  
+    .filter(([label]) => label !== 'SSP');  
   const bySku = bucketGroups(assetRecords, r => r.sku);
 
   wrap.innerHTML = `
@@ -1180,13 +1173,7 @@ function renderDashboard(){
         true
       )}
     
-      ${dashboardSectionHtml(
-        'countryLocation',
-        '국가/위치별 현황 · 클릭하면 사용 법인 표시',
-        'dash-c3',
-        byCountryLocation,
-        true
-      )}
+      ${dashboardCountryLocationSectionHtml(assetRecords)}
     
       ${dashboardSectionHtml(
         'sku',
@@ -1278,6 +1265,25 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
       }
     });
 
+    return;
+  }
+
+  const hierarchyToggle = e.target.closest(
+    '[data-dash-hierarchy-toggle]'
+  );
+  
+  if (hierarchyToggle){
+    const target = document.getElementById(
+      hierarchyToggle.dataset.dashHierarchyToggle
+    );
+  
+    if (target){
+      const opening = target.style.display === 'none';
+  
+      target.style.display = opening ? 'block' : 'none';
+      hierarchyToggle.classList.toggle('open', opening);
+    }
+  
     return;
   }
 
@@ -3926,3 +3932,194 @@ document.getElementById('wlCloseBtn').onclick = () => {
   workLogRecordIds = [];
   workLogEditId = null;
 };
+
+function dashboardCountryLocationSectionHtml(items){
+  const countryMap = new Map();
+
+  // 국가 → 위치 → 법인
+  items.forEach(r => {
+    const country = countryOf(r) || '미상';
+    const location = (r.location || '').trim() || '위치 미상';
+    const owner = (r.owner || '').trim() || '법인명 미상';
+    const gid = r.group;
+
+    if (!countryMap.has(country)){
+      countryMap.set(country, {
+        count: 0,
+        locations: new Map()
+      });
+    }
+
+    const countryData = countryMap.get(country);
+    countryData.count++;
+
+    if (!countryData.locations.has(location)){
+      countryData.locations.set(location, {
+        count: 0,
+        companies: new Map()
+      });
+    }
+
+    const locationData = countryData.locations.get(location);
+    locationData.count++;
+
+    // 같은 group은 하나의 법인으로 묶음
+    if (!locationData.companies.has(gid)){
+      locationData.companies.set(gid, {
+        owner,
+        gid,
+        count: 0
+      });
+    }
+
+    locationData.companies.get(gid).count++;
+  });
+
+  const countries = [...countryMap.entries()]
+    .sort((a, b) => b[1].count - a[1].count);
+
+  if (!countries.length){
+    return `
+      <div class="dash-card">
+        <h4>국가/위치별 현황</h4>
+        <div class="dash-empty">데이터가 없습니다.</div>
+      </div>
+    `;
+  }
+
+  const countryMax = Math.max(...countries.map(([, d]) => d.count));
+
+  const html = countries.map(([country, countryData], ci) => {
+    const countryId = `dashGeoCountry_${ci}`;
+
+    const locations = [...countryData.locations.entries()]
+      .sort((a, b) => b[1].count - a[1].count);
+
+    const locationMax = Math.max(
+      1,
+      ...locations.map(([, d]) => d.count)
+    );
+
+    const locationHtml = locations.map(([location, locationData], li) => {
+      const locationId = `dashGeoLocation_${ci}_${li}`;
+
+      const companies = [...locationData.companies.values()]
+        .sort((a, b) =>
+          b.count - a.count ||
+          a.owner.localeCompare(b.owner, 'ko')
+        );
+
+      const companyMax = Math.max(
+        1,
+        ...companies.map(c => c.count)
+      );
+
+      const companyHtml = companies.map(company => `
+        <div class="dash-row dash-row-clickable dash-geo-company"
+             data-dash-company="${esc(company.owner)}"
+             data-dash-gid="${esc(company.gid)}"
+             title="${esc(company.owner)} 자산 페이지로 이동">
+
+          <span class="dash-geo-caret-space"></span>
+
+          <span class="dash-row-label"
+                title="${esc(company.owner)}">
+            ${esc(company.owner)}
+          </span>
+
+          <div class="dash-bar-track">
+            <div class="dash-bar-fill dash-c3"
+                 style="width:${Math.max(
+                   5,
+                   Math.round(company.count / companyMax * 100)
+                 )}%">
+            </div>
+          </div>
+
+          <span class="dash-row-count">
+            ${company.count}
+          </span>
+        </div>
+      `).join('');
+
+      return `
+        <div class="dash-geo-location-wrap">
+
+          <div class="dash-row dash-row-clickable dash-geo-row dash-geo-location"
+               data-dash-hierarchy-toggle="${locationId}">
+
+            <span class="dash-row-caret dash-geo-caret">›</span>
+
+            <span class="dash-row-label"
+                  title="${esc(location)}">
+              ${esc(location)}
+            </span>
+
+            <div class="dash-bar-track">
+              <div class="dash-bar-fill dash-c3"
+                   style="width:${Math.max(
+                     5,
+                     Math.round(locationData.count / locationMax * 100)
+                   )}%">
+              </div>
+            </div>
+
+            <span class="dash-row-count">
+              ${locationData.count}
+            </span>
+          </div>
+
+          <div class="dash-geo-children"
+               id="${locationId}"
+               style="display:none;">
+            ${companyHtml}
+          </div>
+
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="dash-geo-country-wrap">
+
+        <div class="dash-row dash-row-clickable dash-geo-row dash-geo-country"
+             data-dash-hierarchy-toggle="${countryId}">
+
+          <span class="dash-row-caret dash-geo-caret">›</span>
+
+          <span class="dash-row-label"
+                title="${esc(country)}">
+            ${esc(country)}
+          </span>
+
+          <div class="dash-bar-track">
+            <div class="dash-bar-fill dash-c4"
+                 style="width:${Math.max(
+                   5,
+                   Math.round(countryData.count / countryMax * 100)
+                 )}%">
+            </div>
+          </div>
+
+          <span class="dash-row-count">
+            ${countryData.count}
+          </span>
+        </div>
+
+        <div class="dash-geo-children"
+             id="${countryId}"
+             style="display:none;">
+          ${locationHtml}
+        </div>
+
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="dash-card">
+      <h4>국가/위치별 현황</h4>
+      ${html}
+    </div>
+  `;
+}
