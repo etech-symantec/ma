@@ -13730,6 +13730,19 @@
       "uncontracted": false,
       "author": "윤태리",
       "updated_at": 1786523184467
+    },
+    {
+      "id": 1786523190219,
+      "group": "custom-1786348811427",
+      "ym": "2026-02",
+      "date": "2026.2.24",
+      "manager": "윤태리",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1786523190219
     }
   ]
 }
