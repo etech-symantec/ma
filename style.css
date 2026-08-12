@@ -990,7 +990,9 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-year-table thead th{
   position:sticky;
   top:var(--maint-thead-top, 0px);
-  z-index:6; background:var(--surface2);
+  z-index:6;
+  background:var(--surface2);
+  box-shadow:0 1px 0 var(--border-solid);
 }
 .maint-year-table .maint-th-owner, .maint-year-table .maint-cell-owner{
   width:220px; min-width:220px;
