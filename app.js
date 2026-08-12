@@ -257,6 +257,7 @@ function skuBadge(sku){
 // ---------- SKU keyword tags (filterable/searchable) ----------
 const SKU_TAG_RULES = [
   { key:'BCIS', test: sku => sku.toUpperCase().startsWith('IS-') },
+  { key:'PAC', test: sku => sku.toUpperCase().startsWith('PAC') },
   { key:'ASG',  test: sku => sku.toUpperCase().includes('ASG') },
   { key:'MC',   test: sku => sku.toUpperCase().startsWith('MC-') || sku.toUpperCase().includes('-MC') },
   { key:'RP',   test: sku => sku.toUpperCase().includes('RP') },
@@ -1150,7 +1151,15 @@ function renderDashboard(){
 
   const byTag = bucketByTags(assetRecords)
     .filter(([label]) => label !== 'SSP');  
-  const bySku = bucketGroups(assetRecords, r => r.sku);
+  const bySku = bucketGroups(assetRecords, r => {
+    const sku = (r.sku || '').trim();
+  
+    if (sku.toUpperCase().startsWith('ISG-PROXY')){
+      return 'ISG-Proxy';
+    }
+  
+    return sku;
+  });
 
   wrap.innerHTML = `
     <div class="dash-header">
