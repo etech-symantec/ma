@@ -2324,14 +2324,23 @@ function buildFilters(){
 
   const countryBox = document.getElementById('countryFilters');
   const favSet = getFavCountries();
-  const owners = [...new Map(records.map(r=>{
-    const grp = records.filter(x=>x.group===r.group);
-    const meta = groupMeta(grp);
-    return [meta.owner, meta];
-  })).values()].sort((a,b)=>{
+  const owners = [...new Map(
+    [...groupRecords(records).entries()]
+      .map(([gid, grp]) => {
+        const meta = groupMeta(grp);
+  
+        // 상위 법인이 지정된 하위 법인은 좌측 사이트 목록에서 제외
+        if (meta.group_parent) return null;
+  
+        return [meta.owner, meta];
+      })
+      .filter(Boolean)
+  ).values()].sort((a,b)=>{
     const af = favSet.has(a.owner) ? 0 : 1;
     const bf = favSet.has(b.owner) ? 0 : 1;
+  
     if (af !== bf) return af - bf;
+  
     return a.owner.localeCompare(b.owner, 'ko');
   });
   countryBox.innerHTML = owners.map(m=>{
