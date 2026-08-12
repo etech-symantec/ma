@@ -12975,6 +12975,14 @@
       "pwIterations": 150000,
       "pwHash": "T/qhEY/v1HPV0tJ5vdIblE98HcU2Olz1V/hfJGug9lI=",
       "isAdmin": false
+    },
+    {
+      "id": "u1786521628374",
+      "name": "홍진영",
+      "pwSalt": "ecfEfHBOz83jE6uYEDPo/g==",
+      "pwIterations": 150000,
+      "pwHash": "x5/x5Cch5O6LcAGbF/KvsAeAkQ7F3yNZskM/0Db662Q=",
+      "isAdmin": false
     }
   ],
   "maintenanceLogs": [
