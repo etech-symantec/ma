@@ -33,13 +33,25 @@ function syncStickyOffsets(){
 
 function syncMaintTheadOffset(){
   const stickyTop = document.querySelector('.maint-sticky-top');
-  if (!stickyTop) return;
-  // Read the sticky title/tabs bar's actual rendered bottom edge (works whether
-  // it's currently pinned or still in normal flow) instead of adding up separate
-  // header-height variables, which can drift out of sync and push the table
-  // header down into the middle of the rows.
-  const bottom = Math.max(0, Math.ceil(stickyTop.getBoundingClientRect().bottom));
-  document.documentElement.style.setProperty('--maint-thead-top', bottom + 'px');
+
+  if (!stickyTop){
+    document.documentElement.style.setProperty('--maint-thead-top', '0px');
+    return;
+  }
+
+  const stickyStyle = getComputedStyle(stickyTop);
+  const stickyInsetTop = parseFloat(stickyStyle.top) || 0;
+  const stickyHeight = Math.ceil(stickyTop.getBoundingClientRect().height);
+
+  const theadTop = Math.max(
+    0,
+    Math.ceil(stickyInsetTop + stickyHeight)
+  );
+
+  document.documentElement.style.setProperty(
+    '--maint-thead-top',
+    theadTop + 'px'
+  );
 }
 let maintTheadRaf = null;
 function scheduleMaintTheadSync(){
