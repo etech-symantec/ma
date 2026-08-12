@@ -879,19 +879,83 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 .date-field{ position:relative; display:flex; align-items:center; gap:0; }
 .date-field input:not(.date-native-input){ padding-right:38px; }
-.ml-date-row{ display:flex; align-items:center; gap:8px; flex-wrap:nowrap; }
-.ml-date-row .date-field{ flex:0 0 50%; min-width:0; }
-.ml-date-row .date-field input:not(.date-native-input){ min-width:0; box-sizing:border-box; width:100%; }
-.ml-done-check{
-  flex:1 1 auto;
-  display:flex; align-items:center; justify-content:center; gap:5px;
-  font-size:12px; font-weight:600; color:var(--text-dim); cursor:pointer; white-space:nowrap;
-  padding:0 10px; height:34px; box-sizing:border-box;
-  border:1px solid var(--border-solid); border-radius:8px; background:var(--surface2);
-  transition:all .15s;
+.ml-date-row{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) 112px;
+  gap:10px;
+  align-items:stretch;
 }
-.ml-done-check:has(input:checked){ color:#2F8F52; border-color:#BFE3CC; background:#E4F5EA; }
-.ml-done-check input{ cursor:pointer; margin:0; flex-shrink:0; width:15px; height:15px; accent-color:var(--accent); }
+
+.ml-date-row .date-field{
+  min-width:0;
+}
+
+.ml-date-row .date-field input:not(.date-native-input){
+  min-width:0;
+  width:100%;
+  box-sizing:border-box;
+}
+
+.ml-done-check{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:36px;
+  padding:0 12px;
+  border:1px solid var(--border-solid);
+  border-radius:10px;
+  background:var(--surface2);
+  color:var(--text-dim);
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+  user-select:none;
+  transition:all .15s ease;
+}
+
+.ml-done-check:hover{
+  border-color:#C7CFDC;
+  background:#EEF2F7;
+}
+
+.ml-done-check:has(input:checked){
+  color:#2F8F52;
+  border-color:#BFE3CC;
+  background:#EAF7EF;
+}
+
+.ml-done-check input{
+  appearance:none;
+  -webkit-appearance:none;
+  width:16px;
+  height:16px;
+  margin:0;
+  border:1.5px solid #B8C2CF;
+  border-radius:4px;
+  background:#fff;
+  position:relative;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.ml-done-check input:checked{
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+.ml-done-check input:checked::after{
+  content:'';
+  position:absolute;
+  left:4px;
+  top:1px;
+  width:4px;
+  height:8px;
+  border:solid #fff;
+  border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
 
 /* 점검 등록창(월별 점검) — 설명글 없이, 절반 크기로 심플하게 */
 #maintenanceLogModal .modal-card{ max-width:320px; padding:16px; }
@@ -904,6 +968,13 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 #maintenanceLogModal .cp-error{ margin-top:8px; min-height:0; }
 #maintenanceLogModal .modal-actions{ margin-top:12px; gap:8px; }
 #maintenanceLogModal .modal-actions .btn{ padding:7px 12px; font-size:12px; }
+#maintenanceLogModal .ml-date-row{
+  grid-template-columns:minmax(0, 1fr) 112px;
+}
+
+#maintenanceLogModal .ml-done-check{
+  width:100%;
+}
 .date-pick-btn{
   position:absolute; right:4px; top:50%; transform:translateY(-50%);
   background:none; border:none; cursor:pointer; font-size:14px; padding:6px; line-height:1;
