@@ -168,24 +168,23 @@
 <div id="groupEditModal">
   <div class="modal-card">
     <h2>법인 정보 수정</h2>
-    <p class="hint">법인명 / 국가 / 위치 / 점검 방식 / 구성방식 / 상위 법인(부모) / 담당 엔지니어 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다. Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있습니다. Support ID가 여러 개인 경우는 각 Support ID 영역의 ✎ 버튼에서 따로 수정합니다. <b>다른 법인을 자식(하위 법인)으로 둔 상위 법인은 대표 이름 역할만 하며 Support ID를 직접 가질 수 없습니다.</b></p>
+    <p class="hint">법인명 / 국가 / 위치 / 점검 방식 / 구성방식 / 상위 법인 / 담당 엔지니어 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다. Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있습니다. Support ID가 여러 개인 경우는 각 Support ID 영역의 ✎ 버튼에서 따로 수정합니다. <b>다른 법인을 자식(하위 법인)으로 둔 상위 법인은 대표 이름 역할만 하며 Support ID를 직접 가질 수 없습니다.</b></p>
     <div class="form-grid">
       <div class="ge-row ge-row-3">
         <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
         <div><label>Support ID</label><input id="ge_support_id" placeholder="예: 12345678"></div>
         <div>
-          <label class="parent-flag-check"><input type="checkbox" id="ge_is_parent"> 이 법인은 상위 법인입니다</label>
-          <label>상위 법인 (부모)</label>
+          <label class="parent-flag-check"><input type="checkbox" id="ge_is_parent">상위 법인</label>
           <select id="ge_parent_group">
             <option value="">없음 (독립된 법인)</option>
           </select>
         </div>
       </div>
-      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">이 법인 자체가 다른 법인들을 자식으로 둘 상위 법인이라면 "이 법인은 상위 법인입니다"에 체크하세요. 체크하면 이 법인은 대표 이름 역할만 하게 되어 Support ID / 구축 엔지니어 / 구축 일자 / 구성방식은 비활성화됩니다. 상위 법인(부모) 드롭다운에는 이렇게 상위 법인으로 체크된 법인만 나타납니다. 다른 법인을 상위(부모)로 지정하면, 두 법인은 부모-자식 관계로 연결됩니다. 이렇게 연결된 법인들은 법인 정보 영역에 서로의 Support ID를 모두 함께 보여줍니다 (예: 같은 그룹사의 여러 법인이 Support ID를 나눠 쓰는 경우). 관계가 없는 법인은 기존처럼 표시됩니다. 상위 법인으로 지정된 법인에 기존에 직접 연결되어 있던 Support ID/자산이 있다면, 대표 이름 역할만 하도록 자동으로 첫 번째 자식 법인 아래로 옮겨집니다.</p>
+      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">이 법인 아래에 Support ID가 여러 개인 경우 "상위 법인"을 체크하세요. 이후 연결된 Support ID들은 모두 해당 법인 아래에 보여집니다.</p>
       <div class="ge-row ge-row-3">
-        <div><label>국가 (COUNTRY)</label><input id="ge_country" placeholder="예: 베트남"></div>
-        <div><label>위치 (LOCATION)</label><input id="ge_location" placeholder="예: 하노이"></div>
-        <div><label>점검 방식</label><input id="ge_check" placeholder="원격 (RC)"></div>
+        <div><label>국가 (COUNTRY)</label><input id="ge_country" placeholder="예: 한국"></div>
+        <div><label>위치 (LOCATION)</label><input id="ge_location" placeholder="예: 서울"></div>
+        <div><label>점검 방식</label><input id="ge_check" placeholder="원격/방문"></div>
       </div>
       <div class="ge-row ge-row-3">
         <div><label>구축 엔지니어</label><input id="ge_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
@@ -201,14 +200,14 @@
         </div>
       </div>
       <div class="ge-row ge-row-2">
-        <div><label>담당 엔지니어 (정)</label><input id="ge_owner_primary" placeholder="주 담당자"></div>
-        <div><label>담당 엔지니어 (부)</label><input id="ge_owner_secondary" placeholder="부 담당자"></div>
+        <div><label>담당 엔지니어 (정)</label><input id="ge_owner_primary" placeholder="주 담당 엔지니어"></div>
+        <div><label>담당 엔지니어 (부)</label><input id="ge_owner_secondary" placeholder="부 담당 엔지니어"></div>
       </div>
       <div class="full" id="geCustSectionWrap">
         <label>고객사 담당자 (최대 5명)</label>
         <div id="ge_cust_list" class="cust-contact-list"></div>
         <button type="button" class="btn btn-ghost cust-add-btn" id="ge_cust_add_btn">＋ 담당자 추가</button>
-        <p class="hint" id="geCustHiddenHint" style="display:none; margin-top:6px;">하위 법인(자식 법인)에는 고객사 담당자 정보가 필요 없어 이 법인에서는 입력하지 않습니다.</p>
+        <p class="hint" id="geCustHiddenHint" style="display:none; margin-top:6px;">하위 법인에는 고객사 담당자 정보가 필요 없어 이 법인에서는 입력하지 않습니다.</p>
       </div>
       <div class="full"><label>비고</label><textarea id="ge_remarks" placeholder="법인 관련 별도 코멘트"></textarea></div>
     </div>
