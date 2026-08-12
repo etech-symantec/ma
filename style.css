@@ -1923,3 +1923,39 @@ footer.foot{
   background:#64748B;
   border-color:#64748B;
 }
+
+/* ---------- 작업 이력 전체보기 - 삭제 이력 ---------- */
+.wh-item-deleted{
+  background:#FAFAFB;
+  border-color:#E1E4E8;
+}
+.wh-item-deleted:hover{
+  border-color:#C8CDD5;
+}
+.wh-deleted-badge{
+  display:inline-flex;
+  align-items:center;
+  margin-left:7px;
+  padding:2px 7px;
+  border-radius:999px;
+  border:1px solid #E2B7B7;
+  background:#FDECEC;
+  color:#B42318;
+  font-size:9.5px;
+  font-weight:700;
+  vertical-align:middle;
+}
+.wh-item-deleted .ra-type{
+  color:#7A8494;
+}
+.wh-item-deleted .ra-note{
+  color:#8D97A6;
+}
+.wh-delete-meta{
+  margin-top:8px;
+  padding-top:7px;
+  border-top:1px dashed #D9DEE6;
+  color:#B42318;
+  font-size:11px;
+  font-family:var(--mono);
+}
