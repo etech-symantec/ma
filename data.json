@@ -1290,9 +1290,16 @@
         {
           "role": "운영",
           "name": "Roger Alphonso",
-          "org": "",
+          "org": "삼성전자",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Suman Ghimire",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "s.ghimire@partner.samsung.com"
         }
       ],
       "config_mode": "Explicit",
@@ -1353,9 +1360,16 @@
         {
           "role": "운영",
           "name": "Roger Alphonso",
-          "org": "",
+          "org": "삼성전자",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Suman Ghimire",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "s.ghimire@partner.samsung.com"
         }
       ],
       "config_mode": "Explicit",
@@ -1416,9 +1430,16 @@
         {
           "role": "운영",
           "name": "Roger Alphonso",
-          "org": "",
+          "org": "삼성전자",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Suman Ghimire",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "s.ghimire@partner.samsung.com"
         }
       ],
       "config_mode": "Explicit",
@@ -1474,9 +1495,16 @@
         {
           "role": "운영",
           "name": "Roger Alphonso",
-          "org": "",
+          "org": "삼성전자",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Suman Ghimire",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "s.ghimire@partner.samsung.com"
         }
       ],
       "config_mode": "Explicit",
@@ -1520,9 +1548,16 @@
         {
           "role": "운영",
           "name": "Roger Alphonso",
-          "org": "",
+          "org": "삼성전자",
           "phone": "",
           "email": "r.alphonso@partner.samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Suman Ghimire",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "s.ghimire@partner.samsung.com"
         }
       ],
       "config_mode": "Explicit",
