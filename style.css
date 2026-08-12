@@ -194,6 +194,25 @@ a{color:var(--accent);}
 .ra-asset{ font-size:12px; color:var(--text-dim); margin-top:2px; }
 .ra-note{ font-size:11.8px; color:var(--text-faint); margin-top:3px; line-height:1.4; }
 .ra-author{ font-size:11px; color:var(--text-faint); margin-top:4px; font-family:var(--mono); }
+.ra-changes{
+  margin-top:6px; padding:8px 9px; background:var(--surface2);
+  border:1px solid var(--border-solid); border-radius:8px;
+}
+.ra-changes-label{ font-size:10.5px; color:var(--text-faint); font-weight:700; margin-bottom:5px; }
+.ra-change-row{
+  display:flex; align-items:baseline; flex-wrap:wrap; gap:5px;
+  font-size:11.5px; line-height:1.5;
+}
+.ra-change-row + .ra-change-row{ margin-top:3px; }
+.ra-change-label{ font-weight:700; color:var(--text-dim); flex-shrink:0; }
+.ra-change-before{
+  color:var(--text-faint); text-decoration:line-through; text-decoration-color:#D8B4B4;
+  font-family:var(--mono); word-break:break-all;
+}
+.ra-change-arrow{ color:var(--text-faint); flex-shrink:0; }
+.ra-change-after{
+  color:var(--accent-dim); font-weight:600; font-family:var(--mono); word-break:break-all;
+}
 
 /* 사용자 관리 모달 */
 .user-add-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
