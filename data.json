@@ -13033,6 +13033,18 @@
       "incomplete": false,
       "author": "신호근",
       "updated_at": 1786514421939
+    },
+    {
+      "id": 1786514459524,
+      "group": "custom-1786348497151",
+      "ym": "2026-01",
+      "date": "2026.1.21",
+      "manager": "신호근",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "author": "신호근",
+      "updated_at": 1786514459524
     }
   ]
 }
