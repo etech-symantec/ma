@@ -1285,3 +1285,16 @@ footer.foot{
 .dash-geo-children{
   margin-top:2px;
 }
+
+/* 국가 → 위치 → 법인 : 하위 단계로 갈수록 연한 노란색 */
+.dash-geo-bar-country{
+  background:#C8933A;
+}
+
+.dash-geo-bar-location{
+  background:#D9AD5A;
+}
+
+.dash-geo-bar-company{
+  background:#E8C982;
+}
