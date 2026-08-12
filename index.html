@@ -168,7 +168,7 @@
 <div id="groupEditModal">
   <div class="modal-card">
     <h2>법인 정보 수정</h2>
-    <p class="hint">법인명 / 국가 / 위치 / 점검 방식 / 구성방식 / 상위 법인 / 담당 엔지니어 / 고객사 담당자 / 비고는 이 법인(그룹)에 속한 모든 자산 항목에 공통으로 적용됩니다. Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있습니다. Support ID가 여러 개인 경우는 각 Support ID 영역의 ✎ 버튼에서 따로 수정합니다. <b>다른 법인을 자식(하위 법인)으로 둔 상위 법인은 대표 이름 역할만 하며 Support ID를 직접 가질 수 없습니다.</b></p>
+    <p class="hint">Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있습니다. Support ID가 여러 개인 경우는 각 Support ID 영역의 ✎ 버튼에서 따로 수정합니다. <b>상위 법인은 대표 이름 역할만 하며 Support ID를 직접 가질 수 없습니다.</b></p>
     <div class="form-grid">
       <div class="ge-row ge-row-3">
         <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
@@ -238,7 +238,7 @@
         <div><label>국가 (COUNTRY)</label><input id="ng_country" placeholder="예: 베트남"></div>
         <div><label>위치 (LOCATION)</label><input id="ng_location" placeholder="예: 하노이"></div>
       </div>
-      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">새로 추가하는 법인이 다른 법인들을 자식으로 둘 상위 법인이라면 "이 법인은 상위 법인입니다"에 체크하세요. 체크하면 이 법인은 대표 이름 역할만 하게 되어 Support ID / 구축 엔지니어 / 구축 일자 / 구성방식은 비활성화됩니다. 상위 법인(부모) 드롭다운에는 이렇게 상위 법인으로 체크된 법인만 나타납니다.</p>
+      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">이 법인 아래에 Support ID가 여러 개인 경우 "상위 법인"을 체크하세요. 이후 연결된 Support ID들은 모두 해당 법인 아래에 보여집니다.</p>
       <div class="ge-row ge-row-3">
         <div><label>구축 엔지니어</label><input id="ng_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
         <div><label>구축 일자 (YYYY.MM)</label><input id="ng_build_date" placeholder="2026.07"></div>
@@ -322,8 +322,8 @@
 <div id="workLogModal">
   <div class="modal-card">
     <h2>작업 이력</h2>
-    <p class="hint" id="wlSubtitle">비고와 별도로, 이 장비에 대한 구축/제거/교체/OS 변경/PM 이력을 남길 수 있습니다.</p>
-    <p class="hint" style="margin-top:-14px;">등록된 자산 항목의 세부 정보(라이선스 기간/OS 버전/IP/계정ID/비밀번호/비고)는 직접 수정할 수 없으며, 아래처럼 작업 이력을 남기면서만 변경할 수 있습니다. 변경 이력이 그대로 남으므로 누가 언제 무엇을 바꿨는지 추적할 수 있습니다. (점검 방식은 법인 단위 정보라 "법인 정보 수정"에서 변경합니다.)</p>
+    <p class="hint" id="wlSubtitle">작업 내용과 구축/제거/교체/OS 변경/PM 등 이력을 남길 수 있습니다.</p>
+    <p class="hint" style="margin-top:-14px;">등록된 자산의 세부 정보는 직접 수정할 수 없으며, Tracking을 위해 작업 이력을 남기면서만 변경할 수 있습니다.</p>
 
     <div id="wlAssetList" class="wl-asset-list" style="display:none;"></div>
 
