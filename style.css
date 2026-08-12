@@ -1671,98 +1671,159 @@ footer.foot{
 }
 
 /* =========================================================
-   점검 등록창 하단 버튼 위치 강제 정상화
+   유지보수 점검 등록 모달 - 최종 레이아웃
    ========================================================= */
 
-#maintenanceLogModal .modal-actions{
-  position:static !important;
+/* 모달 전체 화면 */
+#maintenanceLogModal{
+  position:fixed !important;
+  inset:0 !important;
+
+  width:100vw !important;
+  height:100vh !important;
+
+  display:none !important;
+
+  align-items:center !important;
+  justify-content:center !important;
+
+  padding:20px !important;
+  margin:0 !important;
+
+  background:rgba(15,23,42,.45) !important;
+  backdrop-filter:blur(3px);
+
+  z-index:1200 !important;
+}
+
+/* 열렸을 때 반드시 flex */
+#maintenanceLogModal.open{
+  display:flex !important;
+}
+
+/* 실제 흰색 팝업 카드 */
+#maintenanceLogModal > .modal-card{
+  position:relative !important;
+
   top:auto !important;
   right:auto !important;
   bottom:auto !important;
   left:auto !important;
   inset:auto !important;
+
+  transform:none !important;
+
+  display:block !important;
+
+  width:100% !important;
+  max-width:390px !important;
+
+  margin:0 !important;
+  padding:18px !important;
+
+  background:var(--surface) !important;
+
+  border:1px solid var(--border-solid) !important;
+  border-radius:14px !important;
+
+  box-shadow:0 12px 35px rgba(0,0,0,.18) !important;
+}
+
+/* 제목 */
+#maintenanceLogModal .modal-card h2{
+  margin:0 0 14px !important;
+
+  font-size:14px !important;
+  line-height:1.4;
+}
+
+/* 입력 영역 */
+#maintenanceLogModal .form-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+
+  gap:10px !important;
+
+  width:100% !important;
+}
+
+/* 하단 버튼은 반드시 카드 안에서 한 줄 */
+#maintenanceLogModal .modal-card > .modal-actions{
+  position:relative !important;
+
+  top:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  left:auto !important;
+  inset:auto !important;
+
   transform:none !important;
 
   display:flex !important;
-  align-items:center;
-  justify-content:flex-end;
+  align-items:center !important;
+  justify-content:flex-end !important;
 
   width:100% !important;
-  margin:14px 0 0 !important;
-  padding:0 !important;
-  gap:7px;
 
-  box-sizing:border-box;
+  margin:16px 0 0 !important;
+  padding:12px 0 0 !important;
+
+  gap:7px !important;
+
+  border-top:1px solid var(--border-solid);
 }
 
-/* 등록 취소는 왼쪽, 닫기/저장은 오른쪽 */
-#maintenanceLogModal #mlDeleteBtn{
-  margin-right:auto;
+/* 등록 취소만 왼쪽 */
+#maintenanceLogModal .modal-card > .modal-actions #mlDeleteBtn{
+  margin-right:auto !important;
 }
 
-#maintenanceLogModal .modal-actions .btn{
-  position:static !important;
+/* 버튼 공통 */
+#maintenanceLogModal .modal-card > .modal-actions .btn{
+  position:relative !important;
+
+  top:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  left:auto !important;
+
   transform:none !important;
 
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
   flex:0 0 auto !important;
+
   width:auto !important;
-  min-width:58px;
+  min-width:58px !important;
+  height:32px !important;
 
-  padding:7px 12px !important;
-  border-radius:8px;
+  margin:0 !important;
+  padding:0 12px !important;
+
+  border-radius:8px !important;
+
   font-size:11.5px !important;
-}
-
-/* 등록 취소 */
-#maintenanceLogModal #mlDeleteBtn{
-  color:#C62828;
-  border-color:#E9B2B2;
-  background:#FFF;
-}
-
-#maintenanceLogModal #mlDeleteBtn:hover{
-  background:#FDECEC;
 }
 
 /* 닫기 */
 #maintenanceLogModal #cancelMlBtn{
-  background:#FFF;
-  color:var(--text-dim);
+  background:#fff !important;
+  color:var(--text-dim) !important;
+  border-color:var(--border-solid) !important;
 }
 
 /* 저장 */
 #maintenanceLogModal #saveMlBtn{
-  background:var(--accent);
-  border-color:var(--accent);
-  color:#FFF;
+  background:var(--accent) !important;
+  color:#fff !important;
+  border-color:var(--accent) !important;
 }
 
-/* 점검지 월 칸 - 날짜/상태 */
-.maint-cell-main{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:2px;
-}
-
-/* 점검 내용 */
-.maint-cell-note{
-  margin-top:3px;
-
-  font-size:9px;
-  line-height:1.25;
-
-  color:var(--text-faint);
-
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-
-  max-width:100%;
-  text-align:center;
-}
-
-/* 미완료 사유는 붉은 계열 */
-.maint-cell-incomplete .maint-cell-note{
-  color:#C95A5A;
+/* 등록 취소 */
+#maintenanceLogModal #mlDeleteBtn{
+  color:#C62828 !important;
+  background:#fff !important;
+  border-color:#E9B2B2 !important;
 }
