@@ -3121,7 +3121,22 @@
         "tag": "gBtWXEQcaVi6Sliz91WZsw=="
       },
       "group_remarks": "",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "Drake Fisher",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "d.fisher@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Eric Sandberg",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "e.sandberg@samsung.com"
+        }
+      ],
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
@@ -3163,7 +3178,22 @@
       "id_enc": null,
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "Drake Fisher",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "d.fisher@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Eric Sandberg",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "e.sandberg@samsung.com"
+        }
+      ],
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
@@ -3213,7 +3243,22 @@
         "tag": "MJWPeQASetzXhKdecBabRg=="
       },
       "group_remarks": "",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "Drake Fisher",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "d.fisher@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Eric Sandberg",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "e.sandberg@samsung.com"
+        }
+      ],
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
@@ -3255,7 +3300,22 @@
       "id_enc": null,
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "Drake Fisher",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "d.fisher@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Eric Sandberg",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "e.sandberg@samsung.com"
+        }
+      ],
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
@@ -3293,7 +3353,22 @@
       "id_enc": null,
       "pw_enc": null,
       "group_remarks": "",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "Drake Fisher",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "d.fisher@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Eric Sandberg",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "e.sandberg@samsung.com"
+        }
+      ],
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
@@ -3343,7 +3418,22 @@
         "tag": "fkZLl2+sl9qYJwVgPpQZqQ=="
       },
       "group_remarks": "",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "Drake Fisher",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "d.fisher@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Eric Sandberg",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "e.sandberg@samsung.com"
+        }
+      ],
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
@@ -3393,7 +3483,22 @@
         "tag": "WNbNb5yzIQvJg0qxdbE8wA=="
       },
       "group_remarks": "",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "Drake Fisher",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "d.fisher@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Eric Sandberg",
+          "org": "삼성전자",
+          "phone": "",
+          "email": "e.sandberg@samsung.com"
+        }
+      ],
       "country": "미국",
       "config_mode": "Inline",
       "build_engineer": "신호근",
