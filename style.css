@@ -1736,3 +1736,33 @@ footer.foot{
   border-color:var(--accent);
   color:#FFF;
 }
+
+/* 점검지 월 칸 - 날짜/상태 */
+.maint-cell-main{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+}
+
+/* 점검 내용 */
+.maint-cell-note{
+  margin-top:3px;
+
+  font-size:9px;
+  line-height:1.25;
+
+  color:var(--text-faint);
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  max-width:100%;
+  text-align:center;
+}
+
+/* 미완료 사유는 붉은 계열 */
+.maint-cell-incomplete .maint-cell-note{
+  color:#C95A5A;
+}
