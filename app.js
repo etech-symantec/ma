@@ -1440,14 +1440,25 @@ function maintenanceEntryTabHtml(){
         if (log.note){
           tipBits.push(log.note);
         }
-        return `
-          <td class="maint-cell maint-cell-incomplete ${isCurrent ? 'is-current' : ''}"
-              data-maint-cell="${esc(g.gid)}|${ym}"
-              title="${esc(tipBits.join(' · '))}">
+        const noteHtml = log.note
+        ? `<div class="maint-cell-note maint-cell-note-incomplete"
+                title="${esc(log.note)}">
+             ${esc(log.note)}
+           </div>`
+        : '';
       
+      return `
+        <td class="maint-cell maint-cell-incomplete ${isCurrent ? 'is-current' : ''}"
+            data-maint-cell="${esc(g.gid)}|${ym}"
+            title="${esc(tipBits.join(' · '))}">
+      
+          <div class="maint-cell-main">
             <span class="maint-cell-incomplete-label">미완료</span>
-          </td>
-        `;
+          </div>
+      
+          ${noteHtml}
+        </td>
+      `;
       }
       if (hasDate){
         const d = parseDate(log.date);
@@ -1458,9 +1469,23 @@ function maintenanceEntryTabHtml(){
         if (log.note) tipBits.push(log.note);
         const statusCls = isDone ? 'maint-cell-done' : 'maint-cell-reserved';
         const statusTag = isDone ? '완' : '예';
-        return `<td class="maint-cell ${statusCls} ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(tipBits.join(' · '))}">
-          <span class="maint-cell-day">${esc(String(dayNum))}</span><span class="maint-cell-tag">${statusTag}</span>
-        </td>`;
+        const noteHtml = log.note
+          ? `<div class="maint-cell-note" title="${esc(log.note)}">${esc(log.note)}</div>`
+          : '';
+        
+        return `
+          <td class="maint-cell ${statusCls} ${isCurrent?'is-current':''}"
+              data-maint-cell="${esc(g.gid)}|${ym}"
+              title="${esc(tipBits.join(' · '))}">
+        
+            <div class="maint-cell-main">
+              <span class="maint-cell-day">${esc(String(dayNum))}</span>
+              <span class="maint-cell-tag">${statusTag}</span>
+            </div>
+        
+            ${noteHtml}
+          </td>
+        `;
       }
       return `<td class="maint-cell maint-cell-blank ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(ymLabel(ym))} 점검 등록">
         <span class="maint-cell-dash">–</span>
