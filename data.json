@@ -12975,6 +12975,14 @@
       "pwIterations": 150000,
       "pwHash": "ezcU6VMHgbofk3T5Hb/iNNU1/rV3wE+aAavFRqdJoXQ=",
       "isAdmin": false
+    },
+    {
+      "id": "u1786519956793",
+      "name": "윤태리",
+      "pwSalt": "uP4tqAI9JIYyscdJIUOYcQ==",
+      "pwIterations": 150000,
+      "pwHash": "T/qhEY/v1HPV0tJ5vdIblE98HcU2Olz1V/hfJGug9lI=",
+      "isAdmin": false
     }
   ],
   "maintenanceLogs": [
