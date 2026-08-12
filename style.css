@@ -1258,10 +1258,61 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 .maint-site-list{ display:flex; flex-direction:column; gap:4px; }
 .maint-site-listitem{
-  font-size:11.5px; color:var(--text-dim); background:var(--surface);
-  border:1px solid var(--border-solid); border-radius:6px;
-  padding:4px 8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+
+  font-size:11.5px;
+  color:var(--text-dim);
+  background:var(--surface);
+  border:1px solid var(--border-solid);
+  border-radius:6px;
+  padding:5px 8px;
 }
+
+.maint-site-name{
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.maint-site-method{
+  flex-shrink:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:2px 7px;
+  border-radius:999px;
+
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:700;
+
+  background:var(--surface2);
+  color:var(--text-faint);
+}
+.maint-site-method[data-method*="방문"]{
+  color:#2F5FA3;
+  background:#EAF2FC;
+  border:1px solid #C9DCF2;
+}
+
+.maint-site-method[data-method*="원격"]{
+  color:#2F8F52;
+  background:#E4F5EA;
+  border:1px solid #BFE3CC;
+}
+
+.maint-site-method[data-method="X"]{
+  color:#8B6BC9;
+  background:#F3EEFA;
+  border:1px solid #DED0F0;
+}
+
 .maint-site-listitem.primary{ color:#2F5FA3; border-color:#C9DCF2; background:#EAF2FC; }
 .maint-site-listitem.secondary{ color:#7A6A2E; border-color:#EBDFB0; background:#FBF5E2; }
 
