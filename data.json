@@ -12822,6 +12822,17 @@
       "author": "신호근",
       "updated_at": 1786422598965,
       "done": true
+    },
+    {
+      "id": 1786507544564,
+      "group": "seha",
+      "ym": "2026-01",
+      "date": "2026.1.22",
+      "manager": "신호근",
+      "note": "",
+      "done": true,
+      "author": "신호근",
+      "updated_at": 1786507544564
     }
   ]
 }
