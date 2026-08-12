@@ -6420,7 +6420,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "group_remarks": "",
       "cust_contacts": [
         {
           "role": "운영",
@@ -6430,7 +6430,11 @@
           "email": "sunah.choi@secui.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-003",
@@ -6462,7 +6466,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "group_remarks": "",
       "cust_contacts": [
         {
           "role": "운영",
@@ -6472,7 +6476,11 @@
           "email": "sunah.choi@secui.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-003",
@@ -6504,7 +6512,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "group_remarks": "",
       "cust_contacts": [
         {
           "role": "운영",
@@ -6514,7 +6522,11 @@
           "email": "sunah.choi@secui.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-003",
@@ -6546,7 +6558,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "group_remarks": "",
       "cust_contacts": [
         {
           "role": "운영",
@@ -6556,7 +6568,11 @@
           "email": "sunah.choi@secui.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-003",
@@ -6588,7 +6604,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "group_remarks": "",
       "cust_contacts": [
         {
           "role": "운영",
@@ -6598,7 +6614,11 @@
           "email": "sunah.choi@secui.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-003",
@@ -6630,7 +6650,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "@여의도 전경련회관 - 방문시 1층에서 출입증 받고 - 28층에서 다시 출입증 변경 - 27층에서 점검",
+      "group_remarks": "",
       "cust_contacts": [
         {
           "role": "운영",
@@ -6640,7 +6660,11 @@
           "email": "sunah.choi@secui.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-004",
