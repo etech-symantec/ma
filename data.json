@@ -14133,6 +14133,19 @@
       "uncontracted": false,
       "author": "윤태리",
       "updated_at": 1786523477251
+    },
+    {
+      "id": 1786523482243,
+      "group": "tw-ds",
+      "ym": "2026-03",
+      "date": "2026.3.10",
+      "manager": "윤태리",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1786523482243
     }
   ]
 }
