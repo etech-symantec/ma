@@ -267,7 +267,6 @@ const SKU_TAG_RULES = [
       !sku.toUpperCase().startsWith('ASG-S')
   },
   { key:'PS',   test: sku => sku.toUpperCase().includes('PS') },
-  { key:'SSP',  test: sku => sku.toUpperCase().includes('SSP') },
   { key:'VA',   test: sku => sku.toUpperCase().includes('VA') },
   { key:'ELK',  test: sku => sku.toUpperCase().includes('ELK') },
   { key:'CLD',  test: sku => sku.toUpperCase().includes('CLD') },
