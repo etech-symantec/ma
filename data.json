@@ -14094,6 +14094,19 @@
       "uncontracted": false,
       "author": "윤태리",
       "updated_at": 1786523438172
+    },
+    {
+      "id": 1786523444960,
+      "group": "custom-mso09xln",
+      "ym": "2026-08",
+      "date": "2026.8.21",
+      "manager": "윤태리",
+      "note": "",
+      "done": false,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1786523444960
     }
   ]
 }
