@@ -12967,6 +12967,14 @@
       "pwIterations": 150000,
       "pwHash": "GFzrAZnrtt95ImRqG4U+t6NSSwhVnbO+B7TQYCn8GJA=",
       "isAdmin": false
+    },
+    {
+      "id": "u1786518807911",
+      "name": "박동석",
+      "pwSalt": "vTTmXu04pr0/ix0gkTVPww==",
+      "pwIterations": 150000,
+      "pwHash": "ezcU6VMHgbofk3T5Hb/iNNU1/rV3wE+aAavFRqdJoXQ=",
+      "isAdmin": false
     }
   ],
   "maintenanceLogs": [
