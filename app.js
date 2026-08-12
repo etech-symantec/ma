@@ -2107,9 +2107,9 @@ function custContactNamesOf(r){
 
 function topFilterBarHtml(){
   const fields = [
+    { key:'support_id',   label:'Support ID',    cls:'tf-support',  values: uniqueValues(records, r=>r.support_id) },
     { key:'country',      label:'국가',          cls:'tf-country',  values: uniqueValues(records, r=>r.country) },
     { key:'location',     label:'위치',          cls:'tf-location', values: uniqueValues(records, r=>r.location) },
-    { key:'support_id',   label:'Support ID',    cls:'tf-support',  values: uniqueValues(records, r=>r.support_id) },
     { key:'check_method', label:'점검 방식',     cls:'tf-check',    values: uniqueValues(records, r=>r.check_method) },
     { key:'config_mode',  label:'구성방식',      cls:'tf-config',   values: uniqueValues(records, r=>r.config_mode) },
     { key:'engineer',     label:'담당 엔지니어', cls:'tf-engineer', values: uniqueValuesMulti(records, r=>[r.owner_primary, r.owner_secondary]) },
