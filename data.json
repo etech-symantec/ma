@@ -12767,7 +12767,15 @@
       "config_mode": "",
       "owner_primary": "김상문",
       "owner_secondary": "윤태리",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "Syera",
+          "org": "",
+          "phone": "",
+          "email": ""
+        }
+      ],
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
