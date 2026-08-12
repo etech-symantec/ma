@@ -316,7 +316,7 @@
       "deploy_date": "",
       "deploy_log": "23.02.09 윤태리 7.3.3.3>7.3.11.3 / 23.11.11 윤태리 7.3.11.3>7.3.16.2 (no internet) / 25.06.07 윤태리 7.3.16.2>7.3.21.1 (mem bug)",
       "mode": "Explicit",
-      "os_ver": "7.3.21.1",
+      "os_ver": "7.3.21.2",
       "owner_primary": "윤태리",
       "owner_secondary": "김상문",
       "check_method": "원격",
@@ -371,7 +371,20 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "work_log": []
+      "work_log": [
+        {
+          "id": 1786523706213,
+          "type": "OS 업그레이드",
+          "date": "",
+          "manager": "윤태리",
+          "note": "21.1 > 21.2",
+          "author": "윤태리",
+          "field_changes": {
+            "os_ver": "7.3.21.2"
+          },
+          "change_summary": "OS 버전: 7.3.21.1 → 7.3.21.2"
+        }
+      ]
     },
     {
       "group": "tw-ds",
