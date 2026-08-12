@@ -1091,8 +1091,13 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   font-weight:700;
 }
 
+/* 유지보수 모달 전용 액션 컨테이너. 공용 .modal-actions 클래스와 완전히 분리 */
+#maintenanceLogModal .ml-modal-actions{
+  box-sizing:border-box !important;
+}
+
 /* 하단 액션 버튼은 반드시 카드 내부의 일반 흐름에 배치 */
-#maintenanceLogModal > .modal-card > .modal-actions{
+#maintenanceLogModal > .modal-card > .ml-modal-actions{
   position:static !important;
   inset:auto !important;
   transform:none !important;
@@ -1110,11 +1115,11 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   box-sizing:border-box;
 }
 
-#maintenanceLogModal > .modal-card > .modal-actions #mlDeleteBtn{
+#maintenanceLogModal > .modal-card > .ml-modal-actions #mlDeleteBtn{
   margin-right:auto !important;
 }
 
-#maintenanceLogModal > .modal-card > .modal-actions .btn{
+#maintenanceLogModal > .modal-card > .ml-modal-actions .btn{
   position:static !important;
   transform:none !important;
 
