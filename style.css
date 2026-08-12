@@ -980,7 +980,9 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 .maint-summary-card.ms-ok .ms-num{ color:#4CA36A; }
 
 /* 월별 등록 탭: 좌측 법인 정보 + 우측 1~12월 연간 스프레드시트 */
-.maint-year-table-wrap{ overflow-x:auto; overflow-y:clip; }
+.maint-year-table-wrap{
+  overflow:visible;
+}
 .maint-year-table{ table-layout:fixed; min-width:1150px; }
 .maint-year-table th, .maint-year-table td{ padding:8px 8px; }
 .maint-table-caption{
