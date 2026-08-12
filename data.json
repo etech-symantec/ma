@@ -18,7 +18,7 @@
       "deploy_date": "",
       "deploy_log": "24.03.11 박동석 6.7.5.12 > 7.3.17.1",
       "mode": "Explicit",
-      "os_ver": "7.3.17.2",
+      "os_ver": "7.3.17.1",
       "owner_primary": "박동석",
       "owner_secondary": "김상문",
       "check_method": "원격",
@@ -29,19 +29,19 @@
       "tag_note": "일본",
       "id": 1,
       "ip_enc": {
-        "iv": "P/cYqKYL8TRj1zhR",
-        "ct": "Z61GZ2ypuctozk0=",
-        "tag": "oCe8s2yp/En4EjttSiLX/g=="
+        "iv": "p0i07uy2bbPfXTyt",
+        "ct": "zxhVhRAoW3DSMT8=",
+        "tag": "9icPBZ0XEcUgmc4gy3/lRQ=="
       },
       "id_enc": {
-        "iv": "+DyrPRZ6f3kR2jJC",
-        "ct": "7kF95Mcogk2N/+A=",
-        "tag": "yyWHd21IEi12vmmORKzOtQ=="
+        "iv": "TSZp//QmmBfm1NlF",
+        "ct": "2upkAA6J6E+WZKo=",
+        "tag": "CLl1TaUb2ixNycYRZ31DIg=="
       },
       "pw_enc": {
-        "iv": "ZWmejuwowAWWBYT9",
-        "ct": "I4rQ/Lp6GKQ61SgBdy1g62cr8Q==",
-        "tag": "jcl5vM6p10oQMNYFU8KZZw=="
+        "iv": "0D4UHSF+Rik++0Kt",
+        "ct": "9lXR8Ejhr7HBTQWYhE5Co7rxKw==",
+        "tag": "fFZu5EWtMDhjWxREemfxpQ=="
       },
       "work_log": [],
       "group_remarks": "",
@@ -57,9 +57,9 @@
       "config_mode": "Explicit",
       "country": "일본",
       "enable_pw_enc": {
-        "iv": "Vt1hLLYXW1dvqxh4",
-        "ct": "pWkBXnw0GAtuHyQy",
-        "tag": "GF5x6i+d4ftBVum4ibrjXw=="
+        "iv": "zzhL6srCRJRyxjA1",
+        "ct": "xCi1bv9S91WWVqZ+",
+        "tag": "5nWyTDso55MiAlX0F+sYmw=="
       },
       "group_parent": "",
       "is_parent": false,
