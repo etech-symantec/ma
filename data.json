@@ -12717,11 +12717,33 @@
       "config_mode": "",
       "owner_primary": "윤태리",
       "owner_secondary": "신호근",
-      "cust_contacts": [],
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "Ngo Van Tuong",
+          "org": "SDV",
+          "phone": "84-222-390-5145, +84-985-479-311",
+          "email": "tuongnv.93@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Pham The Thao",
+          "org": "SDV",
+          "phone": "84-222-390-5999, +84-97-397-0461",
+          "email": "lt.dat@samsung.com"
+        },
+        {
+          "role": "운영",
+          "name": "Le Minh Diep",
+          "org": "SDV",
+          "phone": "84-222-390-5588, +84-96-583-2699",
+          "email": "minhdiep.le@samsung.com"
+        }
+      ],
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
-      "group_remarks": "",
+      "group_remarks": "cc. sdv.itsec@samsung.com",
       "group_parent": "",
       "is_parent": true,
       "support_id": "",
