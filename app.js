@@ -261,11 +261,16 @@ const SKU_TAG_RULES = [
   { key:'MC',   test: sku => sku.toUpperCase().startsWith('MC-') || sku.toUpperCase().includes('-MC') },
   { key:'RP',   test: sku => sku.toUpperCase().includes('RP') },
   { key:'ISG',  test: sku => sku.toUpperCase().startsWith('SSP-S') },
-  { key:'SG', test: sku =>
-      sku.toUpperCase().includes('SG') &&
-      !sku.toUpperCase().includes('ISG-') &&
-      !sku.toUpperCase().startsWith('ASG-S')
-  },
+  { key:'SG', test: sku => {
+      const s = sku.toUpperCase();
+  
+      return s.startsWith('ISG-PROXY') ||
+             (
+               s.includes('SG') &&
+               !s.includes('ISG-') &&
+               !s.startsWith('ASG-S')
+             );
+  }},
   { key:'PS',   test: sku => sku.toUpperCase().includes('PS') },
   { key:'VA',   test: sku => sku.toUpperCase().includes('VA') },
   { key:'ELK',  test: sku => sku.toUpperCase().includes('ELK') },
