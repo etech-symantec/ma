@@ -11,7 +11,7 @@
 <title>Broadcom 유지보수 자산</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20260812-01">
 </head>
 <body>
 
@@ -410,11 +410,13 @@
         </div>
       </div>
       <div class="full"><label>점검 담당자</label><input id="ml_manager" placeholder="점검을 진행한 담당자"></div>
-      <label>
-        비고 / 점검 내용
-        <span id="mlNoteRequired" class="ml-required-hint">미완료 시 필수</span>
-      </label>
-      <textarea id="ml_note" placeholder="점검 관련 메모 (선택)"></textarea></div>
+      <div class="full">
+        <label>
+          비고 / 점검 내용
+          <span id="mlNoteRequired" class="ml-required-hint">미완료 시 필수</span>
+        </label>
+        <textarea id="ml_note" placeholder="점검 관련 메모 (선택)"></textarea>
+      </div>
     </div>
     <div id="mlError" class="cp-error"></div>
     <div class="modal-actions">
