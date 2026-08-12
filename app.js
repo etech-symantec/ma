@@ -1162,6 +1162,7 @@ function renderDashboard(){
     if (s.startsWith('SSP-S410-10-')) return 'SSP-S410-10';
     if (s.startsWith('SSP-S410-20-')) return 'SSP-S410-20';
     if (s.startsWith('SSP-S410-40-')) return 'SSP-S410-40';
+    if (s.startsWith('ASG-S400'))     return 'ASG-S400';
     if (s.startsWith('SG-S200'))      return 'SG-S200';
     if (s.startsWith('SG-S400'))      return 'SG-S400';
     if (s.startsWith('SG-S500'))      return 'SG-S500';
