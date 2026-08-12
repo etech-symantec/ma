@@ -12925,6 +12925,18 @@
       "incomplete": false,
       "author": "신호근",
       "updated_at": 1786514290766
+    },
+    {
+      "id": 1786514301580,
+      "group": "uk-seuk",
+      "ym": "2026-05",
+      "date": "",
+      "manager": "신호근",
+      "note": "미응답",
+      "done": false,
+      "incomplete": true,
+      "author": "신호근",
+      "updated_at": 1786514301580
     }
   ]
 }
