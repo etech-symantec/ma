@@ -879,43 +879,119 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
 }
 .date-field{ position:relative; display:flex; align-items:center; gap:0; }
 .date-field input:not(.date-native-input){ padding-right:38px; }
-/* 점검일 + 완료 체크 */
-.ml-date-row{
+
+/* =========================================================
+   유지보수 점검 등록 모달 - 최종 스타일
+   ========================================================= */
+
+/* 공통 모달 규칙 위에서 이 모달만 화면 중앙에 고정 */
+#maintenanceLogModal{
+  align-items:center !important;
+  justify-content:center !important;
+  padding:20px !important;
+}
+
+#maintenanceLogModal.open{
+  display:flex !important;
+}
+
+/* 흰색 카드 */
+#maintenanceLogModal > .modal-card{
+  position:relative !important;
+  inset:auto !important;
+  transform:none !important;
+
+  display:block !important;
+  width:100% !important;
+  max-width:390px !important;
+
+  margin:0 !important;
+  padding:18px !important;
+
+  background:var(--surface) !important;
+  border:1px solid var(--border-solid) !important;
+  border-radius:14px !important;
+  box-shadow:0 12px 35px rgba(0,0,0,.18) !important;
+}
+
+#maintenanceLogModal .modal-card h2{
+  margin:0 0 14px !important;
+  font-size:14px !important;
+  line-height:1.4;
+}
+
+#maintenanceLogModal .form-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:10px !important;
+  width:100% !important;
+}
+
+#maintenanceLogModal .form-grid label{
+  display:block;
+  margin-bottom:4px;
+  font-size:10px;
+}
+
+#maintenanceLogModal .form-grid input,
+#maintenanceLogModal .form-grid textarea{
+  padding:7px 9px;
+  font-size:12px;
+}
+
+#maintenanceLogModal .form-grid textarea{
+  min-height:44px;
+}
+
+#maintenanceLogModal .cp-error{
+  margin-top:8px;
+  min-height:0;
+}
+
+/* 날짜 + 상태 버튼 */
+#maintenanceLogModal .ml-date-row{
   display:flex;
   align-items:center;
   gap:10px;
+  width:100%;
 }
 
-.ml-date-row .date-field{
+#maintenanceLogModal .ml-date-row .date-field{
   flex:1 1 auto;
   min-width:0;
 }
 
-.ml-date-row .date-field input:not(.date-native-input){
+#maintenanceLogModal .ml-date-row .date-field input:not(.date-native-input){
   width:100%;
   min-width:0;
 }
 
-/* 완료 체크는 입력칸이 아니라 작은 상태 버튼 형태 */
-.ml-done-check{
+#maintenanceLogModal .ml-status-checks{
+  display:flex;
+  align-items:center;
+  gap:6px;
   flex:0 0 auto;
-  width:auto !important;
-  min-width:72px;
-  height:34px;
+}
 
-  display:flex !important;
+#maintenanceLogModal .ml-status-check{
+  display:inline-flex !important;
   align-items:center !important;
   justify-content:center !important;
   gap:6px;
+
+  width:auto !important;
+  min-width:68px;
+  height:34px;
 
   margin:0 !important;
   padding:0 10px !important;
 
   border:1px solid var(--border-solid);
   border-radius:8px;
-  background:#fff;
 
+  background:#fff;
   color:var(--text-dim);
+
   font-size:11.5px !important;
   font-weight:700;
   line-height:1;
@@ -924,30 +1000,177 @@ td.sn a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
   white-space:nowrap;
   user-select:none;
 
-  transition:
-    background .15s,
-    border-color .15s,
-    color .15s;
+  transition:background .15s, border-color .15s, color .15s;
 }
 
-/* 체크된 상태 */
-.ml-done-check:has(input:checked){
-  color:#2F8F52;
-  background:#EAF7EF;
+/* 커스텀 체크박스 */
+#maintenanceLogModal .ml-status-check input{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+
+  width:15px !important;
+  height:15px !important;
+  min-width:15px;
+  flex:0 0 15px;
+
+  margin:0 !important;
+  padding:0 !important;
+
+  position:relative;
+  cursor:pointer;
+
+  border:1.5px solid #AEB8C5;
+  border-radius:4px;
+  background:#fff;
+}
+
+#maintenanceLogModal .ml-status-check input:checked::after{
+  content:'';
+  position:absolute;
+  left:4px;
+  top:1px;
+
+  width:4px;
+  height:8px;
+
+  border:solid #fff;
+  border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+
+/* 완료 */
+#maintenanceLogModal .ml-done-check:hover{
   border-color:#A9D8B8;
+  background:#F4FBF6;
 }
 
-/* 점검 등록창(월별 점검) — 설명글 없이, 절반 크기로 심플하게 */
-#maintenanceLogModal .modal-card{ max-width:390px; padding:16px; }
-#maintenanceLogModal .modal-card h2{ font-size:14px; margin-bottom:12px; }
-#maintenanceLogModal .form-grid{ grid-template-columns:1fr; gap:10px; }
-#maintenanceLogModal .form-grid label{ font-size:10px; margin-bottom:4px; }
-#maintenanceLogModal .form-grid label.ml-done-check{ font-size:12px; margin-bottom:0; }
-#maintenanceLogModal .form-grid input, #maintenanceLogModal .form-grid textarea{ padding:6px 9px; font-size:12px; }
-#maintenanceLogModal .form-grid textarea{ min-height:40px; }
-#maintenanceLogModal .cp-error{ margin-top:8px; min-height:0; }
-#maintenanceLogModal .modal-actions{ margin-top:12px; gap:8px; }
-#maintenanceLogModal .modal-actions .btn{ padding:7px 12px; font-size:12px; }
+#maintenanceLogModal .ml-done-check:has(input:checked){
+  color:#2F8F52;
+  border-color:#A9D8B8;
+  background:#EAF7EF;
+}
+
+#maintenanceLogModal .ml-done-check input:checked{
+  background:#2F8F52;
+  border-color:#2F8F52;
+}
+
+/* 미완료 */
+#maintenanceLogModal .ml-incomplete-check:hover{
+  border-color:#E9B2B2;
+  background:#FFF5F5;
+}
+
+#maintenanceLogModal .ml-incomplete-check:has(input:checked){
+  color:#C62828;
+  border-color:#E9B2B2;
+  background:#FDECEC;
+}
+
+#maintenanceLogModal .ml-incomplete-check input:checked{
+  background:#D64545;
+  border-color:#D64545;
+}
+
+/* 미완료 선택 시 날짜 비활성화 표시 */
+#maintenanceLogModal .ml-date-row.is-incomplete .date-field input{
+  background:#F1F3F5;
+  color:#A0A8B4;
+}
+
+#maintenanceLogModal .ml-date-row.is-incomplete .date-pick-btn{
+  opacity:.3;
+  cursor:not-allowed;
+}
+
+#maintenanceLogModal .ml-required-hint{
+  display:none;
+  margin-left:5px;
+  color:#D92D20;
+  font-size:9px;
+  font-weight:700;
+}
+
+/* 하단 액션 버튼은 반드시 카드 내부의 일반 흐름에 배치 */
+#maintenanceLogModal > .modal-card > .modal-actions{
+  position:static !important;
+  inset:auto !important;
+  transform:none !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+
+  width:100% !important;
+  margin:16px 0 0 !important;
+  padding:12px 0 0 !important;
+  gap:7px !important;
+
+  border-top:1px solid var(--border-solid);
+  box-sizing:border-box;
+}
+
+#maintenanceLogModal > .modal-card > .modal-actions #mlDeleteBtn{
+  margin-right:auto !important;
+}
+
+#maintenanceLogModal > .modal-card > .modal-actions .btn{
+  position:static !important;
+  transform:none !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  flex:0 0 auto !important;
+  width:auto !important;
+  min-width:58px !important;
+  height:32px !important;
+
+  margin:0 !important;
+  padding:0 12px !important;
+
+  border-radius:8px !important;
+  font-size:11.5px !important;
+}
+
+#maintenanceLogModal #mlDeleteBtn{
+  color:#C62828 !important;
+  background:#fff !important;
+  border-color:#E9B2B2 !important;
+}
+
+#maintenanceLogModal #mlDeleteBtn:hover{
+  background:#FDECEC !important;
+}
+
+#maintenanceLogModal #cancelMlBtn{
+  color:var(--text-dim) !important;
+  background:#fff !important;
+  border-color:var(--border-solid) !important;
+}
+
+#maintenanceLogModal #saveMlBtn{
+  color:#fff !important;
+  background:var(--accent) !important;
+  border-color:var(--accent) !important;
+}
+
+/* 좁은 화면에서는 날짜/상태를 두 줄로 */
+@media (max-width:460px){
+  #maintenanceLogModal .ml-date-row{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  #maintenanceLogModal .ml-status-checks{
+    width:100%;
+  }
+
+  #maintenanceLogModal .ml-status-check{
+    flex:1 1 0;
+  }
+}
 
 .date-pick-btn{
   position:absolute; right:4px; top:50%; transform:translateY(-50%);
@@ -1458,372 +1681,32 @@ footer.foot{
   text-decoration:underline;
   text-underline-offset:2px;
 }
-.ml-status-checks{
-  display:flex;
-  align-items:stretch;
-  gap:6px;
-}
-
-.ml-status-check{
+/* 점검지 월 칸 - 날짜/상태 */
+.maint-cell-main{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:5px;
-
-  min-width:66px;
-  height:34px;
-  padding:0 9px;
-
-  border:1px solid var(--border-solid);
-  border-radius:8px;
-
-  background:#fff;
-  color:var(--text-dim);
-
-  font-size:11.5px;
-  font-weight:700;
-  cursor:pointer;
-
-  white-space:nowrap;
+  gap:2px;
 }
 
-.ml-status-check input{
-  width:15px !important;
-  height:15px !important;
-  margin:0 !important;
-}
+/* 점검 내용 */
+.maint-cell-note{
+  margin-top:3px;
 
-/* 완료 */
-.ml-done-check:has(input:checked){
-  color:#2F8F52;
-  background:#EAF7EF;
-  border-color:#A9D8B8;
-}
-
-/* 미완료 */
-.ml-incomplete-check:has(input:checked){
-  color:#C62828;
-  background:#FDECEC;
-  border-color:#EFBABA;
-}
-
-.ml-incomplete-check input{
-  accent-color:#D92D20;
-}
-
-/* 미완료 선택 시 날짜 */
-.ml-date-row.is-incomplete .date-field input{
-  background:#F1F3F5;
-  color:#A0A8B4;
-}
-
-.ml-date-row.is-incomplete .date-pick-btn{
-  opacity:.3;
-  cursor:not-allowed;
-}
-
-.ml-required-hint{
-  display:none;
-  margin-left:5px;
-  color:#D92D20;
   font-size:9px;
-  font-weight:700;
-}
+  line-height:1.25;
 
-/* =========================================================
-   점검 등록 - 완료 / 미완료 버튼 최종 스타일
-   ========================================================= */
+  color:var(--text-faint);
 
-.ml-status-checks{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  flex:0 0 auto;
-}
-
-/* 완료 / 미완료 공통 버튼 */
-.ml-status-check{
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  gap:6px;
-
-  width:auto !important;
-  min-width:68px;
-  height:34px;
-
-  margin:0 !important;
-  padding:0 10px !important;
-
-  border:1px solid var(--border-solid);
-  border-radius:8px;
-
-  background:#fff;
-  color:var(--text-dim);
-
-  font-size:11.5px !important;
-  font-weight:700;
-  line-height:1;
-
-  cursor:pointer;
   white-space:nowrap;
-  user-select:none;
+  overflow:hidden;
+  text-overflow:ellipsis;
 
-  transition:
-    background .15s,
-    border-color .15s,
-    color .15s;
+  max-width:100%;
+  text-align:center;
 }
 
-/* 완료 / 미완료 체크박스 공통 */
-.ml-status-check input{
-  appearance:none !important;
-  -webkit-appearance:none !important;
-
-  width:15px !important;
-  height:15px !important;
-  min-width:15px;
-  flex:0 0 15px;
-
-  margin:0 !important;
-  padding:0 !important;
-
-  position:relative;
-
-  border:1.5px solid #AEB8C5;
-  border-radius:4px;
-  background:#fff;
-
-  cursor:pointer;
-}
-
-/* 체크 표시 */
-.ml-status-check input:checked::after{
-  content:'';
-
-  position:absolute;
-  left:4px;
-  top:1px;
-
-  width:4px;
-  height:8px;
-
-  border:solid #fff;
-  border-width:0 2px 2px 0;
-
-  transform:rotate(45deg);
-}
-
-
-/* =========================
-   완료
-   ========================= */
-
-.ml-done-check:hover{
-  border-color:#A9D8B8;
-  background:#F4FBF6;
-}
-
-.ml-done-check:has(input:checked){
-  color:#2F8F52;
-  border-color:#A9D8B8;
-  background:#EAF7EF;
-}
-
-.ml-done-check input:checked{
-  background:#2F8F52;
-  border-color:#2F8F52;
-}
-
-
-/* =========================
-   미완료
-   ========================= */
-
-.ml-incomplete-check:hover{
-  border-color:#E9B2B2;
-  background:#FFF5F5;
-}
-
-.ml-incomplete-check:has(input:checked){
-  color:#C62828;
-  border-color:#E9B2B2;
-  background:#FDECEC;
-}
-
-.ml-incomplete-check input:checked{
-  background:#D64545;
-  border-color:#D64545;
-}
-.ml-date-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.ml-date-row .date-field{
-  flex:1 1 auto;
-  min-width:0;
-}
-
-.ml-status-checks{
-  flex-shrink:0;
-}
-
-/* =========================================================
-   유지보수 점검 등록 모달 - 최종 레이아웃
-   ========================================================= */
-
-/* 모달 전체 화면 */
-#maintenanceLogModal{
-  position:fixed !important;
-  inset:0 !important;
-
-  width:100vw !important;
-  height:100vh !important;
-
-  display:none !important;
-
-  align-items:center !important;
-  justify-content:center !important;
-
-  padding:20px !important;
-  margin:0 !important;
-
-  background:rgba(15,23,42,.45) !important;
-  backdrop-filter:blur(3px);
-
-  z-index:1200 !important;
-}
-
-/* 열렸을 때 반드시 flex */
-#maintenanceLogModal.open{
-  display:flex !important;
-}
-
-/* 실제 흰색 팝업 카드 */
-#maintenanceLogModal > .modal-card{
-  position:relative !important;
-
-  top:auto !important;
-  right:auto !important;
-  bottom:auto !important;
-  left:auto !important;
-  inset:auto !important;
-
-  transform:none !important;
-
-  display:block !important;
-
-  width:100% !important;
-  max-width:390px !important;
-
-  margin:0 !important;
-  padding:18px !important;
-
-  background:var(--surface) !important;
-
-  border:1px solid var(--border-solid) !important;
-  border-radius:14px !important;
-
-  box-shadow:0 12px 35px rgba(0,0,0,.18) !important;
-}
-
-/* 제목 */
-#maintenanceLogModal .modal-card h2{
-  margin:0 0 14px !important;
-
-  font-size:14px !important;
-  line-height:1.4;
-}
-
-/* 입력 영역 */
-#maintenanceLogModal .form-grid{
-  display:grid !important;
-  grid-template-columns:1fr !important;
-
-  gap:10px !important;
-
-  width:100% !important;
-}
-
-/* 하단 버튼은 반드시 카드 안에서 한 줄 */
-#maintenanceLogModal .modal-card > .modal-actions{
-  position:relative !important;
-
-  top:auto !important;
-  right:auto !important;
-  bottom:auto !important;
-  left:auto !important;
-  inset:auto !important;
-
-  transform:none !important;
-
-  display:flex !important;
-  align-items:center !important;
-  justify-content:flex-end !important;
-
-  width:100% !important;
-
-  margin:16px 0 0 !important;
-  padding:12px 0 0 !important;
-
-  gap:7px !important;
-
-  border-top:1px solid var(--border-solid);
-}
-
-/* 등록 취소만 왼쪽 */
-#maintenanceLogModal .modal-card > .modal-actions #mlDeleteBtn{
-  margin-right:auto !important;
-}
-
-/* 버튼 공통 */
-#maintenanceLogModal .modal-card > .modal-actions .btn{
-  position:relative !important;
-
-  top:auto !important;
-  right:auto !important;
-  bottom:auto !important;
-  left:auto !important;
-
-  transform:none !important;
-
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-
-  flex:0 0 auto !important;
-
-  width:auto !important;
-  min-width:58px !important;
-  height:32px !important;
-
-  margin:0 !important;
-  padding:0 12px !important;
-
-  border-radius:8px !important;
-
-  font-size:11.5px !important;
-}
-
-/* 닫기 */
-#maintenanceLogModal #cancelMlBtn{
-  background:#fff !important;
-  color:var(--text-dim) !important;
-  border-color:var(--border-solid) !important;
-}
-
-/* 저장 */
-#maintenanceLogModal #saveMlBtn{
-  background:var(--accent) !important;
-  color:#fff !important;
-  border-color:var(--accent) !important;
-}
-
-/* 등록 취소 */
-#maintenanceLogModal #mlDeleteBtn{
-  color:#C62828 !important;
-  background:#fff !important;
-  border-color:#E9B2B2 !important;
+/* 미완료 사유는 붉은 계열 */
+.maint-cell-incomplete .maint-cell-note{
+  color:#C95A5A;
 }
