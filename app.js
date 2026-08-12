@@ -2024,7 +2024,7 @@ document.getElementById('saveMlBtn').onclick = () => {
   const { gid, ym } = maintenanceEditTarget;
   let date = document.getElementById('ml_date').value.trim();
   const manager = document.getElementById('ml_manager').value.trim();
-  const note = document.getElementById('ml_note').value.trim();
+  let note = document.getElementById('ml_note').value.trim();
   
   const done = document.getElementById('ml_done').checked;
   const incomplete = document.getElementById('ml_incomplete').checked;
@@ -2062,8 +2062,6 @@ document.getElementById('saveMlBtn').onclick = () => {
   log.date = date;
   log.manager = manager;
   log.note = note;
-  log.done = incomplete ? false : done;
-
   log.done = uncontracted ? false : done;
   log.incomplete = uncontracted ? false : incomplete;
   log.uncontracted = uncontracted;
