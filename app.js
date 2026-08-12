@@ -485,7 +485,7 @@ function boot(){
 // ---------- date / status ----------
 const GROUP_COMMON_SCALAR_FIELDS = [
   'flag','owner','country','location','check_method','config_mode',
-  'owner_primary','owner_secondary','group_remarks','group_parent','is_parent'
+  'owner_primary','owner_secondary','group_remarks','cust_memo','group_parent','is_parent'
 ];
 function migrateOwnerConsistencyWithinGroups(){
   let changed = false;
@@ -507,7 +507,7 @@ function unescapeStrayHtmlEntities(s){
   if (!/&(amp|lt|gt|quot|#39);/.test(s)) return s;
   return s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'");
 }
-const STRAY_ENTITY_FIELDS = ['owner','country','location','check_method','config_mode','owner_primary','owner_secondary','group_remarks','remarks','sku','sn'];
+const STRAY_ENTITY_FIELDS = ['owner','country','location','check_method','config_mode','owner_primary','owner_secondary','group_remarks','cust_memo','remarks','sku','sn'];
 function migrateStrayHtmlEntities(){
   let changed = false;
   records.forEach(r => {
@@ -750,6 +750,7 @@ function groupMeta(items){
     owner_primary: items.map(i=>i.owner_primary).find(Boolean) || '',
     owner_secondary: items.map(i=>i.owner_secondary).find(Boolean) || '',
     cust_contacts: getGroupCustContacts(items),
+    cust_memo: items.map(i=>i.cust_memo).find(Boolean) || '',
     group_remarks: items.map(i=>i.group_remarks).find(Boolean) || '',
     group_parent: items.map(i=>i.group_parent).find(Boolean) || '',
     is_parent: items.some(i => !!i.is_parent)
@@ -830,6 +831,7 @@ function enforceParentsHaveNoDirectAssets(){
       rec.owner_primary = meta.owner_primary;
       rec.owner_secondary = meta.owner_secondary;
       rec.cust_contacts = JSON.parse(JSON.stringify(meta.cust_contacts || []));
+      rec.cust_memo = meta.cust_memo || '';
       rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
       rec.group_remarks = meta.group_remarks;
       rec.group_parent = meta.group_parent;
@@ -850,6 +852,7 @@ function enforceParentsHaveNoDirectAssets(){
         owner_primary: parentMetaSnapshot.owner_primary,
         owner_secondary: parentMetaSnapshot.owner_secondary,
         cust_contacts: JSON.parse(JSON.stringify(parentMetaSnapshot.cust_contacts || [])),
+        cust_memo: parentMetaSnapshot.cust_memo || '',
         cust_contact: '', cust_phone: '', cust_email: '',
         group_remarks: parentMetaSnapshot.group_remarks,
         group_parent: parentMetaSnapshot.group_parent,
@@ -2523,6 +2526,15 @@ function openCustContactsModal(gid){
     </div>`;
   }).join('') || `<div class="user-list-empty">등록된 담당자가 없습니다.</div>`;
 
+  const memoView = document.getElementById('custContactsMemoView');
+  if (meta.cust_memo){
+    memoView.innerHTML = `<b>공통 메모</b>${esc(meta.cust_memo)}`;
+    memoView.style.display = '';
+  } else {
+    memoView.innerHTML = '';
+    memoView.style.display = 'none';
+  }
+
   // 고객사 담당자는 다른 자산 세부 정보와 달리 작업 이력 없이 누구나(로그인 시) 바로 수정할 수 있습니다.
   document.getElementById('custContactsEditBtn').style.display = currentUserName() ? '' : 'none';
   setCustContactsEditMode(false);
@@ -2547,6 +2559,7 @@ document.getElementById('custContactsEditBtn').onclick = () => {
     : [{role:'',name:'',org:'',phone:'',email:''}]
   ).map(c=>({...c}));
   renderCceCustRows();
+  document.getElementById('cce_cust_memo').value = meta.cust_memo || '';
   setCustContactsEditMode(true);
 };
 
@@ -2559,9 +2572,11 @@ document.getElementById('custContactsSaveEditBtn').onclick = () => {
   if (!custContactsViewGid) return;
   captureCceCustContactsFromDom();
   const newContacts = cceCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
+  const newMemo = document.getElementById('cce_cust_memo').value.trim();
   records.forEach(r => {
     if (r.group === custContactsViewGid){
       r.cust_contacts = newContacts;
+      r.cust_memo = newMemo;
       r.cust_contact = ''; r.cust_phone = ''; r.cust_email = '';
     }
   });
@@ -3014,6 +3029,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
       mode:'', os_ver:val('f_os'), owner_primary: meta.owner_primary, owner_secondary: meta.owner_secondary,
       check_method: meta.check_method, config_mode: meta.config_mode,
       cust_contacts: JSON.parse(JSON.stringify(meta.cust_contacts || [])),
+      cust_memo: meta.cust_memo || '',
       cust_contact:'', cust_phone:'', cust_email:'',
       group_remarks: meta.group_remarks, group_parent: meta.group_parent, is_parent: meta.is_parent, work_log:[],
       ip_enc: await encryptField(val('f_ip')),
@@ -3567,6 +3583,7 @@ document.getElementById('saveMaBtn').onclick = () => {
     rec.owner_primary = meta.owner_primary;
     rec.owner_secondary = meta.owner_secondary;
     rec.cust_contacts = JSON.parse(JSON.stringify(meta.cust_contacts || []));
+    rec.cust_memo = meta.cust_memo || '';
     rec.cust_contact = ''; rec.cust_phone = ''; rec.cust_email = '';
     rec.group_remarks = meta.group_remarks;
     rec.group_parent = meta.group_parent;
