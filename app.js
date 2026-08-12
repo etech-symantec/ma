@@ -1537,14 +1537,20 @@ function maintenanceUserSummaryData(){
       const m = u.methods.get(method) || { primary: 0, secondary: 0 };
       m.primary += 1;
       u.methods.set(method, m);
-      u.primaryGroups.push(g.meta.owner);
+      u.primaryGroups.push({
+        owner: g.meta.owner,
+        method: g.meta.check_method || '미지정'
+      });
     }
     if (secondary){
       const u = ensure(secondary);
       const m = u.methods.get(method) || { primary: 0, secondary: 0 };
       m.secondary += 1;
       u.methods.set(method, m);
-      u.secondaryGroups.push(g.meta.owner);
+      u.secondaryGroups.push({
+        owner: g.meta.owner,
+        method: g.meta.check_method || '미지정'
+      });
     }
   });
   return users;
@@ -1571,10 +1577,32 @@ function maintenanceUserSummaryHtml(){
       }).join('');
 
     const primaryChips = u.primaryGroups.length
-      ? u.primaryGroups.slice().sort((a,b)=>a.localeCompare(b,'ko')).map(o => `<div class="maint-site-listitem primary">${esc(o)}</div>`).join('')
+      ? u.primaryGroups
+          .slice()
+          .sort((a, b) => a.owner.localeCompare(b.owner, 'ko'))
+          .map(g => `
+            <div class="maint-site-listitem primary">
+              <span class="maint-site-name">${esc(g.owner)}</span>
+              <span class="maint-site-method"
+                    data-method="${esc(g.method)}">
+                ${esc(g.method)}
+              </span>
+            </div>
+          `).join('')
       : `<span class="maint-td-empty">-</span>`;
     const secondaryChips = u.secondaryGroups.length
-      ? u.secondaryGroups.slice().sort((a,b)=>a.localeCompare(b,'ko')).map(o => `<div class="maint-site-listitem secondary">${esc(o)}</div>`).join('')
+      ? u.secondaryGroups
+          .slice()
+          .sort((a, b) => a.owner.localeCompare(b.owner, 'ko'))
+          .map(g => `
+            <div class="maint-site-listitem secondary">
+              <span class="maint-site-name">${esc(g.owner)}</span>
+              <span class="maint-site-method"
+                    data-method="${esc(g.method)}">
+                ${esc(g.method)}
+              </span>
+            </div>
+          `).join('')
       : `<span class="maint-td-empty">-</span>`;
 
     return `
