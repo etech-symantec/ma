@@ -281,10 +281,21 @@
   <div class="modal-card">
     <h2>Support ID 정보 수정</h2>
     <p class="hint" id="sgHint">Support ID / 구축 엔지니어 / 구축 일자는 같은 Support ID를 쓰는 자산 항목들에 공통으로 적용됩니다.</p>
-    <div class="form-grid">
-      <div><label>Support ID</label><input id="sg_support" placeholder="예: 12345678"></div>
-      <div><label>구축 엔지니어</label><input id="sg_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
-      <div><label>구축 일자 (YYYY.MM)</label><input id="sg_build_date" placeholder="2026.07"></div>
+    <div class="sg-edit-fields">
+      <div>
+        <label>Support ID</label>
+        <input id="sg_support" placeholder="예: 12345678">
+      </div>
+    
+      <div>
+        <label>구축 엔지니어</label>
+        <input id="sg_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)">
+      </div>
+    
+      <div>
+        <label>구축 일자 (YYYY.MM)</label>
+        <input id="sg_build_date" placeholder="2026.07">
+      </div>
     </div>
     <div id="sgError" class="cp-error"></div>
     <div class="modal-actions">
