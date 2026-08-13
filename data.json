@@ -2003,7 +2003,7 @@
       "location": "하노이",
       "support_id": "743737",
       "sku": "ISG-CAS-SUB",
-      "sn": "91998989",
+      "sn": "0091998989",
       "entitlement": "🔗",
       "qty": "16",
       "start": "2026.5.18",
@@ -2023,19 +2023,19 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 50,
       "ip_enc": {
-        "iv": "vWa+cK5dn6xp1cjB",
-        "ct": "5kFCKg5hJkHYKp4LiYtaIyxwmu0R3cQ=",
-        "tag": "ZBJYxL3iOcFDjsL4zCYZEQ=="
+        "iv": "UgBrp02Dg5nfj5/t",
+        "ct": "BbXHS4mBR8eY9oKRnxpkkVkcwdZ48Pk=",
+        "tag": "PIK+dtEWr0eaVcE6Fy/2Dg=="
       },
       "id_enc": {
-        "iv": "0WE/MEexbOMlxzhZ",
-        "ct": "yRq7TLU=",
-        "tag": "0/LkoVJqUP+ql/nhf7O4Ag=="
+        "iv": "LaEmu3AYfi9MmT9K",
+        "ct": "9QQkgNI=",
+        "tag": "8J1miemmaGKpNrD1n4pWew=="
       },
       "pw_enc": {
-        "iv": "BtSBUYpho1tFbGYA",
-        "ct": "vEIkno94+Qw=",
-        "tag": "E69tSsFlwUsElIMHYLS3Aw=="
+        "iv": "CS4VQzDeIPXXDq1t",
+        "ct": "6ijrK5cOPRo=",
+        "tag": "DPDprI5JSn+NlBX391BgOQ=="
       },
       "country": "베트남",
       "config_mode": "",
