@@ -384,7 +384,16 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "work_log": [],
+      "work_log": [
+        {
+          "id": 1786603459570,
+          "type": "OS 업그레이드",
+          "date": "2023.02.09",
+          "manager": "윤태리",
+          "note": "7.3.3.3 > 7.3.11.3",
+          "author": "윤태리"
+        }
+      ],
       "enable_pw_enc": null,
       "deleted_work_log": [
         {
