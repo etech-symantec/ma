@@ -1068,13 +1068,13 @@ const SKU_CATEGORIES = [
   { match:'contains', value:'ISG-PR-',   color:'#6D28D9' }, // ISG family
   { match:'contains', value:'ISG-CA',    color:'#5B21B6' }, // ISG family
   { match:'contains', value:'CAS-',      color:'#14B8A6' }, // CAS family
+  { match:'contains', value:'CA-VA',     color:'#14B8A6' }, // CAS family
   { match:'contains', value:'FI-',       color:'#2563EB' }, // network/security family
   { match:'contains', value:'RP-',       color:'#22D3EE' }, // RP/BC family (cyan)
   { match:'contains', value:'BCWF',      color:'#06B6D4' }, // RP/BC family
   { match:'contains', value:'SW-E-TAP',  color:'#0891B2' }, // RP/BC family
   { match:'contains', value:'SSP-S',     color:'#FB7185' }, // SSP/WSS family (rose)
   { match:'contains', value:'WSS',       color:'#F43F5E' }, // SSP/WSS family
-  { match:'contains', value:'CA-VA',     color:'#E11D48' }, // SSP/WSS family
   // -- exact rules --
   { match:'exact', value:'WEB-PROTECT-SUB', color:'#94A3B8' }, // standalone (slate)
 ];
@@ -1132,7 +1132,7 @@ const SKU_TAG_RULES = [
   { key:'WPS',  test: sku => sku.toUpperCase() === 'WEB-PROTECT-SUB' },
   { key:'CA', test: sku => {
       const s = sku.toUpperCase();
-      return s.startsWith('CAS-') || s.startsWith('ISG-CA');
+      return s.startsWith('CAS-') || s.startsWith('CA-') || s.startsWith('ISG-CA');
   }},
   { key:'MA', test: sku => {
       const s = sku.toUpperCase();
