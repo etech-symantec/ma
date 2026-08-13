@@ -1404,7 +1404,6 @@ document.getElementById('dashboardView').addEventListener('click', (e) => {
 let maintenanceTab = 'entry';
 let maintenanceYear = null;
 let maintenanceEditTarget = null;
-let maintenanceMyFilter = false;
 
 function pad2(n){ return String(n).padStart(2, '0'); }
 function currentYm(){
@@ -1451,10 +1450,16 @@ function maintenanceLogsForGroup(gid){
 
 function maintenanceVisibleGroupList(){
   const groups = maintenanceGroupList();
-  if (!maintenanceMyFilter) return groups;
+  if (!activeMyAssetsFilter){
+    return groups;
+  }
   const me = currentUserName();
-  if (!me) return groups;
-  return groups.filter(g => g.meta.owner_primary === me);
+  if (!me){
+    return groups;
+  }
+  return groups.filter(
+    g => g.meta.owner_primary === me
+  );
 }
 
 function setMaintenanceTab(tab){
@@ -1462,10 +1467,8 @@ function setMaintenanceTab(tab){
   renderMaintenance();
 }
 
-/* 유지보수 점검지 - 담당자별 고유 색상 */
 function maintenanceOwnerColors(name){
   name = String(name || '').trim();
-
   if (!name){
     return {
       fg:'#7A8494',
@@ -1475,22 +1478,15 @@ function maintenanceOwnerColors(name){
     };
   }
 
-  /*
-    이름을 숫자로 변환해서 색상을 결정.
-    같은 이름은 항상 같은 색이 나온다.
-  */
   let hash = 0;
-
   for (let i = 0; i < name.length; i++){
     hash = (
       name.charCodeAt(i) +
       ((hash << 5) - hash)
     ) | 0;
   }
-
   const hue =
     ((hash % 360) + 360) % 360;
-
   return {
     fg:`hsl(${hue} 48% 34%)`,
     bg:`hsl(${hue} 72% 94%)`,
@@ -1901,9 +1897,12 @@ function maintenanceStatsTabHtml(){
 function renderMaintenance(){
   const wrap = document.getElementById('maintenanceView');
   if (!wrap) return;
-  if (!maintenanceYear) maintenanceYear = Math.max(2026, Number(currentYm().split('-')[0]));
-  const me = currentUserName();
-  const myCount = maintenanceGroupList().filter(g => me && g.meta.owner_primary === me).length;
+  if (!maintenanceYear){
+    maintenanceYear = Math.max(
+      2026,
+      Number(currentYm().split('-')[0])
+    );
+  }
   wrap.innerHTML = `
     <div class="maint-sticky-top">
       <div class="maint-header">
@@ -1920,26 +1919,6 @@ function renderMaintenance(){
               <span class="maint-license-notice-icon">🔔</span>
               <span>라이선스 만료 2달 전 공지글</span>
             </a>
-        
-            <button type="button"
-                    class="my-assets-toggle maint-my-toggle ${maintenanceMyFilter?'active':''}"
-                    id="maintMyToggle"
-                    ${!me?'disabled':''}
-                    title="${me?'내가 정 담당자인 법인만 보기':'로그인이 필요합니다.'}">
-              <span class="mat-icon" aria-hidden="true">
-                <svg viewBox="0 0 16 16" width="12" height="12"
-                     fill="none" stroke="currentColor"
-                     stroke-width="1.6"
-                     stroke-linecap="round"
-                     stroke-linejoin="round">
-                  <path d="M2 3h12l-4.5 5.5v4L7 14v-5.5z"/>
-                </svg>
-              </span>
-        
-              <span class="mat-label">내 사업장만</span>
-              <span class="mat-count">${myCount}</span>
-            </button>
-        
           </div>
         </div>
         <p class="maint-sub">등록된 법인들의 월별 점검 이력을 관리합니다 · 2026년 1월부터</p>
@@ -1968,15 +1947,6 @@ function renderMaintenance(){
   if (yearNextBtn){
     yearNextBtn.onclick = () => {
       maintenanceYear += 1;
-      renderMaintenance();
-    };
-  }
-
-  const myToggle = document.getElementById('maintMyToggle');
-  if (myToggle){
-    myToggle.onclick = () => {
-      if (!currentUserName()) return;
-      maintenanceMyFilter = !maintenanceMyFilter;
       renderMaintenance();
     };
   }
@@ -3313,7 +3283,13 @@ function renderFiltersResetSlot(){
 
 document.getElementById('myAssetsToggle').onclick = () => {
   if (!currentUserName()) return;
-  activeMyAssetsFilter = !activeMyAssetsFilter;
+  activeMyAssetsFilter =
+    !activeMyAssetsFilter;
+  updateMyAssetsToggle();
+  if (currentViewMode === 'maintenance'){
+    renderMaintenance();
+    return;
+  }
   render();
 };
 
