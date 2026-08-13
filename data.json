@@ -15966,6 +15966,19 @@
       "uncontracted": false,
       "author": "김상문",
       "updated_at": 1786608607600
+    },
+    {
+      "id": 1786608842759,
+      "group": "sg-001",
+      "ym": "2026-01",
+      "date": "2026.1.28",
+      "manager": "김상문",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1786608842759
     }
   ],
   "auditLogs": [
@@ -17526,6 +17539,22 @@
       "actor_id": "u1786085321715",
       "actor_name": "신호근",
       "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786608842777-b618wr",
+      "ts": 1786608842777,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608842759",
+      "group": "sg-001",
+      "owner": "삼성SDS SDSAP",
+      "label": "2026-01",
+      "sn": "",
+      "summary": "2026년 1월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
     },
     {
       "id": "audit-1786608751141-y840ao",
