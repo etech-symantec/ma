@@ -12178,8 +12178,8 @@
           "manager": "윤태리",
           "note": "23.06.14 윤태리 6.7.4.10 > 7.3.11.3 gpt\n24.04.23 윤태리 7.3.11.3 > 7.3.17.1 최신\n25.02.18 윤태리 7.3.17.1 > 7.3.21.1 mem bug",
           "author": "윤태리",
-          "history_id": 1786608840252,
-          "deleted_at": 1786608840252,
+          "history_id": 1786608913908,
+          "deleted_at": 1786608913908,
           "deleted_by": "윤태리",
           "delete_revert_result": {
             "reverted": 0,
@@ -17562,6 +17562,22 @@
       "actor_role": "마스터"
     },
     {
+      "id": "audit-1786608842777-b618wr",
+      "ts": 1786608842777,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608842759",
+      "group": "sg-001",
+      "owner": "삼성SDS SDSAP",
+      "label": "2026-01",
+      "sn": "",
+      "summary": "2026년 1월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
       "id": "audit-1786608751141-y840ao",
       "ts": 1786608751141,
       "action": "edit",
@@ -17616,22 +17632,6 @@
       "actor_id": "u1786085321715",
       "actor_name": "신호근",
       "actor_role": "마스터"
-    },
-    {
-      "id": "audit-1786608842777-b618wr",
-      "ts": 1786608842777,
-      "action": "add",
-      "target_type": "유지보수 점검",
-      "target_id": "1786608842759",
-      "group": "sg-001",
-      "owner": "삼성SDS SDSAP",
-      "label": "2026-01",
-      "sn": "",
-      "summary": "2026년 1월 유지보수 점검 등록",
-      "changes": [],
-      "actor_id": "u1786596131396",
-      "actor_name": "김상문",
-      "actor_role": "일반사용자"
     },
     {
       "id": "audit-1786608918353-0e869o",
