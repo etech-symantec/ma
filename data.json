@@ -9141,7 +9141,7 @@
       "qty": "2400",
       "start": "2025.12.1",
       "end": "2026.12.31",
-      "remarks": "ISG : 0090997023, ISG Proxy 13~18 사용",
+      "remarks": "ISG : 0090997023\nISG Proxy 13~18 사용",
       "deploy_date": "",
       "deploy_log": "",
       "mode": "",
@@ -9195,7 +9195,8 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "cust_memo": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반\n- 내방상세\n> 방문일시 :\n> 방문목적 : A/S\n> 접견자 : 김지수 프로"
+      "cust_memo": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반\n- 내방상세\n> 방문일시 :\n> 방문목적 : A/S\n> 접견자 : 김지수 프로",
+      "enable_pw_enc": null
     },
     {
       "group": "kr-004",
