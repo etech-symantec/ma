@@ -4702,8 +4702,13 @@ function openWorkLogModal(recIdOrIds){
     assetListEl.style.display = '';
     assetListEl.innerHTML = `<div class="wl-asset-list-label">선택된 자산 (${recs.length}개)</div>` +
       recs.map(r => `<div class="wl-asset-chip">${esc(r.sku || '장비')}${r.sn ? ' · ' + esc(r.sn) : ''}</div>`).join('');
-    if (fieldChangeWrap) fieldChangeWrap.style.display = 'none';
-    if (historyWrap) historyWrap.style.display = 'none';
+    if (fieldChangeWrap){
+      fieldChangeWrap.style.display = '';
+    }
+    
+    if (historyWrap){
+      historyWrap.style.display = 'none';
+    }
   } else {
     const rec = recs[0];
     document.getElementById('wlSubtitle').textContent =
@@ -4719,6 +4724,7 @@ function openWorkLogModal(recIdOrIds){
   document.getElementById('wl_manager').value = currentUserName() || '';
   document.getElementById('wl_note').value = '';
   resetFieldChangeInputs();
+  wlMultiChangeState = {};
   workLogEditId = null;
   setWorkLogFormMode(false);
   renderWorkLogList();
@@ -4741,6 +4747,7 @@ function wlFieldDef(field){ return WL_FIELD_DEFS.find(d=>d.field===field); }
 let wlChangeFields = [];
 let wlChangeValues = {};
 let wlOriginalValues = {};
+let wlMultiChangeState = {};
 
 async function populateAllWlFieldsFromRecord(rec){
   wlChangeFields = WL_FIELD_DEFS.map(d => d.field);
@@ -4757,6 +4764,296 @@ async function populateAllWlFieldsFromRecord(rec){
     wlOriginalValues[def.field] = current;
   }
   renderWlChangeRows();
+}
+
+async function populateMultiWlFields(recs){
+  wlMultiChangeState = {};
+
+  for (const rec of recs){
+    const values = {};
+    const originals = {};
+
+    for (const def of WL_FIELD_DEFS){
+      let current = '';
+
+      if (def.sensitive){
+        current = rec[def.encField]
+          ? await decryptField(rec[def.encField])
+          : '';
+      } else {
+        current = rec[def.field] || '';
+      }
+
+      values[def.field] = current;
+      originals[def.field] = current;
+    }
+
+    wlMultiChangeState[String(rec.id)] = {
+      values,
+      originals
+    };
+  }
+
+  renderMultiWlChangeRows(recs);
+}
+
+function wlMultiChangedCount(recId){
+  const state = wlMultiChangeState[String(recId)];
+  if (!state) return 0;
+
+  return WL_FIELD_DEFS.filter(def =>
+    String(state.values[def.field] ?? '') !==
+    String(state.originals[def.field] ?? '')
+  ).length;
+}
+
+
+function renderMultiWlChangeRows(recs){
+  const wrap =
+    document.getElementById('wl_fieldchange_rows');
+
+  if (!wrap) return;
+
+  const locked =
+    viewOnly || !sessionKey;
+
+  wrap.innerHTML = `
+    <div class="wl-multi-toolbar">
+      <span>
+        선택한 자산별로 변경할 내용을 수정하세요.
+      </span>
+
+      <div>
+        <button
+          type="button"
+          class="wl-multi-toggle-btn"
+          id="wlMultiExpandAll"
+        >
+          전체 펼치기
+        </button>
+
+        <button
+          type="button"
+          class="wl-multi-toggle-btn"
+          id="wlMultiCollapseAll"
+        >
+          전체 접기
+        </button>
+      </div>
+    </div>
+
+    <div class="wl-multi-assets">
+      ${recs.map((rec, index) => {
+
+        const state =
+          wlMultiChangeState[String(rec.id)];
+
+        const changedCount =
+          wlMultiChangedCount(rec.id);
+
+        return `
+          <details
+            class="wl-multi-asset"
+            data-wl-multi-asset="${esc(rec.id)}"
+            ${index === 0 ? 'open' : ''}
+          >
+
+            <summary class="wl-multi-summary">
+
+              <div class="wl-multi-summary-main">
+
+                <strong>
+                  ${esc(rec.sku || '장비')}
+                </strong>
+
+                ${rec.sn ? `
+                  <span>
+                    S/N ${esc(rec.sn)}
+                  </span>
+                ` : ''}
+
+                <span class="wl-multi-owner">
+                  ${esc(rec.owner || '')}
+                </span>
+
+              </div>
+
+              <span
+                class="wl-multi-change-count"
+                data-wl-change-count="${esc(rec.id)}"
+                style="${changedCount ? '' : 'display:none;'}"
+              >
+                ${changedCount}개 변경
+              </span>
+
+            </summary>
+
+
+            <div class="wl-multi-fields">
+
+              ${WL_FIELD_DEFS.map(def => {
+
+                const value =
+                  state?.values?.[def.field] ?? '';
+
+                const original =
+                  state?.originals?.[def.field] ?? '';
+
+                const changed =
+                  String(value) !== String(original);
+
+                const sensitiveLocked =
+                  def.sensitive && locked;
+
+                const input = def.type === 'textarea'
+                  ? `
+                    <textarea
+                      class="wl-multi-input ${changed ? 'is-changed' : ''}"
+                      data-rec-id="${esc(rec.id)}"
+                      data-field="${esc(def.field)}"
+                      ${sensitiveLocked ? 'disabled' : ''}
+                      placeholder="${sensitiveLocked ? '잠금 해제 후 수정 가능' : ''}"
+                    >${esc(value)}</textarea>
+                  `
+                  : `
+                    <input
+                      class="wl-multi-input ${changed ? 'is-changed' : ''}"
+                      data-rec-id="${esc(rec.id)}"
+                      data-field="${esc(def.field)}"
+                      value="${esc(value)}"
+                      ${sensitiveLocked ? 'disabled' : ''}
+                      placeholder="${sensitiveLocked ? '잠금 해제 후 수정 가능' : ''}"
+                    >
+                  `;
+
+                return `
+                  <div
+                    class="wl-multi-field ${changed ? 'is-changed' : ''}"
+                  >
+                    <label>
+                      ${esc(def.label)}
+                      ${def.sensitive ? ' 🔒' : ''}
+                    </label>
+
+                    ${input}
+
+                    <span
+                      class="wl-multi-changed-badge"
+                      style="${changed ? '' : 'display:none;'}"
+                    >
+                      변경됨
+                    </span>
+                  </div>
+                `;
+              }).join('')}
+
+            </div>
+          </details>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+
+  /* 값 변경 */
+  wrap
+    .querySelectorAll('.wl-multi-input')
+    .forEach(el => {
+
+      el.addEventListener('input', () => {
+
+        const recId =
+          String(el.dataset.recId);
+
+        const field =
+          el.dataset.field;
+
+        const state =
+          wlMultiChangeState[recId];
+
+        if (!state) return;
+
+        state.values[field] =
+          el.value;
+
+
+        const changed =
+          String(el.value) !==
+          String(state.originals[field] ?? '');
+
+
+        el.classList.toggle(
+          'is-changed',
+          changed
+        );
+
+
+        const fieldRow =
+          el.closest('.wl-multi-field');
+
+        if (fieldRow){
+
+          fieldRow.classList.toggle(
+            'is-changed',
+            changed
+          );
+
+          const badge =
+            fieldRow.querySelector(
+              '.wl-multi-changed-badge'
+            );
+
+          if (badge){
+            badge.style.display =
+              changed ? '' : 'none';
+          }
+        }
+
+
+        /* 해당 자산 변경 개수 */
+        const count =
+          wlMultiChangedCount(recId);
+
+        const countEl =
+          wrap.querySelector(
+            `[data-wl-change-count="${CSS.escape(recId)}"]`
+          );
+
+        if (countEl){
+          countEl.textContent =
+            `${count}개 변경`;
+
+          countEl.style.display =
+            count ? '' : 'none';
+        }
+      });
+    });
+
+
+  /* 전체 펼치기 */
+  document
+    .getElementById('wlMultiExpandAll')
+    ?.addEventListener('click', () => {
+
+      wrap
+        .querySelectorAll('.wl-multi-asset')
+        .forEach(el => {
+          el.open = true;
+        });
+    });
+
+
+  /* 전체 접기 */
+  document
+    .getElementById('wlMultiCollapseAll')
+    ?.addEventListener('click', () => {
+
+      wrap
+        .querySelectorAll('.wl-multi-asset')
+        .forEach(el => {
+          el.open = false;
+        });
+    });
 }
 
 function getWlSingleRecord(){
@@ -4820,19 +5117,44 @@ function resetFieldChangeInputs(){
 }
 
 document.getElementById('wl_apply_toggle').addEventListener('change', async (e) => {
-  document.getElementById('wl_fieldchange_section').style.display = e.target.checked ? '' : 'none';
-  if (e.target.checked){
-    const rec = getWlSingleRecord();
-    if (rec){
-      await populateAllWlFieldsFromRecord(rec);
+    const checked =
+      e.target.checked;
+    const section =
+      document.getElementById(
+        'wl_fieldchange_section'
+      );
+    section.style.display =
+      checked ? '' : 'none';
+    const targetRecs =
+      records.filter(r =>
+        workLogRecordIds.includes(
+          String(r.id)
+        )
+      );
+    if (!checked){
+      wlChangeFields = [];
+      wlChangeValues = {};
+      wlOriginalValues = {};
+      wlMultiChangeState = {};
+      document.getElementById('wl_fieldchange_rows').innerHTML = '';
+      return;
     }
-  } else {
-    wlChangeFields = [];
-    wlChangeValues = {};
-    wlOriginalValues = {};
-    renderWlChangeRows();
-  }
-});
+
+    if (targetRecs.length > 1){
+      await populateMultiWlFields(
+        targetRecs
+      );
+      return;
+    }
+
+    const rec =
+      targetRecs[0];
+    if (rec){
+      await populateAllWlFieldsFromRecord(
+        rec
+      );
+    }
+  });
 
 async function applyFieldChanges(rec){
   const changes = [];
@@ -4880,6 +5202,90 @@ async function applyFieldChanges(rec){
   }
 
   return { changes, fieldChanges, rollbackChanges };
+}
+
+async function applyMultiFieldChanges(rec){
+  const state =
+    wlMultiChangeState[String(rec.id)];
+
+  const changes = [];
+  const fieldChanges = {};
+  const rollbackChanges = {};
+
+  if (!state){
+    return {
+      changes,
+      fieldChanges,
+      rollbackChanges
+    };
+  }
+
+
+  for (const def of WL_FIELD_DEFS){
+
+    const field = def.field;
+    const before = state.originals[field] ?? '';
+    const after = state.values[field] ?? '';
+    if (String(before) === String(after)){
+      continue;
+    }
+    if (def.sensitive){
+      if (viewOnly || !sessionKey){
+        continue;
+      }
+      const beforeEnc =
+        rec[def.encField]
+          ? JSON.parse(
+              JSON.stringify(
+                rec[def.encField]
+              )
+            )
+          : null;
+      const afterEnc =
+        after.trim()
+          ? await encryptField(after.trim())
+          : null;
+      rec[def.encField] =
+        afterEnc;
+      changes.push({
+        field,
+        label:def.label,
+        sensitive:true
+      });
+      fieldChanges[field] = true;
+      rollbackChanges[field] = {
+        sensitive:true,
+        encField:def.encField,
+        before:beforeEnc,
+        after:afterEnc
+          ? JSON.parse(
+              JSON.stringify(afterEnc)
+            )
+          : null
+      };
+
+    } else {
+      rec[field] = after;
+      changes.push({
+        field,
+        label:def.label,
+        from:before || '—',
+        to:after || '—'
+      });
+      fieldChanges[field] =
+        after;
+      rollbackChanges[field] = {
+        sensitive:false,
+        before,
+        after
+      };
+    }
+  }
+  return {
+    changes,
+    fieldChanges,
+    rollbackChanges
+  };
 }
 
 function fieldChangesSummary(changes){
@@ -5121,19 +5527,109 @@ document.getElementById('wlAddBtn').onclick = async () => {
   if (!date && !manager && !note){ alert('날짜, 담당자, 내용 중 하나 이상을 입력해 주세요.'); return; }
 
   if (targetRecs.length > 1){
-    if (!currentUserId && !confirm('현재 로그인된 사용자가 없어 이 이력의 작성자가 "미상"으로 표시됩니다.\n로그인 없이 계속 저장할까요?\n\n(취소를 누르면 저장하지 않습니다 — 상단의 "👤 로그인"에서 먼저 본인 계정으로 로그인해 주세요.)')){
+    if (
+      !currentUserId &&
+      !confirm(
+        '현재 로그인된 사용자가 없어 이 이력의 작성자가 "미상"으로 표시됩니다.\n' +
+        '로그인 없이 계속 저장할까요?'
+      )
+    ){
       return;
     }
-    const author = currentUserName();
-    targetRecs.forEach((rec, idx) => {
-      if (!Array.isArray(rec.work_log)) rec.work_log = [];
-      rec.work_log.push({ id: Date.now() + idx, type, date, manager, note, author });
-    });
-    document.getElementById('workLogModal').classList.remove('open');
+    const author =
+      currentUserName();
+  
+    const applyChanges =
+      document
+        .getElementById('wl_apply_toggle')
+        .checked;
+    if (applyChanges){
+      const sensitiveTouched =
+        targetRecs.some(rec => {
+          const state =
+            wlMultiChangeState[
+              String(rec.id)
+            ];
+          if (!state) return false;
+          return WL_FIELD_DEFS.some(def => {
+            if (!def.sensitive){
+              return false;
+            }
+            return (
+              String(
+                state.values[def.field] ?? ''
+              ) !==
+              String(
+                state.originals[def.field] ?? ''
+              )
+            );
+          });
+        });
+      if (
+        sensitiveTouched &&
+        (viewOnly || !sessionKey)
+      ){
+        alert(
+          'IP / 계정 ID / 비밀번호를 변경하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'
+        );
+        return;
+      }
+    }
+    let totalChangedAssets = 0;
+    let totalChangedFields = 0;
+    const baseId =
+      Date.now();
+    for (
+      let idx = 0;
+      idx < targetRecs.length;
+      idx++
+    ){
+      const rec =
+        targetRecs[idx];
+      if (!Array.isArray(rec.work_log)){
+        rec.work_log = [];
+      }
+      const entry = {
+        id:baseId + idx,
+        type,
+        date,
+        manager,
+        note,
+        author
+      };
+      if (applyChanges){
+        const result =
+          await applyMultiFieldChanges(rec);
+        if (result.changes.length){
+          entry.field_changes =
+            result.fieldChanges;
+          entry.change_summary =
+            fieldChangesSummary(
+              result.changes
+            );
+          entry.rollback_changes =
+            result.rollbackChanges;
+          totalChangedAssets++;
+          totalChangedFields +=
+            result.changes.length;
+        }
+      }
+      rec.work_log.push(entry);
+    }
+    document
+      .getElementById('workLogModal')
+      .classList.remove('open');
     workLogRecordIds = [];
+    wlMultiChangeState = {};
     selectedAssetIds.clear();
     render();
     scheduleAutoSync();
+    if (applyChanges && totalChangedFields){
+      alert(
+        `작업 이력이 ${targetRecs.length}개 자산에 등록되었습니다.\n\n` +
+        `자산 정보 변경: ${totalChangedAssets}개 자산 · ${totalChangedFields}개 항목`
+      );
+    }
     return;
   }
 
