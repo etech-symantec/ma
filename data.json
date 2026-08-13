@@ -11590,7 +11590,17 @@
       "is_parent": false,
       "build_engineer": "윤태리",
       "build_date": "2024.09",
-      "cust_memo": "※ Setti에서 서울대로 내방 신청(신경운 프로) kw13.shin\n@서울대 후문 출구 앞 위치\n방문유형 : 일반\n방문목적 : 업무협의\n방문상세목적 : 프록시 정기점검 (물리적작업없음)"
+      "cust_memo": "※ Setti에서 서울대로 내방 신청(신경운 프로) kw13.shin\n@서울대 후문 출구 앞 위치\n방문유형 : 일반\n방문목적 : 업무협의\n방문상세목적 : 프록시 정기점검 (물리적작업없음)",
+      "work_log": [
+        {
+          "id": 1786608274981,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.09.29 윤태리 2.4.9.1 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "custom-mso09xln",
@@ -11656,7 +11666,17 @@
       "is_parent": false,
       "build_engineer": "윤태리",
       "build_date": "2024.09",
-      "cust_memo": "※ Setti에서 서울대로 내방 신청(신경운 프로) kw13.shin\n@서울대 후문 출구 앞 위치\n방문유형 : 일반\n방문목적 : 업무협의\n방문상세목적 : 프록시 정기점검 (물리적작업없음)"
+      "cust_memo": "※ Setti에서 서울대로 내방 신청(신경운 프로) kw13.shin\n@서울대 후문 출구 앞 위치\n방문유형 : 일반\n방문목적 : 업무협의\n방문상세목적 : 프록시 정기점검 (물리적작업없음)",
+      "work_log": [
+        {
+          "id": 1786608274982,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.09.29 윤태리 2.4.9.1 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "custom-mso09xln",
@@ -15705,19 +15725,6 @@
       "updated_at": 1786608034893
     },
     {
-      "id": 1786608210046,
-      "group": "custom-msnzlh9m",
-      "ym": "2026-07",
-      "date": "2026.7.29",
-      "manager": "김상문",
-      "note": "",
-      "done": true,
-      "incomplete": false,
-      "uncontracted": false,
-      "author": "김상문",
-      "updated_at": 1786608210046
-    },
-    {
       "id": 1786608040951,
       "group": "custom-1786349440902",
       "ym": "2026-04",
@@ -15781,6 +15788,19 @@
       "uncontracted": false,
       "author": "김상문",
       "updated_at": 1786608087740
+    },
+    {
+      "id": 1786608210046,
+      "group": "custom-msnzlh9m",
+      "ym": "2026-07",
+      "date": "2026.7.29",
+      "manager": "김상문",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1786608210046
     },
     {
       "id": 1786608263455,
@@ -16990,22 +17010,6 @@
       "actor_role": "일반사용자"
     },
     {
-      "id": "audit-1786608210067-u90xob",
-      "ts": 1786608210067,
-      "action": "add",
-      "target_type": "유지보수 점검",
-      "target_id": "1786608210046",
-      "group": "custom-msnzlh9m",
-      "owner": "삼성전자 R&D",
-      "label": "2026-07",
-      "sn": "",
-      "summary": "2026년 7월 유지보수 점검 등록",
-      "changes": [],
-      "actor_id": "u1786596131396",
-      "actor_name": "김상문",
-      "actor_role": "일반사용자"
-    },
-    {
       "id": "audit-1786608101232-nn7zcg",
       "ts": 1786608101232,
       "action": "edit",
@@ -17104,6 +17108,22 @@
       "label": "2026-08",
       "sn": "",
       "summary": "2026년 8월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786608210067-u90xob",
+      "ts": 1786608210067,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608210046",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "2026-07",
+      "sn": "",
+      "summary": "2026년 7월 유지보수 점검 등록",
       "changes": [],
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
