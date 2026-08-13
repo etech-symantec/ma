@@ -6613,13 +6613,20 @@ function renderWorkLogList(){
         setWorkLogFormMode(false);
       }
 
-      renderWorkLogList();
-      render();
-      scheduleAutoSync();
-
-      if (result.skipped > 0){
+      const synced =
+        await syncWorkLogAndWait(
+          '작업 이력 삭제 내용 동기화 중…',
+          () => {
+            renderWorkLogList();
+            render();
+          }
+        );
+      if (
+        synced &&
+        result.skipped > 0
+      ){
         alert(
-          `작업 이력은 삭제되었습니다.\n\n` +
+          `작업 이력이 삭제되었습니다.\n\n` +
           `${result.reverted}개 항목은 변경 전 값으로 원복되었습니다.\n` +
           `${result.skipped}개 항목은 이후 다른 변경이 있어 현재 값을 유지했습니다.`
         );
@@ -6629,6 +6636,8 @@ function renderWorkLogList(){
 }
 
 document.getElementById('wlAddBtn').onclick = async () => {
+  const wasEditingWorkLog =
+    !!workLogEditId;
   const targetRecs = records.filter(r => workLogRecordIds.includes(String(r.id)));
   if (!targetRecs.length) return;
 
@@ -6675,14 +6684,32 @@ document.getElementById('wlAddBtn').onclick = async () => {
       rec.work_log.push(entry);
     }
 
-    document.getElementById('workLogModal').classList.remove('open');
-    workLogRecordIds = [];
-    wlMultiChangeState = {};
-    selectedAssetIds.clear();
-    render();
-    scheduleAutoSync();
-    if (applyChanges && totalChangedFields){
-      alert(`작업 이력이 ${targetRecs.length}개 자산에 등록되었습니다.\n\n자산 정보 변경: ${totalChangedAssets}개 자산 · ${totalChangedFields}개 항목`);
+    const synced =
+      await syncWorkLogAndWait(
+        `선택한 ${targetRecs.length}개 자산 작업 이력 동기화 중…`,
+        () => {
+          document
+            .getElementById(
+              'workLogModal'
+            )
+            .classList
+            .remove('open');
+    
+          workLogRecordIds = [];
+          wlMultiChangeState = {};
+          selectedAssetIds.clear();
+          render();
+        }
+      );
+    if (
+      synced &&
+      applyChanges &&
+      totalChangedFields
+    ){
+      alert(
+        `작업 이력이 ${targetRecs.length}개 자산에 등록되었습니다.\n\n` +
+        `자산 정보 변경: ${totalChangedAssets}개 자산 · ${totalChangedFields}개 항목`
+      );
     }
     return;
   }
@@ -6769,13 +6796,28 @@ document.getElementById('wlAddBtn').onclick = async () => {
     rec.work_log.push(entry);
   }
 
-  document.getElementById('wl_date').value = todayDots();
-  document.getElementById('wl_manager').value = currentUserName() || '';
-  document.getElementById('wl_note').value = '';
-  resetFieldChangeInputs();
-  renderWorkLogList();
-  render();
-  scheduleAutoSync();
+  await syncWorkLogAndWait(
+    wasEditingWorkLog
+      ? '수정된 작업 이력 동기화 중…'
+      : '새 작업 이력 동기화 중…',
+    () => {
+      document
+        .getElementById('wl_date')
+        .value =
+          todayDots();
+      document
+        .getElementById('wl_manager')
+        .value =
+          currentUserName() || '';
+      document
+        .getElementById('wl_note')
+        .value =
+          '';
+      resetFieldChangeInputs();
+      renderWorkLogList();
+      render();
+    }
+  );
 };
 
 document.getElementById('wlCancelEditBtn').onclick = () => {
