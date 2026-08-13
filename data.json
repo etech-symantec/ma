@@ -11920,7 +11920,7 @@
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터",
+      "owner": "삼성 HDC 신라면세점",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
@@ -11947,7 +11947,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "HDC 신라면세점",
+      "group_remarks": "ICT 상암센터",
       "cust_contacts": [
         {
           "role": "운영",
@@ -11957,12 +11957,16 @@
           "email": "eunkyu.ji@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터",
+      "owner": "삼성 HDC 신라면세점",
       "location": "수원",
       "support_id": "2065519",
       "sku": "SG-S200-30-PR-STANDARD",
@@ -11989,7 +11993,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "HDC 신라면세점",
+      "group_remarks": "ICT 상암센터",
       "cust_contacts": [
         {
           "role": "운영",
@@ -11999,12 +12003,16 @@
           "email": "eunkyu.ji@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "dup-441",
       "flag": "",
-      "owner": "삼성 ICT 상암센터",
+      "owner": "삼성 HDC 신라면세점",
       "location": "수원",
       "support_id": "2065519",
       "sku": "IS-AWAA-SWG-250-500-1Y",
@@ -12031,7 +12039,7 @@
       "id_enc": null,
       "pw_enc": null,
       "config_mode": "Explicit",
-      "group_remarks": "HDC 신라면세점",
+      "group_remarks": "ICT 상암센터",
       "cust_contacts": [
         {
           "role": "운영",
@@ -12041,7 +12049,11 @@
           "email": "eunkyu.ji@samsung.com"
         }
       ],
-      "country": "한국"
+      "country": "한국",
+      "group_parent": "",
+      "is_parent": false,
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "group": "kr-025",
