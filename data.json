@@ -418,7 +418,7 @@
       "entitlement": "🔗",
       "qty": "250",
       "start": "2026.1.1",
-      "end": "2026.12.31",
+      "end": "2026.07.31",
       "remarks": "",
       "deploy_date": "",
       "deploy_log": "",
@@ -466,7 +466,27 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "work_log": []
+      "work_log": [
+        {
+          "id": 1786600066485,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "test",
+          "author": "윤태리",
+          "field_changes": {
+            "end": "2026.07.31"
+          },
+          "change_summary": "라이선스 종료일: 2026.12.31 → 2026.07.31",
+          "rollback_changes": {
+            "end": {
+              "sensitive": false,
+              "before": "2026.12.31",
+              "after": "2026.07.31"
+            }
+          }
+        }
+      ]
     },
     {
       "group": "tw-ds",
