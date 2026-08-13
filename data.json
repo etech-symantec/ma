@@ -15345,11 +15345,11 @@
       "date": "2026.2.26",
       "manager": "김상문",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
       "uncontracted": false,
       "author": "김상문",
-      "updated_at": 1786607408673
+      "updated_at": 1786607693052
     },
     {
       "id": 1786607416974,
@@ -15358,11 +15358,11 @@
       "date": "2026.3.24",
       "manager": "김상문",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
       "uncontracted": false,
       "author": "김상문",
-      "updated_at": 1786607416974
+      "updated_at": 1786607697842
     },
     {
       "id": 1786607476199,
@@ -15371,11 +15371,11 @@
       "date": "2026.4.23",
       "manager": "김상문",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
       "uncontracted": false,
       "author": "김상문",
-      "updated_at": 1786607476199
+      "updated_at": 1786607695848
     },
     {
       "id": 1786607485631,
@@ -15384,11 +15384,11 @@
       "date": "2026.5.19",
       "manager": "김상문",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
       "uncontracted": false,
       "author": "김상문",
-      "updated_at": 1786607485631
+      "updated_at": 1786607700466
     },
     {
       "id": 1786607495798,
@@ -15397,11 +15397,11 @@
       "date": "2026.6.15",
       "manager": "김상문",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
       "uncontracted": false,
       "author": "김상문",
-      "updated_at": 1786607495798
+      "updated_at": 1786607702408
     },
     {
       "id": 1786607549747,
@@ -15410,11 +15410,11 @@
       "date": "2026.7.27",
       "manager": "김상문",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
       "uncontracted": false,
       "author": "김상문",
-      "updated_at": 1786607549747
+      "updated_at": 1786607704994
     },
     {
       "id": 1786607660357,
@@ -15423,11 +15423,24 @@
       "date": "2026.1.30",
       "manager": "김상문",
       "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1786607707866
+    },
+    {
+      "id": 1786607731481,
+      "group": "kr-009",
+      "ym": "2026-02",
+      "date": "2026.2.27",
+      "manager": "김상문",
+      "note": "",
       "done": false,
       "incomplete": false,
       "uncontracted": false,
       "author": "김상문",
-      "updated_at": 1786607660357
+      "updated_at": 1786607731481
     }
   ],
   "auditLogs": [
@@ -15696,6 +15709,22 @@
       "actor_role": "마스터"
     },
     {
+      "id": "audit-1786607383469-p0nu2r",
+      "ts": 1786607383469,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607383448",
+      "group": "kr-018",
+      "owner": "삼성 벤처투자",
+      "label": "2026-01",
+      "sn": "",
+      "summary": "2026년 1월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
       "id": "audit-1786603756489-nq9333",
       "ts": 1786603756489,
       "action": "reorder",
@@ -15765,22 +15794,6 @@
       ],
       "actor_id": "u1786519956793",
       "actor_name": "윤태리",
-      "actor_role": "일반사용자"
-    },
-    {
-      "id": "audit-1786607383469-p0nu2r",
-      "ts": 1786607383469,
-      "action": "add",
-      "target_type": "유지보수 점검",
-      "target_id": "1786607383448",
-      "group": "kr-018",
-      "owner": "삼성 벤처투자",
-      "label": "2026-01",
-      "sn": "",
-      "summary": "2026년 1월 유지보수 점검 등록",
-      "changes": [],
-      "actor_id": "u1786596131396",
-      "actor_name": "김상문",
       "actor_role": "일반사용자"
     },
     {
@@ -15914,6 +15927,190 @@
       "label": "2026-01",
       "sn": "",
       "summary": "2026년 1월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607693070-347f1p",
+      "ts": 1786607693070,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607394939",
+      "group": "kr-018",
+      "owner": "삼성 벤처투자",
+      "label": "2026-02",
+      "sn": "",
+      "summary": "2026년 2월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607695861-b8gdck",
+      "ts": 1786607695861,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607476199",
+      "group": "kr-018",
+      "owner": "삼성 벤처투자",
+      "label": "2026-04",
+      "sn": "",
+      "summary": "2026년 4월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607697857-fqyx98",
+      "ts": 1786607697857,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607416974",
+      "group": "kr-018",
+      "owner": "삼성 벤처투자",
+      "label": "2026-03",
+      "sn": "",
+      "summary": "2026년 3월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607700481-e7lv1y",
+      "ts": 1786607700481,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607485631",
+      "group": "kr-018",
+      "owner": "삼성 벤처투자",
+      "label": "2026-05",
+      "sn": "",
+      "summary": "2026년 5월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607702423-h96v0x",
+      "ts": 1786607702423,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607495798",
+      "group": "kr-018",
+      "owner": "삼성 벤처투자",
+      "label": "2026-06",
+      "sn": "",
+      "summary": "2026년 6월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607705008-p7cblc",
+      "ts": 1786607705008,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607549747",
+      "group": "kr-018",
+      "owner": "삼성 벤처투자",
+      "label": "2026-07",
+      "sn": "",
+      "summary": "2026년 7월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607707881-adp5we",
+      "ts": 1786607707881,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607660357",
+      "group": "kr-009",
+      "owner": "삼성 인력개발원(창조관)",
+      "label": "2026-01",
+      "sn": "",
+      "summary": "2026년 1월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607731495-41pkax",
+      "ts": 1786607731495,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607731481",
+      "group": "kr-009",
+      "owner": "삼성 인력개발원(창조관)",
+      "label": "2026-02",
+      "sn": "",
+      "summary": "2026년 2월 유지보수 점검 등록",
       "changes": [],
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
