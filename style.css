@@ -2279,3 +2279,24 @@ td.maint-cell-owner{
 
   padding-left:13px;
 }
+/* Support ID 정보 수정 - 세로 1열 */
+.sg-edit-fields{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-top:14px;
+}
+
+.sg-edit-fields > div{
+  width:100%;
+}
+
+.sg-edit-fields label{
+  display:block;
+  margin-bottom:6px;
+}
+
+.sg-edit-fields input{
+  width:100%;
+  box-sizing:border-box;
+}
