@@ -2561,7 +2561,17 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "work_log": [
+        {
+          "id": 1786607215838,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "23.06.11 윤태리 6.7.5.12 > 7.3.11.3\n23.12.31 윤태리 7.3.11.3 > 7.3.17.1 cpu\n25.02.08 윤태리 7.3.17.1 > 7.3.21.1 mem bug",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "vn-semv",
