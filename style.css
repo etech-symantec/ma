@@ -2788,6 +2788,31 @@ textarea.wl-fc-input.is-changed{
   color:#C62828;
   background:#FDECEC;
   border-color:#E9B2B2;
+
+  cursor:pointer;
+  user-select:none;
+
+  transition:
+    background .15s,
+    border-color .15s,
+    box-shadow .15s,
+    transform .15s;
+}
+
+#githubSyncStatus.error:hover{
+  background:#FBE0E0;
+  border-color:#DB8E8E;
+
+  box-shadow:
+    0 2px 8px rgba(198,40,40,.12);
+
+  transform:
+    translateY(-1px);
+}
+
+#githubSyncStatus.error:active{
+  transform:
+    translateY(0);
 }
 
 /* =========================================================
