@@ -2081,7 +2081,9 @@
           "note": "22.05.21 신호근\n23.06.27 윤태리 6.7.5.14 > 7.3.11.3\n24.06.18 윤태리 7.3.11.3 > 7.3.18.2\n25.04.16 윤태리 7.3.18.2 > 7.3.24.2/24.1 실패\n25.04.16 윤태리 7.3.21.1 베트남 요청\n26.01.04 윤태리 BCWF > BCIS",
           "author": "윤태리"
         }
-      ]
+      ],
+      "asset_parent_id": "44",
+      "last_mutation_id": "data-msrmt3yi-e38d8e39-9376-45ac-8d59-a2d2aa9ca794"
     },
     {
       "group": "vn-sdv-new",
@@ -15046,6 +15048,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-msrmrwo2-414f10f5-4a38-48a9-91c4-b8e2bfd38628"
+    },
+    {
+      "id": "audit-1786632411983-btj3bh",
+      "ts": 1786632411983,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "46",
+      "group": "vn-sdv-new",
+      "owner": "삼성디스플레이 SDV",
+      "label": "ISG-Proxy",
+      "sn": "0032996841",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "44",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-msrmt3yi-e38d8e39-9376-45ac-8d59-a2d2aa9ca794"
     }
   ],
   "syncMutations": [
@@ -15097,6 +15124,11 @@
     {
       "id": "data-msrmrwo2-414f10f5-4a38-48a9-91c4-b8e2bfd38628",
       "ts": 1786632355881,
+      "scope": "data"
+    },
+    {
+      "id": "data-msrmt3yi-e38d8e39-9376-45ac-8d59-a2d2aa9ca794",
+      "ts": 1786632411986,
       "scope": "data"
     }
   ]
