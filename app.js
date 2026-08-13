@@ -136,7 +136,7 @@ function setSyncStatus(state, msg){
   if (state === 'pending'){ el.textContent = '동기화 대기 중…'; el.className = 'sync-status pending'; }
   else if (state === 'syncing'){ el.textContent = '동기화 중…'; el.className = 'sync-status syncing'; }
   else if (state === 'synced'){ el.textContent = '✓ 동기화 완료'; el.className = 'sync-status synced'; }
-  else if (state === 'error'){ el.textContent = '⚠ 동기화 실패: ' + (msg || ''); el.className = 'sync-status error'; }
+  else if (state === 'error'){ el.textContent = '⚠ 동기화 실패: 새로고침 후 다시 해보세요.'; el.className = 'sync-status error'; }
   else if (state === 'offline'){ el.textContent = ''; el.className = 'sync-status'; }
 }
 
