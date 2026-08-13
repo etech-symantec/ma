@@ -804,7 +804,7 @@ const SKU_TAG_RULES = [
       const s = sku.toUpperCase();
   
       return (
-        s.includes('VA') ||
+        s.includes('-VA') ||
         s.includes('-V')
       );
   }},
