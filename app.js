@@ -135,6 +135,7 @@ let autoSyncTimer = null;
 let autoSyncInFlight = false;
 let autoSyncQueued = false;
 let hasUnsyncedChanges = false;
+let lastAutoSyncError = null;
 
 function setSyncStatus(state, msg){
   const el = document.getElementById('githubSyncStatus');
@@ -183,6 +184,426 @@ function scheduleAutoSync(){
     autoSyncTimer = null;
     runAutoSync();
   }, 1200);
+}
+
+/* =========================================================
+   작업 이력 - 저장 완료까지 화면 잠금
+   ========================================================= */
+
+let workLogSyncBusy = false;
+let pendingWorkLogSyncTask = null;
+
+
+function sleepMs(ms){
+  return new Promise(resolve =>
+    setTimeout(resolve, ms)
+  );
+}
+
+
+/* 중앙 동기화 화면을 필요할 때 자동 생성 */
+function ensureWorkLogSyncOverlay(){
+
+  let overlay =
+    document.getElementById(
+      'workLogSyncOverlay'
+    );
+
+  if (overlay){
+    return overlay;
+  }
+
+
+  overlay =
+    document.createElement('div');
+
+  overlay.id =
+    'workLogSyncOverlay';
+
+  overlay.className =
+    'worklog-sync-overlay';
+
+
+  overlay.innerHTML = `
+    <div class="worklog-sync-card">
+
+      <div
+        class="worklog-sync-spinner"
+        id="workLogSyncSpinner"
+      ></div>
+
+      <div
+        class="worklog-sync-title"
+        id="workLogSyncTitle"
+      >
+        GitHub 동기화 중…
+      </div>
+
+      <div
+        class="worklog-sync-message"
+        id="workLogSyncMessage"
+      >
+        저장이 완료될 때까지 기다려 주세요.
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-primary worklog-sync-retry"
+        id="workLogSyncRetryBtn"
+        style="display:none;"
+      >
+        다시 시도
+      </button>
+
+    </div>
+  `;
+
+
+  document.body.appendChild(
+    overlay
+  );
+
+
+  const retryBtn =
+    document.getElementById(
+      'workLogSyncRetryBtn'
+    );
+
+
+  retryBtn.onclick = async () => {
+
+    if (
+      !pendingWorkLogSyncTask ||
+      workLogSyncBusy
+    ){
+      return;
+    }
+
+
+    await syncWorkLogAndWait(
+      pendingWorkLogSyncTask.label,
+      pendingWorkLogSyncTask.onSuccess,
+      true
+    );
+
+  };
+
+
+  return overlay;
+}
+
+
+/*
+  저장 화면 표시
+*/
+function showWorkLogSyncOverlay(label){
+
+  const overlay =
+    ensureWorkLogSyncOverlay();
+
+
+  overlay.classList.remove(
+    'is-success',
+    'is-error'
+  );
+
+  overlay.classList.add(
+    'open'
+  );
+
+
+  document.getElementById(
+    'workLogSyncSpinner'
+  ).style.display = '';
+
+
+  document.getElementById(
+    'workLogSyncTitle'
+  ).textContent =
+    label || 'GitHub 동기화 중…';
+
+
+  document.getElementById(
+    'workLogSyncMessage'
+  ).textContent =
+    'GitHub 저장이 완료될 때까지 다른 작업을 할 수 없습니다.';
+
+
+  document.getElementById(
+    'workLogSyncRetryBtn'
+  ).style.display = 'none';
+}
+
+
+/*
+  자동 동기화 타이머를 기다리지 않고
+  지금 즉시 GitHub 저장
+*/
+async function flushAutoSyncNow(){
+
+  /*
+    감사로그도 현재 변경사항까지 먼저 생성
+  */
+  captureAuditFromStateDiff();
+
+  hasUnsyncedChanges = true;
+
+
+  if (
+    !githubConfig ||
+    !githubToken
+  ){
+    throw new Error(
+      'GitHub 연결 정보가 없습니다.'
+    );
+  }
+
+
+  /*
+    기존 1.2초 자동 저장 예약이 있다면 취소
+  */
+  if (autoSyncTimer !== null){
+
+    clearTimeout(
+      autoSyncTimer
+    );
+
+    autoSyncTimer = null;
+  }
+
+
+  /*
+    이미 다른 저장이 진행 중이라면
+    먼저 끝날 때까지 기다림
+  */
+  while (autoSyncInFlight){
+
+    await sleepMs(80);
+
+  }
+
+
+  autoSyncQueued = false;
+
+  lastAutoSyncError = null;
+
+
+  /*
+    현재 최신 데이터를 즉시 저장
+  */
+  await runAutoSync();
+
+
+  /*
+    runAutoSync() 내부에서 오류를 catch하므로
+    hasUnsyncedChanges로 최종 성공 여부 확인
+  */
+  if (hasUnsyncedChanges){
+
+    throw (
+      lastAutoSyncError ||
+      new Error(
+        'GitHub 동기화가 완료되지 않았습니다.'
+      )
+    );
+
+  }
+
+
+  return true;
+}
+
+
+/*
+  작업 이력 저장 전용
+
+  성공할 때까지 화면 전체 클릭 차단.
+  실패하면 화면은 계속 잠긴 상태이고
+  "다시 시도"만 사용할 수 있음.
+*/
+async function syncWorkLogAndWait(
+  label,
+  onSuccess,
+  isRetry = false
+){
+
+  if (workLogSyncBusy){
+    return false;
+  }
+
+
+  /*
+    최초 호출에서만 성공 후 처리내용 기억
+    → 실패 후 다시 시도해도 동일한 후처리가 실행됨
+  */
+  if (!isRetry){
+
+    pendingWorkLogSyncTask = {
+      label:
+        label ||
+        'GitHub 동기화 중…',
+
+      onSuccess:
+        typeof onSuccess === 'function'
+          ? onSuccess
+          : null
+    };
+
+  }
+
+
+  workLogSyncBusy = true;
+
+
+  showWorkLogSyncOverlay(
+    label
+  );
+
+
+  const overlay =
+    document.getElementById(
+      'workLogSyncOverlay'
+    );
+
+  const spinner =
+    document.getElementById(
+      'workLogSyncSpinner'
+    );
+
+  const title =
+    document.getElementById(
+      'workLogSyncTitle'
+    );
+
+  const message =
+    document.getElementById(
+      'workLogSyncMessage'
+    );
+
+  const retryBtn =
+    document.getElementById(
+      'workLogSyncRetryBtn'
+    );
+
+
+  try{
+
+    await flushAutoSyncNow();
+
+
+    /*
+      GitHub 저장이 성공한 뒤에만
+      모달 닫기/입력 초기화/화면 갱신
+    */
+    const completeTask =
+      pendingWorkLogSyncTask;
+
+
+    pendingWorkLogSyncTask =
+      null;
+
+
+    if (
+      completeTask &&
+      completeTask.onSuccess
+    ){
+
+      try{
+
+        await completeTask.onSuccess();
+
+      }
+      catch(e){
+
+        console.error(
+          '작업 이력 저장 후 화면 갱신 오류:',
+          e
+        );
+
+      }
+
+    }
+
+
+    overlay.classList.add(
+      'is-success'
+    );
+
+
+    spinner.style.display =
+      'none';
+
+
+    title.textContent =
+      '✓ 동기화 완료';
+
+
+    message.textContent =
+      'GitHub에 정상적으로 저장되었습니다.';
+
+
+    retryBtn.style.display =
+      'none';
+
+
+    /*
+      완료 메시지를 잠깐 보여준 뒤 해제
+    */
+    await sleepMs(500);
+
+
+    overlay.classList.remove(
+      'open',
+      'is-success',
+      'is-error'
+    );
+
+
+    return true;
+
+  }
+  catch(e){
+
+    console.error(
+      '작업 이력 GitHub 동기화 실패:',
+      e
+    );
+
+
+    overlay.classList.add(
+      'is-error'
+    );
+
+
+    spinner.style.display =
+      'none';
+
+
+    title.textContent =
+      '⚠ 동기화 실패';
+
+
+    message.textContent =
+      '입력한 내용은 현재 화면에 유지됩니다. GitHub 저장이 완료될 때까지 다시 시도해 주세요.';
+
+
+    retryBtn.style.display =
+      '';
+
+
+    /*
+      overlay는 닫지 않는다.
+      따라서 뒤쪽 화면 클릭은 계속 차단됨.
+    */
+
+    return false;
+
+  }
+  finally{
+
+    workLogSyncBusy = false;
+
+  }
 }
 
 /* =========================================================
@@ -535,11 +956,13 @@ async function runAutoSync(){
     finally{
       suppressAuditCapture = false;
     }
+    lastAutoSyncError = null;
     hasUnsyncedChanges = false;
     setSyncStatus('synced');
   }
   catch(e){
-    hasUnsyncedChanges = true;
+  lastAutoSyncError = e;
+  hasUnsyncedChanges = true;
     console.error(
       '자동 동기화 실패:',
       e
