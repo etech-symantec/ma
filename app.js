@@ -4491,7 +4491,7 @@ function nestAssetUnderParent(source, target){
   */
   if (typeof makeMutationId === 'function'){
     source.last_mutation_id =
-      makeMutationId('asset-parent');
+      createMutationId('asset-parent')
   }
 
   return true;
@@ -4508,7 +4508,7 @@ function detachAssetFromParent(rec){
 
   if (typeof makeMutationId === 'function'){
     rec.last_mutation_id =
-      makeMutationId('asset-detach');
+      createMutationId('asset-detach')
   }
 }
 
@@ -4531,11 +4531,11 @@ function clearAssetDragVisuals(){
     'tr.asset-drop-parent'
   ).forEach(row => {
     row.classList.remove(
-    'asset-dragging',
-    'asset-drop-before',
-    'asset-drop-after',
-    'asset-drop-parent'
-  );
+      'asset-dragging',
+      'asset-drop-before',
+      'asset-drop-after',
+      'asset-drop-parent'
+    );
   });
 }
 function reorderAssetRows(sourceId, targetId, insertAfter){
@@ -4679,12 +4679,6 @@ function bindAssetDragDrop(){
         'asset-drop-after',
         insertAfter
       );
-        if (el !== row) el.classList.remove('asset-drop-before','asset-drop-after');
-      });
-      const rect = row.getBoundingClientRect();
-      const insertAfter = e.clientY > rect.top + rect.height/2;
-      row.classList.toggle('asset-drop-before',!insertAfter);
-      row.classList.toggle('asset-drop-after',insertAfter);
     });
     row.addEventListener('dragleave', e => {
       if (e.relatedTarget && row.contains(e.relatedTarget)) return;
