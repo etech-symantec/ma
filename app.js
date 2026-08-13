@@ -2780,6 +2780,36 @@ function openMaintenanceLogModal(gid, ym){
     log && !log.incomplete
       ? (log.date || todayDots())
       : (log ? '' : todayDots());
+
+  const datePicker =
+    document.getElementById('ml_date_picker');
+  
+  if (datePicker){
+  
+    if (
+      log &&
+      log.date &&
+      !log.incomplete &&
+      !log.uncontracted
+    ){
+      const parts =
+        String(log.date)
+          .split('.')
+          .map(Number);
+  
+      if (
+        parts.length === 3 &&
+        parts.every(Number.isFinite)
+      ){
+        datePicker.value =
+          `${parts[0]}-${String(parts[1]).padStart(2, '0')}-${String(parts[2]).padStart(2, '0')}`;
+      }
+    }
+    else{
+      datePicker.value =
+        `${ym}-01`;
+    }
+  }
   
   document.getElementById('ml_manager').value =
     log
@@ -2787,7 +2817,7 @@ function openMaintenanceLogModal(gid, ym){
       : (currentUserName() || g.meta.owner_primary || '');
   
   document.getElementById('ml_done').checked =
-    log ? !!log.done : false;
+    log ? !!log.done : true;
   
   document.getElementById('ml_incomplete').checked =
     log ? !!log.incomplete : false;
@@ -2858,9 +2888,6 @@ function syncMaintenanceStatusControls(){
     /* 미완료는 날짜만 비움, 비고는 입력 가능 */
     dateEl.value = '';
     datePicker.value = '';
-  }
-  else if (!dateEl.value.trim()){
-    dateEl.value = todayDots();
   }
 }
 
