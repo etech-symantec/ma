@@ -304,12 +304,13 @@
       "ym": "2026-05",
       "date": "",
       "manager": "신호근",
-      "note": "",
+      "note": "ㅁㄴㅇㄹ",
       "done": false,
-      "incomplete": false,
-      "uncontracted": true,
+      "incomplete": true,
+      "uncontracted": false,
       "author": "신호근",
-      "updated_at": 1786515972444
+      "updated_at": 1786628722137,
+      "mutation_id": "ma-msrkm0ux-e859a83f-c623-46f8-baa1-d112050a6778"
     },
     {
       "id": 1786515974140,
@@ -1834,6 +1835,11 @@
     {
       "id": "ma-msrklvym-7da2dcd4-50fa-40d2-9135-d5a206560e8e",
       "ts": 1786628715791,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msrkm0ux-e859a83f-c623-46f8-baa1-d112050a6778",
+      "ts": 1786628722137,
       "scope": "maintenance"
     }
   ]
