@@ -15705,6 +15705,19 @@
       "updated_at": 1786608034893
     },
     {
+      "id": 1786608210046,
+      "group": "custom-msnzlh9m",
+      "ym": "2026-07",
+      "date": "2026.7.29",
+      "manager": "김상문",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1786608210046
+    },
+    {
       "id": 1786608040951,
       "group": "custom-1786349440902",
       "ym": "2026-04",
@@ -16958,6 +16971,22 @@
       "label": "2026-03",
       "sn": "",
       "summary": "2026년 3월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786608210067-u90xob",
+      "ts": 1786608210067,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608210046",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "2026-07",
+      "sn": "",
+      "summary": "2026년 7월 유지보수 점검 등록",
       "changes": [],
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
