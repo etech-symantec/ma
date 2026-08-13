@@ -2315,7 +2315,7 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
                 ${isChild ? '' : managerNamesInlineHtml(meta)}
                 ${isChild ? '' : custContactsSummaryHtml(gid, meta)}
               </div>
-              ${groupRemarksHtml(meta)}
+              ${groupRemarksHtml(gid, meta)}
             </div>
           </div>
           <div class="group-badges">
@@ -2756,9 +2756,68 @@ document.getElementById('custContactsModalCloseBtn').onclick = () => {
   document.getElementById('custContactsModal').classList.remove('open');
 };
 
-function groupRemarksHtml(meta){
-  if (!meta.group_remarks) return '';
-  return `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
+function groupRemarksHtml(gid, meta){
+  const remarks = (meta.group_remarks || '').trim();
+  const canEdit = !!currentUserName();
+
+  /* 로그인하지 않은 경우 비고가 없으면 아무것도 표시하지 않음 */
+  if (!remarks && !canEdit) return '';
+
+  return `
+    <div class="sub group-remarks">
+      <span class="group-remarks-text">
+        ${remarks ? esc(remarks) : '<span class="group-remarks-empty">비고 없음</span>'}
+      </span>
+
+      ${canEdit ? `
+        <button
+          type="button"
+          class="group-remarks-edit-btn"
+          data-group-remarks-edit="${esc(gid)}"
+          title="법인 비고 수정"
+        >✎</button>
+      ` : ''}
+    </div>
+  `;
+}
+
+function editGroupRemarks(gid){
+  if (!currentUserName()){
+    alert('로그인 후 법인 비고를 수정할 수 있습니다.');
+    return;
+  }
+
+  const items = records.filter(
+    r => String(r.group) === String(gid)
+  );
+
+  if (!items.length) return;
+
+  const meta = groupMeta(items);
+
+  const current =
+    meta.group_remarks || '';
+
+  const next = prompt(
+    '법인 비고를 입력해 주세요.\n\n내용을 모두 지우고 확인하면 비고가 삭제됩니다.',
+    current
+  );
+
+  /* 취소 */
+  if (next === null) return;
+
+  const value = next.trim();
+
+  /*
+    법인 공통 정보이므로
+    해당 그룹의 모든 record에 동일하게 적용
+  */
+  items.forEach(rec => {
+    rec.group_remarks = value;
+  });
+
+  render();
+  scheduleAutoSync();
 }
 
 function supportIdTitleHtml(gid, items, isChild, editableSid){
@@ -4529,6 +4588,20 @@ document.addEventListener('click', (e) => {
   if (!dd || !dd.classList.contains('open')) return;
   if (dd.contains(e.target) || e.target.closest('#recentActivityBtn')) return;
   dd.classList.remove('open');
+});
+document.addEventListener('click', e => {
+  const btn = e.target.closest(
+    '[data-group-remarks-edit]'
+  );
+
+  if (!btn) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  editGroupRemarks(
+    btn.dataset.groupRemarksEdit
+  );
 });
 
 // ---------- GitHub sync ----------
