@@ -2163,19 +2163,20 @@ footer.foot{
 #githubSyncStatus{
   order:4;
 
-  /* My 버튼 옆, 프로필 박스 우측 끝에 배치 */
-  flex:0 0 auto;
-  width:auto;
+  /* 위치가 절대 밀리지 않도록 폭 고정 */
+  flex:0 0 84px;
+  width:84px;
+  min-width:84px;
+  max-width:84px;
+
   margin-left:auto;
 
-  display:inline-flex;
+  display:flex;
   align-items:center;
   justify-content:center;
-  gap:4px;
 
-  height:34px;
   min-height:34px;
-  padding:0 9px;
+  padding:5px 5px;
 
   border:1px solid var(--border-solid);
   border-radius:9px;
@@ -2183,12 +2184,33 @@ footer.foot{
   background:#fff;
 
   font-family:var(--mono);
-  font-size:10.5px;
+  font-size:10px;
   font-weight:700;
+  line-height:1.2;
 
-  white-space:nowrap;
+  text-align:center;
+
+  white-space:normal;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+
+  box-sizing:border-box;
+}
+/* 알림 버튼 */
+#profileBox .icon-btn{
+  flex-shrink:0;
 }
 
+/* My 버튼 */
+#myAssetsToggle{
+  flex:0 0 auto;
+  flex-shrink:0;
+}
+
+/* 저장 상태 */
+#githubSyncStatus{
+  flex-shrink:0;
+}
 /* 저장 대기 */
 #githubSyncStatus.pending{
   color:#9A6B12;
