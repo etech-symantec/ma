@@ -66,7 +66,8 @@
       "build_engineer": "",
       "build_date": "",
       "cust_memo": "",
-      "deleted_work_log": []
+      "deleted_work_log": [],
+      "asset_order": 1
     },
     {
       "group": "jp-sds",
@@ -133,7 +134,8 @@
       "build_date": "",
       "cust_memo": "",
       "work_log": [],
-      "deleted_work_log": []
+      "deleted_work_log": [],
+      "asset_order": 2
     },
     {
       "group": "jp-sds",
@@ -181,7 +183,8 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "cust_memo": ""
+      "cust_memo": "",
+      "asset_order": 3
     },
     {
       "group": "jp-sds",
@@ -246,7 +249,8 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "cust_memo": ""
+      "cust_memo": "",
+      "asset_order": 5
     },
     {
       "group": "jp-sds",
@@ -306,7 +310,8 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "cust_memo": ""
+      "cust_memo": "",
+      "asset_order": 4
     },
     {
       "group": "tw-ds",
@@ -14722,5 +14727,126 @@
       "updated_at": 1786523588420
     }
   ],
-  "auditLogs": []
+  "auditLogs": [
+    {
+      "id": "audit-1786599483737-p4mjlw",
+      "ts": 1786599483737,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "1",
+      "group": "jp-sds",
+      "owner": "삼성SDS 일본",
+      "label": "ASG-S400-30-U5000",
+      "sn": "3917320082",
+      "summary": "자산 순서 변경 · ASG-S400-30-U5000",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "1",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786599483737-e2sufa",
+      "ts": 1786599483737,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "2",
+      "group": "jp-sds",
+      "owner": "삼성SDS 일본",
+      "label": "ASG-S400-30-U5000",
+      "sn": "3917320085",
+      "summary": "자산 순서 변경 · ASG-S400-30-U5000",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "2",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786599483737-7i3zkm",
+      "ts": 1786599483737,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "3",
+      "group": "jp-sds",
+      "owner": "삼성SDS 일본",
+      "label": "IS-SWSA-SWG-1000-2500-1Y",
+      "sn": "50648324-4-1",
+      "summary": "자산 순서 변경 · IS-SWSA-SWG-1000-2500-1Y",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "3",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786599483737-5snjmo",
+      "ts": 1786599483737,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "4",
+      "group": "jp-sds",
+      "owner": "삼성SDS 일본",
+      "label": "MC-S400-20-100",
+      "sn": "5017320101",
+      "summary": "자산 순서 변경 · MC-S400-20-100",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "5",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786599483737-qg78sk",
+      "ts": 1786599483737,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "5",
+      "group": "jp-sds",
+      "owner": "삼성SDS 일본",
+      "label": "RP-V100-1Y",
+      "sn": "26482591",
+      "summary": "자산 순서 변경 · RP-V100-1Y",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "4",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    }
+  ]
 }
