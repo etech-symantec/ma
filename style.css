@@ -2810,3 +2810,99 @@ table td.col-license .lic-dates{
 table td.col-license .lic-bar{
   width:100%;
 }
+/* =========================================================
+   작업 이력 히스토리 - 마스터 선택 삭제
+   ========================================================= */
+
+.wh-admin-actions{
+  margin-left:auto;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  white-space:nowrap;
+}
+
+
+.wh-select-all{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+
+  color:var(--text-muted);
+  font-size:10.5px;
+
+  cursor:pointer;
+  user-select:none;
+}
+
+
+.wh-select-all input,
+.wh-history-check input{
+  width:14px;
+  height:14px;
+  margin:0;
+
+  accent-color:var(--accent);
+  cursor:pointer;
+}
+
+
+.wh-selected-count{
+  min-width:48px;
+
+  color:var(--text-faint);
+
+  font-family:var(--mono);
+  font-size:10px;
+  text-align:center;
+}
+
+
+/* 선택 삭제 버튼 */
+.wh-delete-selected{
+  height:30px;
+  padding:0 11px;
+
+  border-color:#E4B3B3;
+
+  background:#FFF6F6;
+  color:#B42318;
+
+  font-size:10.5px;
+  font-weight:700;
+}
+
+
+.wh-delete-selected:hover:not(:disabled){
+  background:#FDECEC;
+  border-color:#D88D8D;
+}
+
+
+.wh-delete-selected:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+}
+
+
+/* 개별 작업 이력 체크박스 */
+.wh-history-check{
+  flex:0 0 auto;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-right:3px;
+
+  cursor:pointer;
+}
+
+
+/* 선택된 이력을 약하게 강조 */
+.wh-item:has(.wh-history-checkbox:checked){
+  border-color:#E0B1B1;
+  background:#FFF9F9;
+}
