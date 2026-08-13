@@ -324,7 +324,7 @@
       "entitlement": "🔗",
       "qty": "1",
       "start": "2026.1.1",
-      "end": "2026.7.3",
+      "end": "2026.12.31",
       "remarks": "25.03.03 disk failing\nRMA 승인 25.03.05",
       "deploy_date": "",
       "deploy_log": "23.02.09 윤태리 7.3.3.3>7.3.11.3 / 23.11.11 윤태리 7.3.11.3>7.3.16.2 (no internet) / 25.06.07 윤태리 7.3.16.2>7.3.21.1 (mem bug)",
@@ -384,7 +384,9 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "work_log": [
+      "work_log": [],
+      "enable_pw_enc": null,
+      "deleted_work_log": [
         {
           "id": 1786599990734,
           "type": "라이선스 갱신",
@@ -402,10 +404,16 @@
               "before": "2026.12.31",
               "after": "2026.7.3"
             }
+          },
+          "history_id": 1786600120777,
+          "deleted_at": 1786600120777,
+          "deleted_by": "윤태리",
+          "delete_revert_result": {
+            "reverted": 1,
+            "skipped": 0
           }
         }
-      ],
-      "enable_pw_enc": null
+      ]
     },
     {
       "group": "tw-ds",
