@@ -2105,7 +2105,7 @@
       "location": "하노이",
       "support_id": "743737",
       "sku": "ISG-MA-SUB",
-      "sn": "91999230",
+      "sn": "0091999230",
       "entitlement": "🔗",
       "qty": "32",
       "start": "2026.5.18",
@@ -2125,19 +2125,19 @@
       "tag_note": "베트남 디스플레이 (SDV)",
       "id": 52,
       "ip_enc": {
-        "iv": "2hl88djrHPlMYvJP",
-        "ct": "2qjP/LCDSIezaYc0MLIVWUoLPxJRLrs=",
-        "tag": "kj9eKIqU67BQ6B9OCmQ02A=="
+        "iv": "Nx43/iryW8KqBmtj",
+        "ct": "GDqbXU/W/jE2p/q9Uswg3P6EjnwHuQw=",
+        "tag": "pJgGTZ45WuToNFYGA9q+aQ=="
       },
       "id_enc": {
-        "iv": "3wMiPMNv7fYzSq4J",
-        "ct": "l+TeYaU=",
-        "tag": "mECO0OPM/qv/uDcmmWGBPQ=="
+        "iv": "UPdMOIFleuPJP55L",
+        "ct": "lJZa2Cg=",
+        "tag": "I7wL7kBDDbzdwKA//rcYnw=="
       },
       "pw_enc": {
-        "iv": "bt8jNHDHQM0ARuX8",
-        "ct": "E9NVPGiunYA=",
-        "tag": "p8QNrkQ/087dcK9NKVIBJg=="
+        "iv": "97x36kqAB8F8pbXx",
+        "ct": "Ev6K6bdseOQ=",
+        "tag": "WTLzqPdSczCUZp98KKigrQ=="
       },
       "country": "베트남",
       "config_mode": "",
