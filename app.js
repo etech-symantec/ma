@@ -814,6 +814,26 @@ function groupDescendantIds(gid){
   return result;
 }
 
+function groupDescendantConfigModes(gid){
+  const modes = [];
+  const seen = new Set();
+
+  groupDescendantIds(gid).forEach(childGid => {
+    const childItems = records.filter(r => r.group === childGid);
+    if (!childItems.length) return;
+
+    const childMeta = groupMeta(childItems);
+    const mode = (childMeta.config_mode || '').trim();
+
+    if (mode && !seen.has(mode)){
+      seen.add(mode);
+      modes.push(mode);
+    }
+  });
+
+  return modes.join(', ');
+}
+
 function groupTotalItemCount(gid){
   const ids = new Set([gid, ...groupDescendantIds(gid)]);
   return records.filter(r => ids.has(r.group) && !r.is_group_shell).length;
@@ -2190,6 +2210,9 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
   const isParentGroup = groupChildrenOf(gid).length > 0;
   const isParentDisplay = isParentGroup || meta.is_parent;
   const displayItemCount = isParentDisplay ? groupTotalItemCount(gid) : realItems.length;
+  const displayConfigMode = isParentDisplay
+    ? groupDescendantConfigModes(gid)
+    : meta.config_mode;
 
   const subgroupsHtml = subGroups.map(sg => `
           <div class="subgroup-block">
@@ -2229,7 +2252,10 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
                 <span class="meta-chip meta-chip-country"><span class="meta-label">국가</span><span class="meta-value">${esc(meta.country)||'—'}</span></span>
                 <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
                 ${isChild ? '' : `<span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>`}
-                ${isParentDisplay ? '' : `<span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(meta.config_mode)||'—'}</span></span>`}
+                <span class="meta-chip meta-chip-config">
+                  <span class="meta-label">구성방식</span>
+                  <span class="meta-value">${esc(displayConfigMode)||'—'}</span>
+                </span>
                 <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${displayItemCount}건</span></span>
                 ${soloSubGroup ? buildEngineerInlineHtml(soloSubGroup.meta) : ''}
                 ${isChild ? '' : managerNamesInlineHtml(meta)}
