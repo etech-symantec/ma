@@ -408,6 +408,14 @@
           "manager": "윤태리",
           "note": "7.3.16.2 > 7.3.21.1 #mem bug",
           "author": "윤태리"
+        },
+        {
+          "id": 1786604652644,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "신호근",
+          "note": "asdfasdfasdfadsf",
+          "author": "신호근"
         }
       ],
       "enable_pw_enc": null,
