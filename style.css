@@ -2869,46 +2869,56 @@ table td.col-license .lic-bar{
 /* =========================================================
    자산 순서 드래그 앤 드롭
    ========================================================= */
+/* 체크박스 + 드래그 핸들 */
+.asset-select-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
 
+  width:max-content;
+  margin:0 auto;
+}
+
+.asset-select-wrap .asset-select-cb{
+  flex:0 0 auto;
+  margin:0;
+}
+
+
+/* 자산 순서 드래그 핸들 */
 .asset-drag-handle{
+  flex:0 0 auto;
+
   display:inline-flex;
   align-items:center;
   justify-content:center;
 
-  width:18px;
-  height:24px;
+  width:12px;
+  height:20px;
 
-  margin-right:5px;
+  margin:0;
 
   color:var(--text-faint);
 
-  font-size:14px;
+  font-size:15px;
   font-weight:700;
   line-height:1;
 
   cursor:grab;
   user-select:none;
 
-  vertical-align:middle;
-
-  border-radius:5px;
-
-  transition:
-    background .12s,
-    color .12s;
+  border-radius:4px;
 }
-
 
 .asset-drag-handle:hover{
   color:var(--accent);
   background:#EAF5FB;
 }
 
-
 .asset-drag-handle:active{
   cursor:grabbing;
 }
-
 
 /* 현재 들고 있는 자산 */
 tbody tr.asset-dragging{
