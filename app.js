@@ -83,7 +83,9 @@ let ENC_STORE = null;
 let githubConfig = null;
 let githubToken = null;
 let githubSha = null;
+let maintenanceGithubSha = null;
 let lastSyncedState = null;
+let lastSyncedMaintenanceState = null;
 
 function cloneSyncState(v){
   return v == null
@@ -95,11 +97,26 @@ function currentSyncState(){
   return {
     salt: ENC_STORE.salt,
     iterations: ENC_STORE.iterations,
-
-    records: cloneSyncState(records || []),
-    users: cloneSyncState(users || []),
-    maintenanceLogs: cloneSyncState(maintenanceLogs || []),
-    auditLogs: cloneSyncState(auditLogs || [])
+    records:
+      cloneSyncState(
+        records || []
+      ),
+    users:
+      cloneSyncState(
+        users || []
+      ),
+    auditLogs:
+      cloneSyncState(
+        auditLogs || []
+      )
+  };
+}
+function currentMaintenanceState(){
+  return {
+    maintenanceLogs:
+      cloneSyncState(
+        maintenanceLogs || []
+      )
   };
 }
 
@@ -109,6 +126,14 @@ const DEFAULT_GITHUB_CONFIG = {
   branch: 'main',
   path: 'data.json'
 };
+
+function maintenanceGithubConfigOf(cfg){
+  return {
+    ...cfg,
+    path:'ma.json'
+  };
+
+}
 
 const _ok = 'etechMA26-restricted'; // xor key — also just visible text, not a secret
 const _ot = [
@@ -828,15 +853,6 @@ function mergeSyncStates(
         remote.users || [],
         u => u.id
       ),
-    maintenanceLogs:
-      mergeStateArray(
-        base.maintenanceLogs || [],
-        local.maintenanceLogs || [],
-        remote.maintenanceLogs || [],
-        m =>
-          m.id ||
-          `${m.group}|${m.ym}`
-      ),
     auditLogs:
       mergeStateArray(
         base.auditLogs || [],
@@ -846,127 +862,327 @@ function mergeSyncStates(
       )
   };
 }
+/* =========================================================
+   ma.json - 유지보수 점검 전용 3-way merge
+   ========================================================= */
+function mergeMaintenanceStates(
+  base,
+  local,
+  remote
+){
+  base = base || {
+    maintenanceLogs:[]
+  };
+  return {
+    maintenanceLogs:
+      mergeStateArray(
+        base.maintenanceLogs || [],
+        local.maintenanceLogs || [],
+        remote.maintenanceLogs || [],
+        m =>
+          m.id ||
+          `${m.group}|${m.ym}`
+      )
+  };
+}
 
-async function runAutoSync(){
-  if (!githubConfig || !githubToken){
-    return;
-  }
-  if (autoSyncInFlight){
-    autoSyncQueued = true;
-    return;
-  }
-  autoSyncInFlight = true;
-  autoSyncQueued = false;
-  setSyncStatus('syncing');
-
-  try{
-    const localState =
-      currentSyncState();
-
-    let mergedState = null;
-    let savedSha = null;
-    const MAX_RETRY = 5;
-
-    for (
-      let attempt = 1;
-      attempt <= MAX_RETRY;
-      attempt++
-    ){
-      const {
-        json: remoteState,
-        sha: remoteSha
-      } =
+/* =========================================================
+   GitHub JSON 파일 1개를
+   최신본 GET → 3-way merge → PUT 하는 공통 함수
+   ========================================================= */
+async function syncGithubJsonFile({
+  cfg,
+  baseState,
+  localState,
+  mergeFn,
+  emptyState,
+  message
+}){
+  const MAX_RETRY = 5;
+  for (
+    let attempt = 1;
+    attempt <= MAX_RETRY;
+    attempt++
+  ){
+    let remoteState;
+    let remoteSha;
+    try{
+      const result =
         await githubApiGet(
-          githubConfig,
+          cfg,
           githubToken
         );
-      mergedState =
-        mergeSyncStates(
-          lastSyncedState,
-          localState,
-          remoteState
-        );
-      try{
-        savedSha =
-          await githubApiPut(
-            githubConfig,
-            githubToken,
-            mergedState,
-            remoteSha,
-
-            '자산 데이터 자동 병합 동기화 - ' +
-            new Date().toLocaleString('ko-KR')
+      remoteState =
+        result.json;
+      remoteSha =
+        result.sha;
+    }
+    catch(e){
+      if (e.notFound){
+        remoteState =
+          cloneSyncState(
+            emptyState
           );
-        break;
+        remoteSha =
+          null;
       }
-      catch(e){
-        if (
-          (
-            e.status === 409 ||
-            e.status === 422
-          ) &&
-          attempt < MAX_RETRY
-        ){
-          console.warn(
-            `GitHub 동시 저장 충돌 - 자동 재병합 ${attempt}/${MAX_RETRY}`
-          );
-          await new Promise(
-            resolve =>
-              setTimeout(
-                resolve,
-                250 * attempt
-              )
-          );
-          continue;
-        }
+      else{
         throw e;
       }
     }
-    if (!savedSha || !mergedState){
-      throw new Error(
-        'GitHub 동시 저장 충돌을 자동으로 해결하지 못했습니다.'
+    const mergedState =
+      mergeFn(
+        baseState,
+        localState,
+        remoteState
       );
-    }
-    suppressAuditCapture = true;
     try{
+      const savedSha =
+        await githubApiPut(
+          cfg,
+          githubToken,
+          mergedState,
+          remoteSha,
+          message
+        );
+      return {
+        mergedState,
+        savedSha
+      };
+    }
+    catch(e){
+      if (
+        (
+          e.status === 409 ||
+          e.status === 422
+        ) &&
+        attempt < MAX_RETRY
+      ){
+        console.warn(
+          `${cfg.path} 동시 저장 충돌 - ` +
+          `자동 재병합 ${attempt}/${MAX_RETRY}`
+        );
+        await sleepMs(
+          250 * attempt
+        );
+        continue;
+      }
+      throw e;
+    }
+  }
+  throw new Error(
+    `${cfg.path} 동시 저장 충돌을 해결하지 못했습니다.`
+  );
+}
+
+async function runAutoSync(){
+
+  if (
+    !githubConfig ||
+    !githubToken
+  ){
+    return;
+  }
+
+
+  if (autoSyncInFlight){
+
+    autoSyncQueued = true;
+
+    return;
+  }
+
+
+  autoSyncInFlight = true;
+  autoSyncQueued = false;
+
+  setSyncStatus(
+    'syncing'
+  );
+
+
+  try{
+
+    /*
+      현재 브라우저의 LOCAL 데이터
+    */
+    const localDataState =
+      currentSyncState();
+
+
+    const localMaintenanceState =
+      currentMaintenanceState();
+
+
+    /*
+      ========================================
+      1. data.json
+      법인 / 자산 / 사용자 / 감사로그
+      ========================================
+    */
+
+    const dataResult =
+      await syncGithubJsonFile({
+
+        cfg:
+          githubConfig,
+
+        baseState:
+          lastSyncedState,
+
+        localState:
+          localDataState,
+
+        mergeFn:
+          mergeSyncStates,
+
+        emptyState:{
+          salt:
+            ENC_STORE.salt,
+
+          iterations:
+            ENC_STORE.iterations,
+
+          records:[],
+          users:[],
+          auditLogs:[]
+        },
+
+        message:
+          '법인/자산 데이터 자동 병합 동기화 - ' +
+          new Date().toLocaleString('ko-KR')
+
+      });
+
+
+    /*
+      ========================================
+      2. ma.json
+      유지보수 점검 기록
+      ========================================
+    */
+
+    const maConfig =
+      maintenanceGithubConfigOf(
+        githubConfig
+      );
+
+
+    const maResult =
+      await syncGithubJsonFile({
+
+        cfg:
+          maConfig,
+
+        baseState:
+          lastSyncedMaintenanceState,
+
+        localState:
+          localMaintenanceState,
+
+        mergeFn:
+          mergeMaintenanceStates,
+
+        emptyState:{
+          maintenanceLogs:[]
+        },
+
+        message:
+          '유지보수 점검 데이터 자동 병합 동기화 - ' +
+          new Date().toLocaleString('ko-KR')
+
+      });
+
+
+    /*
+      두 파일이 모두 정상 저장된 뒤
+      현재 브라우저 데이터도 병합 결과로 갱신
+    */
+
+    suppressAuditCapture = true;
+
+
+    try{
+
       records =
         cloneSyncState(
-          mergedState.records || []
+          dataResult.mergedState.records || []
         );
+
+
       users =
         cloneSyncState(
-          mergedState.users || []
+          dataResult.mergedState.users || []
         );
-      maintenanceLogs =
-        cloneSyncState(
-          mergedState.maintenanceLogs || []
-        );
+
+
       auditLogs =
         cloneSyncState(
-          mergedState.auditLogs || []
+          dataResult.mergedState.auditLogs || []
         );
+
+
+      maintenanceLogs =
+        cloneSyncState(
+          maResult.mergedState.maintenanceLogs || []
+        );
+
+
+      /* 각 파일별 최신 SHA */
       githubSha =
-        savedSha;
+        dataResult.savedSha;
+
+
+      maintenanceGithubSha =
+        maResult.savedSha;
+
+
+      /* 각 파일별 새로운 BASE */
       lastSyncedState =
         cloneSyncState(
-          mergedState
+          dataResult.mergedState
         );
+
+
+      lastSyncedMaintenanceState =
+        cloneSyncState(
+          maResult.mergedState
+        );
+
+
       refreshAuditSnapshot();
+
     }
     finally{
+
       suppressAuditCapture = false;
+
     }
+
+
     lastAutoSyncError = null;
+
     hasUnsyncedChanges = false;
-    setSyncStatus('synced');
+
+
+    setSyncStatus(
+      'synced'
+    );
+
   }
   catch(e){
-  lastAutoSyncError = e;
-  hasUnsyncedChanges = true;
+
+    lastAutoSyncError = e;
+
+    hasUnsyncedChanges = true;
+
+
     console.error(
       '자동 동기화 실패:',
       e
     );
+
+
     setSyncStatus(
       'error',
       e.message
@@ -990,38 +1206,326 @@ window.addEventListener('beforeunload', (e) => {
 githubConfig = loadGithubConfigFromStorage() || DEFAULT_GITHUB_CONFIG;
 
 const dataReady = (async () => {
-  const cfg = githubConfig;
-  const token = loadRememberedToken() || _decodeAuth();
-  if (cfg && cfg.repo && token){
+
+  const cfg =
+    githubConfig;
+
+
+  const token =
+    loadRememberedToken() ||
+    _decodeAuth();
+
+
+  /*
+    ========================================
+    GitHub 사용 가능
+    ========================================
+  */
+  if (
+    cfg &&
+    cfg.repo &&
+    token
+  ){
+
     try{
-      const { json, sha } = await githubApiGet(cfg, token);
-      ENC_STORE = json;
-      records = ENC_STORE.records.map(r => ({...r}));
-      users = (ENC_STORE.users || []).map(u => ({...u}));
-      maintenanceLogs = (ENC_STORE.maintenanceLogs || []).map(m => ({...m}));
-      auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
-      githubConfig = cfg;
-      githubToken = token;
-      githubSha = sha;
-      
-      lastSyncedState = currentSyncState();
-      
+
+      /*
+        1. data.json
+      */
+      const {
+        json,
+        sha
+      } =
+        await githubApiGet(
+          cfg,
+          token
+        );
+
+
+      ENC_STORE =
+        json;
+
+
+      records =
+        (ENC_STORE.records || [])
+          .map(r => ({...r}));
+
+
+      users =
+        (ENC_STORE.users || [])
+          .map(u => ({...u}));
+
+
+      auditLogs =
+        (ENC_STORE.auditLogs || [])
+          .map(a => ({...a}));
+
+
+      /*
+        기존 버전 data.json에 있던
+        maintenanceLogs
+
+        ma.json이 아직 없을 때의
+        자동 마이그레이션 소스로만 사용한다.
+      */
+      const legacyMaintenanceLogs =
+        (ENC_STORE.maintenanceLogs || [])
+          .map(m => ({...m}));
+
+
+      githubConfig =
+        cfg;
+
+
+      githubToken =
+        token;
+
+
+      githubSha =
+        sha;
+
+
+      /*
+        data.json BASE
+      */
+      lastSyncedState =
+        currentSyncState();
+
+
+      /*
+        ======================================
+        2. ma.json 읽기
+        ======================================
+      */
+
+      const maConfig =
+        maintenanceGithubConfigOf(
+          cfg
+        );
+
+
+      try{
+
+        const {
+          json:maJson,
+          sha:maSha
+        } =
+          await githubApiGet(
+            maConfig,
+            token
+          );
+
+
+        maintenanceLogs =
+          (maJson.maintenanceLogs || [])
+            .map(m => ({...m}));
+
+
+        maintenanceGithubSha =
+          maSha;
+
+
+        lastSyncedMaintenanceState =
+          currentMaintenanceState();
+
+      }
+      catch(maErr){
+
+        /*
+          ma.json이 아직 없는 경우
+
+          기존 data.json의 maintenanceLogs를
+          메모리로 가져온 뒤,
+          다음 저장 때 ma.json을 자동 생성한다.
+        */
+        if (maErr.notFound){
+
+          console.info(
+            'ma.json이 없어 기존 data.json의 ' +
+            '유지보수 점검 기록을 마이그레이션합니다.'
+          );
+
+
+          maintenanceLogs =
+            legacyMaintenanceLogs;
+
+
+          maintenanceGithubSha =
+            null;
+
+
+          /*
+            ★ 중요
+            원격 ma.json은 비어 있는 상태가 BASE.
+
+            여기서 currentMaintenanceState()를
+            BASE로 잡으면 기존 로그가 삭제로 판단될 수 있음.
+          */
+          lastSyncedMaintenanceState = {
+            maintenanceLogs:[]
+          };
+
+        }
+        else{
+
+          /*
+            ma.json 조회 오류 시에도
+            기존 data.json 안 기록을 임시로 사용
+          */
+          console.warn(
+            'ma.json 불러오기 실패. ' +
+            '기존 data.json 유지보수 기록을 사용합니다:',
+            maErr
+          );
+
+
+          maintenanceLogs =
+            legacyMaintenanceLogs;
+
+
+          maintenanceGithubSha =
+            null;
+
+
+          lastSyncedMaintenanceState = {
+            maintenanceLogs:[]
+          };
+
+        }
+
+      }
+
+
       return;
-    }catch(e){
-      console.warn('GitHub 자동 불러오기 실패, 로컬 data.json으로 대체합니다:', e);
+
     }
+    catch(e){
+
+      console.warn(
+        'GitHub 자동 불러오기 실패, ' +
+        '로컬 JSON으로 대체합니다:',
+        e
+      );
+
+    }
+
   }
-  const r = await fetch('data.json');
-  if (!r.ok) throw new Error('HTTP ' + r.status);
-  const json = await r.json();
-  ENC_STORE = json;
-  records = ENC_STORE.records.map(r => ({...r}));
-  users = (ENC_STORE.users || []).map(u => ({...u}));
-  maintenanceLogs = (ENC_STORE.maintenanceLogs || []).map(m => ({...m}));
-  auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
-  lastSyncedState = currentSyncState();
+
+
+  /*
+    ========================================
+    로컬 파일 fallback
+    ========================================
+  */
+
+  const r =
+    await fetch(
+      'data.json'
+    );
+
+
+  if (!r.ok){
+
+    throw new Error(
+      'HTTP ' + r.status
+    );
+
+  }
+
+
+  const json =
+    await r.json();
+
+
+  ENC_STORE =
+    json;
+
+
+  records =
+    (ENC_STORE.records || [])
+      .map(r => ({...r}));
+
+
+  users =
+    (ENC_STORE.users || [])
+      .map(u => ({...u}));
+
+
+  auditLogs =
+    (ENC_STORE.auditLogs || [])
+      .map(a => ({...a}));
+
+
+  /*
+    과거 data.json 유지보수 데이터
+  */
+  const legacyMaintenanceLogs =
+    (ENC_STORE.maintenanceLogs || [])
+      .map(m => ({...m}));
+
+
+  /*
+    로컬 ma.json도 시도
+  */
+  try{
+
+    const maRes =
+      await fetch(
+        'ma.json'
+      );
+
+
+    if (!maRes.ok){
+
+      throw new Error(
+        'HTTP ' +
+        maRes.status
+      );
+
+    }
+
+
+    const maJson =
+      await maRes.json();
+
+
+    maintenanceLogs =
+      (maJson.maintenanceLogs || [])
+        .map(m => ({...m}));
+
+
+    lastSyncedMaintenanceState =
+      currentMaintenanceState();
+
+  }
+  catch(e){
+
+    /*
+      ma.json이 없으면
+      기존 data.json 데이터 사용
+    */
+    maintenanceLogs =
+      legacyMaintenanceLogs;
+
+
+    lastSyncedMaintenanceState = {
+      maintenanceLogs:[]
+    };
+
+  }
+
+
+  lastSyncedState =
+    currentSyncState();
+
+
 })().catch(err => {
-  console.error('데이터 로드 실패:', err);
+
+  console.error(
+    '데이터 로드 실패:',
+    err
+  );
+
 });
 
 let sessionKey = null;
