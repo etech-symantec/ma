@@ -3378,7 +3378,7 @@
       "location": "조지아",
       "support_id": "356307",
       "sku": "ISG-Proxy",
-      "sn": "79999244",
+      "sn": "0079999244",
       "entitlement": "🔗",
       "qty": "1",
       "start": "2025.10.1",
@@ -3398,19 +3398,19 @@
       "tag_note": "SEHA",
       "id": 82,
       "ip_enc": {
-        "iv": "yfGwQ/PH1i2FfPQk",
-        "ct": "p4dfsiX7sMAbI17K/X4=",
-        "tag": "Xl4lPJY36Te9bcsOXptRYQ=="
+        "iv": "9IXXyh5RmV9bU23s",
+        "ct": "FTnLkmXMd7IH49NmSYo=",
+        "tag": "0JV/57VENF5G2Sc6Ppvs+g=="
       },
       "id_enc": {
-        "iv": "uke4x/QZo8z4qdfm",
-        "ct": "btVqdZ4=",
-        "tag": "y/o735AkCZ3JjSMzOgQkug=="
+        "iv": "SV6x3QslQntEQv5w",
+        "ct": "zXDB+90=",
+        "tag": "gFp4CW55j9kOYAU28oME9w=="
       },
       "pw_enc": {
-        "iv": "8WYZzoTRcwPLlVdh",
-        "ct": "r2vyyCRbiEzKBHE=",
-        "tag": "MJWPeQASetzXhKdecBabRg=="
+        "iv": "yIcjnNKwmP79jZL+",
+        "ct": "ZBus7ADBQqvhf/M=",
+        "tag": "LzxVLxg49W35X6ZrD1Q07g=="
       },
       "group_remarks": "",
       "cust_contacts": [
@@ -3434,7 +3434,8 @@
       "build_engineer": "신호근",
       "build_date": "2024.10",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "enable_pw_enc": null
     },
     {
       "group": "seha",
