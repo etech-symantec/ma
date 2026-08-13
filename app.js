@@ -800,7 +800,14 @@ const SKU_TAG_RULES = [
              );
   }},
   { key:'PS',   test: sku => sku.toUpperCase().includes('PS') },
-  { key:'VA',   test: sku => sku.toUpperCase().includes('VA') },
+  { key:'VA', test: sku => {
+      const s = sku.toUpperCase();
+  
+      return (
+        s.includes('VA') ||
+        s.includes('-V')
+      );
+  }},
   { key:'ELK',  test: sku => sku.toUpperCase().includes('ELK') },
   { key:'CLD',  test: sku => sku.toUpperCase().includes('CLD') },
   { key:'BCWF', test: sku => sku.toUpperCase().includes('BCWF') },
