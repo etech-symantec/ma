@@ -2971,3 +2971,83 @@ tbody tr.asset-drop-before,
 tbody tr.asset-drop-after{
   background:#F3F9FD;
 }
+/* =========================================================
+   자산 정보 IP / ID / PW / OS / 비고 세로 정렬 통일
+   ========================================================= */
+
+/* 5개 열의 셀 자체를 동일하게 중앙 정렬 */
+tbody td[data-label="IP"],
+tbody td[data-label="ID"],
+tbody td[data-label="PW"],
+tbody td[data-label="OS 버전"],
+tbody td[data-label="비고"]{
+  vertical-align:middle !important;
+  line-height:20px;
+}
+
+
+/* IP / ID / PW 기본 표시값 */
+tbody td[data-label="IP"] .sec-val,
+tbody td[data-label="ID"] .sec-val,
+tbody td[data-label="PW"] .sec-val{
+  display:inline-flex;
+  align-items:center;
+
+  min-height:20px;
+
+  padding:0;
+  margin:0;
+
+  line-height:20px;
+  vertical-align:middle;
+}
+
+
+/* 잠금 해제 후 IP / ID / PW 여러 값 표시 */
+tbody td[data-label="IP"] .ip-chip-list,
+tbody td[data-label="ID"] .ip-chip-list,
+tbody td[data-label="PW"] .ip-chip-list{
+  min-height:20px;
+  justify-content:center;
+}
+
+
+/* 개별 IP / ID / PW 칩도 기준 높이 통일 */
+tbody td[data-label="IP"] .ip-chip,
+tbody td[data-label="ID"] .ip-chip,
+tbody td[data-label="PW"] .ip-chip{
+  min-height:20px;
+  padding:0 5px;
+  margin:0;
+
+  display:inline-flex;
+  align-items:center;
+
+  line-height:20px;
+}
+
+
+/* PW 셀 */
+tbody td[data-label="PW"] .pw-cell{
+  min-height:20px;
+  justify-content:center;
+}
+
+tbody td[data-label="PW"] .pw-cell-row{
+  min-height:20px;
+  align-items:center;
+}
+
+
+/* 비고 */
+tbody td[data-label="비고"] .remarks-txt{
+  min-height:20px;
+
+  display:flex;
+  align-items:center;
+
+  margin:0;
+  padding:0;
+
+  line-height:20px;
+}
