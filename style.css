@@ -2409,3 +2409,202 @@ td.maint-cell-owner{
   white-space:pre-wrap;
   word-break:break-word;
 }
+
+/* =========================================================
+   다중 자산 작업 이력 - 자산별 편집
+   ========================================================= */
+
+.wl-multi-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  margin-bottom:8px;
+
+  color:var(--text-muted);
+  font-size:11px;
+}
+
+.wl-multi-toolbar > div{
+  display:flex;
+  gap:5px;
+}
+
+.wl-multi-toggle-btn{
+  padding:4px 8px;
+
+  border:1px solid var(--border-solid);
+  border-radius:6px;
+
+  background:#fff;
+  color:var(--text-muted);
+
+  font-size:10px;
+  cursor:pointer;
+}
+
+.wl-multi-toggle-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+
+
+.wl-multi-assets{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+
+.wl-multi-asset{
+  border:1px solid var(--border-solid);
+  border-radius:9px;
+
+  background:#fff;
+
+  overflow:hidden;
+}
+
+
+.wl-multi-asset[open]{
+  border-color:#C8D8E8;
+  box-shadow:0 2px 8px rgba(30,55,80,.05);
+}
+
+
+/* 접힌 제목 */
+.wl-multi-summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  min-height:40px;
+  padding:8px 11px;
+
+  background:var(--surface2);
+
+  cursor:pointer;
+  user-select:none;
+}
+
+.wl-multi-summary-main{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+
+  min-width:0;
+}
+
+.wl-multi-summary-main strong{
+  color:var(--text);
+  font-size:11.5px;
+}
+
+.wl-multi-summary-main span{
+  color:var(--text-muted);
+  font-size:10px;
+}
+
+.wl-multi-owner{
+  color:var(--text-faint) !important;
+}
+
+
+.wl-multi-change-count{
+  flex:0 0 auto;
+
+  padding:2px 7px;
+
+  border:1px solid #E8CE83;
+  border-radius:999px;
+
+  background:#FFF4CF;
+  color:#9A6A10;
+
+  font-size:9px;
+  font-weight:700;
+}
+
+
+/* 펼친 내용 */
+.wl-multi-fields{
+  display:grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap:8px 10px;
+
+  padding:10px 11px 12px;
+}
+
+
+.wl-multi-field{
+  position:relative;
+
+  min-width:0;
+  padding:5px;
+
+  border:1px solid transparent;
+  border-radius:7px;
+}
+
+.wl-multi-field label{
+  display:block;
+
+  margin-bottom:4px;
+
+  color:var(--text-muted);
+  font-size:10px;
+}
+
+
+.wl-multi-input{
+  width:100%;
+  box-sizing:border-box;
+}
+
+textarea.wl-multi-input{
+  min-height:58px;
+  resize:vertical;
+}
+
+
+/* 변경된 항목 */
+.wl-multi-field.is-changed{
+  background:#FFF9EB;
+  border-color:#F0D997;
+}
+
+.wl-multi-input.is-changed{
+  background:#FFFDF7 !important;
+  border-color:#E4B84F !important;
+}
+
+
+.wl-multi-changed-badge{
+  position:absolute;
+  top:4px;
+  right:5px;
+
+  padding:1px 5px;
+
+  border-radius:999px;
+
+  background:#F8E7B4;
+  color:#95670C;
+
+  font-size:8.5px;
+  font-weight:700;
+
+  pointer-events:none;
+}
+
+
+@media (max-width:800px){
+  .wl-multi-fields{
+    grid-template-columns:1fr;
+  }
+}
