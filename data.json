@@ -1190,7 +1190,9 @@
       "build_engineer": "강성준",
       "build_date": "2024.07",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "asset_order": 1,
+      "last_mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
     },
     {
       "group": "pl-sepm",
@@ -1253,7 +1255,9 @@
       "build_engineer": "강성준",
       "build_date": "2024.07",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "asset_order": 2,
+      "last_mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
     },
     {
       "group": "pl-sepm",
@@ -1317,8 +1321,8 @@
       "build_date": "2024.07",
       "group_parent": "",
       "is_parent": false,
-      "asset_parent_id": "25",
-      "last_mutation_id": "data-mss5mo04-15dbaa7e-7f38-4bed-bc58-e579f1581882"
+      "last_mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c",
+      "asset_order": 3
     },
     {
       "group": "pl-sepm",
@@ -1381,7 +1385,9 @@
       "build_engineer": "강성준",
       "build_date": "2024.07",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "asset_order": 4,
+      "last_mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
     },
     {
       "group": "pl-sepm",
@@ -1444,7 +1450,9 @@
       "build_engineer": "강성준",
       "build_date": "2024.07",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "asset_order": 5,
+      "last_mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
     },
     {
       "group": "pl-sepm",
@@ -1507,7 +1515,9 @@
       "build_engineer": "강성준",
       "build_date": "2024.07",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "asset_order": 6,
+      "last_mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
     },
     {
       "group": "pl-sepm",
@@ -1553,7 +1563,9 @@
       "build_engineer": "강성준",
       "build_date": "2024.07",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "asset_order": 7,
+      "last_mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
     },
     {
       "group": "uk-seuk",
@@ -15181,6 +15193,188 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss5mo04-15dbaa7e-7f38-4bed-bc58-e579f1581882"
+    },
+    {
+      "id": "audit-1786664720171-kmzyme",
+      "ts": 1786664720171,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "25",
+      "group": "pl-sepm",
+      "owner": "삼성전자 SEPM",
+      "label": "SSP-S210-10",
+      "sn": "2422710019",
+      "summary": "자산 순서 변경 · SSP-S210-10",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "1",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
+    },
+    {
+      "id": "audit-1786664720171-1b9q1u",
+      "ts": 1786664720171,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "26",
+      "group": "pl-sepm",
+      "owner": "삼성전자 SEPM",
+      "label": "SSP-S210-10",
+      "sn": "2422710066",
+      "summary": "자산 순서 변경 · SSP-S210-10",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "2",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
+    },
+    {
+      "id": "audit-1786664720171-shpbkr",
+      "ts": 1786664720171,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "27",
+      "group": "pl-sepm",
+      "owner": "삼성전자 SEPM",
+      "label": "ISG-Proxy#1",
+      "sn": "0079997679",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "25",
+          "after": "—",
+          "sensitive": false
+        },
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "3",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
+    },
+    {
+      "id": "audit-1786664720171-j7iwyt",
+      "ts": 1786664720171,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "28",
+      "group": "pl-sepm",
+      "owner": "삼성전자 SEPM",
+      "label": "ISG-Proxy#2",
+      "sn": "0079997679",
+      "summary": "자산 순서 변경 · ISG-Proxy#2",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "4",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
+    },
+    {
+      "id": "audit-1786664720171-dk84ln",
+      "ts": 1786664720171,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "29",
+      "group": "pl-sepm",
+      "owner": "삼성전자 SEPM",
+      "label": "MC-VA",
+      "sn": "2668418307",
+      "summary": "자산 순서 변경 · MC-VA",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "5",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
+    },
+    {
+      "id": "audit-1786664720171-4nhmxz",
+      "ts": 1786664720171,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "30",
+      "group": "pl-sepm",
+      "owner": "삼성전자 SEPM",
+      "label": "RP-VA",
+      "sn": "0074485230",
+      "summary": "자산 순서 변경 · RP-VA",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "6",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
+    },
+    {
+      "id": "audit-1786664720171-jmxy16",
+      "ts": 1786664720171,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "31",
+      "group": "pl-sepm",
+      "owner": "삼성전자 SEPM",
+      "label": "WEB-PROTECT-SUB",
+      "sn": "52563391-1-1",
+      "summary": "자산 순서 변경 · WEB-PROTECT-SUB",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "7",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c"
     }
   ],
   "syncMutations": [
@@ -15262,6 +15456,11 @@
     {
       "id": "data-mss61j7i-3d29ba44-fec1-487a-9aa6-708abe2bc684",
       "ts": 1786664717711,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss61l44-7c398454-59f6-4077-b3e9-1e114a83c33c",
+      "ts": 1786664720173,
       "scope": "data"
     }
   ]
