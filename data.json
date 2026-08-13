@@ -12887,7 +12887,7 @@
       "check_method": "X",
       "config_mode": "",
       "owner_primary": "신호근",
-      "owner_secondary": "김상문",
+      "owner_secondary": "윤태리",
       "cust_contacts": [
         {
           "role": "운영",
@@ -12917,7 +12917,9 @@
       "start": "",
       "end": "",
       "os_ver": "",
-      "work_log": []
+      "work_log": [],
+      "build_engineer": "",
+      "build_date": ""
     },
     {
       "id": 1786348956933,
