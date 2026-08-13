@@ -188,29 +188,15 @@ function scheduleAutoSync(){
 /* =========================================================
    GitHub 동시 저장 충돌 방지 - 3-way merge
    ========================================================= */
-
 function syncEqual(a, b){
   return JSON.stringify(a ?? null) ===
          JSON.stringify(b ?? null);
 }
 
-
 function mergeObject3Way(base, local, remote){
-
-  /*
-    BASE에는 있었는데 LOCAL에서 삭제됨
-    → 내가 삭제한 것으로 판단
-  */
   if (base && !local){
     return null;
   }
-
-
-  /*
-    REMOTE에서 삭제됐고
-    나는 해당 데이터를 수정하지 않았다면
-    상대방의 삭제를 유지
-  */
   if (
     base &&
     !remote &&
@@ -218,91 +204,50 @@ function mergeObject3Way(base, local, remote){
   ){
     return null;
   }
-
-
-  /* 내가 새로 추가 */
   if (!base && local && !remote){
     return cloneSyncState(local);
   }
 
-
-  /* 상대방이 새로 추가 */
   if (!base && !local && remote){
     return cloneSyncState(remote);
   }
 
-
-  /* 둘 다 없음 */
   if (!local && !remote){
     return null;
   }
 
-
-  /*
-    REMOTE에는 없지만
-    나는 해당 데이터를 수정했다면 LOCAL 유지
-  */
   if (!remote){
     return local
       ? cloneSyncState(local)
       : null;
   }
-
-
   if (!local){
     return cloneSyncState(remote);
   }
-
-
   const result = {};
-
   const keys = new Set([
     ...Object.keys(base || {}),
     ...Object.keys(local || {}),
     ...Object.keys(remote || {})
   ]);
 
-
   keys.forEach(key => {
-
     const b = base?.[key];
     const l = local?.[key];
     const r = remote?.[key];
 
-
-    /*
-      나는 이 필드를 수정하지 않음
-      → GitHub 최신값 사용
-    */
     if (syncEqual(l, b)){
       result[key] = cloneSyncState(r);
       return;
     }
-
-
-    /*
-      상대방은 이 필드를 수정하지 않음
-      → 내 변경값 사용
-    */
     if (syncEqual(r, b)){
       result[key] = cloneSyncState(l);
       return;
     }
-
-
-    /*
-      둘 다 동일한 값으로 변경
-    */
     if (syncEqual(l, r)){
       result[key] = cloneSyncState(l);
       return;
     }
-
-
-    /*
-      작업 이력 배열은 배열 전체를 덮지 않고
-      각 작업 이력 ID를 기준으로 다시 병합
-    */
     if (
       key === 'work_log' ||
       key === 'deleted_work_log'
@@ -312,20 +257,10 @@ function mergeObject3Way(base, local, remote){
         l || [],
         r || []
       );
-
       return;
     }
-
-
-    /*
-      같은 필드를 나와 상대방이 동시에 서로 다르게 수정한 경우
-      현재 사용자가 수정한 LOCAL 값을 우선.
-    */
     result[key] = cloneSyncState(l);
-
   });
-
-
   return result;
 }
 
@@ -342,7 +277,6 @@ function mergeArrayById3Way(
       item?.history_id ??
       ''
     );
-
 
   const baseMap = new Map(
     (baseArray || [])
@@ -363,7 +297,6 @@ function mergeArrayById3Way(
       ])
   );
 
-
   const remoteMap = new Map(
     (remoteArray || [])
       .filter(x => getId(x))
@@ -373,25 +306,19 @@ function mergeArrayById3Way(
       ])
   );
 
-
   const ids = new Set([
     ...baseMap.keys(),
     ...localMap.keys(),
     ...remoteMap.keys()
   ]);
 
-
   const result = [];
-
-
   ids.forEach(id => {
-
     const merged = mergeObject3Way(
       baseMap.get(id),
       localMap.get(id),
       remoteMap.get(id)
     );
-
 
     if (merged){
       result.push(merged);
@@ -402,7 +329,6 @@ function mergeArrayById3Way(
 
   return result;
 }
-
 
 function mergeStateArray(
   baseArray,
@@ -410,88 +336,63 @@ function mergeStateArray(
   remoteArray,
   idFn
 ){
-
   const baseMap = new Map(
     (baseArray || []).map(x => [
       String(idFn(x)),
       x
     ])
   );
-
-
   const localMap = new Map(
     (localArray || []).map(x => [
       String(idFn(x)),
       x
     ])
   );
-
-
   const remoteMap = new Map(
     (remoteArray || []).map(x => [
       String(idFn(x)),
       x
     ])
   );
-
-
   const ids = new Set([
     ...baseMap.keys(),
     ...localMap.keys(),
     ...remoteMap.keys()
   ]);
-
-
   const result = [];
-
-
   ids.forEach(id => {
-
     const merged = mergeObject3Way(
       baseMap.get(id),
       localMap.get(id),
       remoteMap.get(id)
     );
-
-
     if (merged){
       result.push(merged);
     }
-
   });
-
-
   return result;
 }
-
 
 function mergeSyncStates(
   base,
   local,
   remote
 ){
-
   base = base || {
     records:[],
     users:[],
     maintenanceLogs:[],
     auditLogs:[]
   };
-
-
   return {
-
     salt:
       remote?.salt ||
       local?.salt ||
       base?.salt,
-
     iterations:
       remote?.iterations ||
       local?.iterations ||
       base?.iterations,
-
-
     records:
       mergeStateArray(
         base.records || [],
@@ -499,8 +400,6 @@ function mergeSyncStates(
         remote.records || [],
         r => r.id
       ),
-
-
     users:
       mergeStateArray(
         base.users || [],
@@ -508,8 +407,6 @@ function mergeSyncStates(
         remote.users || [],
         u => u.id
       ),
-
-
     maintenanceLogs:
       mergeStateArray(
         base.maintenanceLogs || [],
@@ -519,8 +416,6 @@ function mergeSyncStates(
           m.id ||
           `${m.group}|${m.ym}`
       ),
-
-
     auditLogs:
       mergeStateArray(
         base.auditLogs || [],
@@ -528,7 +423,6 @@ function mergeSyncStates(
         remote.auditLogs || [],
         a => a.id
       )
-
   };
 }
 
@@ -1815,7 +1709,7 @@ function setViewMode(mode){
   }
   if (histBtn){
     histBtn.classList.toggle('on', mode === 'history');
-    histBtn.title = mode === 'history' ? '작업 이력 전체보기 닫기 (다시 클릭)' : '작업 이력 전체보기';
+    histBtn.title = mode === 'history' ? '업데이트 전체보기 닫기 (다시 클릭)' : '업데이트 전체보기';
   }
   if (mode === 'dashboard') renderDashboard();
   if (mode === 'maintenance') renderMaintenance();
@@ -3122,7 +3016,6 @@ function openCustContactsModal(gid){
     memoView.style.display = 'none';
   }
 
-  // 고객사 담당자는 다른 자산 세부 정보와 달리 작업 이력 없이 누구나(로그인 시) 바로 수정할 수 있습니다.
   document.getElementById('custContactsEditBtn').style.display = currentUserName() ? '' : 'none';
   setCustContactsEditMode(false);
   document.getElementById('custContactsModal').classList.add('open');
@@ -5007,7 +4900,7 @@ document.getElementById('logoutBtn').onclick = () => {
 };
 
 
-// ---------- recent activity (최근 작업 이력 알림) ----------
+// ---------- recent activity (최근 업데이트 알림) ----------
 function dismissedActivityKey(){
   return 'bcAssetDismissedActivity_' + (currentUserId || 'anon');
 }
@@ -5155,8 +5048,8 @@ function renderWorkHistoryPage(){
   wrap.innerHTML = `
     <div class="maint-sticky-top">
       <div class="maint-header">
-        <div class="maint-header-row"><h2>작업 이력 전체보기</h2></div>
-        <p class="maint-sub">작업 이력과 마스터/일반사용자의 추가·편집·삭제 기록을 한 곳에서 확인합니다 · 총 ${total}건</p>
+        <div class="maint-header-row"><h2>업데이트 전체보기</h2></div>
+        <p class="maint-sub">모든 업데이트 내역(추가·편집·삭제 기록)을 한 곳에서 확인합니다 · 총 ${total}건</p>
       </div>
       <div class="wh-toolbar">
         <div class="tf-search wh-search">
