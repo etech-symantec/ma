@@ -133,9 +133,9 @@ let hasUnsyncedChanges = false;
 function setSyncStatus(state, msg){
   const el = document.getElementById('githubSyncStatus');
   if (!el) return;
-  if (state === 'pending'){ el.textContent = '변경사항 동기화 대기 중…'; el.className = 'sync-status pending'; }
-  else if (state === 'syncing'){ el.textContent = 'GitHub에 동기화 중…'; el.className = 'sync-status syncing'; }
-  else if (state === 'synced'){ el.textContent = '✓ GitHub에 동기화됨 · ' + new Date().toLocaleTimeString('ko-KR'); el.className = 'sync-status synced'; }
+  if (state === 'pending'){ el.textContent = '동기화 대기 중…'; el.className = 'sync-status pending'; }
+  else if (state === 'syncing'){ el.textContent = '동기화 중…'; el.className = 'sync-status syncing'; }
+  else if (state === 'synced'){ el.textContent = '✓ 동기화 완료'; el.className = 'sync-status synced'; }
   else if (state === 'error'){ el.textContent = '⚠ 동기화 실패: ' + (msg || ''); el.className = 'sync-status error'; }
   else if (state === 'offline'){ el.textContent = ''; el.className = 'sync-status'; }
 }
@@ -3429,8 +3429,8 @@ function applyGeSidFieldState(){
     sidInput.disabled = true; engInput.disabled = true; dateInput.disabled = true;
     sidInput.value = ''; engInput.value = ''; dateInput.value = '';
     sidInput.placeholder = '상위 법인은 대표 이름 역할만 합니다';
-    engInput.placeholder = '자식 법인에서 관리';
-    dateInput.placeholder = '자식 법인에서 관리';
+    engInput.placeholder = '하위 법인에서 관리';
+    dateInput.placeholder = '하위 법인에서 관리';
   } else if (subGroups.length <= 1){
     sidInput.disabled = false; engInput.disabled = false; dateInput.disabled = false;
     sidInput.value = subGroups.length ? subGroups[0].sid : '';
@@ -3438,7 +3438,7 @@ function applyGeSidFieldState(){
     dateInput.value = subGroups.length ? (subGroups[0].meta.build_date || '') : '';
     sidInput.placeholder = '예: 12345678';
     engInput.placeholder = '장비를 구축한 엔지니어 (선택)';
-    dateInput.placeholder = '2026.07';
+    dateInput.placeholder = '2026.08';
   } else {
     sidInput.disabled = true; engInput.disabled = true; dateInput.disabled = true;
     sidInput.value = subGroups.map(sg=>sg.sid||'미지정').join(', ');
@@ -4589,8 +4589,6 @@ let wlChangeFields = [];
 let wlChangeValues = {};
 let wlOriginalValues = {};
 
-// 현재 등록된 자산 정보를 그대로 불러와 wlChangeFields/Values에 채워 넣는다.
-// (체크박스를 켜면 모든 항목이 현재 값으로 채워진 상태로 보이고, 그 중 원하는 항목만 고쳐서 저장하면 된다.)
 async function populateAllWlFieldsFromRecord(rec){
   wlChangeFields = WL_FIELD_DEFS.map(d => d.field);
   wlChangeValues = {};
