@@ -437,51 +437,6 @@
             "reverted": 1,
             "skipped": 0
           }
-        },
-        {
-          "id": 1786603626771,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "신호근",
-          "note": "123123123",
-          "author": "신호근",
-          "history_id": 1786603788570,
-          "deleted_at": 1786603788570,
-          "deleted_by": "윤태리",
-          "delete_revert_result": {
-            "reverted": 0,
-            "skipped": 0
-          }
-        },
-        {
-          "id": 1786603639967,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "신호근",
-          "note": "4573456",
-          "author": "신호근",
-          "history_id": 1786603885178,
-          "deleted_at": 1786603885178,
-          "deleted_by": "신호근",
-          "delete_revert_result": {
-            "reverted": 0,
-            "skipped": 0
-          }
-        },
-        {
-          "id": 1786603664319,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "신호근",
-          "note": "ㅁㄴㅇㄻㄴㅇㄹ",
-          "author": "신호근",
-          "history_id": 1786603851210,
-          "deleted_at": 1786603851210,
-          "deleted_by": "윤태리",
-          "delete_revert_result": {
-            "reverted": 0,
-            "skipped": 0
-          }
         }
       ],
       "asset_order": 1
