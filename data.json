@@ -12032,13 +12032,13 @@
       "owner": "삼성 HDC 신라면세점",
       "location": "수원",
       "support_id": "2065519",
-      "sku": "IS-AWAA-SWG-250-500-1Y",
+      "sku": "BCWF-250-499",
       "sn": "Q8QJ3-AZCGG",
       "entitlement": "🔗",
       "qty": "300",
       "start": "2025.1.1",
       "end": "2026.12.31",
-      "remarks": "BCWF-250-499",
+      "remarks": "",
       "deploy_date": "",
       "deploy_log": "",
       "mode": "",
@@ -12070,7 +12070,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "kr-025",
