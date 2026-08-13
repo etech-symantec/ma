@@ -166,11 +166,13 @@
       "ym": "2026-02",
       "date": "",
       "manager": "신호근",
-      "note": "미계약",
+      "note": "",
       "done": false,
-      "incomplete": true,
+      "incomplete": false,
       "author": "신호근",
-      "updated_at": 1786514324716
+      "updated_at": 1786629949243,
+      "mutation_id": "ma-msrlcbp7-6f5d3241-441e-4d23-9db3-a2c008c7056e",
+      "uncontracted": true
     },
     {
       "id": 1786514345749,
@@ -1860,6 +1862,11 @@
     {
       "id": "ma-msrkmk9q-e6e78071-ce62-446d-a96e-d4b3c64826ff",
       "ts": 1786628747294,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msrlcbp7-6f5d3241-441e-4d23-9db3-a2c008c7056e",
+      "ts": 1786629949243,
       "scope": "maintenance"
     }
   ]
