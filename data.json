@@ -15957,6 +15957,19 @@
       "uncontracted": false,
       "author": "김상문",
       "updated_at": 1786608607600
+    },
+    {
+      "id": 1786608693169,
+      "group": "uk-seuk",
+      "ym": "2026-08",
+      "date": "2026.8.13",
+      "manager": "신호근",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "신호근",
+      "updated_at": 1786608693169
     }
   ],
   "auditLogs": [
@@ -17485,6 +17498,22 @@
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
       "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786608693217-lv8zlu",
+      "ts": 1786608693217,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608693169",
+      "group": "uk-seuk",
+      "owner": "삼성전자 SEUK",
+      "label": "2026-08",
+      "sn": "",
+      "summary": "2026년 8월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
     }
   ]
 }
