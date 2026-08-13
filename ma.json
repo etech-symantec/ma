@@ -260,14 +260,15 @@
       "id": 1786515966757,
       "group": "custom-1786348497151",
       "ym": "2026-02",
-      "date": "",
+      "date": "2026.8.13",
       "manager": "신호근",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
-      "uncontracted": true,
+      "uncontracted": false,
       "author": "신호근",
-      "updated_at": 1786626066145
+      "updated_at": 1786628700203,
+      "mutation_id": "ma-msrkljxm-a15d01b4-8082-4c42-a29f-c0eb55aabfbb"
     },
     {
       "id": 1786515968812,
@@ -1815,6 +1816,13 @@
       "uncontracted": false,
       "author": "김상문",
       "updated_at": 1786608976851
+    }
+  ],
+  "syncMutations": [
+    {
+      "id": "ma-msrkljxm-a15d01b4-8082-4c42-a29f-c0eb55aabfbb",
+      "ts": 1786628700203,
+      "scope": "maintenance"
     }
   ]
 }
