@@ -2583,11 +2583,33 @@ function statusLabel(s){ return {ok:'정상', warn:'만료임박', crit:'만료�
 function statusColorVar(s){ return {ok:'var(--green)', warn:'var(--amber)', crit:'var(--red)', na:'var(--text-faint)'}[s]; }
 
 function snLink(r, groupSupportId){
-  const sn = esc(r.sn);
-  if (!sn) return '—';
+  const rawSn = String(r.sn || '').trim();
+  const sn = esc(rawSn);
+
+  if (!rawSn) return '—';
+
   const supportId = r.support_id || groupSupportId;
   if (!supportId) return sn;
-  const url = `https://support.broadcom.com/group/ecx/licensing?siteId=${encodeURIComponent(supportId)}&serialNumber=${encodeURIComponent(r.sn)}`;
+
+  /*
+    S/N이 숫자로만 구성되어 있고 10자리보다 짧으면
+    Broadcom 링크에 사용할 때만 앞에 0을 붙여 10자리로 만든다.
+
+    예:
+    74485847   → 0074485847
+    123456789  → 0123456789
+    1234567890 → 1234567890
+  */
+  const linkSn = /^\d+$/.test(rawSn)
+    ? rawSn.padStart(10, '0')
+    : rawSn;
+
+  const url =
+    `https://support.broadcom.com/group/ecx/licensing` +
+    `?siteId=${encodeURIComponent(supportId)}` +
+    `&serialNumber=${encodeURIComponent(linkSn)}`;
+
+  /* 화면에는 기존 S/N 그대로 표시 */
   return `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${sn}</a>`;
 }
 
