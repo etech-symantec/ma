@@ -1724,7 +1724,7 @@
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
       "is_parent": false,
-      "asset_order": 2
+      "asset_order": 3
     },
     {
       "group": "vn-sdv-new",
@@ -1776,7 +1776,7 @@
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
       "is_parent": false,
-      "asset_order": 3
+      "asset_order": 2
     },
     {
       "group": "vn-sdv-new",
