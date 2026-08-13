@@ -702,14 +702,14 @@
         "tag": "RmBVB0e+EcW6MIyQA/GMxA=="
       },
       "id_enc": {
-        "iv": "IEOHPGSgAS4HSaDx",
-        "ct": "R0XhVF1NtyhJcEHflAOe4um7/Hc=",
-        "tag": "9v5jJNierdgKtkzYP37ANg=="
+        "iv": "9np/H6hUYSuabY6F",
+        "ct": "qjy5g3D0s8urGjWD0tAQ30Y8",
+        "tag": "F2ktw8DACnuHl1kXVZ+tYQ=="
       },
       "pw_enc": {
-        "iv": "XHH3SdPotnhmyDOz",
-        "ct": "wmaBly3hp8qDDsFvJpmV79/8aoXw/xR9Jp+hufNzuA==",
-        "tag": "MHWcxjJcfMuWLEAqO9V9DQ=="
+        "iv": "0KP+tOQgZFtVeXv0",
+        "ct": "FYZDxmwXQjG9gvV/u7Ai87aM8zQCgkPDmkICazo=",
+        "tag": "bCAPlcRbosuUZAiVrwHXeA=="
       },
       "group_remarks": "",
       "cust_contacts": [
@@ -733,7 +733,52 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "work_log": [
+        {
+          "id": 1786581710279,
+          "type": "라이선스 갱신",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "id/pw 변경",
+          "author": "윤태리",
+          "field_changes": {
+            "id": true,
+            "pw": true
+          },
+          "change_summary": "계정 ID (여러 개면 줄바꿈으로 구분) 변경됨 · 비밀번호 (여러 개면 줄바꿈으로 구분) 변경됨",
+          "rollback_changes": {
+            "id": {
+              "sensitive": true,
+              "encField": "id_enc",
+              "before": {
+                "iv": "IEOHPGSgAS4HSaDx",
+                "ct": "R0XhVF1NtyhJcEHflAOe4um7/Hc=",
+                "tag": "9v5jJNierdgKtkzYP37ANg=="
+              },
+              "after": {
+                "iv": "9np/H6hUYSuabY6F",
+                "ct": "qjy5g3D0s8urGjWD0tAQ30Y8",
+                "tag": "F2ktw8DACnuHl1kXVZ+tYQ=="
+              }
+            },
+            "pw": {
+              "sensitive": true,
+              "encField": "pw_enc",
+              "before": {
+                "iv": "XHH3SdPotnhmyDOz",
+                "ct": "wmaBly3hp8qDDsFvJpmV79/8aoXw/xR9Jp+hufNzuA==",
+                "tag": "MHWcxjJcfMuWLEAqO9V9DQ=="
+              },
+              "after": {
+                "iv": "0KP+tOQgZFtVeXv0",
+                "ct": "FYZDxmwXQjG9gvV/u7Ai87aM8zQCgkPDmkICazo=",
+                "tag": "bCAPlcRbosuUZAiVrwHXeA=="
+              }
+            }
+          }
+        }
+      ]
     },
     {
       "group": "in-shi",
