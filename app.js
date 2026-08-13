@@ -5687,14 +5687,19 @@ function renderWhList(){
         </div>
   
         <!-- 법인 / 자산 -->
-        <div
-          class="ra-asset"
-          title="${esc(recOwner || '—')} · ${esc(recLabel || '—')}${recSn ? ' · S/N ' + esc(recSn) : ''}"
-        >
-          ${esc(recOwner) || '—'}
-          ·
-          ${esc(recLabel) || '—'}
-          ${recSn ? ' · S/N ' + esc(recSn) : ''}
+        <div class="ra-asset" title="${esc(recOwner || '—')} ${recLabel ? ' · ' + esc(recLabel) : ''}${recSn ? ' · S/N ' + esc(recSn) : ''}">
+          <span class="wh-owner">${esc(recOwner) || '—'}</span>        
+          ${recLabel ? `
+            <span class="wh-sku-badge">
+              ${esc(recLabel)}
+            </span>
+          ` : ''}
+        
+          ${recSn ? `
+            <span class="wh-sn-badge">
+              S/N ${esc(recSn)}
+            </span>
+          ` : ''}
         </div>
   
         <!-- 작업 내용 -->
