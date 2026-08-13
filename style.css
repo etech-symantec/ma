@@ -1539,7 +1539,16 @@ textarea.wl-fc-input.is-changed{
 .wh-item .ra-note{ font-size:12.8px; margin-top:5px; }
 .wh-item .ra-changes{ margin-top:9px; }
 .wh-item .ra-author{ margin-top:8px; }
-.wh-top{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.wh-top{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:7px;
+}
+
+.wh-top .ra-date{
+  margin-left:auto;
+}
 .wh-empty{ padding:40px 10px; }
 .maint-header-row .maint-my-toggle{
   flex:0 0 auto; min-width:0; height:32px; padding:0 10px 0 9px; gap:6px;
@@ -2783,125 +2792,83 @@ table td.col-qty{
   padding-left:8px;
   padding-right:8px;
 }
-
-
-/* 라이선스 기간 */
 table th.col-license,
 table td.col-license{
   padding-left:10px;
   padding-right:12px;
 }
 
-
-/* 기존 140px 강제 최소폭 제거 */
 table td.col-license .lic-bar-wrap{
   min-width:0;
   width:max-content;
 }
 
-
-/* 날짜 길이를 기준으로 라이선스 바 폭 결정 */
 table td.col-license .lic-dates{
   width:max-content;
 }
 
-
-/* 상태 바는 라이선스 날짜 폭에 맞춤 */
 table td.col-license .lic-bar{
   width:100%;
 }
 /* =========================================================
    작업 이력 히스토리 - 마스터 선택 삭제
    ========================================================= */
-
 .wh-admin-actions{
   margin-left:auto;
-
   display:flex;
   align-items:center;
   gap:8px;
-
   white-space:nowrap;
 }
-
-
 .wh-select-all{
   display:inline-flex;
   align-items:center;
   gap:5px;
-
   color:var(--text-muted);
   font-size:10.5px;
-
   cursor:pointer;
   user-select:none;
 }
-
-
 .wh-select-all input,
 .wh-history-check input{
   width:14px;
   height:14px;
   margin:0;
-
   accent-color:var(--accent);
   cursor:pointer;
 }
-
-
 .wh-selected-count{
   min-width:48px;
-
   color:var(--text-faint);
-
   font-family:var(--mono);
   font-size:10px;
   text-align:center;
 }
-
-
-/* 선택 삭제 버튼 */
 .wh-delete-selected{
   height:30px;
   padding:0 11px;
-
   border-color:#E4B3B3;
-
   background:#FFF6F6;
   color:#B42318;
-
   font-size:10.5px;
   font-weight:700;
 }
-
-
 .wh-delete-selected:hover:not(:disabled){
   background:#FDECEC;
   border-color:#D88D8D;
 }
-
-
 .wh-delete-selected:disabled{
   opacity:.4;
   cursor:not-allowed;
 }
-
-
-/* 개별 작업 이력 체크박스 */
 .wh-history-check{
   flex:0 0 auto;
-
   display:inline-flex;
   align-items:center;
   justify-content:center;
-
-  margin-right:3px;
-
+  margin:0;
   cursor:pointer;
 }
-
-
-/* 선택된 이력을 약하게 강조 */
 .wh-item:has(.wh-history-checkbox:checked){
   border-color:#E0B1B1;
   background:#FFF9F9;
