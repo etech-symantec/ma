@@ -2356,18 +2356,35 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
 function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const mySiteGroupIds = getMySiteGroupIds();
-
-  // 좌측 사이트에서 상위 법인을 선택한 경우
-  // 상위 법인 + 모든 하위 법인까지 필터 대상에 포함
+    const licenseMatchedGroupIds = new Set(
+      records
+        .filter(r =>
+          !r.is_group_shell &&
+          activeStatusFilters.has(licenseStatus(r))
+        )
+        .map(r => r.group)
+    );
+    const licenseVisibleGroupIds =
+      new Set(licenseMatchedGroupIds);
+  
+    [...licenseMatchedGroupIds].forEach(gid => {
+      let parentGid = groupParentOf(gid);
+  
+      while (parentGid){
+        if (licenseVisibleGroupIds.has(parentGid)){
+          break;
+        }
+  
+        licenseVisibleGroupIds.add(parentGid);
+        parentGid = groupParentOf(parentGid);
+      }
+    });
   let activeSiteGroupIds = null;
-
   if (activeCountryFilter){
     const selectedGid = allGroupIds().find(gid => {
       const items = records.filter(r => r.group === gid);
       if (!items.length) return false;
-
       const meta = groupMeta(items);
-
       return !meta.group_parent &&
              meta.owner === activeCountryFilter;
     });
@@ -2380,8 +2397,16 @@ function render(){
     }
   }
 
-  let list = records.filter(r => {
-    if (!activeStatusFilters.has(licenseStatus(r))) return false;
+    let list = records.filter(r => {
+      if (r.is_group_shell){
+        if (!licenseVisibleGroupIds.has(r.group)){
+          return false;
+        }
+      } else {
+        if (!activeStatusFilters.has(licenseStatus(r))){
+          return false;
+        }
+      }
     if (activeSkuKeywordFilters.size){
       const kws = skuKeywordMatches(r.sku);
       if (!kws.some(k => activeSkuKeywordFilters.has(k))) return false;
