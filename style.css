@@ -2367,3 +2367,47 @@ td.maint-cell-owner{
 .form-grid.sg-edit-fields > div{
   grid-column:1 / -1;
 }
+
+/* 법인 비고 - 일반사용자 수정 가능 */
+.group-remarks{
+  display:flex;
+  align-items:flex-start;
+  gap:6px;
+}
+
+.group-remarks-text{
+  min-width:0;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.group-remarks-empty{
+  color:var(--text-faint);
+  font-style:italic;
+}
+
+.group-remarks-edit-btn{
+  flex:0 0 auto;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  width:20px;
+  height:20px;
+  padding:0;
+
+  border:0;
+  border-radius:5px;
+
+  background:transparent;
+  color:var(--text-faint);
+
+  font-size:11px;
+  cursor:pointer;
+}
+
+.group-remarks-edit-btn:hover{
+  background:var(--surface2);
+  color:var(--accent);
+}
