@@ -260,14 +260,14 @@
       "id": 1786515966757,
       "group": "custom-1786348497151",
       "ym": "2026-02",
-      "date": "2026.8.13",
+      "date": "",
       "manager": "신호근",
       "note": "",
-      "done": true,
+      "done": false,
       "incomplete": false,
-      "uncontracted": false,
+      "uncontracted": true,
       "author": "신호근",
-      "updated_at": 1786626031983
+      "updated_at": 1786626066145
     },
     {
       "id": 1786515968812,
