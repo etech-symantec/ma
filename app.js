@@ -2280,8 +2280,18 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
             <table>
               <thead><tr>
                 ${canSelectAssets() ? '<th class="col-select"></th>' : ''}
-                <th>SKU / 제품</th><th>S/N</th><th>수량</th><th>라이선스 기간</th>
-                <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
+                <th class="col-sku">SKU / 제품</th>
+                <th class="col-sn">S/N</th>
+                <th class="col-qty">수량</th>
+                <th class="col-license">라이선스 기간</th>
+                
+                <th>IP</th>
+                <th>ID</th>
+                <th>PW</th>
+                <th>OS 버전</th>
+                <th>비고</th>
+                <th>작업이력</th>
+                <th>관리</th>
               </tr></thead>
               <tbody>
                 ${sg.items.map(r=>rowHtml(r, sg.sid)).join('')}
@@ -3073,10 +3083,19 @@ function rowHtml(r, groupSupportId){
   return `
   <tr data-id="${r.id}">
     ${canSelectAssets() ? `<td class="col-select" data-label=""><input type="checkbox" class="asset-select-cb" data-select-asset="${r.id}" ${selectedAssetIds.has(String(r.id))?'checked':''} title="일괄 이동/작업 이력 등록을 위해 선택"></td>` : ''}
-    <td class="sku" data-label="SKU / 제품">${skuBadge(r.sku)}${skuKeywordTagsHtml(r.sku)}</td>
-    <td class="sn" data-label="S/N">${snLink(r, groupSupportId)}</td>
-    <td data-label="수량">${esc(r.qty)||''}</td>
-    <td data-label="라이선스 기간">
+    <td class="sku col-sku" data-label="SKU / 제품">
+      ${skuBadge(r.sku)}${skuKeywordTagsHtml(r.sku)}
+    </td>
+    
+    <td class="sn col-sn" data-label="S/N">
+      ${snLink(r, groupSupportId)}
+    </td>
+    
+    <td class="col-qty" data-label="수량">
+      ${esc(r.qty)||''}
+    </td>
+    
+    <td class="col-license" data-label="라이선스 기간">
       <div class="lic-bar-wrap">
         <div class="lic-dates">${esc(r.start)||'-'} → ${esc(r.end)||'-'}</div>
         <div class="lic-bar"><i style="width:${pct}%; background:${statusColorVar(status)}"></i></div>
