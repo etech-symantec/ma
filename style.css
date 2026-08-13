@@ -3415,3 +3415,137 @@ tbody td[data-label="비고"] .remarks-txt{
 
   line-height:20px;
 }
+/* =========================================================
+   작업 이력 GitHub 동기화 - 전체 화면 잠금
+   ========================================================= */
+
+.worklog-sync-overlay{
+  position:fixed;
+  inset:0;
+
+  z-index:99999;
+
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  background:
+    rgba(245,247,250,.68);
+
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+
+  /*
+    화면 전체를 덮기 때문에
+    뒤쪽 버튼/입력창 클릭 불가능
+  */
+  pointer-events:auto;
+}
+
+
+.worklog-sync-overlay.open{
+  display:flex;
+}
+
+
+.worklog-sync-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  width:280px;
+  min-height:150px;
+
+  padding:24px 22px;
+
+  background:#fff;
+
+  border:1px solid var(--border-solid);
+  border-radius:14px;
+
+  box-shadow:
+    0 15px 45px rgba(15,23,42,.18);
+
+  text-align:center;
+}
+
+
+/* 회전 로딩 */
+.worklog-sync-spinner{
+  width:30px;
+  height:30px;
+
+  margin-bottom:15px;
+
+  border:3px solid #DDE8EF;
+  border-top-color:var(--accent);
+
+  border-radius:50%;
+
+  animation:
+    worklogSyncSpin .75s linear infinite;
+}
+
+
+@keyframes worklogSyncSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+
+.worklog-sync-title{
+  color:var(--text);
+
+  font-size:14px;
+  font-weight:700;
+
+  line-height:1.4;
+}
+
+
+.worklog-sync-message{
+  margin-top:7px;
+
+  color:var(--text-faint);
+
+  font-size:11px;
+  line-height:1.55;
+}
+
+
+/* 성공 */
+.worklog-sync-overlay.is-success
+.worklog-sync-card{
+  border-color:#A9D8B8;
+}
+
+.worklog-sync-overlay.is-success
+.worklog-sync-title{
+  color:#2F8F52;
+}
+
+
+/* 실패 */
+.worklog-sync-overlay.is-error
+.worklog-sync-card{
+  border-color:#E9B2B2;
+}
+
+.worklog-sync-overlay.is-error
+.worklog-sync-title{
+  color:#C62828;
+}
+
+
+.worklog-sync-retry{
+  flex:none;
+
+  width:auto;
+
+  margin-top:14px;
+  padding:8px 18px;
+}
