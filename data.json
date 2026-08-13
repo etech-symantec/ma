@@ -13486,14 +13486,14 @@
       "id": 1786515966757,
       "group": "custom-1786348497151",
       "ym": "2026-02",
-      "date": "",
+      "date": "2026.8.13",
       "manager": "신호근",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
-      "uncontracted": true,
+      "uncontracted": false,
       "author": "신호근",
-      "updated_at": 1786515966757
+      "updated_at": 1786581052716
     },
     {
       "id": 1786515968812,
