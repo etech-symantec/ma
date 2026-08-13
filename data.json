@@ -13060,19 +13060,19 @@
       "tag_note": "한화큐셀 Module",
       "id": 414,
       "ip_enc": {
-        "iv": "pfOGkvGKiPlMKO5Q",
-        "ct": "7AySAWmCd6l01nAz",
-        "tag": "BlEjyeS0ryR9tA7dl84eAQ=="
+        "iv": "3abKyUimlYaXfG/4",
+        "ct": "PtKU+cwsZxMvR/ux",
+        "tag": "p6Epvxk1rfkLMUEZ4rWrtg=="
       },
       "id_enc": {
-        "iv": "340k4zx+NzRD3Be8",
-        "ct": "mWrR7xI=",
-        "tag": "4FaVgCXX5/S2fud+6ush1w=="
+        "iv": "bC4RqcAzrll3U4Jc",
+        "ct": "uezUimRPAWyaZrbiIFzhww==",
+        "tag": "T09MMsaf5zt6nPaW+V+C6A=="
       },
       "pw_enc": {
-        "iv": "+gyE/4Jv1sqzgUjK",
-        "ct": "r7kelfxu8vfshHENVa00/KfsAd+IPVqPta7CT2rLF8iC",
-        "tag": "jPCw5bI4UCjgDSlhsxAYCQ=="
+        "iv": "JMm8qOtHiV68dKtr",
+        "ct": "FlZjQQ9CrEWrfGvyo0ccfdZWFg7xYXt6gw==",
+        "tag": "29SpEWMnMLqooyBFEQHy+w=="
       },
       "config_mode": "Inline",
       "group_remarks": "",
@@ -13081,7 +13081,8 @@
       "group_parent": "custom-1786348497151",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": ""
+      "build_date": "",
+      "last_mutation_id": "data-msrllg09-860eb020-dc09-4015-b670-a581e80c3a0f"
     },
     {
       "group": "kr-025",
@@ -14844,6 +14845,45 @@
       "actor_id": "u1786085321715",
       "actor_name": "신호근",
       "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786630374739-3rhrrv",
+      "ts": 1786630374739,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "414",
+      "group": "kr-025",
+      "owner": "한화큐셀 Module",
+      "label": "RP-VA",
+      "sn": "73482285",
+      "summary": "자산 정보 3개 항목 수정",
+      "changes": [
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "id_enc",
+          "label": "계정 ID",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "pw_enc",
+          "label": "비밀번호",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-msrllg09-860eb020-dc09-4015-b670-a581e80c3a0f"
     }
   ],
   "syncMutations": [
@@ -14860,6 +14900,11 @@
     {
       "id": "data-msrkpgeu-e5c2ac23-eb39-4b15-85cf-732598c79d2f",
       "ts": 1786628882278,
+      "scope": "data"
+    },
+    {
+      "id": "data-msrllg09-860eb020-dc09-4015-b670-a581e80c3a0f",
+      "ts": 1786630374739,
       "scope": "data"
     }
   ]
