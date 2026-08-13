@@ -402,6 +402,14 @@
           "author": "윤태리"
         },
         {
+          "id": 1786603706276,
+          "type": "OS 업그레이드",
+          "date": "2025.06.07",
+          "manager": "윤태리",
+          "note": "7.3.16.2 > 7.3.21.1 #mem bug",
+          "author": "윤태리"
+        },
+        {
           "id": 1786603639967,
           "type": "장비 구축",
           "date": "2026.8.13",
@@ -416,14 +424,6 @@
           "manager": "신호근",
           "note": "ㅁㄴㅇㄻㄴㅇㄹ",
           "author": "신호근"
-        },
-        {
-          "id": 1786603706276,
-          "type": "OS 업그레이드",
-          "date": "2025.06.07",
-          "manager": "윤태리",
-          "note": "7.3.16.2 > 7.3.21.1 #mem bug",
-          "author": "윤태리"
         }
       ],
       "enable_pw_enc": null,
@@ -461,15 +461,16 @@
           "manager": "신호근",
           "note": "123123123",
           "author": "신호근",
-          "history_id": 1786603738648,
-          "deleted_at": 1786603738648,
-          "deleted_by": "신호근",
+          "history_id": 1786603788570,
+          "deleted_at": 1786603788570,
+          "deleted_by": "윤태리",
           "delete_revert_result": {
             "reverted": 0,
             "skipped": 0
           }
         }
-      ]
+      ],
+      "asset_order": 1
     },
     {
       "group": "tw-ds",
@@ -558,7 +559,8 @@
             "skipped": 0
           }
         }
-      ]
+      ],
+      "asset_order": 3
     },
     {
       "group": "tw-ds",
@@ -630,7 +632,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "asset_order": 2
     },
     {
       "group": "in-sdn-cama",
@@ -15103,6 +15106,78 @@
       "actor_id": "u1786085321715",
       "actor_name": "신호근",
       "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786603756489-nq9333",
+      "ts": 1786603756489,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "6",
+      "group": "tw-ds",
+      "owner": "삼성전자 SET",
+      "label": "SG-S200-30-PR",
+      "sn": "3919330046",
+      "summary": "자산 순서 변경 · SG-S200-30-PR",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "1",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786519956793",
+      "actor_name": "윤태리",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786603756489-0bs6ch",
+      "ts": 1786603756489,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "7",
+      "group": "tw-ds",
+      "owner": "삼성전자 SET",
+      "label": "IS-SWSA-SWG-100-250-1Y",
+      "sn": "50691101-1-1",
+      "summary": "자산 순서 변경 · IS-SWSA-SWG-100-250-1Y",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "3",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786519956793",
+      "actor_name": "윤태리",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786603756489-ct3o9i",
+      "ts": 1786603756489,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "8",
+      "group": "tw-ds",
+      "owner": "삼성전자 SET",
+      "label": "RP-V50-1Y",
+      "sn": "27480040",
+      "summary": "자산 순서 변경 · RP-V50-1Y",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "2",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786519956793",
+      "actor_name": "윤태리",
+      "actor_role": "일반사용자"
     }
   ]
 }
