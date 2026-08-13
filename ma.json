@@ -288,15 +288,15 @@
       "id": 1786515970437,
       "group": "custom-1786348497151",
       "ym": "2026-04",
-      "date": "2026.7.29",
+      "date": "",
       "manager": "신호근",
       "note": "",
-      "done": true,
+      "done": false,
       "incomplete": false,
-      "uncontracted": false,
+      "uncontracted": true,
       "author": "신호근",
-      "updated_at": 1786628715790,
-      "mutation_id": "ma-msrklvym-7da2dcd4-50fa-40d2-9135-d5a206560e8e"
+      "updated_at": 1786628742577,
+      "mutation_id": "ma-msrkmgmp-4413488b-7853-41d4-846b-49247de90d79"
     },
     {
       "id": 1786515972444,
@@ -1850,6 +1850,11 @@
     {
       "id": "ma-msrkmcb5-b51ca7a4-a10a-463e-a420-ddd8364f0265",
       "ts": 1786628736977,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msrkmgmp-4413488b-7853-41d4-846b-49247de90d79",
+      "ts": 1786628742577,
       "scope": "maintenance"
     }
   ]
