@@ -4543,7 +4543,17 @@
       "build_engineer": "신호근",
       "build_date": "2024.12",
       "enable_pw_enc": null,
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607405478,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.05 신호근 3.3.5.2 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-006",
@@ -15507,22 +15517,6 @@
       "actor_role": "마스터"
     },
     {
-      "id": "audit-1786607383469-p0nu2r",
-      "ts": 1786607383469,
-      "action": "add",
-      "target_type": "유지보수 점검",
-      "target_id": "1786607383448",
-      "group": "kr-018",
-      "owner": "삼성 벤처투자",
-      "label": "2026-01",
-      "sn": "",
-      "summary": "2026년 1월 유지보수 점검 등록",
-      "changes": [],
-      "actor_id": "u1786596131396",
-      "actor_name": "김상문",
-      "actor_role": "일반사용자"
-    },
-    {
       "id": "audit-1786603756489-nq9333",
       "ts": 1786603756489,
       "action": "reorder",
@@ -15592,6 +15586,22 @@
       ],
       "actor_id": "u1786519956793",
       "actor_name": "윤태리",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607383469-p0nu2r",
+      "ts": 1786607383469,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607383448",
+      "group": "kr-018",
+      "owner": "삼성 벤처투자",
+      "label": "2026-01",
+      "sn": "",
+      "summary": "2026년 1월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
       "actor_role": "일반사용자"
     }
   ]
