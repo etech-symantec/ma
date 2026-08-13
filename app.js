@@ -1462,6 +1462,43 @@ function setMaintenanceTab(tab){
   renderMaintenance();
 }
 
+/* 유지보수 점검지 - 담당자별 고유 색상 */
+function maintenanceOwnerColors(name){
+  name = String(name || '').trim();
+
+  if (!name){
+    return {
+      fg:'#7A8494',
+      bg:'#F2F4F7',
+      border:'#D9DEE6',
+      accent:'#AAB2BE'
+    };
+  }
+
+  /*
+    이름을 숫자로 변환해서 색상을 결정.
+    같은 이름은 항상 같은 색이 나온다.
+  */
+  let hash = 0;
+
+  for (let i = 0; i < name.length; i++){
+    hash = (
+      name.charCodeAt(i) +
+      ((hash << 5) - hash)
+    ) | 0;
+  }
+
+  const hue =
+    ((hash % 360) + 360) % 360;
+
+  return {
+    fg:`hsl(${hue} 48% 34%)`,
+    bg:`hsl(${hue} 72% 94%)`,
+    border:`hsl(${hue} 48% 78%)`,
+    accent:`hsl(${hue} 55% 53%)`
+  };
+}
+
 const MAINT_MONTHS = [1,2,3,4,5,6,7,8,9,10,11,12];
 
 function maintenanceEntryTabHtml(){
@@ -1484,8 +1521,22 @@ function maintenanceEntryTabHtml(){
       ddayHtml = `<span class="maint-dday ${cls}">${label}</span>`;
     }
 
+    const ownerColors =
+      maintenanceOwnerColors(g.meta.owner_primary);
+    
     const engineerHtml = g.meta.owner_primary
-      ? `<span class="mgr-primary">${esc(g.meta.owner_primary)}</span>`
+      ? `
+        <span
+          class="maint-owner-badge"
+          style="
+            --owner-fg:${ownerColors.fg};
+            --owner-bg:${ownerColors.bg};
+            --owner-border:${ownerColors.border};
+          "
+        >
+          ${esc(g.meta.owner_primary)}
+        </span>
+      `
       : '<span class="maint-td-empty">-</span>';
 
     const monthCellsHtml = MAINT_MONTHS.map(m => {
@@ -1571,7 +1622,10 @@ function maintenanceEntryTabHtml(){
     }).join('');
 
     return `
-      <tr>
+      <tr
+        class="maint-owner-row"
+        style="--maint-owner-color:${ownerColors.accent};"
+      >
         <td class="maint-cell-owner" data-label="사업장">
           <span class="maint-row-owner">${esc(g.meta.owner)}</span>${g.meta.location ? `<span class="maint-row-location"> · ${esc(g.meta.location)}</span>` : ''}
         </td>
