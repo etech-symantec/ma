@@ -5685,7 +5685,9 @@
           "note": "23.08 강성준 7.3.11.3 \nxx.xx ??? 7.3.11.3 > 7.3.21.1",
           "author": "윤태리"
         }
-      ]
+      ],
+      "asset_parent_id": "137",
+      "last_mutation_id": "data-mss64lhq-768a5639-31a4-4aad-9413-506e12365eae"
     },
     {
       "group": "cn-001",
@@ -15535,6 +15537,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss64fw0-54f4c741-44a1-411a-9b5e-470fa56185db"
+    },
+    {
+      "id": "audit-1786664860628-lxyy7l",
+      "ts": 1786664860628,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "139",
+      "group": "cn-001",
+      "owner": "삼성디스플레이 SDT",
+      "label": "ISG-Proxy 2",
+      "sn": "0073998789",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "137",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss64lhq-768a5639-31a4-4aad-9413-506e12365eae"
     }
   ],
   "syncMutations": [
@@ -15651,6 +15678,11 @@
     {
       "id": "data-mss64fw0-54f4c741-44a1-411a-9b5e-470fa56185db",
       "ts": 1786664853369,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss64lhq-768a5639-31a4-4aad-9413-506e12365eae",
+      "ts": 1786664860630,
       "scope": "data"
     }
   ]
