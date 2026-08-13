@@ -66,75 +66,7 @@
       "build_engineer": "",
       "build_date": "",
       "cust_memo": "",
-      "deleted_work_log": [
-        {
-          "id": 1786579245650,
-          "type": "OS 업그레이드",
-          "date": "2026.8.13",
-          "manager": "신호근",
-          "note": "테스트",
-          "author": "신호근",
-          "field_changes": {
-            "os_ver": "7.3.17.2"
-          },
-          "change_summary": "OS 버전: 7.3.17.1 → 7.3.17.2",
-          "rollback_changes": {
-            "os_ver": {
-              "sensitive": false,
-              "before": "7.3.17.1",
-              "after": "7.3.17.2"
-            }
-          },
-          "history_id": 1786579263174,
-          "deleted_at": 1786579263174,
-          "deleted_by": "신호근",
-          "delete_revert_result": {
-            "reverted": 1,
-            "skipped": 0
-          }
-        },
-        {
-          "id": 1786586586693,
-          "type": "OS 업그레이드",
-          "date": "2026.8.13",
-          "manager": "테스트",
-          "note": "테스트",
-          "author": "테스트",
-          "field_changes": {
-            "os_ver": "9.9.9.9"
-          },
-          "change_summary": "OS 버전: 7.3.17.1 → 9.9.9.9",
-          "rollback_changes": {
-            "os_ver": {
-              "sensitive": false,
-              "before": "7.3.17.1",
-              "after": "9.9.9.9"
-            }
-          },
-          "history_id": 1786586606335,
-          "deleted_at": 1786586606335,
-          "deleted_by": "테스트",
-          "delete_revert_result": {
-            "reverted": 1,
-            "skipped": 0
-          }
-        },
-        {
-          "id": 1786593258493,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "신호근",
-          "note": "ㅁㄴㅇㄹㄴㅁㅇㄹ",
-          "author": "신호근",
-          "history_id": 1786593270220,
-          "deleted_at": 1786593270220,
-          "deleted_by": "신호근",
-          "delete_revert_result": {
-            "reverted": 0,
-            "skipped": 0
-          }
-        }
-      ]
+      "deleted_work_log": []
     },
     {
       "group": "jp-sds",
@@ -201,34 +133,7 @@
       "build_date": "",
       "cust_memo": "",
       "work_log": [],
-      "deleted_work_log": [
-        {
-          "id": 1786586586694,
-          "type": "OS 업그레이드",
-          "date": "2026.8.13",
-          "manager": "테스트",
-          "note": "테스트",
-          "author": "테스트",
-          "field_changes": {
-            "os_ver": "9.9.9.9"
-          },
-          "change_summary": "OS 버전: 7.3.17.1 → 9.9.9.9",
-          "rollback_changes": {
-            "os_ver": {
-              "sensitive": false,
-              "before": "7.3.17.1",
-              "after": "9.9.9.9"
-            }
-          },
-          "history_id": 1786586603124,
-          "deleted_at": 1786586603124,
-          "deleted_by": "테스트",
-          "delete_revert_result": {
-            "reverted": 1,
-            "skipped": 0
-          }
-        }
-      ]
+      "deleted_work_log": []
     },
     {
       "group": "jp-sds",
