@@ -18,7 +18,7 @@
       "deploy_date": "",
       "deploy_log": "24.03.11 박동석 6.7.5.12 > 7.3.17.1",
       "mode": "Explicit",
-      "os_ver": "9.9.9.9",
+      "os_ver": "7.3.17.1",
       "owner_primary": "박동석",
       "owner_secondary": "김상문",
       "check_method": "원격",
@@ -43,27 +43,7 @@
         "ct": "9lXR8Ejhr7HBTQWYhE5Co7rxKw==",
         "tag": "fFZu5EWtMDhjWxREemfxpQ=="
       },
-      "work_log": [
-        {
-          "id": 1786586586693,
-          "type": "OS 업그레이드",
-          "date": "2026.8.13",
-          "manager": "테스트",
-          "note": "테스트",
-          "author": "테스트",
-          "field_changes": {
-            "os_ver": "9.9.9.9"
-          },
-          "change_summary": "OS 버전: 7.3.17.1 → 9.9.9.9",
-          "rollback_changes": {
-            "os_ver": {
-              "sensitive": false,
-              "before": "7.3.17.1",
-              "after": "9.9.9.9"
-            }
-          }
-        }
-      ],
+      "work_log": [],
       "group_remarks": "",
       "cust_contacts": [
         {
@@ -108,6 +88,32 @@
           "history_id": 1786579263174,
           "deleted_at": 1786579263174,
           "deleted_by": "신호근",
+          "delete_revert_result": {
+            "reverted": 1,
+            "skipped": 0
+          }
+        },
+        {
+          "id": 1786586586693,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "테스트",
+          "note": "테스트",
+          "author": "테스트",
+          "field_changes": {
+            "os_ver": "9.9.9.9"
+          },
+          "change_summary": "OS 버전: 7.3.17.1 → 9.9.9.9",
+          "rollback_changes": {
+            "os_ver": {
+              "sensitive": false,
+              "before": "7.3.17.1",
+              "after": "9.9.9.9"
+            }
+          },
+          "history_id": 1786586606335,
+          "deleted_at": 1786586606335,
+          "deleted_by": "테스트",
           "delete_revert_result": {
             "reverted": 1,
             "skipped": 0
