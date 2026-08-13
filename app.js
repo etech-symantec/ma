@@ -3452,10 +3452,30 @@ function rowHtml(r, groupSupportId){
   const logCount = (r.work_log||[]).length;
   return `
   <tr data-id="${r.id}">
-    ${canSelectAssets() ? `<td class="col-select" data-label=""><input type="checkbox" class="asset-select-cb" data-select-asset="${r.id}" ${selectedAssetIds.has(String(r.id))?'checked':''} title="일괄 이동/작업 이력 등록을 위해 선택"></td>` : ''}
+    ${canSelectAssets() ? `
+      <td class="col-select" data-label="">
+        <div class="asset-select-wrap">
+          ${canReorderAssets() ? `
+            <span
+              class="asset-drag-handle"
+              draggable="true"
+              data-drag-asset="${r.id}"
+              title="드래그하여 자산 순서 변경"
+            >⋮</span>
+          ` : ''}
+          <input
+            type="checkbox"
+            class="asset-select-cb"
+            data-select-asset="${r.id}"
+            ${selectedAssetIds.has(String(r.id)) ? 'checked' : ''}
+            title="일괄 이동/작업 이력 등록을 위해 선택"
+          >
+        </div>
+      </td>
+    ` : ''}
     <td class="sku col-sku" data-label="SKU / 제품">
-      ${canReorderAssets() ? `<span class="asset-drag-handle" draggable="true" data-drag-asset="${r.id}" title="드래그하여 자산 순서 변경">⋮⋮</span>` : ''}
-      ${skuBadge(r.sku)}${skuKeywordTagsHtml(r.sku)}
+      ${skuBadge(r.sku)}
+      ${skuKeywordTagsHtml(r.sku)}
     </td>
     <td class="sn col-sn" data-label="S/N">${snLink(r, groupSupportId)}</td>
     <td class="col-qty" data-label="수량">${esc(r.qty)||''}</td>
