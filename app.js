@@ -3622,35 +3622,44 @@ function openGroupEditModal(gid){
   const modal = document.getElementById('groupEditModal');
   
   modal
-    .querySelectorAll('.form-grid input, .form-grid select, .form-grid textarea, .form-grid button')
+    .querySelectorAll(
+      '.form-grid input, .form-grid select, .form-grid textarea, .form-grid button'
+    )
     .forEach(el => {
       el.disabled = !isAdmin;
     });
-  
-  /* 비고는 모든 로그인 사용자가 수정 가능 */
-  document.getElementById('ge_remarks').disabled = false;
-  
-  
-  /* 일반사용자 안내 */
+  if (!isAdmin){
+    document.getElementById('ge_remarks').disabled = false;
+    modal
+      .querySelectorAll(
+        '#ge_cust_list input, ' +
+        '#ge_cust_list select, ' +
+        '#ge_cust_list button'
+      )
+      .forEach(el => {
+        el.disabled = false;
+      });
+    const addCustBtn =
+      document.getElementById('ge_cust_add_btn');
+    if (addCustBtn){
+      addCustBtn.disabled = false;
+    }
+  }
   let notice = document.getElementById('geLimitedEditNotice');
   
   if (!notice){
     notice = document.createElement('div');
     notice.id = 'geLimitedEditNotice';
     notice.className = 'ge-limited-edit-notice';
-  
     const grid = modal.querySelector('.form-grid');
     grid.parentNode.insertBefore(notice, grid);
   }
-  
   if (isAdmin){
     notice.style.display = 'none';
   } else {
     notice.style.display = '';
     notice.textContent = '일반사용자는 법인 비고만 수정할 수 있습니다.';
   }
-  
-  
   document.getElementById('geError').textContent = '';
   modal.classList.add('open');
 }
@@ -3676,14 +3685,32 @@ document.getElementById('saveGeBtn').onclick = () => {
       alert('로그인 후 수정할 수 있습니다.');
       return;
     }
-    const remarks =
-      document.getElementById('ge_remarks').value.trim();
     const items = records.filter(
       r => String(r.group) === String(groupEditId)
     );
     if (!items.length) return;
+    captureCustContactsFromDom();
+    const newContacts =
+      geCustContacts
+        .filter(c =>
+          c.name ||
+          c.org ||
+          c.phone ||
+          c.email
+        )
+        .slice(0, 5);
+    const remarks =
+      document
+        .getElementById('ge_remarks')
+        .value
+        .trim();
     items.forEach(r => {
       r.group_remarks = remarks;
+      r.cust_contacts =
+        newContacts.map(c => ({...c}));
+      r.cust_contact = '';
+      r.cust_phone = '';
+      r.cust_email = '';
     });
     document
       .getElementById('groupEditModal')
