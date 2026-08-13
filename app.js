@@ -82,9 +82,13 @@ if (window.ResizeObserver){
 let ENC_STORE = null;
 let githubConfig = null;
 let githubToken = null;
+
+/* data.json 전용 SHA / 3-way merge 기준 */
 let githubSha = null;
-let maintenanceGithubSha = null;
 let lastSyncedState = null;
+
+/* ma.json 전용 SHA / 3-way merge 기준 */
+let maintenanceGithubSha = null;
 let lastSyncedMaintenanceState = null;
 
 function cloneSyncState(v){
@@ -93,30 +97,22 @@ function cloneSyncState(v){
     : JSON.parse(JSON.stringify(v));
 }
 
+/* data.json: 법인/자산/사용자/감사기록만 저장 */
 function currentSyncState(){
   return {
     salt: ENC_STORE.salt,
     iterations: ENC_STORE.iterations,
-    records:
-      cloneSyncState(
-        records || []
-      ),
-    users:
-      cloneSyncState(
-        users || []
-      ),
-    auditLogs:
-      cloneSyncState(
-        auditLogs || []
-      )
+
+    records: cloneSyncState(records || []),
+    users: cloneSyncState(users || []),
+    auditLogs: cloneSyncState(auditLogs || [])
   };
 }
+
+/* ma.json: 유지보수 점검 기록만 저장 */
 function currentMaintenanceState(){
   return {
-    maintenanceLogs:
-      cloneSyncState(
-        maintenanceLogs || []
-      )
+    maintenanceLogs: cloneSyncState(maintenanceLogs || [])
   };
 }
 
@@ -132,7 +128,6 @@ function maintenanceGithubConfigOf(cfg){
     ...cfg,
     path:'ma.json'
   };
-
 }
 
 const _ok = 'etechMA26-restricted'; // xor key — also just visible text, not a secret
@@ -161,6 +156,12 @@ let autoSyncInFlight = false;
 let autoSyncQueued = false;
 let hasUnsyncedChanges = false;
 let lastAutoSyncError = null;
+
+/* ma.json 동기화는 data.json과 완전히 별도 상태로 관리 */
+let maintenanceSyncInFlight = false;
+let maintenanceSyncQueued = false;
+let hasUnsyncedMaintenanceChanges = false;
+let lastMaintenanceSyncError = null;
 
 function setSyncStatus(state, msg){
   const el = document.getElementById('githubSyncStatus');
@@ -308,7 +309,8 @@ function ensureWorkLogSyncOverlay(){
     await syncWorkLogAndWait(
       pendingWorkLogSyncTask.label,
       pendingWorkLogSyncTask.onSuccess,
-      true
+      true,
+      pendingWorkLogSyncTask.syncKind || 'data'
     );
 
   };
@@ -439,6 +441,34 @@ async function flushAutoSyncNow(){
 }
 
 
+
+/* ma.json 유지보수 점검을 즉시 동기화 */
+async function flushMaintenanceSyncNow(){
+  hasUnsyncedMaintenanceChanges = true;
+
+  if (!githubConfig || !githubToken){
+    throw new Error('GitHub 연결 정보가 없습니다.');
+  }
+
+  while (maintenanceSyncInFlight){
+    await sleepMs(80);
+  }
+
+  maintenanceSyncQueued = false;
+  lastMaintenanceSyncError = null;
+
+  await runMaintenanceSync();
+
+  if (hasUnsyncedMaintenanceChanges){
+    throw (
+      lastMaintenanceSyncError ||
+      new Error('유지보수 점검 GitHub 동기화가 완료되지 않았습니다.')
+    );
+  }
+
+  return true;
+}
+
 /*
   작업 이력 저장 전용
 
@@ -449,7 +479,8 @@ async function flushAutoSyncNow(){
 async function syncWorkLogAndWait(
   label,
   onSuccess,
-  isRetry = false
+  isRetry = false,
+  syncKind = 'data'
 ){
 
   if (workLogSyncBusy){
@@ -471,7 +502,12 @@ async function syncWorkLogAndWait(
       onSuccess:
         typeof onSuccess === 'function'
           ? onSuccess
-          : null
+          : null,
+
+      syncKind:
+        syncKind === 'maintenance'
+          ? 'maintenance'
+          : 'data'
     };
 
   }
@@ -513,7 +549,11 @@ async function syncWorkLogAndWait(
 
   try{
 
-    await flushAutoSyncNow();
+    if (syncKind === 'maintenance'){
+      await flushMaintenanceSyncNow();
+    } else {
+      await flushAutoSyncNow();
+    }
 
 
     /*
@@ -827,7 +867,6 @@ function mergeSyncStates(
   base = base || {
     records:[],
     users:[],
-    maintenanceLogs:[],
     auditLogs:[]
   };
   return {
@@ -862,9 +901,7 @@ function mergeSyncStates(
       )
   };
 }
-/* =========================================================
-   ma.json - 유지보수 점검 전용 3-way merge
-   ========================================================= */
+
 function mergeMaintenanceStates(
   base,
   local,
@@ -873,316 +910,134 @@ function mergeMaintenanceStates(
   base = base || {
     maintenanceLogs:[]
   };
+
   return {
     maintenanceLogs:
       mergeStateArray(
         base.maintenanceLogs || [],
         local.maintenanceLogs || [],
         remote.maintenanceLogs || [],
-        m =>
-          m.id ||
-          `${m.group}|${m.ym}`
+        m => m.id || `${m.group}|${m.ym}`
       )
   };
 }
 
-/* =========================================================
-   GitHub JSON 파일 1개를
-   최신본 GET → 3-way merge → PUT 하는 공통 함수
-   ========================================================= */
-async function syncGithubJsonFile({
-  cfg,
-  baseState,
-  localState,
-  mergeFn,
-  emptyState,
-  message
-}){
-  const MAX_RETRY = 5;
-  for (
-    let attempt = 1;
-    attempt <= MAX_RETRY;
-    attempt++
-  ){
-    let remoteState;
-    let remoteSha;
-    try{
-      const result =
+async function runAutoSync(){
+  if (!githubConfig || !githubToken){
+    return;
+  }
+  if (autoSyncInFlight){
+    autoSyncQueued = true;
+    return;
+  }
+  autoSyncInFlight = true;
+  autoSyncQueued = false;
+  setSyncStatus('syncing');
+
+  try{
+    const localState =
+      currentSyncState();
+
+    let mergedState = null;
+    let savedSha = null;
+    const MAX_RETRY = 5;
+
+    for (
+      let attempt = 1;
+      attempt <= MAX_RETRY;
+      attempt++
+    ){
+      const {
+        json: remoteState,
+        sha: remoteSha
+      } =
         await githubApiGet(
-          cfg,
+          githubConfig,
           githubToken
         );
-      remoteState =
-        result.json;
-      remoteSha =
-        result.sha;
-    }
-    catch(e){
-      if (e.notFound){
-        remoteState =
-          cloneSyncState(
-            emptyState
+      mergedState =
+        mergeSyncStates(
+          lastSyncedState,
+          localState,
+          remoteState
+        );
+      try{
+        savedSha =
+          await githubApiPut(
+            githubConfig,
+            githubToken,
+            mergedState,
+            remoteSha,
+
+            '자산 데이터 자동 병합 동기화 - ' +
+            new Date().toLocaleString('ko-KR')
           );
-        remoteSha =
-          null;
+        break;
       }
-      else{
+      catch(e){
+        if (
+          (
+            e.status === 409 ||
+            e.status === 422
+          ) &&
+          attempt < MAX_RETRY
+        ){
+          console.warn(
+            `GitHub 동시 저장 충돌 - 자동 재병합 ${attempt}/${MAX_RETRY}`
+          );
+          await new Promise(
+            resolve =>
+              setTimeout(
+                resolve,
+                250 * attempt
+              )
+          );
+          continue;
+        }
         throw e;
       }
     }
-    const mergedState =
-      mergeFn(
-        baseState,
-        localState,
-        remoteState
+    if (!savedSha || !mergedState){
+      throw new Error(
+        'GitHub 동시 저장 충돌을 자동으로 해결하지 못했습니다.'
       );
-    try{
-      const savedSha =
-        await githubApiPut(
-          cfg,
-          githubToken,
-          mergedState,
-          remoteSha,
-          message
-        );
-      return {
-        mergedState,
-        savedSha
-      };
     }
-    catch(e){
-      if (
-        (
-          e.status === 409 ||
-          e.status === 422
-        ) &&
-        attempt < MAX_RETRY
-      ){
-        console.warn(
-          `${cfg.path} 동시 저장 충돌 - ` +
-          `자동 재병합 ${attempt}/${MAX_RETRY}`
-        );
-        await sleepMs(
-          250 * attempt
-        );
-        continue;
-      }
-      throw e;
-    }
-  }
-  throw new Error(
-    `${cfg.path} 동시 저장 충돌을 해결하지 못했습니다.`
-  );
-}
-
-async function runAutoSync(){
-
-  if (
-    !githubConfig ||
-    !githubToken
-  ){
-    return;
-  }
-
-
-  if (autoSyncInFlight){
-
-    autoSyncQueued = true;
-
-    return;
-  }
-
-
-  autoSyncInFlight = true;
-  autoSyncQueued = false;
-
-  setSyncStatus(
-    'syncing'
-  );
-
-
-  try{
-
-    /*
-      현재 브라우저의 LOCAL 데이터
-    */
-    const localDataState =
-      currentSyncState();
-
-
-    const localMaintenanceState =
-      currentMaintenanceState();
-
-
-    /*
-      ========================================
-      1. data.json
-      법인 / 자산 / 사용자 / 감사로그
-      ========================================
-    */
-
-    const dataResult =
-      await syncGithubJsonFile({
-
-        cfg:
-          githubConfig,
-
-        baseState:
-          lastSyncedState,
-
-        localState:
-          localDataState,
-
-        mergeFn:
-          mergeSyncStates,
-
-        emptyState:{
-          salt:
-            ENC_STORE.salt,
-
-          iterations:
-            ENC_STORE.iterations,
-
-          records:[],
-          users:[],
-          auditLogs:[]
-        },
-
-        message:
-          '법인/자산 데이터 자동 병합 동기화 - ' +
-          new Date().toLocaleString('ko-KR')
-
-      });
-
-
-    /*
-      ========================================
-      2. ma.json
-      유지보수 점검 기록
-      ========================================
-    */
-
-    const maConfig =
-      maintenanceGithubConfigOf(
-        githubConfig
-      );
-
-
-    const maResult =
-      await syncGithubJsonFile({
-
-        cfg:
-          maConfig,
-
-        baseState:
-          lastSyncedMaintenanceState,
-
-        localState:
-          localMaintenanceState,
-
-        mergeFn:
-          mergeMaintenanceStates,
-
-        emptyState:{
-          maintenanceLogs:[]
-        },
-
-        message:
-          '유지보수 점검 데이터 자동 병합 동기화 - ' +
-          new Date().toLocaleString('ko-KR')
-
-      });
-
-
-    /*
-      두 파일이 모두 정상 저장된 뒤
-      현재 브라우저 데이터도 병합 결과로 갱신
-    */
-
     suppressAuditCapture = true;
-
-
     try{
-
       records =
         cloneSyncState(
-          dataResult.mergedState.records || []
+          mergedState.records || []
         );
-
-
       users =
         cloneSyncState(
-          dataResult.mergedState.users || []
+          mergedState.users || []
         );
-
-
       auditLogs =
         cloneSyncState(
-          dataResult.mergedState.auditLogs || []
+          mergedState.auditLogs || []
         );
-
-
-      maintenanceLogs =
-        cloneSyncState(
-          maResult.mergedState.maintenanceLogs || []
-        );
-
-
-      /* 각 파일별 최신 SHA */
       githubSha =
-        dataResult.savedSha;
-
-
-      maintenanceGithubSha =
-        maResult.savedSha;
-
-
-      /* 각 파일별 새로운 BASE */
+        savedSha;
       lastSyncedState =
         cloneSyncState(
-          dataResult.mergedState
+          mergedState
         );
-
-
-      lastSyncedMaintenanceState =
-        cloneSyncState(
-          maResult.mergedState
-        );
-
-
       refreshAuditSnapshot();
-
     }
     finally{
-
       suppressAuditCapture = false;
-
     }
-
-
     lastAutoSyncError = null;
-
     hasUnsyncedChanges = false;
-
-
-    setSyncStatus(
-      'synced'
-    );
-
+    setSyncStatus('synced');
   }
   catch(e){
-
-    lastAutoSyncError = e;
-
-    hasUnsyncedChanges = true;
-
-
+  lastAutoSyncError = e;
+  hasUnsyncedChanges = true;
     console.error(
       '자동 동기화 실패:',
       e
     );
-
-
     setSyncStatus(
       'error',
       e.message
@@ -1196,8 +1051,122 @@ async function runAutoSync(){
   }
 }
 
+
+/* =========================================================
+   ma.json 전용 동기화
+   - data.json은 전혀 읽거나 쓰지 않음
+   - 유지보수 점검 기록만 3-way merge
+   ========================================================= */
+async function runMaintenanceSync(){
+  if (!githubConfig || !githubToken){
+    return;
+  }
+
+  if (maintenanceSyncInFlight){
+    maintenanceSyncQueued = true;
+    return;
+  }
+
+  maintenanceSyncInFlight = true;
+  maintenanceSyncQueued = false;
+  setSyncStatus('syncing');
+
+  try{
+    const localState = currentMaintenanceState();
+    const maConfig = maintenanceGithubConfigOf(githubConfig);
+
+    let mergedState = null;
+    let savedSha = null;
+    const MAX_RETRY = 5;
+
+    for (let attempt = 1; attempt <= MAX_RETRY; attempt++){
+      let remoteState;
+      let remoteSha;
+
+      try{
+        const remote = await githubApiGet(maConfig, githubToken);
+        remoteState = remote.json || {maintenanceLogs:[]};
+        remoteSha = remote.sha;
+      }
+      catch(e){
+        if (e.notFound){
+          remoteState = {maintenanceLogs:[]};
+          remoteSha = null;
+        } else {
+          throw e;
+        }
+      }
+
+      mergedState = mergeMaintenanceStates(
+        lastSyncedMaintenanceState,
+        localState,
+        remoteState
+      );
+
+      try{
+        savedSha = await githubApiPut(
+          maConfig,
+          githubToken,
+          mergedState,
+          remoteSha,
+          '유지보수 점검 데이터 자동 병합 동기화 - ' +
+            new Date().toLocaleString('ko-KR')
+        );
+        break;
+      }
+      catch(e){
+        if (
+          (e.status === 409 || e.status === 422) &&
+          attempt < MAX_RETRY
+        ){
+          console.warn(
+            `ma.json 동시 저장 충돌 - 자동 재병합 ${attempt}/${MAX_RETRY}`
+          );
+          await sleepMs(250 * attempt);
+          continue;
+        }
+        throw e;
+      }
+    }
+
+    if (!savedSha || !mergedState){
+      throw new Error('ma.json 동시 저장 충돌을 자동으로 해결하지 못했습니다.');
+    }
+
+    maintenanceLogs = cloneSyncState(
+      mergedState.maintenanceLogs || []
+    );
+
+    maintenanceGithubSha = savedSha;
+    lastSyncedMaintenanceState = cloneSyncState(mergedState);
+
+    lastMaintenanceSyncError = null;
+    hasUnsyncedMaintenanceChanges = false;
+    setSyncStatus('synced');
+  }
+  catch(e){
+    lastMaintenanceSyncError = e;
+    hasUnsyncedMaintenanceChanges = true;
+
+    console.error('유지보수 점검 자동 동기화 실패:', e);
+    setSyncStatus('error', e.message);
+  }
+  finally{
+    maintenanceSyncInFlight = false;
+
+    if (maintenanceSyncQueued){
+      runMaintenanceSync();
+    }
+  }
+}
+
 window.addEventListener('beforeunload', (e) => {
-  const syncPending = hasUnsyncedChanges || autoSyncInFlight || autoSyncTimer !== null;
+  const syncPending =
+    hasUnsyncedChanges ||
+    autoSyncInFlight ||
+    autoSyncTimer !== null ||
+    hasUnsyncedMaintenanceChanges ||
+    maintenanceSyncInFlight;
   if (!syncPending) return;
   e.preventDefault();
   e.returnValue = '';
@@ -1206,326 +1175,92 @@ window.addEventListener('beforeunload', (e) => {
 githubConfig = loadGithubConfigFromStorage() || DEFAULT_GITHUB_CONFIG;
 
 const dataReady = (async () => {
+  const cfg = githubConfig;
+  const token = loadRememberedToken() || _decodeAuth();
 
-  const cfg =
-    githubConfig;
-
-
-  const token =
-    loadRememberedToken() ||
-    _decodeAuth();
-
-
-  /*
-    ========================================
-    GitHub 사용 가능
-    ========================================
-  */
-  if (
-    cfg &&
-    cfg.repo &&
-    token
-  ){
-
+  if (cfg && cfg.repo && token){
     try{
+      /* data.json: 법인/자산/사용자/감사기록 */
+      const { json, sha } = await githubApiGet(cfg, token);
+      ENC_STORE = json;
+      records = (ENC_STORE.records || []).map(r => ({...r}));
+      users = (ENC_STORE.users || []).map(u => ({...u}));
+      auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
 
-      /*
-        1. data.json
-      */
-      const {
-        json,
-        sha
-      } =
-        await githubApiGet(
-          cfg,
-          token
-        );
-
-
-      ENC_STORE =
-        json;
-
-
-      records =
-        (ENC_STORE.records || [])
-          .map(r => ({...r}));
-
-
-      users =
-        (ENC_STORE.users || [])
-          .map(u => ({...u}));
-
-
-      auditLogs =
-        (ENC_STORE.auditLogs || [])
-          .map(a => ({...a}));
-
-
-      /*
-        기존 버전 data.json에 있던
-        maintenanceLogs
-
-        ma.json이 아직 없을 때의
-        자동 마이그레이션 소스로만 사용한다.
-      */
+      /* 구버전 data.json의 유지보수 기록은 ma.json 최초 생성용으로만 사용 */
       const legacyMaintenanceLogs =
-        (ENC_STORE.maintenanceLogs || [])
-          .map(m => ({...m}));
+        (ENC_STORE.maintenanceLogs || []).map(m => ({...m}));
 
+      githubConfig = cfg;
+      githubToken = token;
+      githubSha = sha;
+      lastSyncedState = currentSyncState();
 
-      githubConfig =
-        cfg;
-
-
-      githubToken =
-        token;
-
-
-      githubSha =
-        sha;
-
-
-      /*
-        data.json BASE
-      */
-      lastSyncedState =
-        currentSyncState();
-
-
-      /*
-        ======================================
-        2. ma.json 읽기
-        ======================================
-      */
-
-      const maConfig =
-        maintenanceGithubConfigOf(
-          cfg
-        );
-
+      /* ma.json: 유지보수 점검 기록만 별도 로드 */
+      const maConfig = maintenanceGithubConfigOf(cfg);
 
       try{
-
-        const {
-          json:maJson,
-          sha:maSha
-        } =
-          await githubApiGet(
-            maConfig,
-            token
-          );
-
+        const { json: maJson, sha: maSha } =
+          await githubApiGet(maConfig, token);
 
         maintenanceLogs =
-          (maJson.maintenanceLogs || [])
-            .map(m => ({...m}));
+          (maJson.maintenanceLogs || []).map(m => ({...m}));
 
-
-        maintenanceGithubSha =
-          maSha;
-
-
-        lastSyncedMaintenanceState =
-          currentMaintenanceState();
-
+        maintenanceGithubSha = maSha;
+        lastSyncedMaintenanceState = currentMaintenanceState();
       }
       catch(maErr){
-
-        /*
-          ma.json이 아직 없는 경우
-
-          기존 data.json의 maintenanceLogs를
-          메모리로 가져온 뒤,
-          다음 저장 때 ma.json을 자동 생성한다.
-        */
         if (maErr.notFound){
-
-          console.info(
-            'ma.json이 없어 기존 data.json의 ' +
-            '유지보수 점검 기록을 마이그레이션합니다.'
-          );
-
-
-          maintenanceLogs =
-            legacyMaintenanceLogs;
-
-
-          maintenanceGithubSha =
-            null;
-
-
-          /*
-            ★ 중요
-            원격 ma.json은 비어 있는 상태가 BASE.
-
-            여기서 currentMaintenanceState()를
-            BASE로 잡으면 기존 로그가 삭제로 판단될 수 있음.
-          */
-          lastSyncedMaintenanceState = {
-            maintenanceLogs:[]
-          };
-
+          /* ma.json이 없으면 기존 data.json 기록을 메모리로 승계.
+             다음 유지보수 저장 때 ma.json만 새로 생성한다. */
+          maintenanceLogs = legacyMaintenanceLogs;
+          maintenanceGithubSha = null;
+          lastSyncedMaintenanceState = {maintenanceLogs:[]};
+        } else {
+          throw maErr;
         }
-        else{
-
-          /*
-            ma.json 조회 오류 시에도
-            기존 data.json 안 기록을 임시로 사용
-          */
-          console.warn(
-            'ma.json 불러오기 실패. ' +
-            '기존 data.json 유지보수 기록을 사용합니다:',
-            maErr
-          );
-
-
-          maintenanceLogs =
-            legacyMaintenanceLogs;
-
-
-          maintenanceGithubSha =
-            null;
-
-
-          lastSyncedMaintenanceState = {
-            maintenanceLogs:[]
-          };
-
-        }
-
       }
 
-
       return;
-
     }
     catch(e){
-
       console.warn(
-        'GitHub 자동 불러오기 실패, ' +
-        '로컬 JSON으로 대체합니다:',
+        'GitHub 자동 불러오기 실패, 로컬 JSON으로 대체합니다:',
         e
       );
-
     }
-
   }
 
+  /* 로컬 fallback: data.json + ma.json */
+  const r = await fetch('data.json');
+  if (!r.ok) throw new Error('HTTP ' + r.status);
 
-  /*
-    ========================================
-    로컬 파일 fallback
-    ========================================
-  */
+  const json = await r.json();
+  ENC_STORE = json;
+  records = (ENC_STORE.records || []).map(r => ({...r}));
+  users = (ENC_STORE.users || []).map(u => ({...u}));
+  auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
 
-  const r =
-    await fetch(
-      'data.json'
-    );
-
-
-  if (!r.ok){
-
-    throw new Error(
-      'HTTP ' + r.status
-    );
-
-  }
-
-
-  const json =
-    await r.json();
-
-
-  ENC_STORE =
-    json;
-
-
-  records =
-    (ENC_STORE.records || [])
-      .map(r => ({...r}));
-
-
-  users =
-    (ENC_STORE.users || [])
-      .map(u => ({...u}));
-
-
-  auditLogs =
-    (ENC_STORE.auditLogs || [])
-      .map(a => ({...a}));
-
-
-  /*
-    과거 data.json 유지보수 데이터
-  */
   const legacyMaintenanceLogs =
-    (ENC_STORE.maintenanceLogs || [])
-      .map(m => ({...m}));
+    (ENC_STORE.maintenanceLogs || []).map(m => ({...m}));
 
-
-  /*
-    로컬 ma.json도 시도
-  */
   try{
+    const maRes = await fetch('ma.json');
+    if (!maRes.ok) throw new Error('HTTP ' + maRes.status);
 
-    const maRes =
-      await fetch(
-        'ma.json'
-      );
-
-
-    if (!maRes.ok){
-
-      throw new Error(
-        'HTTP ' +
-        maRes.status
-      );
-
-    }
-
-
-    const maJson =
-      await maRes.json();
-
-
+    const maJson = await maRes.json();
     maintenanceLogs =
-      (maJson.maintenanceLogs || [])
-        .map(m => ({...m}));
-
-
-    lastSyncedMaintenanceState =
-      currentMaintenanceState();
-
+      (maJson.maintenanceLogs || []).map(m => ({...m}));
+    lastSyncedMaintenanceState = currentMaintenanceState();
   }
   catch(e){
-
-    /*
-      ma.json이 없으면
-      기존 data.json 데이터 사용
-    */
-    maintenanceLogs =
-      legacyMaintenanceLogs;
-
-
-    lastSyncedMaintenanceState = {
-      maintenanceLogs:[]
-    };
-
+    maintenanceLogs = legacyMaintenanceLogs;
+    lastSyncedMaintenanceState = {maintenanceLogs:[]};
   }
 
-
-  lastSyncedState =
-    currentSyncState();
-
-
+  lastSyncedState = currentSyncState();
 })().catch(err => {
-
-  console.error(
-    '데이터 로드 실패:',
-    err
-  );
-
+  console.error('데이터 로드 실패:', err);
 });
 
 let sessionKey = null;
@@ -3280,38 +3015,39 @@ function openMaintenanceLogModal(gid, ym){
   maintenanceEditTarget = { gid, ym };
   const log = maintenanceLogFor(gid, ym);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
-  document.getElementById('ml_date').value =
-    log && !log.incomplete
-      ? (log.date || todayDots())
-      : (log ? '' : todayDots());
 
-  const datePicker =
-    document.getElementById('ml_date_picker');
-  
-  if (datePicker){
-  
-    if (
-      log &&
-      log.date &&
-      !log.incomplete &&
-      !log.uncontracted
-    ){
-      const parts =
-        String(log.date)
-          .split('.')
-          .map(Number);
-  
-      if (
-        parts.length === 3 &&
-        parts.every(Number.isFinite)
-      ){
+  const dateEl = document.getElementById('ml_date');
+  const datePicker = document.getElementById('ml_date_picker');
+
+  if (log && !log.incomplete && !log.uncontracted){
+    dateEl.value = log.date || '';
+
+    if (log.date){
+      const parts = String(log.date).split('.').map(Number);
+      if (parts.length === 3 && parts.every(Number.isFinite)){
         datePicker.value =
-          `${parts[0]}-${String(parts[1]).padStart(2, '0')}-${String(parts[2]).padStart(2, '0')}`;
+          `${parts[0]}-${String(parts[1]).padStart(2,'0')}-${String(parts[2]).padStart(2,'0')}`;
       }
+    } else {
+      datePicker.value = `${ym}-01`;
     }
-    else{
+  }
+  else if (log){
+    dateEl.value = '';
+    datePicker.value = '';
+  }
+  else {
+    const today = new Date();
+    const todayYm =
+      `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+
+    if (ym === todayYm){
+      dateEl.value = todayDots();
       datePicker.value =
-        `${ym}-01`;
+        `${todayYm}-${String(today.getDate()).padStart(2,'0')}`;
+    } else {
+      dateEl.value = '';
+      datePicker.value = `${ym}-01`;
     }
   }
   
@@ -3441,15 +3177,17 @@ document.getElementById('ml_date_picker').addEventListener('change', (e) => {
 
 document.getElementById('saveMlBtn').onclick = async () => {
   if (!maintenanceEditTarget) return;
+
   const { gid, ym } = maintenanceEditTarget;
   let date = document.getElementById('ml_date').value.trim();
   const manager = document.getElementById('ml_manager').value.trim();
   let note = document.getElementById('ml_note').value.trim();
-  
+
   const done = document.getElementById('ml_done').checked;
   const incomplete = document.getElementById('ml_incomplete').checked;
   const uncontracted = document.getElementById('ml_uncontracted').checked;
   const errEl = document.getElementById('mlError');
+
   if (uncontracted){
     date = '';
     note = '';
@@ -3461,7 +3199,8 @@ document.getElementById('saveMlBtn').onclick = async () => {
       document.getElementById('ml_note').focus();
       return;
     }
-  } else {
+  }
+  else {
     if (!date){
       errEl.textContent = '점검일을 입력해 주세요.';
       return;
@@ -3472,6 +3211,7 @@ document.getElementById('saveMlBtn').onclick = async () => {
       return;
     }
   }
+
   errEl.textContent = '';
 
   let log = maintenanceLogFor(gid, ym);
@@ -3479,6 +3219,7 @@ document.getElementById('saveMlBtn').onclick = async () => {
     log = { id: Date.now(), group: gid, ym };
     maintenanceLogs.push(log);
   }
+
   log.date = date;
   log.manager = manager;
   log.note = note;
@@ -3488,45 +3229,39 @@ document.getElementById('saveMlBtn').onclick = async () => {
   log.author = currentUserName() || log.author || '';
   log.updated_at = Date.now();
 
+  hasUnsyncedMaintenanceChanges = true;
+
   await syncWorkLogAndWait(
     `${ymLabel(ym)} 유지보수 점검 동기화 중…`,
     () => {
       closeMaintenanceLogModal();
       renderMaintenance();
-    }
+    },
+    false,
+    'maintenance'
   );
 };
 
 document.getElementById('mlDeleteBtn').onclick = async () => {
-  if (!maintenanceEditTarget){
-    return;
-  }
-  if (
-    !confirm(
-      '이 달의 점검 등록을 취소하시겠습니까?'
-    )
-  ){
-    return;
-  }
-  const {
-    gid,
-    ym
-  } = maintenanceEditTarget;
-  maintenanceLogs =
-    maintenanceLogs.filter(
-      m =>
-        !(
-          m.group === gid &&
-          m.ym === ym
-        )
-    );
+  if (!maintenanceEditTarget) return;
+  if (!confirm('이 달의 점검 등록을 취소하시겠습니까?')) return;
+
+  const { gid, ym } = maintenanceEditTarget;
+
+  maintenanceLogs = maintenanceLogs.filter(
+    m => !(m.group === gid && m.ym === ym)
+  );
+
+  hasUnsyncedMaintenanceChanges = true;
+
   await syncWorkLogAndWait(
     `${ymLabel(ym)} 유지보수 점검 삭제 내용 동기화 중…`,
-
     () => {
       closeMaintenanceLogModal();
       renderMaintenance();
-    }
+    },
+    false,
+    'maintenance'
   );
 };
 
@@ -5407,8 +5142,7 @@ function auditClone(v){
 function auditSnapshotState(){
   return {
     records: auditClone(records || []),
-    users: auditClone(users || []),
-    maintenanceLogs: auditClone(maintenanceLogs || [])
+    users: auditClone(users || [])
   };
 }
 
@@ -5609,25 +5343,6 @@ function captureAuditFromStateDiff(){
 
     const sig = `${action}|${targetType}|${targetId}|${changes.map(c=>`${c.field}:${c.before}->${c.after}`).join('|')}`;
     pushUnique(sig, { action, targetType, targetId, group:ident.group, owner:ident.owner, label:ident.label, sn:ident.sn, summary, changes });
-  });
-
-  const maintKey = m => String(m.id || `${m.group}|${m.ym}`);
-  const oldMaint = new Map((before.maintenanceLogs || []).map(m => [maintKey(m),m]));
-  const newMaint = new Map((after.maintenanceLogs || []).map(m => [maintKey(m),m]));
-  const maintIds = new Set([...oldMaint.keys(),...newMaint.keys()]);
-  maintIds.forEach(id => {
-    const a=oldMaint.get(id), b=newMaint.get(id);
-    const cur=b||a;
-    const groupItems = records.filter(r => r.group === cur?.group);
-    const owner = groupItems.length ? groupMeta(groupItems).owner : '';
-    if (!a && b){
-      addAuditLog({action:'add',targetType:'유지보수 점검',targetId:id,group:b.group,owner,label:b.ym,summary:`${ymLabel(b.ym)} 유지보수 점검 등록`});
-    } else if (a && !b){
-      addAuditLog({action:'delete',targetType:'유지보수 점검',targetId:id,group:a.group,owner,label:a.ym,summary:`${ymLabel(a.ym)} 유지보수 점검 삭제`});
-    } else if (a && b){
-      const changes=auditFieldChanges(a,b,['id','group','ym','created_at','updated_at']);
-      if (changes.length) addAuditLog({action:'edit',targetType:'유지보수 점검',targetId:id,group:b.group,owner,label:b.ym,summary:`${ymLabel(b.ym)} 유지보수 점검 수정`,changes});
-    }
   });
 
   const oldUsers = new Map((before.users || []).map(u => [String(u.id),u]));
