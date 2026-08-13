@@ -426,7 +426,7 @@
       "entitlement": "🔗",
       "qty": "250",
       "start": "2026.1.1",
-      "end": "2026.07.31",
+      "end": "2026.12.31",
       "remarks": "",
       "deploy_date": "",
       "deploy_log": "",
@@ -474,7 +474,8 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "work_log": [
+      "work_log": [],
+      "deleted_work_log": [
         {
           "id": 1786600066485,
           "type": "장비 구축",
@@ -492,6 +493,13 @@
               "before": "2026.12.31",
               "after": "2026.07.31"
             }
+          },
+          "history_id": 1786600194917,
+          "deleted_at": 1786600194917,
+          "deleted_by": "윤태리",
+          "delete_revert_result": {
+            "reverted": 1,
+            "skipped": 0
           }
         }
       ]
