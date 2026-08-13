@@ -1550,52 +1550,56 @@ textarea.wl-fc-input.is-changed{
 .maint-toolbar label{ font-size:11px; color:var(--text-faint); font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em; margin-right:6px; }
 
 /* =========================================================
-   업데이트 전체보기 - 한 이력 = 최대한 한 줄
+   업데이트 전체보기 - 한 줄형 최종 정리
    ========================================================= */
-/* ---------- 상단 도구 ---------- */
+/* 상단 툴바 */
 .wh-toolbar{
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  justify-content:flex-start;
   gap:14px;
+
   width:100%;
   padding:8px 0 12px;
 }
 
-/* 왼쪽 - 전체선택 */
+/* 좌측: 전체 선택 / 선택 삭제 */
 .wh-admin-actions{
   display:flex;
   align-items:center;
+  justify-content:flex-start;
   gap:8px;
+
   flex:0 0 auto;
   margin:0;
 }
 
-/* 오른쪽 - 검색 / 구분 / 정렬 */
+/* 우측: 검색 / 구분 / 정렬 */
 .wh-filter-actions{
   display:flex;
   align-items:center;
   justify-content:flex-end;
   gap:6px;
+
   margin-left:auto;
   min-width:0;
 }
 
-/* 검색창 폭 고정 */
 .wh-search{
   flex:0 0 300px !important;
   width:300px;
 }
 
-/* select 크기 고정 */
 .wh-select{
   flex:0 0 auto;
   width:105px;
   height:30px;
   padding:0 8px;
+
   background:var(--surface2);
   border:1px solid var(--border-solid);
   border-radius:7px;
+
   color:var(--text-dim);
   font-size:11px;
   outline:none;
@@ -1605,45 +1609,19 @@ textarea.wl-fc-input.is-changed{
   width:88px;
 }
 /* ---------- 목록 ---------- */
-
-.wh-list{
-  display:flex;
-  flex-direction:column;
-
-  gap:6px;
-
-  width:100%;
-
-  padding:3px 0 40px;
-}
-
-
-/*
-  고정열 구성
-
-  체크     24
-  날짜     132
-  구분     110
-  자산     255
-  내용     180
-  변경     나머지 전체
-  작업자   125
-*/
 .wh-item{
   display:grid;
-
   grid-template-columns:
     24px
-    132px
-    110px
-    255px
-    180px
-    minmax(260px, 1fr)
-    125px;
+    max-content
+    max-content
+    minmax(260px, 1.25fr)
+    140px
+    minmax(260px, 1.7fr)
+    140px;
 
   align-items:start;
-
-  column-gap:9px;
+  column-gap:8px;
   row-gap:5px;
 
   width:100%;
@@ -1652,62 +1630,46 @@ textarea.wl-fc-input.is-changed{
   padding:8px 10px;
 
   background:var(--surface);
-
   border:1px solid var(--border-solid);
   border-radius:8px;
 
   cursor:pointer;
-
-  transition:
-    border-color .12s,
-    background .12s;
+  transition:border-color .12s, background .12s;
 }
-
 
 .wh-item:hover{
   border-color:#BCDDEA;
   background:#FBFDFE;
 }
 
-
-/*
-  체크박스 / 작업 구분 / 날짜를
-  wh-item grid에 직접 배치
-*/
+/* wh-top 안 요소를 그리드 직접 배치 */
 .wh-top{
   display:contents;
 }
 
-
-/* 체크 */
+/* 체크박스 */
 .wh-history-check{
   grid-column:1;
 
   display:flex;
-
   align-items:flex-start;
   justify-content:center;
 
   margin:1px 0 0;
 }
 
-
-/* 날짜 + 시간 */
+/* 날짜+시간 */
 .wh-item .ra-date{
   grid-column:2;
 
   margin:0;
-
   color:var(--text-faint);
-
   font-family:var(--mono);
   font-size:9.5px;
-
   line-height:1.4;
 
   white-space:nowrap;
 }
-
 
 /* 작업 구분 */
 .wh-item .ra-type{
@@ -1718,188 +1680,168 @@ textarea.wl-fc-input.is-changed{
   color:var(--accent);
   font-size:10.8px;
   font-weight:700;
-
   line-height:1.4;
 
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
-
-/* 법인 / SKU / S/N */
+/* 법인 / SKU / SN */
 .wh-item .ra-asset{
   grid-column:4;
 
-  min-width:0;
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:5px;
 
+  min-width:0;
   margin:0;
 
+  line-height:1.4;
+}
+
+.wh-owner{
   color:var(--text);
   font-size:11px;
   font-weight:700;
 
-  line-height:1.4;
+  white-space:nowrap;
+}
+/* SKU - 기존 배지 느낌과 비슷하게 */
+.wh-sku-badge{
+  display:inline-flex;
+  align-items:center;
+
+  max-width:100%;
+  min-height:20px;
+  padding:1px 8px;
+
+  border:1px solid #E7C979;
+  border-radius:999px;
+  background:#FFF6DA;
+  color:#B37A00;
+
+  font-size:10px;
+  font-weight:700;
+  line-height:1.2;
 
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
+/* S/N - 연한 박스 */
+.wh-sn-badge{
+  display:inline-flex;
+  align-items:center;
+
+  max-width:100%;
+  min-height:20px;
+  padding:1px 8px;
+
+  border:1px solid #D8E0EA;
+  border-radius:999px;
+  background:#F5F8FB;
+  color:#6A7A8B;
+
+  font-size:10px;
+  font-weight:600;
+  line-height:1.2;
+
+  white-space:nowrap;
+}
 
 /* 작업 내용 */
 .wh-item .ra-note{
   grid-column:5;
-
   min-width:0;
-
   margin:0;
-
   color:var(--text-dim);
   font-size:10.8px;
-
   line-height:1.4;
-
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
 
-
 /* ---------- 변경 내용 ---------- */
-
 .wh-item .ra-changes{
   grid-column:6;
 
   min-width:0;
-
-  display:flex;
-  align-items:flex-start;
-  flex-wrap:wrap;
-
-  gap:3px 5px;
+  display:block;
 
   margin:0;
   padding:5px 7px;
 
   background:var(--surface2);
-
   border:1px solid var(--border-solid);
   border-radius:6px;
 
-  /*
-    중요:
-    변경내용은 2줄, 3줄 이상 자유롭게 확장
-  */
   white-space:normal;
   overflow:visible;
+  word-break:break-word;
+  overflow-wrap:anywhere;
 }
 
-
-/* 변경 내용 제목 */
 .wh-item .ra-changes-label{
-  flex:0 0 auto;
-
-  margin:0 3px 0 0;
+  margin:0 0 4px 0;
 
   color:var(--text-faint);
-
   font-size:9px;
   font-weight:700;
-
-  line-height:1.45;
-
-  white-space:nowrap;
+  line-height:1.4;
 }
 
-
-/* 변경 항목 */
+/* 변경 내용은 여러 줄 허용 */
 .wh-item .ra-change-row{
-  flex:0 1 auto;
-
-  display:inline-flex;
-  align-items:baseline;
-
-  flex-wrap:wrap;
-
-  min-width:0;
-
-  gap:3px;
-
+  display:inline;
   margin:0 !important;
 
   font-size:9.7px;
-  line-height:1.45;
+  line-height:1.5;
 
   white-space:normal;
+  word-break:break-word;
+  overflow-wrap:anywhere;
 }
 
-
-/* 변경 항목 간 구분 */
-.wh-item .ra-change-row +
-.wh-item .ra-change-row::before{
-  content:'·';
-
-  flex:0 0 auto;
-
-  margin-right:2px;
-
+.wh-item .ra-change-row + .ra-change-row::before{
+  content:' · ';
   color:var(--text-faint);
 }
 
-
-/*
-  변경 전 / 변경 후 값이 길면
-  해당 칸 안에서 자연스럽게 줄바꿈
-*/
 .wh-item .ra-change-label,
 .wh-item .ra-change-before,
 .wh-item .ra-change-after{
   white-space:normal;
-
-  overflow-wrap:anywhere;
   word-break:break-word;
+  overflow-wrap:anywhere;
 }
 
-
 .wh-item .ra-change-arrow{
-  flex:0 0 auto;
-
   white-space:nowrap;
 }
 
-
-/* ---------- 작업자 ---------- */
-
+/* 작업자 */
 .wh-item .ra-author{
   grid-column:7;
 
   min-width:0;
-
   margin:0;
 
   color:var(--text-faint);
-
   font-family:var(--mono);
   font-size:9.5px;
-
   line-height:1.4;
 
   white-space:normal;
   word-break:keep-all;
 }
 
-
-/*
-  변경내용이 없는 행은
-  작업자 앞 공간을 굳이 빈칸으로 두지 않음
-*/
 .wh-item:not(:has(.ra-changes)) .ra-author{
   grid-column:6 / 8;
 }
 
-
-/* 삭제 정보만 두 번째 줄 사용 */
+/* 삭제 정보 */
 .wh-delete-meta{
   grid-column:2 / 8;
 
@@ -1909,31 +1851,23 @@ textarea.wl-fc-input.is-changed{
   border-top:1px dashed #D8DEE7;
 
   color:#D64545;
-
   font-family:var(--mono);
   font-size:9px;
-
   line-height:1.4;
 
   white-space:normal;
 }
 
-
-/* 선택 행 */
 .wh-item:has(.wh-history-checkbox:checked){
   border-color:#DFB1B1;
   background:#FFF9F9;
 }
 
-
-/* 검색 결과 없음 */
 .wh-empty{
   padding:40px 10px;
   text-align:center;
 }
 
-
-/* 작은 화면에서만 최소 대응 */
 @media(max-width:1250px){
 
   .wh-search{
@@ -1944,14 +1878,12 @@ textarea.wl-fc-input.is-changed{
   .wh-item{
     grid-template-columns:
       24px
-      125px
-      95px
-      210px
-      150px
-      minmax(220px, 1fr)
-      110px;
-
-    column-gap:7px;
+      max-content
+      max-content
+      minmax(220px, 1.2fr)
+      120px
+      minmax(220px, 1.5fr)
+      120px;
   }
 }
 
