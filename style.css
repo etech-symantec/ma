@@ -1079,8 +1079,24 @@ textarea.wl-fc-input.is-changed{
 
 /* 자산 추가/수정창 — SKU/S/N/수량/라이선스, OS/IP/ID/PW/Enable PW를 각각 5열로 배치하기 위해 더 넓게 */
 #addModal .modal-card{ max-width:960px; }
-.form-grid input:disabled, .form-grid select:disabled{
-  background:var(--surface2); color:var(--text-faint); cursor:not-allowed;
+.form-grid input:disabled,
+.form-grid select:disabled,
+.form-grid textarea:disabled{
+  background:var(--surface2);
+  color:var(--text-faint);
+  cursor:not-allowed;
+  opacity:.75;
+}
+.ge-limited-edit-notice{
+  margin:10px 0 12px;
+  padding:8px 10px;
+
+  background:#FFF8E8;
+  border:1px solid #F0D79A;
+  border-radius:8px;
+
+  color:#8A6614;
+  font-size:11.5px;
 }
 .date-field{ position:relative; display:flex; align-items:center; gap:0; }
 .date-field input:not(.date-native-input){ padding-right:38px; }
