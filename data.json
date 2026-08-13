@@ -10574,7 +10574,7 @@
       "location": "우면",
       "support_id": "15688920",
       "sku": "Web Security Service - WSS",
-      "sn": "",
+      "sn": "53413234-1-2",
       "entitlement": "🔗",
       "qty": "",
       "start": "",
@@ -10625,7 +10625,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "enable_pw_enc": null
     },
     {
       "group": "custom-msnzlh9m",
