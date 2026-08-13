@@ -80,9 +80,28 @@ if (window.ResizeObserver){
 
 // ---------- data loading (external JSON / GitHub) ----------
 let ENC_STORE = null;
-let githubConfig = null;   // {repo, branch, path} - non-sensitive, persisted in localStorage (set below to hardcoded defaults)
-let githubToken = null;    // PAT - only persisted if user opts in
-let githubSha = null;      // sha of the last-loaded file, needed to PUT updates
+let githubConfig = null;
+let githubToken = null;
+let githubSha = null;
+let lastSyncedState = null;
+
+function cloneSyncState(v){
+  return v == null
+    ? v
+    : JSON.parse(JSON.stringify(v));
+}
+
+function currentSyncState(){
+  return {
+    salt: ENC_STORE.salt,
+    iterations: ENC_STORE.iterations,
+
+    records: cloneSyncState(records || []),
+    users: cloneSyncState(users || []),
+    maintenanceLogs: cloneSyncState(maintenanceLogs || []),
+    auditLogs: cloneSyncState(auditLogs || [])
+  };
+}
 
 // Hardcoded default repo location.
 const DEFAULT_GITHUB_CONFIG = {
@@ -166,25 +185,481 @@ function scheduleAutoSync(){
   }, 1200);
 }
 
+/* =========================================================
+   GitHub 동시 저장 충돌 방지 - 3-way merge
+   ========================================================= */
+
+function syncEqual(a, b){
+  return JSON.stringify(a ?? null) ===
+         JSON.stringify(b ?? null);
+}
+
+
+function mergeObject3Way(base, local, remote){
+
+  /*
+    BASE에는 있었는데 LOCAL에서 삭제됨
+    → 내가 삭제한 것으로 판단
+  */
+  if (base && !local){
+    return null;
+  }
+
+
+  /*
+    REMOTE에서 삭제됐고
+    나는 해당 데이터를 수정하지 않았다면
+    상대방의 삭제를 유지
+  */
+  if (
+    base &&
+    !remote &&
+    syncEqual(local, base)
+  ){
+    return null;
+  }
+
+
+  /* 내가 새로 추가 */
+  if (!base && local && !remote){
+    return cloneSyncState(local);
+  }
+
+
+  /* 상대방이 새로 추가 */
+  if (!base && !local && remote){
+    return cloneSyncState(remote);
+  }
+
+
+  /* 둘 다 없음 */
+  if (!local && !remote){
+    return null;
+  }
+
+
+  /*
+    REMOTE에는 없지만
+    나는 해당 데이터를 수정했다면 LOCAL 유지
+  */
+  if (!remote){
+    return local
+      ? cloneSyncState(local)
+      : null;
+  }
+
+
+  if (!local){
+    return cloneSyncState(remote);
+  }
+
+
+  const result = {};
+
+  const keys = new Set([
+    ...Object.keys(base || {}),
+    ...Object.keys(local || {}),
+    ...Object.keys(remote || {})
+  ]);
+
+
+  keys.forEach(key => {
+
+    const b = base?.[key];
+    const l = local?.[key];
+    const r = remote?.[key];
+
+
+    /*
+      나는 이 필드를 수정하지 않음
+      → GitHub 최신값 사용
+    */
+    if (syncEqual(l, b)){
+      result[key] = cloneSyncState(r);
+      return;
+    }
+
+
+    /*
+      상대방은 이 필드를 수정하지 않음
+      → 내 변경값 사용
+    */
+    if (syncEqual(r, b)){
+      result[key] = cloneSyncState(l);
+      return;
+    }
+
+
+    /*
+      둘 다 동일한 값으로 변경
+    */
+    if (syncEqual(l, r)){
+      result[key] = cloneSyncState(l);
+      return;
+    }
+
+
+    /*
+      작업 이력 배열은 배열 전체를 덮지 않고
+      각 작업 이력 ID를 기준으로 다시 병합
+    */
+    if (
+      key === 'work_log' ||
+      key === 'deleted_work_log'
+    ){
+      result[key] = mergeArrayById3Way(
+        b || [],
+        l || [],
+        r || []
+      );
+
+      return;
+    }
+
+
+    /*
+      같은 필드를 나와 상대방이 동시에 서로 다르게 수정한 경우
+      현재 사용자가 수정한 LOCAL 값을 우선.
+    */
+    result[key] = cloneSyncState(l);
+
+  });
+
+
+  return result;
+}
+
+
+function mergeArrayById3Way(
+  baseArray,
+  localArray,
+  remoteArray
+){
+
+  const getId = item =>
+    String(
+      item?.id ??
+      item?.history_id ??
+      ''
+    );
+
+
+  const baseMap = new Map(
+    (baseArray || [])
+      .filter(x => getId(x))
+      .map(x => [
+        getId(x),
+        x
+      ])
+  );
+
+
+  const localMap = new Map(
+    (localArray || [])
+      .filter(x => getId(x))
+      .map(x => [
+        getId(x),
+        x
+      ])
+  );
+
+
+  const remoteMap = new Map(
+    (remoteArray || [])
+      .filter(x => getId(x))
+      .map(x => [
+        getId(x),
+        x
+      ])
+  );
+
+
+  const ids = new Set([
+    ...baseMap.keys(),
+    ...localMap.keys(),
+    ...remoteMap.keys()
+  ]);
+
+
+  const result = [];
+
+
+  ids.forEach(id => {
+
+    const merged = mergeObject3Way(
+      baseMap.get(id),
+      localMap.get(id),
+      remoteMap.get(id)
+    );
+
+
+    if (merged){
+      result.push(merged);
+    }
+
+  });
+
+
+  return result;
+}
+
+
+function mergeStateArray(
+  baseArray,
+  localArray,
+  remoteArray,
+  idFn
+){
+
+  const baseMap = new Map(
+    (baseArray || []).map(x => [
+      String(idFn(x)),
+      x
+    ])
+  );
+
+
+  const localMap = new Map(
+    (localArray || []).map(x => [
+      String(idFn(x)),
+      x
+    ])
+  );
+
+
+  const remoteMap = new Map(
+    (remoteArray || []).map(x => [
+      String(idFn(x)),
+      x
+    ])
+  );
+
+
+  const ids = new Set([
+    ...baseMap.keys(),
+    ...localMap.keys(),
+    ...remoteMap.keys()
+  ]);
+
+
+  const result = [];
+
+
+  ids.forEach(id => {
+
+    const merged = mergeObject3Way(
+      baseMap.get(id),
+      localMap.get(id),
+      remoteMap.get(id)
+    );
+
+
+    if (merged){
+      result.push(merged);
+    }
+
+  });
+
+
+  return result;
+}
+
+
+function mergeSyncStates(
+  base,
+  local,
+  remote
+){
+
+  base = base || {
+    records:[],
+    users:[],
+    maintenanceLogs:[],
+    auditLogs:[]
+  };
+
+
+  return {
+
+    salt:
+      remote?.salt ||
+      local?.salt ||
+      base?.salt,
+
+    iterations:
+      remote?.iterations ||
+      local?.iterations ||
+      base?.iterations,
+
+
+    records:
+      mergeStateArray(
+        base.records || [],
+        local.records || [],
+        remote.records || [],
+        r => r.id
+      ),
+
+
+    users:
+      mergeStateArray(
+        base.users || [],
+        local.users || [],
+        remote.users || [],
+        u => u.id
+      ),
+
+
+    maintenanceLogs:
+      mergeStateArray(
+        base.maintenanceLogs || [],
+        local.maintenanceLogs || [],
+        remote.maintenanceLogs || [],
+        m =>
+          m.id ||
+          `${m.group}|${m.ym}`
+      ),
+
+
+    auditLogs:
+      mergeStateArray(
+        base.auditLogs || [],
+        local.auditLogs || [],
+        remote.auditLogs || [],
+        a => a.id
+      )
+
+  };
+}
+
 async function runAutoSync(){
-  if (!githubConfig || !githubToken) return;
-  if (autoSyncInFlight){ autoSyncQueued = true; return; }
+  if (!githubConfig || !githubToken){
+    return;
+  }
+  if (autoSyncInFlight){
+    autoSyncQueued = true;
+    return;
+  }
   autoSyncInFlight = true;
   autoSyncQueued = false;
   setSyncStatus('syncing');
+
   try{
-    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records, users, maintenanceLogs, auditLogs };
-    const newSha = await githubApiPut(githubConfig, githubToken, payload, githubSha, '자산 데이터 자동 동기화 - ' + new Date().toLocaleString('ko-KR'));
-    githubSha = newSha;
+    const localState =
+      currentSyncState();
+
+    let mergedState = null;
+    let savedSha = null;
+    const MAX_RETRY = 5;
+
+    for (
+      let attempt = 1;
+      attempt <= MAX_RETRY;
+      attempt++
+    ){
+      const {
+        json: remoteState,
+        sha: remoteSha
+      } =
+        await githubApiGet(
+          githubConfig,
+          githubToken
+        );
+      mergedState =
+        mergeSyncStates(
+          lastSyncedState,
+          localState,
+          remoteState
+        );
+      try{
+        savedSha =
+          await githubApiPut(
+            githubConfig,
+            githubToken,
+            mergedState,
+            remoteSha,
+
+            '자산 데이터 자동 병합 동기화 - ' +
+            new Date().toLocaleString('ko-KR')
+          );
+        break;
+      }
+      catch(e){
+        if (
+          (
+            e.status === 409 ||
+            e.status === 422
+          ) &&
+          attempt < MAX_RETRY
+        ){
+          console.warn(
+            `GitHub 동시 저장 충돌 - 자동 재병합 ${attempt}/${MAX_RETRY}`
+          );
+          await new Promise(
+            resolve =>
+              setTimeout(
+                resolve,
+                250 * attempt
+              )
+          );
+          continue;
+        }
+        throw e;
+      }
+    }
+    if (!savedSha || !mergedState){
+      throw new Error(
+        'GitHub 동시 저장 충돌을 자동으로 해결하지 못했습니다.'
+      );
+    }
+    suppressAuditCapture = true;
+    try{
+      records =
+        cloneSyncState(
+          mergedState.records || []
+        );
+      users =
+        cloneSyncState(
+          mergedState.users || []
+        );
+      maintenanceLogs =
+        cloneSyncState(
+          mergedState.maintenanceLogs || []
+        );
+      auditLogs =
+        cloneSyncState(
+          mergedState.auditLogs || []
+        );
+      githubSha =
+        savedSha;
+      lastSyncedState =
+        cloneSyncState(
+          mergedState
+        );
+      refreshAuditSnapshot();
+    }
+    finally{
+      suppressAuditCapture = false;
+    }
     hasUnsyncedChanges = false;
     setSyncStatus('synced');
-  }catch(e){
+  }
+  catch(e){
     hasUnsyncedChanges = true;
-    console.error('자동 동기화 실패:', e);
-    setSyncStatus('error', e.message);
-  }finally{
+    console.error(
+      '자동 동기화 실패:',
+      e
+    );
+    setSyncStatus(
+      'error',
+      e.message
+    );
+  }
+  finally{
     autoSyncInFlight = false;
-    if (autoSyncQueued){ runAutoSync(); }
+    if (autoSyncQueued){
+      runAutoSync();
+    }
   }
 }
 
@@ -208,7 +683,12 @@ const dataReady = (async () => {
       users = (ENC_STORE.users || []).map(u => ({...u}));
       maintenanceLogs = (ENC_STORE.maintenanceLogs || []).map(m => ({...m}));
       auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
-      githubConfig = cfg; githubToken = token; githubSha = sha;
+      githubConfig = cfg;
+      githubToken = token;
+      githubSha = sha;
+      
+      lastSyncedState = currentSyncState();
+      
       return;
     }catch(e){
       console.warn('GitHub 자동 불러오기 실패, 로컬 data.json으로 대체합니다:', e);
@@ -222,6 +702,7 @@ const dataReady = (async () => {
   users = (ENC_STORE.users || []).map(u => ({...u}));
   maintenanceLogs = (ENC_STORE.maintenanceLogs || []).map(m => ({...m}));
   auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
+  lastSyncedState = currentSyncState();
 })().catch(err => {
   console.error('데이터 로드 실패:', err);
 });
@@ -4976,8 +5457,16 @@ async function githubApiPut(cfg, token, jsonObj, sha, message){
     body: JSON.stringify(body)
   });
   if (!res.ok){
-    const errBody = await res.json().catch(()=>({}));
-    throw new Error(`GitHub 저장 실패: HTTP ${res.status}${errBody.message? ' - '+errBody.message : ''}`);
+    const errBody =
+      await res.json().catch(()=>({}));
+    const err =
+      new Error(
+        `GitHub 저장 실패: HTTP ${res.status}` +
+        `${errBody.message ? ' - ' + errBody.message : ''}`
+      );
+    err.status = res.status;
+    err.githubBody = errBody;
+    throw err;
   }
   const data = await res.json();
   return data.content.sha;
