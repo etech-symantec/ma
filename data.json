@@ -3444,7 +3444,7 @@
       "location": "조지아",
       "support_id": "356307",
       "sku": "ISG-Proxy",
-      "sn": "79999244",
+      "sn": "0079999244",
       "entitlement": "🔗",
       "qty": "1",
       "start": "2025.10.1",
@@ -3464,9 +3464,9 @@
       "tag_note": "SEHA",
       "id": 83,
       "ip_enc": {
-        "iv": "yq+qHv7vIEa17lhV",
-        "ct": "ZbCIRx/h9JW0/KvVdbo=",
-        "tag": "EOnIKXJCY28RABGfUfi56g=="
+        "iv": "rOtXIZDd5ndxYeYP",
+        "ct": "8CVPcKG27ikaBBmT7w8=",
+        "tag": "SwhwdJdbTAYgLUCU5bgYbQ=="
       },
       "id_enc": null,
       "pw_enc": null,
@@ -3492,7 +3492,8 @@
       "build_engineer": "신호근",
       "build_date": "2024.10",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "enable_pw_enc": null
     },
     {
       "group": "seha",
