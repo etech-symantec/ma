@@ -460,9 +460,9 @@
           "manager": "신호근",
           "note": "4573456",
           "author": "신호근",
-          "history_id": 1786603849403,
-          "deleted_at": 1786603849403,
-          "deleted_by": "윤태리",
+          "history_id": 1786603885178,
+          "deleted_at": 1786603885178,
+          "deleted_by": "신호근",
           "delete_revert_result": {
             "reverted": 0,
             "skipped": 0
