@@ -408,14 +408,6 @@
           "manager": "윤태리",
           "note": "7.3.16.2 > 7.3.21.1 #mem bug",
           "author": "윤태리"
-        },
-        {
-          "id": 1786604652644,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "신호근",
-          "note": "asdfasdfasdfadsf",
-          "author": "신호근"
         }
       ],
       "enable_pw_enc": null,
@@ -443,6 +435,21 @@
           "deleted_by": "윤태리",
           "delete_revert_result": {
             "reverted": 1,
+            "skipped": 0
+          }
+        },
+        {
+          "id": 1786604652644,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "신호근",
+          "note": "asdfasdfasdfadsf",
+          "author": "신호근",
+          "history_id": 1786604661631,
+          "deleted_at": 1786604661631,
+          "deleted_by": "신호근",
+          "delete_revert_result": {
+            "reverted": 0,
             "skipped": 0
           }
         }
