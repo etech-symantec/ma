@@ -12155,6 +12155,14 @@
               }
             }
           }
+        },
+        {
+          "id": 1786608382501,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "23.06.14 윤태리 6.7.4.10 > 7.3.11.3 gpt\n24.04.23 윤태리 7.3.11.3 > 7.3.17.1 최신\n25.02.18 윤태리 7.3.17.1 > 7.3.21.1 mem bug",
+          "author": "윤태리"
         }
       ],
       "enable_pw_enc": {
@@ -12261,6 +12269,14 @@
               }
             }
           }
+        },
+        {
+          "id": 1786608382502,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "23.06.14 윤태리 6.7.4.10 > 7.3.11.3 gpt\n24.04.23 윤태리 7.3.11.3 > 7.3.17.1 최신\n25.02.18 윤태리 7.3.17.1 > 7.3.21.1 mem bug",
+          "author": "윤태리"
         }
       ],
       "enable_pw_enc": {
@@ -15745,6 +15761,19 @@
       "updated_at": 1786608034893
     },
     {
+      "id": 1786608210046,
+      "group": "custom-msnzlh9m",
+      "ym": "2026-07",
+      "date": "2026.7.29",
+      "manager": "김상문",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1786608210046
+    },
+    {
       "id": 1786608040951,
       "group": "custom-1786349440902",
       "ym": "2026-04",
@@ -15808,19 +15837,6 @@
       "uncontracted": false,
       "author": "김상문",
       "updated_at": 1786608087740
-    },
-    {
-      "id": 1786608210046,
-      "group": "custom-msnzlh9m",
-      "ym": "2026-07",
-      "date": "2026.7.29",
-      "manager": "김상문",
-      "note": "",
-      "done": true,
-      "incomplete": false,
-      "uncontracted": false,
-      "author": "김상문",
-      "updated_at": 1786608210046
     },
     {
       "id": 1786608263455,
@@ -17069,6 +17085,22 @@
       "actor_role": "일반사용자"
     },
     {
+      "id": "audit-1786608210067-u90xob",
+      "ts": 1786608210067,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608210046",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "2026-07",
+      "sn": "",
+      "summary": "2026년 7월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
       "id": "audit-1786608101232-nn7zcg",
       "ts": 1786608101232,
       "action": "edit",
@@ -17173,22 +17205,6 @@
       "actor_role": "일반사용자"
     },
     {
-      "id": "audit-1786608210067-u90xob",
-      "ts": 1786608210067,
-      "action": "add",
-      "target_type": "유지보수 점검",
-      "target_id": "1786608210046",
-      "group": "custom-msnzlh9m",
-      "owner": "삼성전자 R&D",
-      "label": "2026-07",
-      "sn": "",
-      "summary": "2026년 7월 유지보수 점검 등록",
-      "changes": [],
-      "actor_id": "u1786596131396",
-      "actor_name": "김상문",
-      "actor_role": "일반사용자"
-    },
-    {
       "id": "audit-1786608263471-fwpqzt",
       "ts": 1786608263471,
       "action": "add",
@@ -17200,37 +17216,6 @@
       "sn": "",
       "summary": "2026년 1월 유지보수 점검 등록",
       "changes": [],
-      "actor_id": "u1786596131396",
-      "actor_name": "김상문",
-      "actor_role": "일반사용자"
-    },
-    {
-      "id": "audit-1786608394445-fh1gdv",
-      "ts": 1786608394445,
-      "action": "edit",
-      "target_type": "유지보수 점검",
-      "target_id": "1786608263455",
-      "group": "custom-1786348956934",
-      "owner": "삼성전자 SEAU",
-      "label": "2026-01",
-      "sn": "",
-      "summary": "2026년 1월 유지보수 점검 수정",
-      "changes": [
-        {
-          "field": "date",
-          "label": "점검일",
-          "before": "2026.8.13",
-          "after": "2026.1.28",
-          "sensitive": false
-        },
-        {
-          "field": "done",
-          "label": "완료",
-          "before": "false",
-          "after": "true",
-          "sensitive": false
-        }
-      ],
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
       "actor_role": "일반사용자"
@@ -17310,6 +17295,37 @@
       "sn": "",
       "summary": "2026년 4월 유지보수 점검 등록",
       "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786608394445-fh1gdv",
+      "ts": 1786608394445,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608263455",
+      "group": "custom-1786348956934",
+      "owner": "삼성전자 SEAU",
+      "label": "2026-01",
+      "sn": "",
+      "summary": "2026년 1월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "date",
+          "label": "점검일",
+          "before": "2026.8.13",
+          "after": "2026.1.28",
+          "sensitive": false
+        },
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
       "actor_role": "일반사용자"
