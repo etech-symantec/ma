@@ -6746,7 +6746,7 @@
       "owner": "삼성증권",
       "location": "여의도",
       "support_id": "2065519",
-      "sku": "IS-AWAA-SWG-2500-5000-1Y",
+      "sku": "BCWF-2500-4999",
       "sn": "QYUFV-CZUE3",
       "entitlement": "🔗",
       "qty": "3500",
@@ -6785,7 +6785,8 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "cust_memo": "@여의도 전경련회관\n- 방문시 1층에서 출입증 받고\n- 28층에서 다시 출입증 변경\n- 27층에서 점검"
+      "cust_memo": "@여의도 전경련회관\n- 방문시 1층에서 출입증 받고\n- 28층에서 다시 출입증 변경\n- 27층에서 점검",
+      "enable_pw_enc": null
     },
     {
       "group": "kr-004",
