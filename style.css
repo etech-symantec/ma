@@ -767,22 +767,18 @@ main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
 .group-title .sub b{ color:var(--text-faint); font-weight:500; font-family:var(--mono); }
 .group-title .sub.group-remarks{
   display:block !important;
-
-  margin:1px 0 0 0 !important;
+  margin:4px 0 4px 0 !important;
   padding:0 !important;
-
   text-indent:0 !important;
-
   color:var(--text-faint);
   font-size:11.5px;
   line-height:1.25;
   font-style:italic;
-
   white-space:pre-wrap;
   word-break:break-word;
 }
 .group-head:has(.group-remarks){
-  padding-bottom:5px;
+  padding-bottom:7px;
 }
 .meta-chip{
   display:inline-flex; align-items:center; gap:6px;
