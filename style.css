@@ -2383,3 +2383,14 @@ td.maint-cell-owner{
 .form-grid.sg-edit-fields > div{
   grid-column:1 / -1;
 }
+.group-remarks{
+  margin-top:4px;
+  padding:0;
+
+  color:var(--text-muted);
+  font-size:11.5px;
+  line-height:1.4;
+
+  white-space:pre-wrap;
+  word-break:break-word;
+}
