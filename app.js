@@ -78,6 +78,19 @@ if (window.ResizeObserver){
   if (topbarEl) stickyResizeObserver.observe(topbarEl); // also fires when #app flips from display:none to visible
 }
 
+window.addEventListener('beforeunload', (e) => {
+    const syncPending =
+      hasUnsyncedChanges ||
+      autoSyncInFlight ||
+      autoSyncTimer !== null;
+    if (!syncPending){
+      return;
+    }
+    e.preventDefault();
+    e.returnValue = '';
+  }
+);
+
 // ---------- data loading (external JSON / GitHub) ----------
 let ENC_STORE = null;
 let githubConfig = null;   // {repo, branch, path} - non-sensitive, persisted in localStorage (set below to hardcoded defaults)
@@ -115,6 +128,7 @@ function _decodeAuth(){
 let autoSyncTimer = null;
 let autoSyncInFlight = false;
 let autoSyncQueued = false;
+let hasUnsyncedChanges = false;
 
 function setSyncStatus(state, msg){
   const el = document.getElementById('githubSyncStatus');
@@ -127,10 +141,20 @@ function setSyncStatus(state, msg){
 }
 
 function scheduleAutoSync(){
-  if (!githubConfig || !githubToken){ setSyncStatus('offline'); return; }
+  hasUnsyncedChanges = true;
+  if (!githubConfig || !githubToken){
+    setSyncStatus(
+      'error',
+      'GitHub 연결 정보가 없습니다.'
+    );
+    return;
+  }
   setSyncStatus('pending');
   clearTimeout(autoSyncTimer);
-  autoSyncTimer = setTimeout(runAutoSync, 1200);
+  autoSyncTimer = setTimeout(() => {
+    autoSyncTimer = null;
+    runAutoSync();
+  }, 1200);
 }
 
 async function runAutoSync(){
@@ -143,10 +167,18 @@ async function runAutoSync(){
     const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records, users, maintenanceLogs };
     const newSha = await githubApiPut(githubConfig, githubToken, payload, githubSha, '자산 데이터 자동 동기화 - ' + new Date().toLocaleString('ko-KR'));
     githubSha = newSha;
+    hasUnsyncedChanges = false;
     setSyncStatus('synced');
   }catch(e){
-    console.error('자동 동기화 실패:', e);
-    setSyncStatus('error', e.message);
+    hasUnsyncedChanges = true;
+    console.error(
+      '자동 동기화 실패:',
+      e
+    );
+    setSyncStatus(
+      'error',
+      e.message
+    );
   }finally{
     autoSyncInFlight = false;
     if (autoSyncQueued){ runAutoSync(); }
