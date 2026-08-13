@@ -4148,7 +4148,17 @@
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607337957,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 7.3.18.2 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-005",
@@ -4190,7 +4200,17 @@
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607337958,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 7.3.18.2 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-005",
@@ -4401,7 +4421,17 @@
       "build_engineer": "신호근",
       "build_date": "2024.12",
       "enable_pw_enc": null,
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607337959,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 7.3.18.2 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-006",
@@ -4452,7 +4482,17 @@
       "build_engineer": "신호근",
       "build_date": "2024.12",
       "enable_pw_enc": null,
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607337960,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 7.3.18.2 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-006",
@@ -4739,7 +4779,17 @@
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
-      "build_date": "2024.12"
+      "build_date": "2024.12",
+      "work_log": [
+        {
+          "id": 1786607337961,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 7.3.18.2 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-007",
@@ -4780,7 +4830,17 @@
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
-      "build_date": "2024.12"
+      "build_date": "2024.12",
+      "work_log": [
+        {
+          "id": 1786607337962,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 7.3.18.2 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-007",
