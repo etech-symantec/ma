@@ -375,11 +375,29 @@ aside.filters{
 .fav-star:hover{ color:var(--amber); transform:scale(1.15); }
 .fav-star.active{ color:var(--amber); }
 
-/* 라이선스 상태 / 태그 필터는 2열로 배치 */
-#statusFilters, #skuKeywordFilters{
+/* 라이선스 상태는 기존 2열 유지 */
+#statusFilters{
   display:grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns:1fr 1fr;
   gap:4px 6px;
+}
+
+/* 태그는 3열로 컴팩트하게 */
+#skuKeywordFilters{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:3px 4px;
+}
+
+/* 태그 항목만 조금 더 작게 */
+#skuKeywordFilters .filter-item{
+  padding:6px 5px;
+  gap:4px;
+  font-size:11.5px;
+}
+
+#skuKeywordFilters .filter-item .cnt{
+  font-size:9.5px;
 }
 
 .filters-reset-btn{
