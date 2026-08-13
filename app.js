@@ -2353,6 +2353,143 @@ function sortAssetsByOrder(items){
     .map(x => x.rec);
 }
 
+/*
+  SSP-S 부모 바로 아래에 연결된 ISG- 자산들을 배치
+*/
+function sortAssetsWithHierarchy(items){
+
+  const sorted =
+    sortAssetsByOrder(items);
+
+  const byId =
+    new Map(
+      sorted.map(r => [
+        String(r.id),
+        r
+      ])
+    );
+
+
+  const childrenByParent =
+    new Map();
+
+  const childIds =
+    new Set();
+
+  const parentIds =
+    new Set();
+
+
+  sorted.forEach(rec => {
+
+    if (!isIsgChildAsset(rec)){
+      return;
+    }
+
+
+    const parentId =
+      String(
+        rec.asset_parent_id || ''
+      ).trim();
+
+
+    if (!parentId){
+      return;
+    }
+
+
+    const parent =
+      byId.get(parentId);
+
+
+    /*
+      부모가 없어졌거나
+      SSP-S가 아니라면 하위 자산으로 취급하지 않음
+    */
+    if (
+      !parent ||
+      !isSspParentAsset(parent)
+    ){
+      return;
+    }
+
+
+    childIds.add(
+      String(rec.id)
+    );
+
+    parentIds.add(
+      String(parent.id)
+    );
+
+
+    if (
+      !childrenByParent.has(parentId)
+    ){
+      childrenByParent.set(
+        parentId,
+        []
+      );
+    }
+
+
+    childrenByParent
+      .get(parentId)
+      .push(rec);
+
+  });
+
+
+  const result = [];
+
+
+  sorted.forEach(rec => {
+
+    const id =
+      String(rec.id);
+
+
+    /*
+      자식은 여기서 출력하지 않고
+      부모를 만났을 때 바로 아래에 출력
+    */
+    if (childIds.has(id)){
+      return;
+    }
+
+
+    result.push(rec);
+
+
+    const children =
+      childrenByParent.get(id);
+
+
+    if (children?.length){
+
+      children
+        .slice()
+        .sort(
+          (a, b) =>
+            assetOrderValue(a) -
+            assetOrderValue(b)
+        )
+        .forEach(child => {
+          result.push(child);
+        });
+
+    }
+
+  });
+
+
+  return {
+    items:result,
+    childIds,
+    parentIds
+  };
+}
+
 function buildSubGroups(items){
   const realItems = items.filter(r => !r.is_group_shell);
   const sourceItems = realItems.length ? realItems : items.filter(r => r.is_group_shell);
@@ -2363,8 +2500,26 @@ function buildSubGroups(items){
     map.get(key).push(it);
   }
   const arr = [...map.entries()].map(([sid, its]) => {
-    const sortedItems = sortAssetsByOrder(its);
-    return { sid, items: sortedItems, meta: subGroupMeta(sortedItems) };
+    const hierarchy =
+      sortAssetsWithHierarchy(its);
+    
+    return {
+      sid,
+    
+      items:
+        hierarchy.items,
+    
+      childIds:
+        hierarchy.childIds,
+    
+      parentIds:
+        hierarchy.parentIds,
+    
+      meta:
+        subGroupMeta(
+          hierarchy.items
+        )
+    };
   });
   arr.sort((a,b) => {
     if (!a.sid && b.sid) return 1;
@@ -3661,7 +3816,14 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
                 <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
               </tr></thead>
               <tbody>
-                ${sg.items.map(r=>rowHtml(r, sg.sid)).join('')}
+                ${sg.items.map(r =>
+                  rowHtml(
+                    r,
+                    sg.sid,
+                    sg.childIds?.has(String(r.id)),
+                    sg.parentIds?.has(String(r.id))
+                  )
+                ).join('')}
               </tbody>
             </table>
           </div>`).join('');
@@ -4283,6 +4445,72 @@ function bindAssetUpdateTooltips(){
    같은 법인/Support ID 내 자산 순서 드래그 앤 드롭
    ========================================================= */
 let draggingAssetId = null;
+function isSspParentAsset(rec){
+  return String(rec?.sku || '')
+    .trim()
+    .toUpperCase()
+    .startsWith('SSP-S');
+}
+
+function isIsgChildAsset(rec){
+  return String(rec?.sku || '')
+    .trim()
+    .toUpperCase()
+    .startsWith('ISG-');
+}
+
+/*
+  ISG- 자산을 SSP-S 자산 아래에 넣을 수 있는지 확인
+*/
+function canNestAsset(source, target){
+  return !!(
+    source &&
+    target &&
+    source !== target &&
+    isIsgChildAsset(source) &&
+    isSspParentAsset(target) &&
+    sameAssetOrderScope(source, target)
+  );
+}
+
+/*
+  ISG 자산 → SSP-S 자산 하위 연결
+*/
+function nestAssetUnderParent(source, target){
+
+  if (!canNestAsset(source, target)){
+    return false;
+  }
+
+  source.asset_parent_id =
+    String(target.id);
+
+  /*
+    현재 프로그램에 mutation_id 처리 기능을
+    이미 넣어둔 경우 여기에서도 변경 ID 갱신
+  */
+  if (typeof makeMutationId === 'function'){
+    source.last_mutation_id =
+      makeMutationId('asset-parent');
+  }
+
+  return true;
+}
+
+/*
+  일반 위치로 다시 드래그하면
+  부모 연결을 해제할 때 사용
+*/
+function detachAssetFromParent(rec){
+  if (!rec) return;
+
+  delete rec.asset_parent_id;
+
+  if (typeof makeMutationId === 'function'){
+    rec.last_mutation_id =
+      makeMutationId('asset-detach');
+  }
+}
 
 function canReorderAssets(){ return !!currentUserName(); }
 function assetSupportKey(rec){ return String(rec?.support_id || '').trim(); }
@@ -4296,8 +4524,18 @@ function assetOrderScope(rec){
   ));
 }
 function clearAssetDragVisuals(){
-  document.querySelectorAll('tr.asset-dragging, tr.asset-drop-before, tr.asset-drop-after').forEach(row => {
-    row.classList.remove('asset-dragging','asset-drop-before','asset-drop-after');
+  document.querySelectorAll(
+    'tr.asset-dragging, ' +
+    'tr.asset-drop-before, ' +
+    'tr.asset-drop-after, ' +
+    'tr.asset-drop-parent'
+  ).forEach(row => {
+    row.classList.remove(
+    'asset-dragging',
+    'asset-drop-before',
+    'asset-drop-after',
+    'asset-drop-parent'
+  );
   });
 }
 function reorderAssetRows(sourceId, targetId, insertAfter){
@@ -4334,12 +4572,113 @@ function bindAssetDragDrop(){
       if (!draggingAssetId) return;
       const targetId = String(row.dataset.id || '');
       if (!targetId || targetId === draggingAssetId) return;
-      const source = records.find(r => String(r.id) === draggingAssetId);
-      const target = records.find(r => String(r.id) === targetId);
-      if (!sameAssetOrderScope(source,target)) return;
+      const source =
+        records.find(
+          r =>
+            String(r.id) ===
+            draggingAssetId
+        );
+      
+      const target =
+        records.find(
+          r =>
+            String(r.id) ===
+            targetId
+        );
+      
+      
+      if (
+        !sameAssetOrderScope(
+          source,
+          target
+        )
+      ){
+        return;
+      }
+      
+      
       e.preventDefault();
-      if (e.dataTransfer) e.dataTransfer.dropEffect='move';
-      document.querySelectorAll('tr.asset-drop-before, tr.asset-drop-after').forEach(el => {
+      
+      
+      if (e.dataTransfer){
+        e.dataTransfer.dropEffect =
+          'move';
+      }
+      
+      
+      /*
+        기존 표시 전부 제거
+      */
+      document
+        .querySelectorAll(
+          'tr.asset-drop-before, ' +
+          'tr.asset-drop-after, ' +
+          'tr.asset-drop-parent'
+        )
+        .forEach(el => {
+      
+          if (el !== row){
+            el.classList.remove(
+              'asset-drop-before',
+              'asset-drop-after',
+              'asset-drop-parent'
+            );
+          }
+      
+        });
+      
+      
+      /*
+        ISG- → SSP-S 드래그라면
+        순서 이동이 아니라 하위 자산 연결
+      */
+      if (
+        canNestAsset(
+          source,
+          target
+        )
+      ){
+      
+        row.classList.remove(
+          'asset-drop-before',
+          'asset-drop-after'
+        );
+      
+        row.classList.add(
+          'asset-drop-parent'
+        );
+      
+        return;
+      }
+      
+      
+      /*
+        기존 일반 순서 이동
+      */
+      row.classList.remove(
+        'asset-drop-parent'
+      );
+      
+      
+      const rect =
+        row.getBoundingClientRect();
+      
+      
+      const insertAfter =
+        e.clientY >
+        rect.top +
+        rect.height / 2;
+      
+      
+      row.classList.toggle(
+        'asset-drop-before',
+        !insertAfter
+      );
+      
+      row.classList.toggle(
+        'asset-drop-after',
+        insertAfter
+      );
         if (el !== row) el.classList.remove('asset-drop-before','asset-drop-after');
       });
       const rect = row.getBoundingClientRect();
@@ -4359,21 +4698,119 @@ function bindAssetDragDrop(){
       const target = records.find(r => String(r.id) === targetId);
       if (!sameAssetOrderScope(source,target)) return;
       e.preventDefault();
-      const insertAfter = row.classList.contains('asset-drop-after');
-      const sourceId = draggingAssetId;
-      draggingAssetId = null;
+      /*
+        ISG-를 SSP-S 위에 드롭
+        → 하위 자산으로 연결
+      */
+      if (
+        canNestAsset(
+          source,
+          target
+        )
+      ){
+      
+        e.preventDefault();
+      
+      
+        nestAssetUnderParent(
+          source,
+          target
+        );
+      
+      
+        draggingAssetId =
+          null;
+      
+      
+        clearAssetDragVisuals();
+      
+      
+        render();
+      
+        scheduleAutoSync();
+      
+        return;
+      }
+      
+      
+      /*
+        기존에 하위 자산이었던 ISG를
+        일반 자산 위치로 드래그하면
+        부모 관계 해제
+      */
+      if (
+        source.asset_parent_id &&
+        !isSspParentAsset(target)
+      ){
+      
+        detachAssetFromParent(
+          source
+        );
+      
+      }
+      
+      
+      const insertAfter =
+        row.classList.contains(
+          'asset-drop-after'
+        );
+      
+      
+      const sourceId =
+        draggingAssetId;
+      
+      
+      draggingAssetId =
+        null;
+      
+      
       clearAssetDragVisuals();
-      reorderAssetRows(sourceId,targetId,insertAfter);
+      
+      
+      reorderAssetRows(
+        sourceId,
+        targetId,
+        insertAfter
+      );
     });
   });
 }
 
-function rowHtml(r, groupSupportId){
-  const status = licenseStatus(r);
-  const pct = licenseBarPct(r);
-  const logCount = (r.work_log||[]).length;
-  return `
-  <tr data-id="${r.id}">
+function rowHtml(
+    r,
+    groupSupportId,
+    isAssetChild = false,
+    hasAssetChildren = false
+  ){
+  
+    const status =
+      licenseStatus(r);
+  
+    const pct =
+      licenseBarPct(r);
+  
+    const logCount =
+      (r.work_log || []).length;
+  
+  
+    return `
+    <tr
+      data-id="${r.id}"
+      class="${
+        isAssetChild
+          ? 'asset-child-row'
+          : ''
+      } ${
+        hasAssetChildren
+          ? 'asset-parent-row'
+          : ''
+      }"
+      ${
+        isAssetChild
+          ? `data-asset-parent="${esc(r.asset_parent_id)}"`
+          : ''
+      }
+    >
     ${canSelectAssets() ? `
       <td class="col-select" data-label="">
         <div class="asset-select-wrap">
