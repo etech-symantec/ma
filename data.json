@@ -13185,6 +13185,66 @@
       "id_enc": null,
       "pw_enc": null,
       "enable_pw_enc": null
+    },
+    {
+      "id": 1786349440907,
+      "group": "in-sdn-cama",
+      "flag": "◎",
+      "owner": "삼성디스플레이 SDN",
+      "country": "인도",
+      "location": "노이다",
+      "support_id": "379966",
+      "build_engineer": "",
+      "build_date": "",
+      "sku": "BCWF-S-500-999-1YR",
+      "sn": "QJ4X6-WZG8X",
+      "qty": "750",
+      "start": "2026.01.01",
+      "end": "2026.12.31",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "os_ver": "",
+      "owner_primary": "윤태리",
+      "owner_secondary": "신호근",
+      "check_method": "원격",
+      "config_mode": "Explicit",
+      "cust_contacts": [
+        {
+          "role": "",
+          "name": "최원석 프로(PM)",
+          "org": "",
+          "phone": "010-8574-5957 / 010-7133-0100(영업대표)",
+          "email": "wonsukc@samsung.com"
+        },
+        {
+          "role": "",
+          "name": "서상철",
+          "org": "",
+          "phone": "+91-124-74280-41219",
+          "email": "sc2470.seo@samsung.com"
+        }
+      ],
+      "cust_memo": "",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "is_parent": false,
+      "work_log": [],
+      "ip_enc": null,
+      "id_enc": {
+        "iv": "ffn4vPub7RjCEFJ0",
+        "ct": "tRVf/GolreS8JEU=",
+        "tag": "V70k2c4yq4e/48pADM7OCw=="
+      },
+      "pw_enc": {
+        "iv": "+fY8t2jurUCylv2P",
+        "ct": "+6QFzlaFGAB1OQ==",
+        "tag": "41aF6NWcZSRyaluoWBL9MA=="
+      },
+      "enable_pw_enc": null
     }
   ],
   "users": [
