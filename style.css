@@ -2111,3 +2111,60 @@ footer.foot{
 .asset-update-tooltip-detail{
   color:#AAB2BE;
 }
+
+/* ---------- GitHub 자동 저장 상태 ---------- */
+
+#githubSyncStatus{
+  flex:1 1 100%;
+  order:4;
+
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  min-height:27px;
+  padding:5px 9px;
+
+  border:1px solid var(--border-solid);
+  border-radius:7px;
+
+  background:#fff;
+
+  font-family:var(--mono);
+  font-size:10.5px;
+  font-weight:700;
+
+  white-space:nowrap;
+}
+
+
+/* 저장 대기 */
+#githubSyncStatus.pending{
+  color:#9A6B12;
+  background:#FFF8E8;
+  border-color:#F0D79A;
+}
+
+
+/* 저장 중 */
+#githubSyncStatus.syncing{
+  color:#1473A5;
+  background:#EAF6FC;
+  border-color:#B8DEF1;
+}
+
+
+/* 저장 완료 */
+#githubSyncStatus.synced{
+  color:#2F8F52;
+  background:#EAF7EF;
+  border-color:#B8DDC4;
+}
+
+
+/* 저장 실패 */
+#githubSyncStatus.error{
+  color:#C62828;
+  background:#FDECEC;
+  border-color:#E9B2B2;
+}
