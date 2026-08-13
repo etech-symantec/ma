@@ -16015,6 +16015,19 @@
       "updated_at": 1786608937880
     },
     {
+      "id": 1786609072438,
+      "group": "sg-001",
+      "ym": "2026-04",
+      "date": "2026.4.27",
+      "manager": "김상문",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1786609072439
+    },
+    {
       "id": 1786608976851,
       "group": "sg-001",
       "ym": "2026-04",
@@ -17686,6 +17699,22 @@
       "label": "2026-03",
       "sn": "",
       "summary": "2026년 3월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786609072447-vqd7q1",
+      "ts": 1786609072447,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786609072438",
+      "group": "sg-001",
+      "owner": "삼성SDS SDSAP",
+      "label": "2026-04",
+      "sn": "",
+      "summary": "2026년 4월 유지보수 점검 등록",
       "changes": [],
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
