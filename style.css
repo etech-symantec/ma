@@ -1959,3 +1959,155 @@ footer.foot{
   font-size:11px;
   font-family:var(--mono);
 }
+/* =========================================================
+   자산 정보 - 최근 업데이트 툴팁
+   ========================================================= */
+
+.asset-update-tooltip{
+  position:fixed;
+
+  display:none;
+
+  width:380px;
+  max-width:calc(100vw - 24px);
+
+  padding:12px;
+
+  background:#20242C;
+  color:#F5F7FA;
+
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:10px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.25);
+
+  z-index:3000;
+
+  pointer-events:none;
+
+  font-family:var(--body);
+}
+
+
+.asset-update-tooltip.open{
+  display:block;
+}
+
+
+/* 제목 */
+.asset-update-tooltip-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 2px 8px;
+
+  border-bottom:1px solid rgba(255,255,255,.10);
+
+  font-size:11.5px;
+  font-weight:700;
+}
+
+.asset-update-tooltip-title span{
+  color:#9CA8B8;
+
+  font-size:10px;
+  font-weight:500;
+}
+
+
+/* 목록 */
+.asset-update-tooltip-list{
+  display:flex;
+  flex-direction:column;
+}
+
+
+/* 개별 이력 */
+.asset-update-tooltip-item{
+  padding:9px 2px;
+}
+
+.asset-update-tooltip-item +
+.asset-update-tooltip-item{
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+
+/* 상단 */
+.asset-update-tooltip-head{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+
+/* 작업 종류 */
+.asset-update-tooltip-type{
+  color:#7DD3FC;
+
+  font-size:10.5px;
+  font-weight:700;
+}
+
+
+/* 날짜 */
+.asset-update-tooltip-date{
+  margin-left:auto;
+
+  color:#8F9BAA;
+
+  font-family:var(--mono);
+  font-size:9.5px;
+
+  white-space:nowrap;
+}
+
+
+/* 실제 작업/변경 내용 */
+.asset-update-tooltip-detail{
+  margin-top:4px;
+
+  color:#E5E9EF;
+
+  font-size:11.5px;
+  line-height:1.5;
+
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+
+/* 담당자 */
+.asset-update-tooltip-manager{
+  margin-top:4px;
+
+  color:#8F9BAA;
+
+  font-size:9.5px;
+}
+
+
+/* 삭제된 이력 */
+.asset-update-tooltip-item.is-deleted{
+  opacity:.72;
+}
+
+.asset-update-tooltip-deleted{
+  padding:1px 5px;
+
+  color:#FCA5A5;
+  background:rgba(239,68,68,.13);
+
+  border:1px solid rgba(239,68,68,.28);
+  border-radius:999px;
+
+  font-size:8.5px;
+  font-weight:700;
+}
+
+.asset-update-tooltip-item.is-deleted
+.asset-update-tooltip-detail{
+  color:#AAB2BE;
+}
