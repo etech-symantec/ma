@@ -5022,6 +5022,36 @@ function dismissActivity(key){
   set.add(key);
   try{ localStorage.setItem(dismissedActivityKey(), JSON.stringify([...set])); }catch(e){}
 }
+
+function dismissAllActivity(){
+  const set =
+    getDismissedActivity();
+  records.forEach(rec => {
+    (rec.work_log || []).forEach(entry => {
+      set.add(
+        activityKeyOf(
+          rec.id,
+          entry.id
+        )
+      );
+    });
+  });
+  try{
+    localStorage.setItem(
+      dismissedActivityKey(),
+      JSON.stringify([...set])
+    );
+  }
+  catch(e){
+    console.warn(
+      '알림 삭제 상태 저장 실패:',
+      e
+    );
+  }
+  updateActivityBadge();
+  renderRecentActivity();
+}
+
 function activityKeyOf(recId, entryId){
   return recId + ':' + entryId;
 }
@@ -5349,8 +5379,19 @@ function renderRecentActivity(){
   const wrap = document.getElementById('recentActivityList');
   const items = getRecentWorkLogEntries(10);
   if (!items.length){
-    wrap.innerHTML = `<div class="ra-empty">아직 작업 이력이 없습니다.</div>`;
+    wrap.innerHTML =
+      `<div class="ra-empty">새로운 알림이 없습니다.</div>`;
+    const clearBtn =
+      document.getElementById('raClearAllBtn');
+    if (clearBtn){
+      clearBtn.disabled = true;
+    }
     return;
+  }
+  const clearBtn =
+    document.getElementById('raClearAllBtn');
+  if (clearBtn){
+    clearBtn.disabled = false;
   }
   wrap.innerHTML = items.map(({entry, recId, recGroup, recOwner, recLabel, key}) => `
     <div class="ra-item" data-jump-group="${esc(recGroup)}" data-jump-rec="${esc(recId)}" data-activity-key="${esc(key)}">
@@ -5387,6 +5428,25 @@ function renderRecentActivity(){
     };
   });
 }
+document.getElementById('raClearAllBtn')?.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const count =
+      getRecentWorkLogEntries(
+        Number.MAX_SAFE_INTEGER
+      ).length;
+
+    if (!count){
+      return;
+    }
+    if (!confirm(
+      `현재 알림 ${count}건을 모두 삭제하시겠습니까?\n\n` +
+      `작업 이력 자체는 삭제되지 않고 알림창에서만 사라집니다.`
+    )){
+      return;
+    }
+    dismissAllActivity();
+  });
 
 document.getElementById('recentActivityBtn').onclick = (e) => {
   const dd = document.getElementById('recentActivityDropdown');
