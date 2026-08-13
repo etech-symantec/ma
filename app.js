@@ -7137,7 +7137,24 @@ function renderWorkLogList(){
       <div class="wl-body">
         <div class="wl-meta">${esc(entry.date)||'날짜 미기재'} · ${esc(entry.manager)||'담당자 미기재'} · 작성 ${esc(entry.author)||'미상'}</div>
         <div class="wl-note">${esc(entry.note)||'—'}</div>
-        ${entry.change_summary ? `<div class="wl-changes">🔧 자산 정보 반영: ${esc(entry.change_summary)}</div>` : ''}
+        ${entry.change_summary ? `
+            <div class="wl-changes">
+              <div class="wl-changes-title">
+                🔧 자산 정보 반영
+              </div>
+          
+              ${entry.change_summary
+                .split(' · ')
+                .filter(Boolean)
+                .map(item => `
+                  <div class="wl-change-line">
+                    ${esc(item)}
+                  </div>
+                `)
+                .join('')
+              }
+            </div>
+          ` : ''}
       </div>
       <div class="wl-actions">
         <button class="wl-action-btn" data-wl-edit="${entry.id}">수정</button>
