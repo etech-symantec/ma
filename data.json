@@ -11381,7 +11381,7 @@
       "qty": "1",
       "start": "2025.1.1",
       "end": "2026.12.31",
-      "remarks": "25년 굿어스 계약",
+      "remarks": "",
       "deploy_date": "",
       "deploy_log": "23.06.14 윤태리 6.7.4.10 > 7.3.11.3 gpt / 24.04.23 윤태리 7.3.11.3 > 7.3.17.1 최신 / 25.02.18 윤태리 7.3.17.1 > 7.3.21.1 mem bug",
       "mode": "Explicit",
@@ -11406,9 +11406,9 @@
         "tag": "I5CnEQxsAbmJ24XiVtENOw=="
       },
       "pw_enc": {
-        "iv": "Z0gk0XyHfBP1WcX7",
-        "ct": "IHeaTxotrCTAWUnbzDzEigKZYII9bMnGx2A=",
-        "tag": "e9D6+Xu7zABU4Z3TIo781A=="
+        "iv": "FlUCSHkfFrasH4RI",
+        "ct": "ORMzGWbQ4ajAnA==",
+        "tag": "HeU9HMg2UOynMN1cImOjyw=="
       },
       "config_mode": "Explicit",
       "group_remarks": "연초,연말 정전작업 / (연 1~4회)",
@@ -11426,7 +11426,59 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "cust_memo": "상록회관 15층 / 방문신청 메일"
+      "cust_memo": "상록회관 15층 / 방문신청 메일",
+      "work_log": [
+        {
+          "id": 1786595886161,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "",
+          "author": "윤태리",
+          "field_changes": {
+            "remarks": "",
+            "pw": true,
+            "enable_pw": true
+          },
+          "change_summary": "비고: 25년 굿어스 계약 → — · 비밀번호 (여러 개면 줄바꿈으로 구분) 변경됨 · Enable 비밀번호 변경됨",
+          "rollback_changes": {
+            "remarks": {
+              "sensitive": false,
+              "before": "25년 굿어스 계약",
+              "after": ""
+            },
+            "pw": {
+              "sensitive": true,
+              "encField": "pw_enc",
+              "before": {
+                "iv": "Z0gk0XyHfBP1WcX7",
+                "ct": "IHeaTxotrCTAWUnbzDzEigKZYII9bMnGx2A=",
+                "tag": "e9D6+Xu7zABU4Z3TIo781A=="
+              },
+              "after": {
+                "iv": "FlUCSHkfFrasH4RI",
+                "ct": "ORMzGWbQ4ajAnA==",
+                "tag": "HeU9HMg2UOynMN1cImOjyw=="
+              }
+            },
+            "enable_pw": {
+              "sensitive": true,
+              "encField": "enable_pw_enc",
+              "before": null,
+              "after": {
+                "iv": "v8ru8fe1EWBGDuh6",
+                "ct": "1oQOi9Cjbz5GEBGbYg7V",
+                "tag": "EvXpvJONgMy4VTwMk2LnBA=="
+              }
+            }
+          }
+        }
+      ],
+      "enable_pw_enc": {
+        "iv": "v8ru8fe1EWBGDuh6",
+        "ct": "1oQOi9Cjbz5GEBGbYg7V",
+        "tag": "EvXpvJONgMy4VTwMk2LnBA=="
+      }
     },
     {
       "group": "kr-010",
@@ -11465,9 +11517,9 @@
         "tag": "8atV7ah/dIQ3xBUtYqXe7w=="
       },
       "pw_enc": {
-        "iv": "db89TbHvuBNT4FH4",
-        "ct": "pORKF280RvZTb1gm1Vab9lCrept7rYRxs8g=",
-        "tag": "4itbLNKCkn44qcRKp9E9eA=="
+        "iv": "/pj60jFkOyFaOvSg",
+        "ct": "ASCXhZayB5OE5g==",
+        "tag": "5mxoltC00Am79Z3oOPjQtg=="
       },
       "config_mode": "Explicit",
       "group_remarks": "연초,연말 정전작업 / (연 1~4회)",
@@ -11485,7 +11537,53 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "cust_memo": "상록회관 15층 / 방문신청 메일"
+      "cust_memo": "상록회관 15층 / 방문신청 메일",
+      "work_log": [
+        {
+          "id": 1786595886162,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "",
+          "author": "윤태리",
+          "field_changes": {
+            "pw": true,
+            "enable_pw": true
+          },
+          "change_summary": "비밀번호 (여러 개면 줄바꿈으로 구분) 변경됨 · Enable 비밀번호 변경됨",
+          "rollback_changes": {
+            "pw": {
+              "sensitive": true,
+              "encField": "pw_enc",
+              "before": {
+                "iv": "db89TbHvuBNT4FH4",
+                "ct": "pORKF280RvZTb1gm1Vab9lCrept7rYRxs8g=",
+                "tag": "4itbLNKCkn44qcRKp9E9eA=="
+              },
+              "after": {
+                "iv": "/pj60jFkOyFaOvSg",
+                "ct": "ASCXhZayB5OE5g==",
+                "tag": "5mxoltC00Am79Z3oOPjQtg=="
+              }
+            },
+            "enable_pw": {
+              "sensitive": true,
+              "encField": "enable_pw_enc",
+              "before": null,
+              "after": {
+                "iv": "eDodR3Y9xbAwDREU",
+                "ct": "C2n54iGxMyuZ4sUftVtm",
+                "tag": "LFIB+jWk8VqB1kLj42anPA=="
+              }
+            }
+          }
+        }
+      ],
+      "enable_pw_enc": {
+        "iv": "eDodR3Y9xbAwDREU",
+        "ct": "C2n54iGxMyuZ4sUftVtm",
+        "tag": "LFIB+jWk8VqB1kLj42anPA=="
+      }
     },
     {
       "group": "kr-010",
