@@ -1996,7 +1996,7 @@
       "qty": "8",
       "start": "2026.1.1",
       "end": "2026.12.31",
-      "remarks": "accelerated_pac\nWPS 0073992894\n25.12.23 auto-update on\n7.3.24.x/7.4.4.x~7.4.8.1 업그레이드 불가",
+      "remarks": "1. WPS 0073992894\n2. 25.12.23 auto-update ena\n3. 7.3.24.x 업그레이드 불가",
       "deploy_date": "",
       "deploy_log": "22.05.21 신호근 / 23.06.27 윤태리 6.7.5.14>7.3.11.3 / 24.06.18 윤태리 7.3.11.3>7.3.18.2 / 25.04.16 윤태리 7.3.18.2>7.3.24.2 실패 / 25.04.16 윤태리 7.3.21.1 베트남 요청 / 26.01.04 윤태리 BCWF>BCIS",
       "mode": "",
@@ -2034,7 +2034,28 @@
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
       "is_parent": false,
-      "asset_order": 3
+      "asset_order": 3,
+      "work_log": [
+        {
+          "id": 1786606830937,
+          "type": "자산정보 업데이트",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "",
+          "author": "윤태리",
+          "field_changes": {
+            "remarks": "1. WPS 0073992894\n2. 25.12.23 auto-update ena\n3. 7.3.24.x 업그레이드 불가"
+          },
+          "change_summary": "비고: accelerated_pac\nWPS 0073992894\n25.12.23 auto-update on\n7.3.24.x/7.4.4.x~7.4.8.1 업그레이드 불가 → 1. WPS 0073992894\n2. 25.12.23 auto-update ena\n3. 7.3.24.x 업그레이드 불가",
+          "rollback_changes": {
+            "remarks": {
+              "sensitive": false,
+              "before": "accelerated_pac\nWPS 0073992894\n25.12.23 auto-update on\n7.3.24.x/7.4.4.x~7.4.8.1 업그레이드 불가",
+              "after": "1. WPS 0073992894\n2. 25.12.23 auto-update ena\n3. 7.3.24.x 업그레이드 불가"
+            }
+          }
+        }
+      ]
     },
     {
       "group": "vn-sdv-new",
@@ -2048,7 +2069,7 @@
       "qty": "8",
       "start": "2026.1.1",
       "end": "2026.12.31",
-      "remarks": "accelerated_pac\nWPS 0073992894\n25.12.23 auto-update on\n7.3.24.x/7.4.4.x~7.4.8.1 업그레이드 불가",
+      "remarks": "1. WPS 0073992894\n2. 25.12.23 auto-update ena\n3. 7.3.24.x 업그레이드 불가",
       "deploy_date": "",
       "deploy_log": "22.05.21 신호근 / 23.06.27 윤태리 6.7.5.14>7.3.11.3 / 24.06.18 윤태리 7.3.11.3>7.3.18.2 / 25.04.16 윤태리 7.3.18.2>7.3.24.2 실패 / 25.04.16 윤태리 7.3.21.1 베트남 요청 / 26.01.04 윤태리 BCWF>BCIS",
       "mode": "",
@@ -2086,7 +2107,28 @@
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
       "is_parent": false,
-      "asset_order": 4
+      "asset_order": 4,
+      "work_log": [
+        {
+          "id": 1786606830938,
+          "type": "자산정보 업데이트",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "",
+          "author": "윤태리",
+          "field_changes": {
+            "remarks": "1. WPS 0073992894\n2. 25.12.23 auto-update ena\n3. 7.3.24.x 업그레이드 불가"
+          },
+          "change_summary": "비고: accelerated_pac\nWPS 0073992894\n25.12.23 auto-update on\n7.3.24.x/7.4.4.x~7.4.8.1 업그레이드 불가 → 1. WPS 0073992894\n2. 25.12.23 auto-update ena\n3. 7.3.24.x 업그레이드 불가",
+          "rollback_changes": {
+            "remarks": {
+              "sensitive": false,
+              "before": "accelerated_pac\nWPS 0073992894\n25.12.23 auto-update on\n7.3.24.x/7.4.4.x~7.4.8.1 업그레이드 불가",
+              "after": "1. WPS 0073992894\n2. 25.12.23 auto-update ena\n3. 7.3.24.x 업그레이드 불가"
+            }
+          }
+        }
+      ]
     },
     {
       "group": "vn-sdv-new",
