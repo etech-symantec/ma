@@ -375,11 +375,21 @@ aside.filters{
 .fav-star:hover{ color:var(--amber); transform:scale(1.15); }
 .fav-star.active{ color:var(--amber); }
 
-/* 라이선스 상태는 기존 2열 유지 */
+/* 라이선스 상태 - 4열 컴팩트 */
 #statusFilters{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:4px 6px;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:3px 4px;
+}
+
+#statusFilters .filter-item{
+  padding:6px 4px;
+  gap:3px;
+  font-size:11px;
+}
+
+#statusFilters .filter-item .cnt{
+  font-size:9px;
 }
 
 /* 태그는 3열로 컴팩트하게 */
