@@ -11478,21 +11478,30 @@
               }
             }
           }
-        },
-        {
-          "id": 1786597503344,
-          "type": "OS 업그레이드",
-          "date": "2026.8.13",
-          "manager": "윤태리",
-          "note": "7.2131",
-          "author": "윤태리"
         }
       ],
       "enable_pw_enc": {
         "iv": "v8ru8fe1EWBGDuh6",
         "ct": "1oQOi9Cjbz5GEBGbYg7V",
         "tag": "EvXpvJONgMy4VTwMk2LnBA=="
-      }
+      },
+      "deleted_work_log": [
+        {
+          "id": 1786597503344,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "7.2131",
+          "author": "윤태리",
+          "history_id": 1786597545408,
+          "deleted_at": 1786597545408,
+          "deleted_by": "윤태리",
+          "delete_revert_result": {
+            "reverted": 0,
+            "skipped": 0
+          }
+        }
+      ]
     },
     {
       "group": "kr-010",
