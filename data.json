@@ -12983,7 +12983,9 @@
       "group_parent": "custom-1786348497151",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": ""
+      "build_date": "",
+      "asset_parent_id": "410",
+      "last_mutation_id": "data-msrmr8bb-9df171e4-9aee-4516-b44b-922543ca9528"
     },
     {
       "group": "kr-025",
@@ -14911,6 +14913,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-msrmr5bj-63c4385d-9f1c-43ac-8283-84fb46752e39"
+    },
+    {
+      "id": "audit-1786632324323-y1is8b",
+      "ts": 1786632324323,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "412",
+      "group": "kr-025",
+      "owner": "한화큐셀 Module",
+      "label": "ISG-Proxy",
+      "sn": "76996539",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "410",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-msrmr8bb-9df171e4-9aee-4516-b44b-922543ca9528"
     }
   ],
   "syncMutations": [
@@ -14937,6 +14964,11 @@
     {
       "id": "data-msrmr5bj-63c4385d-9f1c-43ac-8283-84fb46752e39",
       "ts": 1786632320443,
+      "scope": "data"
+    },
+    {
+      "id": "data-msrmr8bb-9df171e4-9aee-4516-b44b-922543ca9528",
+      "ts": 1786632324324,
       "scope": "data"
     }
   ]
