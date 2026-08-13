@@ -5350,7 +5350,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "SSP-S210-10",
       "sn": "73998801",
       "entitlement": "🔗",
@@ -5418,7 +5418,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "SSP-S210-10",
       "sn": "73998789",
       "entitlement": "🔗",
@@ -5486,7 +5486,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "ISG-Proxy 1",
       "sn": "0073998801",
       "entitlement": "🔗",
@@ -5573,7 +5573,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "ISG-Proxy 2",
       "sn": "0073998789",
       "entitlement": "🔗",
@@ -5660,7 +5660,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "MC-V10",
       "sn": "2655413667",
       "entitlement": "🔗",
@@ -5728,7 +5728,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "RP-V100",
       "sn": "0071489986",
       "entitlement": "🔗",
@@ -5853,7 +5853,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "ONSITE-ADVANCED",
       "sn": "1422710025",
       "entitlement": "🔗",
@@ -5899,7 +5899,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "ONSITE-ADVANCED",
       "sn": "1422710039",
       "entitlement": "🔗",
@@ -5945,7 +5945,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52222844-1-1",
       "entitlement": "🔗",
@@ -5991,7 +5991,7 @@
       "flag": "",
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
-      "support_id": "937842",
+      "support_id": "743737",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52222844-7-1",
       "entitlement": "🔗",
@@ -6033,10 +6033,10 @@
       "build_date": "2023.05"
     },
     {
-      "group": "cn-001",
-      "flag": "",
-      "owner": "삼성디스플레이 SDT",
-      "location": "천진",
+      "group": "kr-002",
+      "flag": "아산",
+      "owner": "삼성디스플레이",
+      "location": "아산",
       "support_id": "937842",
       "sku": "MC-S400-20-100-STANDARD",
       "sn": "2718320038",
@@ -6049,9 +6049,9 @@
       "deploy_log": "",
       "mode": "",
       "os_ver": "3.1.3.1",
-      "owner_primary": "윤태리",
-      "owner_secondary": "박동석",
-      "check_method": "원격",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6077,24 +6077,25 @@
       "group_remarks": "",
       "cust_contacts": [
         {
-          "role": "",
-          "name": "yifeng.guo",
-          "org": "",
-          "phone": "",
-          "email": "yifeng.guo@samsung.com"
+          "role": "운영",
+          "name": "반석 프로",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
         }
       ],
-      "country": "중국",
+      "country": "한국",
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": "2023.05"
+      "build_date": "2023.05",
+      "cust_memo": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 \n> 방문일시 : \n> 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S \n> 접견자 : 네트워크그룹 박영범 프로 \n> 방문장소 : 아산1 모듈동 회의실"
     },
     {
-      "group": "cn-001",
-      "flag": "",
-      "owner": "삼성디스플레이 SDT",
-      "location": "천진",
+      "group": "kr-002",
+      "flag": "아산",
+      "owner": "삼성디스플레이",
+      "location": "아산",
       "support_id": "937842",
       "sku": "RP-S500-20-STANDARD",
       "sn": "0918470044",
@@ -6107,9 +6108,9 @@
       "deploy_log": "26-01-25 ~ 29-03-31 2318470007(RMA) / 하드웨어 미교체 (이테크 보관)",
       "mode": "",
       "os_ver": "10.6.2.1",
-      "owner_primary": "윤태리",
-      "owner_secondary": "박동석",
-      "check_method": "원격",
+      "owner_primary": "홍진영",
+      "owner_secondary": "김상문",
+      "check_method": "방문",
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
@@ -6135,18 +6136,19 @@
       "group_remarks": "",
       "cust_contacts": [
         {
-          "role": "",
-          "name": "yifeng.guo",
-          "org": "",
-          "phone": "",
-          "email": "yifeng.guo@samsung.com"
+          "role": "운영",
+          "name": "반석 프로",
+          "org": "삼성SDS",
+          "phone": "010-8718-9514",
+          "email": "bans@samsung.com"
         }
       ],
-      "country": "중국",
+      "country": "한국",
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": "2023.05"
+      "build_date": "2023.05",
+      "cust_memo": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 \n> 방문일시 : \n> 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S \n> 접견자 : 네트워크그룹 박영범 프로 \n> 방문장소 : 아산1 모듈동 회의실"
     },
     {
       "group": "kr-002",
@@ -16543,6 +16545,190 @@
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
       "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607984915-hmrhm7",
+      "ts": 1786607984915,
+      "action": "move",
+      "target_type": "자산",
+      "target_id": "151",
+      "group": "kr-002",
+      "owner": "삼성디스플레이",
+      "label": "MC-S400-20-100-STANDARD",
+      "sn": "2718320038",
+      "summary": "자산 이동 · 삼성디스플레이 SDT → 삼성디스플레이",
+      "changes": [
+        {
+          "field": "group",
+          "label": "소속 법인",
+          "before": "cn-001",
+          "after": "kr-002",
+          "sensitive": false
+        },
+        {
+          "field": "owner",
+          "label": "법인명",
+          "before": "삼성디스플레이 SDT",
+          "after": "삼성디스플레이",
+          "sensitive": false
+        },
+        {
+          "field": "location",
+          "label": "위치",
+          "before": "천진",
+          "after": "아산",
+          "sensitive": false
+        },
+        {
+          "field": "owner_primary",
+          "label": "담당 엔지니어(정)",
+          "before": "윤태리",
+          "after": "홍진영",
+          "sensitive": false
+        },
+        {
+          "field": "owner_secondary",
+          "label": "담당 엔지니어(부)",
+          "before": "박동석",
+          "after": "김상문",
+          "sensitive": false
+        },
+        {
+          "field": "check_method",
+          "label": "점검 방식",
+          "before": "원격",
+          "after": "방문",
+          "sensitive": false
+        },
+        {
+          "field": "cust_contacts",
+          "label": "고객사 담당자",
+          "before": "yifeng.guo / yifeng.guo@samsung.com",
+          "after": "운영 / 반석 프로 / 삼성SDS / 010-8718-9514 / bans@samsung.com",
+          "sensitive": false
+        },
+        {
+          "field": "country",
+          "label": "국가",
+          "before": "중국",
+          "after": "한국",
+          "sensitive": false
+        },
+        {
+          "field": "cust_memo",
+          "label": "고객사 담당자 메모",
+          "before": "—",
+          "after": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 \n> 방문일시 : \n> 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S \n> 접견자 : 네트워크그룹 박영범 프로 \n> 방문장소 : 아산1 모듈동 회의실",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786607984915-i7fj2e",
+      "ts": 1786607984915,
+      "action": "move",
+      "target_type": "자산",
+      "target_id": "152",
+      "group": "kr-002",
+      "owner": "삼성디스플레이",
+      "label": "RP-S500-20-STANDARD",
+      "sn": "0918470044",
+      "summary": "자산 이동 · 삼성디스플레이 SDT → 삼성디스플레이",
+      "changes": [
+        {
+          "field": "group",
+          "label": "소속 법인",
+          "before": "cn-001",
+          "after": "kr-002",
+          "sensitive": false
+        },
+        {
+          "field": "owner",
+          "label": "법인명",
+          "before": "삼성디스플레이 SDT",
+          "after": "삼성디스플레이",
+          "sensitive": false
+        },
+        {
+          "field": "location",
+          "label": "위치",
+          "before": "천진",
+          "after": "아산",
+          "sensitive": false
+        },
+        {
+          "field": "owner_primary",
+          "label": "담당 엔지니어(정)",
+          "before": "윤태리",
+          "after": "홍진영",
+          "sensitive": false
+        },
+        {
+          "field": "owner_secondary",
+          "label": "담당 엔지니어(부)",
+          "before": "박동석",
+          "after": "김상문",
+          "sensitive": false
+        },
+        {
+          "field": "check_method",
+          "label": "점검 방식",
+          "before": "원격",
+          "after": "방문",
+          "sensitive": false
+        },
+        {
+          "field": "cust_contacts",
+          "label": "고객사 담당자",
+          "before": "yifeng.guo / yifeng.guo@samsung.com",
+          "after": "운영 / 반석 프로 / 삼성SDS / 010-8718-9514 / bans@samsung.com",
+          "sensitive": false
+        },
+        {
+          "field": "country",
+          "label": "국가",
+          "before": "중국",
+          "after": "한국",
+          "sensitive": false
+        },
+        {
+          "field": "cust_memo",
+          "label": "고객사 담당자 메모",
+          "before": "—",
+          "after": "※ 신청 시스템 : https://guest.samsungdisplay.com\n- 내방 담당자 : 반 석 프로\n- 내방장소 : 아산1캠퍼스\n- 내방목적 : A/S\n- 내방상세 \n> 방문일시 : \n> 방문목적 : SDC 프록시 및 CAS/MAA 정기점검 및 A/S \n> 접견자 : 네트워크그룹 박영범 프로 \n> 방문장소 : 아산1 모듈동 회의실",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786608045714-7fe078",
+      "ts": 1786608045714,
+      "action": "edit",
+      "target_type": "Support ID",
+      "target_id": "cn-001:743737",
+      "group": "cn-001",
+      "owner": "삼성디스플레이 SDT",
+      "label": "SSP-S210-10",
+      "sn": "73998801",
+      "summary": "Support ID 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "support_id",
+          "label": "Support ID",
+          "before": "937842",
+          "after": "743737",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
     },
     {
       "id": "audit-1786607919895-pfkrh9",
