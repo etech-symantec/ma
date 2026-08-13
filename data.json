@@ -402,20 +402,28 @@
           "author": "윤태리"
         },
         {
+          "id": 1786603639967,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "신호근",
+          "note": "4573456",
+          "author": "신호근"
+        },
+        {
+          "id": 1786603664319,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "신호근",
+          "note": "ㅁㄴㅇㄻㄴㅇㄹ",
+          "author": "신호근"
+        },
+        {
           "id": 1786603706276,
           "type": "OS 업그레이드",
           "date": "2025.06.07",
           "manager": "윤태리",
           "note": "7.3.16.2 > 7.3.21.1 #mem bug",
           "author": "윤태리"
-        },
-        {
-          "id": 1786603626771,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "신호근",
-          "note": "123123123",
-          "author": "신호근"
         }
       ],
       "enable_pw_enc": null,
@@ -443,6 +451,21 @@
           "deleted_by": "윤태리",
           "delete_revert_result": {
             "reverted": 1,
+            "skipped": 0
+          }
+        },
+        {
+          "id": 1786603626771,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "신호근",
+          "note": "123123123",
+          "author": "신호근",
+          "history_id": 1786603738648,
+          "deleted_at": 1786603738648,
+          "deleted_by": "신호근",
+          "delete_revert_result": {
+            "reverted": 0,
             "skipped": 0
           }
         }
