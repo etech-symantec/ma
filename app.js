@@ -2322,7 +2322,13 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
             <div class="group-title-actions">
               ${currentUserName() && !(isParentGroup || meta.is_parent) ? `<button class="wl-action-btn icon-only" data-group-add-asset="${gid}" title="이 법인에 자산 추가">＋</button>` : ''}
               ${isCurrentUserAdmin() && (isParentGroup || meta.is_parent) ? `<button class="wl-action-btn icon-only" data-group-add-child="${gid}" title="이 법인을 상위 법인으로 하는 하위 법인 추가">↳＋</button>` : ''}
-              ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="법인 정보 수정 (법인명/국가/위치/점검방식/구성방식/상위 법인/담당자/고객사 담당자)">${pencilSvg()}</button>` : ''}
+              ${currentUserName() ? `
+                <button
+                  class="wl-action-btn icon-only"
+                  data-group-edit="${gid}"
+                  title="${isCurrentUserAdmin() ? '법인 정보 수정' : '법인 비고 수정'}"
+                >${pencilSvg()}</button>
+              ` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
             </div>
@@ -3590,8 +3596,15 @@ function applyGeSidFieldState(){
 document.getElementById('ge_is_parent').addEventListener('change', applyGeSidFieldState);
 
 function openGroupEditModal(gid){
-  if (!isCurrentUserAdmin()){ alert('마스터만 법인 정보를 수정할 수 있습니다.'); return; }
-  if (viewOnly || !sessionKey){ alert('법인 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
+  const isAdmin = isCurrentUserAdmin();
+  if (!currentUserName()){
+    alert('로그인 후 수정할 수 있습니다.');
+    return;
+  }
+  if (isAdmin && (viewOnly || !sessionKey)){
+    alert('법인 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.');
+    return;
+  }
   const items = records.filter(r=>r.group===gid);
   if (!items.length) return;
   const meta = groupMeta(items);
@@ -3619,8 +3632,40 @@ function openGroupEditModal(gid){
   ).map(c=>({...c}));
   renderCustContactRows();
   updateGeCustSectionVisibility();
+  const modal = document.getElementById('groupEditModal');
+  
+  modal
+    .querySelectorAll('.form-grid input, .form-grid select, .form-grid textarea, .form-grid button')
+    .forEach(el => {
+      el.disabled = !isAdmin;
+    });
+  
+  /* 비고는 모든 로그인 사용자가 수정 가능 */
+  document.getElementById('ge_remarks').disabled = false;
+  
+  
+  /* 일반사용자 안내 */
+  let notice = document.getElementById('geLimitedEditNotice');
+  
+  if (!notice){
+    notice = document.createElement('div');
+    notice.id = 'geLimitedEditNotice';
+    notice.className = 'ge-limited-edit-notice';
+  
+    const grid = modal.querySelector('.form-grid');
+    grid.parentNode.insertBefore(notice, grid);
+  }
+  
+  if (isAdmin){
+    notice.style.display = 'none';
+  } else {
+    notice.style.display = '';
+    notice.textContent = '일반사용자는 법인 비고만 수정할 수 있습니다.';
+  }
+  
+  
   document.getElementById('geError').textContent = '';
-  document.getElementById('groupEditModal').classList.add('open');
+  modal.classList.add('open');
 }
 
 function updateGeCustSectionVisibility(){
@@ -3637,8 +3682,31 @@ document.getElementById('cancelGeBtn').onclick = () => {
 };
 
 document.getElementById('saveGeBtn').onclick = () => {
-  if (!isCurrentUserAdmin()){ alert('마스터만 법인 정보를 수정할 수 있습니다.'); return; }
   if (!groupEditId) return;
+  const isAdmin = isCurrentUserAdmin();
+  if (!isAdmin){
+    if (!currentUserName()){
+      alert('로그인 후 수정할 수 있습니다.');
+      return;
+    }
+    const remarks =
+      document.getElementById('ge_remarks').value.trim();
+    const items = records.filter(
+      r => String(r.group) === String(groupEditId)
+    );
+    if (!items.length) return;
+    items.forEach(r => {
+      r.group_remarks = remarks;
+    });
+    document
+      .getElementById('groupEditModal')
+      .classList.remove('open');
+    groupEditId = null;
+    render();
+    buildFilters();
+    scheduleAutoSync();
+    return;
+  }
   const val = id => document.getElementById(id).value.trim();
   const newOwner = val('ge_owner');
   if (!newOwner){ document.getElementById('geError').textContent = '법인명을 입력해 주세요.'; return; }
