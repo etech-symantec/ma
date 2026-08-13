@@ -15640,11 +15640,11 @@
       "date": "2026.1.30",
       "manager": "김상문",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
       "uncontracted": false,
       "author": "김상문",
-      "updated_at": 1786607897796
+      "updated_at": 1786608751124
     },
     {
       "id": 1786607906941,
@@ -17517,6 +17517,30 @@
       "actor_id": "u1786085321715",
       "actor_name": "신호근",
       "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786608751141-y840ao",
+      "ts": 1786608751141,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607897796",
+      "group": "dup-441",
+      "owner": "삼성 HDC 신라면세점",
+      "label": "2026-01",
+      "sn": "",
+      "summary": "2026년 1월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
     }
   ]
 }
