@@ -13587,8 +13587,15 @@
           "email": ""
         },
         {
-          "role": "",
+          "role": "운영",
           "name": "김보현 프로",
+          "org": "삼성SDSA",
+          "phone": "",
+          "email": ""
+        },
+        {
+          "role": "운영",
+          "name": "Ken 프로",
           "org": "삼성SDSA",
           "phone": "",
           "email": ""
@@ -15957,6 +15964,30 @@
           "label": "고객사 담당자 메모",
           "before": "—",
           "after": "—",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786626223767-yinqkj",
+      "ts": 1786626223767,
+      "action": "edit",
+      "target_type": "법인",
+      "target_id": "kr-001",
+      "group": "kr-001",
+      "owner": "삼성전자 미주법인",
+      "label": "삼성전자 미주법인",
+      "sn": "",
+      "summary": "법인 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "cust_contacts",
+          "label": "고객사 담당자",
+          "before": "운영 / 손재영 프로 / 삼성SDSA / +1-201-364-3492 / jaeyoung.s@samsung.com, 운영 / 강인규 프로 / 삼성SDSA, 김보현 프로 / 삼성SDSA",
+          "after": "운영 / 손재영 프로 / 삼성SDSA / +1-201-364-3492 / jaeyoung.s@samsung.com, 운영 / 강인규 프로 / 삼성SDSA, 운영 / 김보현 프로 / 삼성SDSA, 운영 / Ken 프로 / 삼성SDSA",
           "sensitive": false
         }
       ],
