@@ -375,21 +375,40 @@ aside.filters{
 .fav-star:hover{ color:var(--amber); transform:scale(1.15); }
 .fav-star.active{ color:var(--amber); }
 
-/* 라이선스 상태 - 4열 컴팩트 */
+/* 라이선스 상태 - 4열 / 상태명 위, 숫자 아래 */
 #statusFilters{
   display:grid;
   grid-template-columns:repeat(4, minmax(0, 1fr));
-  gap:3px 4px;
+  gap:4px;
 }
 
 #statusFilters .filter-item{
-  padding:6px 4px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
   gap:3px;
-  font-size:11px;
+  min-width:0;
+  padding:6px 2px;
+
+  font-size:10.5px;
+  line-height:1.2;
+  text-align:center;
+  white-space:nowrap;
 }
 
 #statusFilters .filter-item .cnt{
-  font-size:9px;
+  display:block;
+
+  font-size:9.5px;
+  line-height:1;
+
+  color:var(--text-faint);
+}
+
+#statusFilters .filter-item.active .cnt{
+  color:var(--accent);
 }
 
 /* 태그는 3열로 컴팩트하게 */
