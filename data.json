@@ -3771,7 +3771,9 @@
       "build_date": "2024.10",
       "group_parent": "",
       "is_parent": false,
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "asset_parent_id": "80",
+      "last_mutation_id": "data-mss62fn1-734d4cec-31e3-4be4-afec-44e836279a8b"
     },
     {
       "group": "seha",
@@ -15454,6 +15456,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss622h2-1d6f57be-c920-4c97-bc8c-c6364b1d22f3"
+    },
+    {
+      "id": "audit-1786664759733-b1w6fb",
+      "ts": 1786664759733,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "82",
+      "group": "seha",
+      "owner": "삼성전자 SEHA",
+      "label": "ISG-Proxy",
+      "sn": "0079999244",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "80",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss62fn1-734d4cec-31e3-4be4-afec-44e836279a8b"
     }
   ],
   "syncMutations": [
@@ -15555,6 +15582,11 @@
     {
       "id": "data-mss622h2-1d6f57be-c920-4c97-bc8c-c6364b1d22f3",
       "ts": 1786664742670,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss62fn1-734d4cec-31e3-4be4-afec-44e836279a8b",
+      "ts": 1786664759736,
       "scope": "data"
     }
   ]
