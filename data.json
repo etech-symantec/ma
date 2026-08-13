@@ -2253,7 +2253,17 @@
       "build_date": "2026.06",
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607149766,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "26.06.08 신호근 2.5.5.1 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "custom-472",
@@ -2304,7 +2314,17 @@
       "build_date": "2026.06",
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607149767,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "26.06.08 신호근 2.5.5.1 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "custom-472",
@@ -2355,7 +2375,17 @@
       "build_date": "2026.06",
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607149768,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "26.06.08 신호근 2.5.5.1 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "custom-472",
@@ -2406,7 +2436,17 @@
       "build_date": "2026.06",
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607149769,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "26.06.08 신호근 2.5.5.1 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "vn-sdv-new",
