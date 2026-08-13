@@ -3705,3 +3705,97 @@ tbody td[data-label="비고"] .remarks-txt{
     width:220px !important;
   }
 }
+/* =========================================================
+   SSP-S → ISG 하위 자산 표현
+   ========================================================= */
+
+
+/* SSP-S 부모 자산 */
+tbody tr.asset-parent-row{
+  background:#FCFDFE;
+}
+
+
+/* ISG 하위 자산 */
+tbody tr.asset-child-row{
+  background:#F8FBFD;
+}
+
+
+/*
+  SKU 부분을 들여쓰기해서
+  실제 하위 자산처럼 표현
+*/
+tbody tr.asset-child-row
+td.col-sku{
+  position:relative;
+
+  padding-left:34px !important;
+}
+
+
+/* ↳ 가지 표시 */
+tbody tr.asset-child-row
+td.col-sku::before{
+  content:'↳';
+
+  position:absolute;
+  left:14px;
+  top:13px;
+
+  color:#9AA9B8;
+
+  font-size:14px;
+  font-weight:700;
+  line-height:1;
+}
+
+
+/*
+  하위 자산 좌측에 연한 연결선
+*/
+tbody tr.asset-child-row
+td.col-sku::after{
+  content:'';
+
+  position:absolute;
+
+  left:20px;
+  top:0;
+  bottom:50%;
+
+  width:1px;
+
+  background:#D5E0E8;
+
+  transform:translateX(-7px);
+}
+
+
+/*
+  ISG를 SSP-S 위에 올리고 있을 때
+  "하위 연결" 대상임을 강조
+*/
+tbody tr.asset-drop-parent td{
+  background:#EAF6FD !important;
+
+  border-top:1px solid #86C8EA;
+  border-bottom:1px solid #86C8EA;
+}
+
+
+tbody tr.asset-drop-parent td:first-child{
+  border-left:1px solid #86C8EA;
+}
+
+
+tbody tr.asset-drop-parent td:last-child{
+  border-right:1px solid #86C8EA;
+}
+
+
+/* 부모 행 SKU에 살짝 강조 */
+tbody tr.asset-parent-row
+td.col-sku{
+  font-weight:700;
+}
