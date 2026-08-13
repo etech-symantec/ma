@@ -43,7 +43,16 @@
         "ct": "9lXR8Ejhr7HBTQWYhE5Co7rxKw==",
         "tag": "fFZu5EWtMDhjWxREemfxpQ=="
       },
-      "work_log": [],
+      "work_log": [
+        {
+          "id": 1786593258493,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "신호근",
+          "note": "ㅁㄴㅇㄹㄴㅁㅇㄹ",
+          "author": "신호근"
+        }
+      ],
       "group_remarks": "",
       "cust_contacts": [
         {
