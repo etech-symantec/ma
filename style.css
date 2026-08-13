@@ -2196,14 +2196,12 @@ footer.foot{
   border-color:#F0D79A;
 }
 
-
 /* 저장 중 */
 #githubSyncStatus.syncing{
   color:#1473A5;
   background:#EAF6FC;
   border-color:#B8DEF1;
 }
-
 
 /* 저장 완료 */
 #githubSyncStatus.synced{
@@ -2212,10 +2210,50 @@ footer.foot{
   border-color:#B8DDC4;
 }
 
-
 /* 저장 실패 */
 #githubSyncStatus.error{
   color:#C62828;
   background:#FDECEC;
   border-color:#E9B2B2;
+}
+
+/* =========================================================
+   유지보수 점검지 - 담당자별 고유 색상
+   ========================================================= */
+
+.maint-owner-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  min-width:58px;
+  max-width:100%;
+
+  padding:4px 8px;
+
+  border:1px solid var(--owner-border);
+  border-radius:999px;
+
+  background:var(--owner-bg);
+  color:var(--owner-fg);
+
+  font-size:11.5px;
+  font-weight:700;
+  line-height:1.2;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/* 담당자별 사업장 구분선 */
+.maint-year-table
+tr.maint-owner-row
+td.maint-cell-owner{
+  box-shadow:
+    inset 4px 0 0 var(--maint-owner-color),
+    1px 0 0 var(--border-solid);
+
+  padding-left:13px;
 }
