@@ -78,19 +78,6 @@ if (window.ResizeObserver){
   if (topbarEl) stickyResizeObserver.observe(topbarEl); // also fires when #app flips from display:none to visible
 }
 
-window.addEventListener('beforeunload', (e) => {
-    const syncPending =
-      hasUnsyncedChanges ||
-      autoSyncInFlight ||
-      autoSyncTimer !== null;
-    if (!syncPending){
-      return;
-    }
-    e.preventDefault();
-    e.returnValue = '';
-  }
-);
-
 // ---------- data loading (external JSON / GitHub) ----------
 let ENC_STORE = null;
 let githubConfig = null;   // {repo, branch, path} - non-sensitive, persisted in localStorage (set below to hardcoded defaults)
@@ -133,22 +120,44 @@ let hasUnsyncedChanges = false;
 function setSyncStatus(state, msg){
   const el = document.getElementById('githubSyncStatus');
   if (!el) return;
-  if (state === 'pending'){ el.textContent = '동기화 대기 중…'; el.className = 'sync-status pending'; }
-  else if (state === 'syncing'){ el.textContent = '동기화 중…'; el.className = 'sync-status syncing'; }
-  else if (state === 'synced'){ el.textContent = '✓ 동기화 완료'; el.className = 'sync-status synced'; }
-  else if (state === 'error'){ el.textContent = '⚠ 동기화 실패: 새로고침 후 다시 해보세요.'; el.className = 'sync-status error'; }
-  else if (state === 'offline'){ el.textContent = ''; el.className = 'sync-status'; }
+
+  if (state === 'pending'){
+    el.textContent = '저장 대기';
+    el.title = '변경사항 GitHub 동기화 대기 중';
+    el.className = 'sync-status pending';
+  }
+  else if (state === 'syncing'){
+    el.textContent = '동기화 중…';
+    el.title = 'GitHub에 데이터를 저장하고 있습니다.';
+    el.className = 'sync-status syncing';
+  }
+  else if (state === 'synced'){
+    const time = new Date().toLocaleTimeString('ko-KR');
+    el.textContent = '✓ 저장됨';
+    el.title = `GitHub 동기화 완료 · ${time}`;
+    el.className = 'sync-status synced';
+  }
+  else if (state === 'error'){
+    el.textContent = '⚠ 저장 실패';
+    el.title = 'GitHub 동기화 실패: ' + (msg || '');
+    el.className = 'sync-status error';
+  }
+  else if (state === 'offline'){
+    el.textContent = '';
+    el.title = '';
+    el.className = 'sync-status';
+  }
 }
 
 function scheduleAutoSync(){
+  captureAuditFromStateDiff();
   hasUnsyncedChanges = true;
+
   if (!githubConfig || !githubToken){
-    setSyncStatus(
-      'error',
-      'GitHub 연결 정보가 없습니다.'
-    );
+    setSyncStatus('error', 'GitHub 연결 정보가 없습니다.');
     return;
   }
+
   setSyncStatus('pending');
   clearTimeout(autoSyncTimer);
   autoSyncTimer = setTimeout(() => {
@@ -164,26 +173,27 @@ async function runAutoSync(){
   autoSyncQueued = false;
   setSyncStatus('syncing');
   try{
-    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records, users, maintenanceLogs };
+    const payload = { salt: ENC_STORE.salt, iterations: ENC_STORE.iterations, records, users, maintenanceLogs, auditLogs };
     const newSha = await githubApiPut(githubConfig, githubToken, payload, githubSha, '자산 데이터 자동 동기화 - ' + new Date().toLocaleString('ko-KR'));
     githubSha = newSha;
     hasUnsyncedChanges = false;
     setSyncStatus('synced');
   }catch(e){
     hasUnsyncedChanges = true;
-    console.error(
-      '자동 동기화 실패:',
-      e
-    );
-    setSyncStatus(
-      'error',
-      e.message
-    );
+    console.error('자동 동기화 실패:', e);
+    setSyncStatus('error', e.message);
   }finally{
     autoSyncInFlight = false;
     if (autoSyncQueued){ runAutoSync(); }
   }
 }
+
+window.addEventListener('beforeunload', (e) => {
+  const syncPending = hasUnsyncedChanges || autoSyncInFlight || autoSyncTimer !== null;
+  if (!syncPending) return;
+  e.preventDefault();
+  e.returnValue = '';
+});
 
 githubConfig = loadGithubConfigFromStorage() || DEFAULT_GITHUB_CONFIG;
 
@@ -197,6 +207,7 @@ const dataReady = (async () => {
       records = ENC_STORE.records.map(r => ({...r}));
       users = (ENC_STORE.users || []).map(u => ({...u}));
       maintenanceLogs = (ENC_STORE.maintenanceLogs || []).map(m => ({...m}));
+      auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
       githubConfig = cfg; githubToken = token; githubSha = sha;
       return;
     }catch(e){
@@ -210,6 +221,7 @@ const dataReady = (async () => {
   records = ENC_STORE.records.map(r => ({...r}));
   users = (ENC_STORE.users || []).map(u => ({...u}));
   maintenanceLogs = (ENC_STORE.maintenanceLogs || []).map(m => ({...m}));
+  auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
 })().catch(err => {
   console.error('데이터 로드 실패:', err);
 });
@@ -219,6 +231,8 @@ let viewOnly = false;
 let records = [];
 let users = [];
 let maintenanceLogs = [];
+let auditLogs = [];
+let auditSnapshot = null;
 let expandedGroups = new Set();
 let activeStatusFilters = new Set(['ok','warn','na']);
 let activeCountryFilter = null;
@@ -499,6 +513,7 @@ function boot(){
   document.getElementById('lockOverlay').style.display = 'none';
   document.getElementById('app').classList.add('ready');
   updateUserBtnLabel();
+  suppressAuditCapture = true;
   const entitiesFixed = migrateStrayHtmlEntities();
   const brokenGroupFixed = repairKnownBrokenGeneratedGroups();
   const shellFixed = migrateEmptyGroupPlaceholders();
@@ -506,6 +521,8 @@ function boot(){
   const ownerFixed = migrateOwnerConsistencyWithinGroups();
   migrateCustContactRoleLabels();
   const migrated = enforceParentsHaveNoDirectAssets();
+  refreshAuditSnapshot();
+  suppressAuditCapture = false;
   render();
   requestAnimationFrame(() => { syncGlobalHeaderHeight(); syncStickyOffsets(); });
   if ((migrated || entitiesFixed || brokenGroupFixed || shellFixed || shellSupportFixed || ownerFixed) && !viewOnly && sessionKey){
@@ -821,10 +838,7 @@ function groupDescendantConfigModes(gid){
   groupDescendantIds(gid).forEach(childGid => {
     const childItems = records.filter(r => r.group === childGid);
     if (!childItems.length) return;
-
-    const childMeta = groupMeta(childItems);
-    const mode = (childMeta.config_mode || '').trim();
-
+    const mode = (groupMeta(childItems).config_mode || '').trim();
     if (mode && !seen.has(mode)){
       seen.add(mode);
       modes.push(mode);
@@ -971,28 +985,17 @@ function subGroupMeta(items){
     build_date: items.map(i=>i.build_date).find(Boolean) || ''
   };
 }
-
 function assetOrderValue(rec){
   const n = Number(rec.asset_order);
-  return Number.isFinite(n)
-    ? n
-    : Number.MAX_SAFE_INTEGER;
+  return Number.isFinite(n) ? n : Number.MAX_SAFE_INTEGER;
 }
 
 function sortAssetsByOrder(items){
   return items
-    .map((rec, originalIndex) => ({
-      rec,
-      originalIndex
-    }))
-    .sort((a, b) => {
-      const diff =
-        assetOrderValue(a.rec) -
-        assetOrderValue(b.rec);
-      if (diff !== 0){
-        return diff;
-      }
-      return a.originalIndex - b.originalIndex;
+    .map((rec, originalIndex) => ({rec, originalIndex}))
+    .sort((a,b) => {
+      const diff = assetOrderValue(a.rec) - assetOrderValue(b.rec);
+      return diff !== 0 ? diff : a.originalIndex - b.originalIndex;
     })
     .map(x => x.rec);
 }
@@ -1006,17 +1009,10 @@ function buildSubGroups(items){
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(it);
   }
-  const arr = [...map.entries()].map(
-    ([sid, its]) => {
-      const sortedItems =
-        sortAssetsByOrder(its);
-      return {
-        sid,
-        items:sortedItems,
-        meta:subGroupMeta(sortedItems)
-      };
-    }
-  );
+  const arr = [...map.entries()].map(([sid, its]) => {
+    const sortedItems = sortAssetsByOrder(its);
+    return { sid, items: sortedItems, meta: subGroupMeta(sortedItems) };
+  });
   arr.sort((a,b) => {
     if (!a.sid && b.sid) return 1;
     if (a.sid && !b.sid) return -1;
@@ -1486,16 +1482,10 @@ function maintenanceLogsForGroup(gid){
 
 function maintenanceVisibleGroupList(){
   const groups = maintenanceGroupList();
-  if (!activeMyAssetsFilter){
-    return groups;
-  }
+  if (!activeMyAssetsFilter) return groups;
   const me = currentUserName();
-  if (!me){
-    return groups;
-  }
-  return groups.filter(
-    g => g.meta.owner_primary === me
-  );
+  if (!me) return groups;
+  return groups.filter(g => g.meta.owner_primary === me);
 }
 
 function setMaintenanceTab(tab){
@@ -1506,23 +1496,13 @@ function setMaintenanceTab(tab){
 function maintenanceOwnerColors(name){
   name = String(name || '').trim();
   if (!name){
-    return {
-      fg:'#7A8494',
-      bg:'#F2F4F7',
-      border:'#D9DEE6',
-      accent:'#AAB2BE'
-    };
+    return { fg:'#7A8494', bg:'#F2F4F7', border:'#D9DEE6', accent:'#AAB2BE' };
   }
-
   let hash = 0;
   for (let i = 0; i < name.length; i++){
-    hash = (
-      name.charCodeAt(i) +
-      ((hash << 5) - hash)
-    ) | 0;
+    hash = (name.charCodeAt(i) + ((hash << 5) - hash)) | 0;
   }
-  const hue =
-    ((hash % 360) + 360) % 360;
+  const hue = ((hash % 360) + 360) % 360;
   return {
     fg:`hsl(${hue} 48% 34%)`,
     bg:`hsl(${hue} 72% 94%)`,
@@ -1553,22 +1533,9 @@ function maintenanceEntryTabHtml(){
       ddayHtml = `<span class="maint-dday ${cls}">${label}</span>`;
     }
 
-    const ownerColors =
-      maintenanceOwnerColors(g.meta.owner_primary);
-    
+    const ownerColors = maintenanceOwnerColors(g.meta.owner_primary);
     const engineerHtml = g.meta.owner_primary
-      ? `
-        <span
-          class="maint-owner-badge"
-          style="
-            --owner-fg:${ownerColors.fg};
-            --owner-bg:${ownerColors.bg};
-            --owner-border:${ownerColors.border};
-          "
-        >
-          ${esc(g.meta.owner_primary)}
-        </span>
-      `
+      ? `<span class="maint-owner-badge" style="--owner-fg:${ownerColors.fg};--owner-bg:${ownerColors.bg};--owner-border:${ownerColors.border};">${esc(g.meta.owner_primary)}</span>`
       : '<span class="maint-td-empty">-</span>';
 
     const monthCellsHtml = MAINT_MONTHS.map(m => {
@@ -1654,10 +1621,7 @@ function maintenanceEntryTabHtml(){
     }).join('');
 
     return `
-      <tr
-        class="maint-owner-row"
-        style="--maint-owner-color:${ownerColors.accent};"
-      >
+      <tr class="maint-owner-row" style="--maint-owner-color:${ownerColors.accent};">
         <td class="maint-cell-owner" data-label="사업장">
           <span class="maint-row-owner">${esc(g.meta.owner)}</span>${g.meta.location ? `<span class="maint-row-location"> · ${esc(g.meta.location)}</span>` : ''}
         </td>
@@ -1925,7 +1889,7 @@ function maintenanceStatsTabHtml(){
     </div>
     <div class="maint-trend-card">
       <h4>담당자별 사이트 요약</h4>
-      <p class="maint-day-hint">담당자별로 정/부 담당 중인 법인 수를 점검 방식별로 모아 보여줍니다. 개인 필터(내 사업장만)와 무관하게 전체 담당자 기준입니다.</p>
+      <p class="maint-day-hint">담당자별로 정/부 담당 중인 법인 수를 점검 방식별로 모아 보여줍니다. 개인 필터(My)와 무관하게 전체 담당자 기준입니다.</p>
       ${maintenanceUserSummaryHtml()}
     </div>`;
 }
@@ -1933,12 +1897,7 @@ function maintenanceStatsTabHtml(){
 function renderMaintenance(){
   const wrap = document.getElementById('maintenanceView');
   if (!wrap) return;
-  if (!maintenanceYear){
-    maintenanceYear = Math.max(
-      2026,
-      Number(currentYm().split('-')[0])
-    );
-  }
+  if (!maintenanceYear) maintenanceYear = Math.max(2026, Number(currentYm().split('-')[0]));
   wrap.innerHTML = `
     <div class="maint-sticky-top">
       <div class="maint-header">
@@ -1955,6 +1914,7 @@ function renderMaintenance(){
               <span class="maint-license-notice-icon">🔔</span>
               <span>라이선스 만료 2달 전 공지글</span>
             </a>
+        
           </div>
         </div>
         <p class="maint-sub">등록된 법인들의 월별 점검 이력을 관리합니다 · 2026년 1월부터</p>
@@ -2286,18 +2246,8 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
             <table>
               <thead><tr>
                 ${canSelectAssets() ? '<th class="col-select"></th>' : ''}
-                <th class="col-sku">SKU / 제품</th>
-                <th class="col-sn">S/N</th>
-                <th class="col-qty">수량</th>
-                <th class="col-license">라이선스 기간</th>
-                
-                <th>IP</th>
-                <th>ID</th>
-                <th>PW</th>
-                <th>OS 버전</th>
-                <th>비고</th>
-                <th>작업이력</th>
-                <th>관리</th>
+                <th class="col-sku">SKU / 제품</th><th class="col-sn">S/N</th><th class="col-qty">수량</th><th class="col-license">라이선스 기간</th>
+                <th>IP</th><th>ID</th><th>PW</th><th>OS 버전</th><th>비고</th><th>작업이력</th><th>관리</th>
               </tr></thead>
               <tbody>
                 ${sg.items.map(r=>rowHtml(r, sg.sid)).join('')}
@@ -2322,10 +2272,7 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
                 <span class="meta-chip meta-chip-country"><span class="meta-label">국가</span><span class="meta-value">${esc(meta.country)||'—'}</span></span>
                 <span class="meta-chip meta-chip-location"><span class="meta-label">위치</span><span class="meta-value">${esc(meta.location)||'—'}</span></span>
                 ${isChild ? '' : `<span class="meta-chip meta-chip-check"><span class="meta-label">점검 방식</span><span class="meta-value">${esc(meta.check_method)||'—'}</span></span>`}
-                <span class="meta-chip meta-chip-config">
-                  <span class="meta-label">구성방식</span>
-                  <span class="meta-value">${esc(displayConfigMode)||'—'}</span>
-                </span>
+                <span class="meta-chip meta-chip-config"><span class="meta-label">구성방식</span><span class="meta-value">${esc(displayConfigMode)||'—'}</span></span>
                 <span class="meta-chip"><span class="meta-label">항목</span><span class="meta-value">${displayItemCount}건</span></span>
                 ${soloSubGroup ? buildEngineerInlineHtml(soloSubGroup.meta) : ''}
                 ${isChild ? '' : managerNamesInlineHtml(meta)}
@@ -2338,13 +2285,7 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
             <div class="group-title-actions">
               ${currentUserName() && !(isParentGroup || meta.is_parent) ? `<button class="wl-action-btn icon-only" data-group-add-asset="${gid}" title="이 법인에 자산 추가">＋</button>` : ''}
               ${isCurrentUserAdmin() && (isParentGroup || meta.is_parent) ? `<button class="wl-action-btn icon-only" data-group-add-child="${gid}" title="이 법인을 상위 법인으로 하는 하위 법인 추가">↳＋</button>` : ''}
-              ${currentUserName() ? `
-                <button
-                  class="wl-action-btn icon-only"
-                  data-group-edit="${gid}"
-                  title="${isCurrentUserAdmin() ? '법인 정보 수정' : '법인 비고 수정'}"
-                >${pencilSvg()}</button>
-              ` : ''}
+              ${currentUserName() ? `<button class="wl-action-btn icon-only" data-group-edit="${gid}" title="${isCurrentUserAdmin() ? '법인 정보 수정' : '고객사 담당자 / 비고 수정'}">${pencilSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only" data-group-duplicate="${gid}" title="이 법인의 자산을 그대로 복사해서 바로 아래에 새 법인으로 추가">${clipboardSvg()}</button>` : ''}
               ${isCurrentUserAdmin() ? `<button class="wl-action-btn icon-only danger" data-group-delete="${gid}" title="법인 전체 삭제">${trashSvg()}</button>` : ''}
             </div>
@@ -2362,35 +2303,34 @@ function groupCardHtml(gid, items, groupsMap, depth, visited){
 function render(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   const mySiteGroupIds = getMySiteGroupIds();
-    const licenseMatchedGroupIds = new Set(
-      records
-        .filter(r =>
-          !r.is_group_shell &&
-          activeStatusFilters.has(licenseStatus(r))
-        )
-        .map(r => r.group)
-    );
-    const licenseVisibleGroupIds =
-      new Set(licenseMatchedGroupIds);
-  
-    [...licenseMatchedGroupIds].forEach(gid => {
-      let parentGid = groupParentOf(gid);
-  
-      while (parentGid){
-        if (licenseVisibleGroupIds.has(parentGid)){
-          break;
-        }
-  
-        licenseVisibleGroupIds.add(parentGid);
-        parentGid = groupParentOf(parentGid);
-      }
-    });
+
+  /* 라이선스 상태 필터는 실제 자산만 기준으로 계산 */
+  const licenseMatchedGroupIds = new Set(
+    records
+      .filter(r => !r.is_group_shell && activeStatusFilters.has(licenseStatus(r)))
+      .map(r => r.group)
+  );
+  const licenseVisibleGroupIds = new Set(licenseMatchedGroupIds);
+  [...licenseMatchedGroupIds].forEach(gid => {
+    let parentGid = groupParentOf(gid);
+    while (parentGid){
+      if (licenseVisibleGroupIds.has(parentGid)) break;
+      licenseVisibleGroupIds.add(parentGid);
+      parentGid = groupParentOf(parentGid);
+    }
+  });
+
+  // 좌측 사이트에서 상위 법인을 선택한 경우
+  // 상위 법인 + 모든 하위 법인까지 필터 대상에 포함
   let activeSiteGroupIds = null;
+
   if (activeCountryFilter){
     const selectedGid = allGroupIds().find(gid => {
       const items = records.filter(r => r.group === gid);
       if (!items.length) return false;
+
       const meta = groupMeta(items);
+
       return !meta.group_parent &&
              meta.owner === activeCountryFilter;
     });
@@ -2403,16 +2343,12 @@ function render(){
     }
   }
 
-    let list = records.filter(r => {
-      if (r.is_group_shell){
-        if (!licenseVisibleGroupIds.has(r.group)){
-          return false;
-        }
-      } else {
-        if (!activeStatusFilters.has(licenseStatus(r))){
-          return false;
-        }
-      }
+  let list = records.filter(r => {
+    if (r.is_group_shell){
+      if (!licenseVisibleGroupIds.has(r.group)) return false;
+    } else {
+      if (!activeStatusFilters.has(licenseStatus(r))) return false;
+    }
     if (activeSkuKeywordFilters.size){
       const kws = skuKeywordMatches(r.sku);
       if (!kws.some(k => activeSkuKeywordFilters.has(k))) return false;
@@ -2572,8 +2508,8 @@ function render(){
   buildFilters();
   updateActivityBadge();
   populateSecretFields();
-  bindAssetDragDrop();
   bindAssetUpdateTooltips();
+  bindAssetDragDrop();
 }
 
 // ---------- 자산 일괄 선택 이동 툴바 ----------
@@ -2627,31 +2563,11 @@ function statusColorVar(s){ return {ok:'var(--green)', warn:'var(--amber)', crit
 function snLink(r, groupSupportId){
   const rawSn = String(r.sn || '').trim();
   const sn = esc(rawSn);
-
   if (!rawSn) return '—';
-
   const supportId = r.support_id || groupSupportId;
   if (!supportId) return sn;
-
-  /*
-    S/N이 숫자로만 구성되어 있고 10자리보다 짧으면
-    Broadcom 링크에 사용할 때만 앞에 0을 붙여 10자리로 만든다.
-
-    예:
-    74485847   → 0074485847
-    123456789  → 0123456789
-    1234567890 → 1234567890
-  */
-  const linkSn = /^\d+$/.test(rawSn)
-    ? rawSn.padStart(10, '0')
-    : rawSn;
-
-  const url =
-    `https://support.broadcom.com/group/ecx/licensing` +
-    `?siteId=${encodeURIComponent(supportId)}` +
-    `&serialNumber=${encodeURIComponent(linkSn)}`;
-
-  /* 화면에는 기존 S/N 그대로 표시 */
+  const linkSn = /^\d+$/.test(rawSn) ? rawSn.padStart(10, '0') : rawSn;
+  const url = `https://support.broadcom.com/group/ecx/licensing?siteId=${encodeURIComponent(supportId)}&serialNumber=${encodeURIComponent(linkSn)}`;
   return `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${sn}</a>`;
 }
 
@@ -2827,13 +2743,8 @@ document.getElementById('custContactsModalCloseBtn').onclick = () => {
 };
 
 function groupRemarksHtml(meta){
-  const remarks = (meta.group_remarks || '').trim();
-  if (!remarks) return '';
-  return `
-    <div class="sub group-remarks">
-      ${esc(remarks)}
-    </div>
-  `;
+  if (!meta.group_remarks) return '';
+  return `<div class="sub group-remarks">${esc(meta.group_remarks)}</div>`;
 }
 
 function supportIdTitleHtml(gid, items, isChild, editableSid){
@@ -2873,239 +2784,178 @@ function supportIdChipSimple(gid, sids, editableSid){
 /* =========================================================
    자산 행 - 최근 업데이트 툴팁
    ========================================================= */
-
 function assetRecentUpdateItems(rec){
   const items = [];
-
-  /* 현재 작업 이력 */
   (rec.work_log || []).forEach(entry => {
-    items.push({
-      entry,
-      deleted:false,
-      ts:Number(
-        entry.updated_at ||
-        entry.id ||
-        0
-      )
-    });
+    items.push({ entry, deleted:false, ts:Number(entry.updated_at || entry.id || 0) });
   });
-
-  /* 삭제된 작업 이력도 감사 이력으로 표시 */
   (rec.deleted_work_log || []).forEach(entry => {
-    items.push({
-      entry,
-      deleted:true,
-      ts:Number(
-        entry.deleted_at ||
-        entry.updated_at ||
-        entry.history_id ||
-        entry.id ||
-        0
-      )
-    });
+    items.push({ entry, deleted:true, ts:Number(entry.deleted_at || entry.updated_at || entry.history_id || entry.id || 0) });
   });
-
-  return items
-    .sort((a, b) => b.ts - a.ts)
-    .slice(0, 5);
+  return items.sort((a,b)=>b.ts-a.ts).slice(0,5);
 }
-
 
 function assetUpdateTooltipHtml(rec){
   const items = assetRecentUpdateItems(rec);
-
   if (!items.length) return '';
-
   return `
-    <div class="asset-update-tooltip-title">
-      최근 업데이트
-      <span>${items.length}건</span>
-    </div>
-
+    <div class="asset-update-tooltip-title">최근 업데이트 <span>${items.length}건</span></div>
     <div class="asset-update-tooltip-list">
-
       ${items.map(({entry, deleted}) => {
-
-        const date =
-          entry.date ||
-          (
-            entry.updated_at
-              ? new Date(entry.updated_at).toLocaleDateString('ko-KR')
-              : ''
-          );
-
-        const manager =
-          entry.manager ||
-          entry.author ||
-          '';
-
-        /*
-          자산 정보가 변경된 경우 change_summary 우선 표시.
-          일반 작업 이력이면 note 표시.
-        */
-        const detail =
-          entry.change_summary ||
-          entry.note ||
-          '내용 없음';
-
+        const date = entry.date || (entry.updated_at ? new Date(entry.updated_at).toLocaleDateString('ko-KR') : '');
+        const manager = entry.manager || entry.author || '';
+        const detail = entry.change_summary || entry.note || '내용 없음';
         return `
           <div class="asset-update-tooltip-item ${deleted ? 'is-deleted' : ''}">
-
             <div class="asset-update-tooltip-head">
-
-              <span class="asset-update-tooltip-type">
-                ${esc(entry.type || '작업 이력')}
-              </span>
-
-              ${deleted
-                ? `<span class="asset-update-tooltip-deleted">삭제됨</span>`
-                : ''
-              }
-
-              <span class="asset-update-tooltip-date">
-                ${esc(date)}
-              </span>
-
+              <span class="asset-update-tooltip-type">${esc(entry.type || '작업 이력')}</span>
+              ${deleted ? '<span class="asset-update-tooltip-deleted">삭제됨</span>' : ''}
+              <span class="asset-update-tooltip-date">${esc(date)}</span>
             </div>
-
-            <div class="asset-update-tooltip-detail">
-              ${esc(detail)}
-            </div>
-
-            ${manager ? `
-              <div class="asset-update-tooltip-manager">
-                ${esc(manager)}
-              </div>
-            ` : ''}
-
-          </div>
-        `;
+            <div class="asset-update-tooltip-detail">${esc(detail)}</div>
+            ${manager ? `<div class="asset-update-tooltip-manager">${esc(manager)}</div>` : ''}
+          </div>`;
       }).join('')}
-
-    </div>
-  `;
+    </div>`;
 }
 
-
 function getAssetUpdateTooltip(){
-  let tooltip =
-    document.getElementById('assetUpdateTooltip');
-
+  let tooltip = document.getElementById('assetUpdateTooltip');
   if (!tooltip){
     tooltip = document.createElement('div');
-
     tooltip.id = 'assetUpdateTooltip';
     tooltip.className = 'asset-update-tooltip';
-
     document.body.appendChild(tooltip);
   }
-
   return tooltip;
 }
 
-
 function positionAssetUpdateTooltip(tooltip, e){
   const gap = 14;
-
   let left = e.clientX + gap;
   let top = e.clientY + gap;
-
-  /*
-    우측 화면 밖으로 나가면
-    마우스 왼쪽에 표시
-  */
-  const width =
-    tooltip.offsetWidth || 380;
-
-  const height =
-    tooltip.offsetHeight || 200;
-
-  if (left + width > window.innerWidth - 12){
-    left = e.clientX - width - gap;
-  }
-
-  /*
-    하단 화면 밖으로 나가면 위로 이동
-  */
-  if (top + height > window.innerHeight - 12){
-    top = window.innerHeight - height - 12;
-  }
-
+  const width = tooltip.offsetWidth || 380;
+  const height = tooltip.offsetHeight || 200;
+  if (left + width > window.innerWidth - 12) left = e.clientX - width - gap;
+  if (top + height > window.innerHeight - 12) top = window.innerHeight - height - 12;
   if (left < 12) left = 12;
   if (top < 12) top = 12;
-
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top}px`;
 }
 
-
 function bindAssetUpdateTooltips(){
   const tooltip = getAssetUpdateTooltip();
-
-  document
-    .querySelectorAll('tr[data-id]')
-    .forEach(row => {
-
-      const rec = records.find(
-        r => String(r.id) === String(row.dataset.id)
-      );
-
-      if (!rec) return;
-
-      const html =
-        assetUpdateTooltipHtml(rec);
-
-      /*
-        업데이트 이력이 없는 자산은
-        툴팁 표시 안 함
-      */
-      if (!html) return;
-
-
-      row.addEventListener('mouseenter', e => {
-        tooltip.innerHTML = html;
-
-        tooltip.classList.add('open');
-
-        positionAssetUpdateTooltip(
-          tooltip,
-          e
-        );
-      });
-
-
-      row.addEventListener('mousemove', e => {
-
-        /*
-          버튼 / 링크 / 체크박스 / 비밀번호 등에
-          마우스를 올렸을 때는 방해하지 않도록 숨김
-        */
-        const interactive = e.target.closest(
-          'button, a, input, select, textarea, .sec-val, .ip-chip'
-        );
-
-        if (interactive){
-          tooltip.classList.remove('open');
-          return;
-        }
-
-        if (!tooltip.classList.contains('open')){
-          tooltip.innerHTML = html;
-          tooltip.classList.add('open');
-        }
-
-        positionAssetUpdateTooltip(
-          tooltip,
-          e
-        );
-      });
-
-
-      row.addEventListener('mouseleave', () => {
-        tooltip.classList.remove('open');
-      });
-
+  document.querySelectorAll('tbody tr[data-id]').forEach(row => {
+    const rec = records.find(r => String(r.id) === String(row.dataset.id));
+    if (!rec) return;
+    const html = assetUpdateTooltipHtml(rec);
+    if (!html) return;
+    row.addEventListener('mouseenter', e => {
+      tooltip.innerHTML = html;
+      tooltip.classList.add('open');
+      positionAssetUpdateTooltip(tooltip, e);
     });
+    row.addEventListener('mousemove', e => {
+      const interactive = e.target.closest('button, a, input, select, textarea, .sec-val, .ip-chip, .asset-drag-handle');
+      if (interactive){ tooltip.classList.remove('open'); return; }
+      if (!tooltip.classList.contains('open')){
+        tooltip.innerHTML = html;
+        tooltip.classList.add('open');
+      }
+      positionAssetUpdateTooltip(tooltip, e);
+    });
+    row.addEventListener('mouseleave', () => tooltip.classList.remove('open'));
+  });
+}
+
+/* =========================================================
+   같은 법인/Support ID 내 자산 순서 드래그 앤 드롭
+   ========================================================= */
+let draggingAssetId = null;
+
+function canReorderAssets(){ return !!currentUserName(); }
+function assetSupportKey(rec){ return String(rec?.support_id || '').trim(); }
+function sameAssetOrderScope(a,b){
+  return !!(a && b && String(a.group) === String(b.group) && assetSupportKey(a) === assetSupportKey(b));
+}
+function assetOrderScope(rec){
+  if (!rec) return [];
+  return sortAssetsByOrder(records.filter(r =>
+    !r.is_group_shell && String(r.group) === String(rec.group) && assetSupportKey(r) === assetSupportKey(rec)
+  ));
+}
+function clearAssetDragVisuals(){
+  document.querySelectorAll('tr.asset-dragging, tr.asset-drop-before, tr.asset-drop-after').forEach(row => {
+    row.classList.remove('asset-dragging','asset-drop-before','asset-drop-after');
+  });
+}
+function reorderAssetRows(sourceId, targetId, insertAfter){
+  const source = records.find(r => String(r.id) === String(sourceId));
+  const target = records.find(r => String(r.id) === String(targetId));
+  if (!source || !target || source === target || !sameAssetOrderScope(source,target)) return;
+  const ordered = assetOrderScope(source);
+  const sourceIndex = ordered.findIndex(r => String(r.id) === String(source.id));
+  if (sourceIndex < 0) return;
+  const [moved] = ordered.splice(sourceIndex,1);
+  let targetIndex = ordered.findIndex(r => String(r.id) === String(target.id));
+  if (targetIndex < 0) return;
+  if (insertAfter) targetIndex++;
+  ordered.splice(targetIndex,0,moved);
+  ordered.forEach((rec,index) => { rec.asset_order = index + 1; });
+  render();
+  scheduleAutoSync();
+}
+function bindAssetDragDrop(){
+  if (!canReorderAssets()) return;
+  document.querySelectorAll('.asset-drag-handle').forEach(handle => {
+    handle.addEventListener('dragstart', e => {
+      const recId = String(handle.dataset.dragAsset || '');
+      if (!recId){ e.preventDefault(); return; }
+      draggingAssetId = recId;
+      const row = handle.closest('tr[data-id]');
+      if (row) row.classList.add('asset-dragging');
+      if (e.dataTransfer){ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',recId); }
+    });
+    handle.addEventListener('dragend', () => { draggingAssetId=null; clearAssetDragVisuals(); });
+  });
+  document.querySelectorAll('tbody tr[data-id]').forEach(row => {
+    row.addEventListener('dragover', e => {
+      if (!draggingAssetId) return;
+      const targetId = String(row.dataset.id || '');
+      if (!targetId || targetId === draggingAssetId) return;
+      const source = records.find(r => String(r.id) === draggingAssetId);
+      const target = records.find(r => String(r.id) === targetId);
+      if (!sameAssetOrderScope(source,target)) return;
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect='move';
+      document.querySelectorAll('tr.asset-drop-before, tr.asset-drop-after').forEach(el => {
+        if (el !== row) el.classList.remove('asset-drop-before','asset-drop-after');
+      });
+      const rect = row.getBoundingClientRect();
+      const insertAfter = e.clientY > rect.top + rect.height/2;
+      row.classList.toggle('asset-drop-before',!insertAfter);
+      row.classList.toggle('asset-drop-after',insertAfter);
+    });
+    row.addEventListener('dragleave', e => {
+      if (e.relatedTarget && row.contains(e.relatedTarget)) return;
+      row.classList.remove('asset-drop-before','asset-drop-after');
+    });
+    row.addEventListener('drop', e => {
+      if (!draggingAssetId) return;
+      const targetId = String(row.dataset.id || '');
+      if (!targetId || targetId === draggingAssetId) return;
+      const source = records.find(r => String(r.id) === draggingAssetId);
+      const target = records.find(r => String(r.id) === targetId);
+      if (!sameAssetOrderScope(source,target)) return;
+      e.preventDefault();
+      const insertAfter = row.classList.contains('asset-drop-after');
+      const sourceId = draggingAssetId;
+      draggingAssetId = null;
+      clearAssetDragVisuals();
+      reorderAssetRows(sourceId,targetId,insertAfter);
+    });
+  });
 }
 
 function rowHtml(r, groupSupportId){
@@ -3115,27 +2965,12 @@ function rowHtml(r, groupSupportId){
   return `
   <tr data-id="${r.id}">
     ${canSelectAssets() ? `<td class="col-select" data-label=""><input type="checkbox" class="asset-select-cb" data-select-asset="${r.id}" ${selectedAssetIds.has(String(r.id))?'checked':''} title="일괄 이동/작업 이력 등록을 위해 선택"></td>` : ''}
-    <td class="sku" data-label="SKU / 제품">
-      ${canReorderAssets() ? `
-        <span
-          class="asset-drag-handle"
-          draggable="true"
-          data-drag-asset="${r.id}"
-          title="드래그하여 자산 순서 변경"
-        >⋮⋮</span>
-      ` : ''}
-      ${skuBadge(r.sku)}
-      ${skuKeywordTagsHtml(r.sku)}
+    <td class="sku col-sku" data-label="SKU / 제품">
+      ${canReorderAssets() ? `<span class="asset-drag-handle" draggable="true" data-drag-asset="${r.id}" title="드래그하여 자산 순서 변경">⋮⋮</span>` : ''}
+      ${skuBadge(r.sku)}${skuKeywordTagsHtml(r.sku)}
     </td>
-    
-    <td class="sn col-sn" data-label="S/N">
-      ${snLink(r, groupSupportId)}
-    </td>
-    
-    <td class="col-qty" data-label="수량">
-      ${esc(r.qty)||''}
-    </td>
-    
+    <td class="sn col-sn" data-label="S/N">${snLink(r, groupSupportId)}</td>
+    <td class="col-qty" data-label="수량">${esc(r.qty)||''}</td>
     <td class="col-license" data-label="라이선스 기간">
       <div class="lic-bar-wrap">
         <div class="lic-dates">${esc(r.start)||'-'} → ${esc(r.end)||'-'}</div>
@@ -3329,8 +3164,7 @@ function renderFiltersResetSlot(){
 
 document.getElementById('myAssetsToggle').onclick = () => {
   if (!currentUserName()) return;
-  activeMyAssetsFilter =
-    !activeMyAssetsFilter;
+  activeMyAssetsFilter = !activeMyAssetsFilter;
   updateMyAssetsToggle();
   if (currentViewMode === 'maintenance'){
     renderMaintenance();
@@ -3608,8 +3442,8 @@ function applyGeSidFieldState(){
     sidInput.disabled = true; engInput.disabled = true; dateInput.disabled = true;
     sidInput.value = ''; engInput.value = ''; dateInput.value = '';
     sidInput.placeholder = '상위 법인은 대표 이름 역할만 합니다';
-    engInput.placeholder = '하위 법인에서 관리';
-    dateInput.placeholder = '하위 법인에서 관리';
+    engInput.placeholder = '자식 법인에서 관리';
+    dateInput.placeholder = '자식 법인에서 관리';
   } else if (subGroups.length <= 1){
     sidInput.disabled = false; engInput.disabled = false; dateInput.disabled = false;
     sidInput.value = subGroups.length ? subGroups[0].sid : '';
@@ -3617,7 +3451,7 @@ function applyGeSidFieldState(){
     dateInput.value = subGroups.length ? (subGroups[0].meta.build_date || '') : '';
     sidInput.placeholder = '예: 12345678';
     engInput.placeholder = '장비를 구축한 엔지니어 (선택)';
-    dateInput.placeholder = '2026.08';
+    dateInput.placeholder = '2026.07';
   } else {
     sidInput.disabled = true; engInput.disabled = true; dateInput.disabled = true;
     sidInput.value = subGroups.map(sg=>sg.sid||'미지정').join(', ');
@@ -3631,10 +3465,7 @@ document.getElementById('ge_is_parent').addEventListener('change', applyGeSidFie
 
 function openGroupEditModal(gid){
   const isAdmin = isCurrentUserAdmin();
-  if (!currentUserName()){
-    alert('로그인 후 수정할 수 있습니다.');
-    return;
-  }
+  if (!currentUserName()){ alert('로그인 후 수정할 수 있습니다.'); return; }
   if (isAdmin && (viewOnly || !sessionKey)){
     alert('법인 정보를 수정하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.');
     return;
@@ -3666,34 +3497,19 @@ function openGroupEditModal(gid){
   ).map(c=>({...c}));
   renderCustContactRows();
   updateGeCustSectionVisibility();
+
   const modal = document.getElementById('groupEditModal');
-  
-  modal
-    .querySelectorAll(
-      '.form-grid input, .form-grid select, .form-grid textarea, .form-grid button'
-    )
-    .forEach(el => {
-      el.disabled = !isAdmin;
-    });
+  modal.querySelectorAll('.form-grid input, .form-grid select, .form-grid textarea, .form-grid button').forEach(el => {
+    el.disabled = !isAdmin;
+  });
   if (!isAdmin){
     document.getElementById('ge_remarks').disabled = false;
-    modal
-      .querySelectorAll(
-        '#ge_cust_list input, ' +
-        '#ge_cust_list select, ' +
-        '#ge_cust_list button'
-      )
-      .forEach(el => {
-        el.disabled = false;
-      });
-    const addCustBtn =
-      document.getElementById('ge_cust_add_btn');
-    if (addCustBtn){
-      addCustBtn.disabled = false;
-    }
+    modal.querySelectorAll('#ge_cust_list input, #ge_cust_list select, #ge_cust_list button').forEach(el => { el.disabled = false; });
+    const addCustBtn = document.getElementById('ge_cust_add_btn');
+    if (addCustBtn) addCustBtn.disabled = false;
   }
+
   let notice = document.getElementById('geLimitedEditNotice');
-  
   if (!notice){
     notice = document.createElement('div');
     notice.id = 'geLimitedEditNotice';
@@ -3705,8 +3521,9 @@ function openGroupEditModal(gid){
     notice.style.display = 'none';
   } else {
     notice.style.display = '';
-    notice.textContent = '일반사용자는 법인 비고만 수정할 수 있습니다.';
+    notice.textContent = '일반사용자는 고객사 담당자와 법인 비고만 수정할 수 있습니다.';
   }
+
   document.getElementById('geError').textContent = '';
   modal.classList.add('open');
 }
@@ -3727,47 +3544,27 @@ document.getElementById('cancelGeBtn').onclick = () => {
 document.getElementById('saveGeBtn').onclick = () => {
   if (!groupEditId) return;
   const isAdmin = isCurrentUserAdmin();
+
   if (!isAdmin){
-    if (!currentUserName()){
-      alert('로그인 후 수정할 수 있습니다.');
-      return;
-    }
-    const items = records.filter(
-      r => String(r.group) === String(groupEditId)
-    );
+    if (!currentUserName()){ alert('로그인 후 수정할 수 있습니다.'); return; }
+    const items = records.filter(r => String(r.group) === String(groupEditId));
     if (!items.length) return;
     captureCustContactsFromDom();
-    const newContacts =
-      geCustContacts
-        .filter(c =>
-          c.name ||
-          c.org ||
-          c.phone ||
-          c.email
-        )
-        .slice(0, 5);
-    const remarks =
-      document
-        .getElementById('ge_remarks')
-        .value
-        .trim();
+    const newContacts = geCustContacts.filter(c => c.name || c.org || c.phone || c.email).slice(0,5);
+    const remarks = document.getElementById('ge_remarks').value.trim();
     items.forEach(r => {
       r.group_remarks = remarks;
-      r.cust_contacts =
-        newContacts.map(c => ({...c}));
-      r.cust_contact = '';
-      r.cust_phone = '';
-      r.cust_email = '';
+      r.cust_contacts = newContacts.map(c => ({...c}));
+      r.cust_contact = ''; r.cust_phone = ''; r.cust_email = '';
     });
-    document
-      .getElementById('groupEditModal')
-      .classList.remove('open');
+    document.getElementById('groupEditModal').classList.remove('open');
     groupEditId = null;
     render();
     buildFilters();
     scheduleAutoSync();
     return;
   }
+
   const val = id => document.getElementById(id).value.trim();
   const newOwner = val('ge_owner');
   if (!newOwner){ document.getElementById('geError').textContent = '법인명을 입력해 주세요.'; return; }
@@ -4028,335 +3825,6 @@ document.getElementById('saveSgBtn').onclick = () => {
 // ---------- 자산을 다른 법인으로 이동 ----------
 let moveAssetRecIds = [];
 let selectedAssetIds = new Set();
-/* =========================================================
-   같은 법인 내 자산 순서 드래그 앤 드롭
-   ========================================================= */
-let draggingAssetId = null;
-function canReorderAssets(){
-  return !!currentUserName();
-}
-
-function assetSupportKey(rec){
-  return String(
-    rec?.support_id || ''
-  ).trim();
-}
-
-function sameAssetOrderScope(a, b){
-  if (!a || !b){
-    return false;
-  }
-  return (
-    String(a.group) === String(b.group) &&
-    assetSupportKey(a) === assetSupportKey(b)
-  );
-}
-
-function assetOrderScope(rec){
-  if (!rec){
-    return [];
-  }
-  const group =
-    String(rec.group);
-  const support =
-    assetSupportKey(rec);
-
-  return sortAssetsByOrder(
-    records.filter(r =>
-      !r.is_group_shell &&
-      String(r.group) === group &&
-      assetSupportKey(r) === support
-    )
-  );
-}
-
-function clearAssetDragVisuals(){
-  document
-    .querySelectorAll(
-      'tr.asset-dragging, ' +
-      'tr.asset-drop-before, ' +
-      'tr.asset-drop-after'
-    )
-    .forEach(row => {
-      row.classList.remove(
-        'asset-dragging',
-        'asset-drop-before',
-        'asset-drop-after'
-      );
-    });
-}
-
-function reorderAssetRows(
-  sourceId,
-  targetId,
-  insertAfter
-){
-  const source =
-    records.find(
-      r =>
-        String(r.id) ===
-        String(sourceId)
-    );
-  const target =
-    records.find(
-      r =>
-        String(r.id) ===
-        String(targetId)
-    );
-  if (
-    !source ||
-    !target ||
-    source === target
-  ){
-    return;
-  }
-  if (!sameAssetOrderScope(source, target)){
-    return;
-  }
-  const ordered =
-    assetOrderScope(source);
-  const sourceIndex =
-    ordered.findIndex(
-      r =>
-        String(r.id) ===
-        String(source.id)
-    );
-  if (sourceIndex < 0){
-    return;
-  }
-  const [moved] =
-    ordered.splice(
-      sourceIndex,
-      1
-    );
-  let targetIndex =
-    ordered.findIndex(
-      r =>
-        String(r.id) ===
-        String(target.id)
-    );
-  if (targetIndex < 0){
-    return;
-  }
-  if (insertAfter){
-    targetIndex++;
-  }
-  ordered.splice(
-    targetIndex,
-    0,
-    moved
-  );
-  ordered.forEach(
-    (rec, index) => {
-
-      rec.asset_order =
-        index + 1;
-    }
-  );
-  render();
-  scheduleAutoSync();
-}
-
-function bindAssetDragDrop(){
-  if (!canReorderAssets()){
-    return;
-  }
-  const handles =
-    document.querySelectorAll(
-      '.asset-drag-handle'
-    );
-  handles.forEach(handle => {
-    handle.addEventListener(
-      'dragstart',
-      e => {
-        const recId =
-          String(
-            handle.dataset.dragAsset || ''
-          );
-        if (!recId){
-          e.preventDefault();
-          return;
-        }
-        draggingAssetId =
-          recId;
-        const row =
-          handle.closest(
-            'tr[data-id]'
-          );
-        if (row){
-          row.classList.add(
-            'asset-dragging'
-          );
-        }
-        if (e.dataTransfer){
-          e.dataTransfer.effectAllowed =
-            'move';
-          e.dataTransfer.setData(
-            'text/plain',
-            recId
-          );
-        }
-      }
-    );
-    handle.addEventListener(
-      'dragend',
-      () => {
-        draggingAssetId = null;
-        clearAssetDragVisuals();
-      }
-    );
-  });
-  const rows =
-    document.querySelectorAll(
-      'tbody tr[data-id]'
-    );
-  rows.forEach(row => {
-    row.addEventListener(
-      'dragover',
-      e => {
-        if (!draggingAssetId){
-          return;
-        }
-        const targetId =
-          String(
-            row.dataset.id || ''
-          );
-        if (
-          !targetId ||
-          targetId === draggingAssetId
-        ){
-          return;
-        }
-        const source =
-          records.find(
-            r =>
-              String(r.id) ===
-              draggingAssetId
-          );
-        const target =
-          records.find(
-            r =>
-              String(r.id) ===
-              targetId
-          );
-        if (
-          !sameAssetOrderScope(
-            source,
-            target
-          )
-        ){
-          return;
-        }
-        e.preventDefault();
-        if (e.dataTransfer){
-          e.dataTransfer.dropEffect =
-            'move';
-        }
-        document
-          .querySelectorAll(
-            'tr.asset-drop-before, ' +
-            'tr.asset-drop-after'
-          )
-          .forEach(el => {
-            if (el !== row){
-              el.classList.remove(
-                'asset-drop-before',
-                'asset-drop-after'
-              );
-            }
-          });
-
-        const rect =
-          row.getBoundingClientRect();
-
-        const insertAfter =
-          e.clientY >
-          (
-            rect.top +
-            rect.height / 2
-          );
-        row.classList.toggle(
-          'asset-drop-before',
-          !insertAfter
-        );
-        row.classList.toggle(
-          'asset-drop-after',
-          insertAfter
-        );
-      }
-    );
-    row.addEventListener(
-      'dragleave',
-      e => {
-        if (
-          e.relatedTarget &&
-          row.contains(e.relatedTarget)
-        ){
-          return;
-        }
-        row.classList.remove(
-          'asset-drop-before',
-          'asset-drop-after'
-        );
-
-      }
-    );
-    row.addEventListener(
-      'drop',
-      e => {
-        if (!draggingAssetId){
-          return;
-        }
-        const targetId =
-          String(
-            row.dataset.id || ''
-          );
-        if (
-          !targetId ||
-          targetId === draggingAssetId
-        ){
-          return;
-        }
-        const source =
-          records.find(
-            r =>
-              String(r.id) ===
-              draggingAssetId
-          );
-        const target =
-          records.find(
-            r =>
-              String(r.id) ===
-              targetId
-          );
-        if (
-          !sameAssetOrderScope(
-            source,
-            target
-          )
-        ){
-          return;
-        }
-        e.preventDefault();
-        const insertAfter =
-          row.classList.contains(
-            'asset-drop-after'
-          );
-
-        const sourceId =
-          draggingAssetId;
-
-        draggingAssetId = null;
-        clearAssetDragVisuals();
-        reorderAssetRows(
-          sourceId,
-          targetId,
-          insertAfter
-        );
-      }
-    );
-  });
-}
 
 function canBulkMove(){
   return isCurrentUserAdmin() && !viewOnly && sessionKey;
@@ -4543,6 +4011,256 @@ function currentUserName(){
 function isCurrentUserAdmin(){
   const u = users.find(x=>String(x.id)===String(currentUserId));
   return !!(u && u.isAdmin);
+}
+
+/* =========================================================
+   감사 이력 - 모든 사용자 추가/편집/삭제 기록
+   ========================================================= */
+let suppressAuditCapture = false;
+
+function auditClone(v){
+  return v == null ? v : JSON.parse(JSON.stringify(v));
+}
+
+function auditSnapshotState(){
+  return {
+    records: auditClone(records || []),
+    users: auditClone(users || []),
+    maintenanceLogs: auditClone(maintenanceLogs || [])
+  };
+}
+
+function refreshAuditSnapshot(){
+  auditSnapshot = auditSnapshotState();
+}
+
+function auditActor(){
+  const u = users.find(x => String(x.id) === String(currentUserId));
+  return {
+    id: u ? String(u.id) : '',
+    name: u ? u.name : '미상',
+    role: u && u.isAdmin ? '마스터' : '일반사용자'
+  };
+}
+
+function auditDateText(ts){
+  const d = new Date(ts);
+  return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+}
+
+function auditSafeValue(field, value){
+  const sensitive = ['ip_enc','id_enc','pw_enc','enable_pw_enc','pwHash','pwSalt','pwIterations'];
+  if (sensitive.includes(field)) return value ? '변경됨' : '—';
+  if (value === null || value === undefined || value === '') return '—';
+  if (Array.isArray(value)){
+    return value.map(v => {
+      if (v && typeof v === 'object'){
+        const bits = [v.role, v.name, v.org, v.phone, v.email].filter(Boolean);
+        return bits.join(' / ');
+      }
+      return String(v);
+    }).filter(Boolean).join(', ') || '—';
+  }
+  if (typeof value === 'object') return '변경됨';
+  return String(value);
+}
+
+const AUDIT_FIELD_LABELS = {
+  owner:'법인명', country:'국가', location:'위치', support_id:'Support ID',
+  build_engineer:'구축 엔지니어', build_date:'구축 일자', check_method:'점검 방식', config_mode:'구성방식',
+  owner_primary:'담당 엔지니어(정)', owner_secondary:'담당 엔지니어(부)', group_remarks:'법인 비고',
+  group_parent:'상위 법인', is_parent:'상위 법인 여부', cust_contacts:'고객사 담당자', cust_memo:'고객사 담당자 메모',
+  sku:'SKU', sn:'S/N', qty:'수량', start:'라이선스 시작일', end:'라이선스 종료일', os_ver:'OS 버전', remarks:'자산 비고',
+  asset_order:'자산 순서', group:'소속 법인', ip_enc:'IP 주소', id_enc:'계정 ID', pw_enc:'비밀번호', enable_pw_enc:'Enable 비밀번호',
+  date:'점검일', manager:'점검 담당자', note:'점검 내용', done:'완료', incomplete:'미완료', uncontracted:'미계약', ym:'점검 월',
+  name:'사용자 이름', isAdmin:'마스터 권한', pwHash:'비밀번호', pwSalt:'비밀번호', pwIterations:'비밀번호'
+};
+
+function auditFieldChanges(before, after, ignoreFields=[]){
+  const ignore = new Set(ignoreFields);
+  const keys = new Set([...Object.keys(before || {}), ...Object.keys(after || {})]);
+  const out = [];
+  keys.forEach(field => {
+    if (ignore.has(field)) return;
+    const a = before ? before[field] : undefined;
+    const b = after ? after[field] : undefined;
+    if (JSON.stringify(a ?? null) === JSON.stringify(b ?? null)) return;
+    out.push({
+      field,
+      label: AUDIT_FIELD_LABELS[field] || field,
+      before: auditSafeValue(field, a),
+      after: auditSafeValue(field, b),
+      sensitive: ['ip_enc','id_enc','pw_enc','enable_pw_enc','pwHash','pwSalt','pwIterations'].includes(field)
+    });
+  });
+  return out;
+}
+
+function addAuditLog({action, targetType, targetId='', group='', owner='', label='', sn='', summary='', changes=[], actorName='', actorRole='', actorId=''}){
+  const actor = actorName
+    ? {id:String(actorId || ''), name:actorName, role:actorRole || '일반사용자'}
+    : auditActor();
+  const now = Date.now();
+  auditLogs.push({
+    id:`audit-${now}-${Math.random().toString(36).slice(2,8)}`,
+    ts:now,
+    action,
+    target_type:targetType,
+    target_id:String(targetId || ''),
+    group:String(group || ''),
+    owner:String(owner || ''),
+    label:String(label || ''),
+    sn:String(sn || ''),
+    summary:String(summary || ''),
+    changes:(changes || []).map(c => ({...c})),
+    actor_id:actor.id,
+    actor_name:actor.name,
+    actor_role:actor.role
+  });
+}
+
+function recordAuditIdentity(rec){
+  return {
+    group:rec?.group || '',
+    owner:rec?.owner || '',
+    label:rec?.sku || rec?.owner || '',
+    sn:rec?.sn || ''
+  };
+}
+
+function captureAuditFromStateDiff(){
+  if (suppressAuditCapture){ refreshAuditSnapshot(); return; }
+  if (!auditSnapshot){ refreshAuditSnapshot(); return; }
+
+  const before = auditSnapshot;
+  const after = auditSnapshotState();
+  const seen = new Set();
+  const pushUnique = (sig, log) => {
+    if (seen.has(sig)) return;
+    seen.add(sig);
+    addAuditLog(log);
+  };
+
+  const oldRecords = new Map((before.records || []).map(r => [String(r.id), r]));
+  const newRecords = new Map((after.records || []).map(r => [String(r.id), r]));
+
+  const oldGroupIds = new Set((before.records || []).map(r => String(r.group || '')).filter(Boolean));
+  const newGroupIds = new Set((after.records || []).map(r => String(r.group || '')).filter(Boolean));
+  [...newGroupIds].filter(gid => !oldGroupIds.has(gid)).forEach(gid => {
+    const rec = (after.records || []).find(r => String(r.group) === gid) || {};
+    pushUnique(`add|법인|${gid}`, {
+      action:'add', targetType:'법인', targetId:gid, group:gid,
+      owner:rec.owner || '', label:rec.owner || '',
+      summary:`법인 추가 · ${rec.owner || '이름 미지정'}`
+    });
+  });
+  [...oldGroupIds].filter(gid => !newGroupIds.has(gid)).forEach(gid => {
+    const rec = (before.records || []).find(r => String(r.group) === gid) || {};
+    pushUnique(`delete|법인|${gid}`, {
+      action:'delete', targetType:'법인', targetId:gid, group:gid,
+      owner:rec.owner || '', label:rec.owner || '',
+      summary:`법인 삭제 · ${rec.owner || '이름 미지정'}`
+    });
+  });
+
+  const ids = new Set([...oldRecords.keys(), ...newRecords.keys()]);
+  ids.forEach(id => {
+    const a = oldRecords.get(id);
+    const b = newRecords.get(id);
+    if (!a && b){
+      const ident = recordAuditIdentity(b);
+      const targetType = b.is_group_shell ? '법인' : '자산';
+      pushUnique(`add|${targetType}|${targetType==='법인'?b.group:id}`, {
+        action:'add', targetType, targetId:targetType==='법인'?b.group:id,
+        group:ident.group, owner:ident.owner, label:ident.label, sn:ident.sn,
+        summary: targetType === '법인' ? `법인 추가 · ${ident.owner || '이름 미지정'}` : `자산 추가 · ${ident.label || 'SKU 미지정'}${ident.sn ? ` · S/N ${ident.sn}` : ''}`
+      });
+      return;
+    }
+    if (a && !b){
+      const ident = recordAuditIdentity(a);
+      const targetType = a.is_group_shell ? '법인' : '자산';
+      pushUnique(`delete|${targetType}|${targetType==='법인'?a.group:id}`, {
+        action:'delete', targetType, targetId:targetType==='법인'?a.group:id,
+        group:ident.group, owner:ident.owner, label:ident.label, sn:ident.sn,
+        summary: targetType === '법인' ? `법인 삭제 · ${ident.owner || '이름 미지정'}` : `자산 삭제 · ${ident.label || 'SKU 미지정'}${ident.sn ? ` · S/N ${ident.sn}` : ''}`
+      });
+      return;
+    }
+    if (!a || !b) return;
+
+    const changes = auditFieldChanges(a,b,['work_log','deleted_work_log','id','is_group_shell','flag','deploy_date','mode']);
+    if (!changes.length) return;
+    const workLogChanged = JSON.stringify(a.work_log || []) !== JSON.stringify(b.work_log || []) ||
+      JSON.stringify(a.deleted_work_log || []) !== JSON.stringify(b.deleted_work_log || []);
+    const worklogAssetFields = new Set(['start','end','os_ver','remarks','ip_enc','id_enc','pw_enc','enable_pw_enc']);
+    if (workLogChanged && changes.every(c => worklogAssetFields.has(c.field))) return;
+    const fields = new Set(changes.map(c => c.field));
+    const ident = recordAuditIdentity(b);
+    let action = 'edit';
+    let targetType = b.is_group_shell ? '법인' : '자산';
+    let targetId = b.is_group_shell ? b.group : b.id;
+    let summary = '';
+
+    if (fields.has('group')){
+      action = 'move'; targetType = '자산';
+      summary = `자산 이동 · ${a.owner || a.group || '이전 법인'} → ${b.owner || b.group || '새 법인'}`;
+    } else if ([...fields].every(f => ['asset_order'].includes(f))){
+      action = 'reorder'; targetType = '자산';
+      summary = `자산 순서 변경 · ${ident.label || '자산'}`;
+    } else if ([...fields].every(f => ['support_id','build_engineer','build_date'].includes(f))){
+      targetType = 'Support ID'; targetId = `${b.group}:${b.support_id || a.support_id || ''}`;
+      summary = `Support ID 정보 ${changes.length}개 항목 수정`;
+    } else if ([...fields].every(f => ['owner','country','location','check_method','config_mode','owner_primary','owner_secondary','group_remarks','group_parent','is_parent','cust_contacts','cust_memo'].includes(f))){
+      targetType = '법인'; targetId = b.group;
+      summary = `법인 정보 ${changes.length}개 항목 수정`;
+    } else {
+      summary = `자산 정보 ${changes.length}개 항목 수정`;
+    }
+
+    const sig = `${action}|${targetType}|${targetId}|${changes.map(c=>`${c.field}:${c.before}->${c.after}`).join('|')}`;
+    pushUnique(sig, { action, targetType, targetId, group:ident.group, owner:ident.owner, label:ident.label, sn:ident.sn, summary, changes });
+  });
+
+  const maintKey = m => String(m.id || `${m.group}|${m.ym}`);
+  const oldMaint = new Map((before.maintenanceLogs || []).map(m => [maintKey(m),m]));
+  const newMaint = new Map((after.maintenanceLogs || []).map(m => [maintKey(m),m]));
+  const maintIds = new Set([...oldMaint.keys(),...newMaint.keys()]);
+  maintIds.forEach(id => {
+    const a=oldMaint.get(id), b=newMaint.get(id);
+    const cur=b||a;
+    const groupItems = records.filter(r => r.group === cur?.group);
+    const owner = groupItems.length ? groupMeta(groupItems).owner : '';
+    if (!a && b){
+      addAuditLog({action:'add',targetType:'유지보수 점검',targetId:id,group:b.group,owner,label:b.ym,summary:`${ymLabel(b.ym)} 유지보수 점검 등록`});
+    } else if (a && !b){
+      addAuditLog({action:'delete',targetType:'유지보수 점검',targetId:id,group:a.group,owner,label:a.ym,summary:`${ymLabel(a.ym)} 유지보수 점검 삭제`});
+    } else if (a && b){
+      const changes=auditFieldChanges(a,b,['id','group','ym','created_at','updated_at']);
+      if (changes.length) addAuditLog({action:'edit',targetType:'유지보수 점검',targetId:id,group:b.group,owner,label:b.ym,summary:`${ymLabel(b.ym)} 유지보수 점검 수정`,changes});
+    }
+  });
+
+  const oldUsers = new Map((before.users || []).map(u => [String(u.id),u]));
+  const newUsers = new Map((after.users || []).map(u => [String(u.id),u]));
+  const userIds = new Set([...oldUsers.keys(),...newUsers.keys()]);
+  userIds.forEach(id => {
+    const a=oldUsers.get(id), b=newUsers.get(id);
+    if (!a && b){
+      addAuditLog({action:'add',targetType:'사용자 계정',targetId:id,label:b.name,summary:`사용자 계정 추가 · ${b.name}${b.isAdmin?' · 마스터':''}`});
+    } else if (a && !b){
+      addAuditLog({action:'delete',targetType:'사용자 계정',targetId:id,label:a.name,summary:`사용자 계정 삭제 · ${a.name}`,actorName:a.name,actorRole:a.isAdmin?'마스터':'일반사용자',actorId:a.id});
+    } else if (a && b){
+      const changes=auditFieldChanges(a,b,['id']);
+      if (changes.length){
+        const pwChanged=changes.some(c=>['pwHash','pwSalt','pwIterations'].includes(c.field));
+        const visible=changes.filter(c=>!['pwSalt','pwIterations'].includes(c.field));
+        addAuditLog({action:'edit',targetType:'사용자 계정',targetId:id,label:b.name,summary:pwChanged?`사용자 비밀번호 변경 · ${b.name}`:`사용자 계정 ${visible.length}개 항목 수정 · ${b.name}`,changes:visible,actorName:b.name,actorRole:b.isAdmin?'마스터':'일반사용자',actorId:b.id});
+      }
+    }
+  });
+
+  auditSnapshot = after;
 }
 function updateSidebarProfile(){
   const nameEl = document.getElementById('profileName');
@@ -4765,7 +4483,7 @@ document.getElementById('ag_register_btn').onclick = async () => {
 };
 
 document.getElementById('ag_user_list').innerHTML = `<div class="user-list-empty">계정 목록을 불러오는 중…</div>`;
-dataReady.then(renderAccountGateUserList);
+dataReady.then(() => { refreshAuditSnapshot(); renderAccountGateUserList(); });
 
 dataReady.then(() => {
   if (currentUserId && users.some(u=>String(u.id)===String(currentUserId))){
@@ -4814,44 +4532,69 @@ function getRecentWorkLogEntries(limit){
   return all.slice(0, limit);
 }
 
-// ---------- 작업 이력 전체보기 페이지 ----------
+// ---------- 작업 이력 / 사용자 변경 전체보기 페이지 ----------
 let whSearch = '';
 let whTypeFilter = '';
 let whSort = 'desc';
 let whSelectedKeys = new Set();
 
+function auditActionLabel(action){
+  return ({add:'추가', edit:'편집', delete:'삭제', move:'이동', reorder:'순서 변경'})[action] || action || '변경';
+}
+
 function getAllWorkLogEntries(){
   const all = [];
 
   records.forEach(r => {
-    /* 현재 유효한 작업 이력 */
     (r.work_log||[]).forEach(entry => {
       all.push({
-        entry,
-        recId:r.id,
-        recGroup:r.group,
-        recOwner:r.owner,
-        recLabel:r.sku || skuTagLabel(r),
-        recSn:r.sn||'',
-        key: activityKeyOf(r.id, entry.id),
-        deleted:false,
-        historyTs: Number(entry.updated_at || entry.id || 0)
+        source:'worklog', entry,
+        recId:r.id, recGroup:r.group, recOwner:r.owner,
+        recLabel:r.sku || skuTagLabel(r), recSn:r.sn||'',
+        key:activityKeyOf(r.id, entry.id), deleted:false,
+        historyTs:Number(entry.updated_at || entry.id || 0)
       });
     });
 
-    /* 삭제된 작업 이력 감사 로그 */
     (r.deleted_work_log||[]).forEach(entry => {
       all.push({
-        entry,
-        recId:r.id,
-        recGroup:r.group,
-        recOwner:r.owner,
-        recLabel:r.sku || skuTagLabel(r),
-        recSn:r.sn||'',
-        key: `deleted:${r.id}:${entry.history_id || entry.deleted_at || entry.id}`,
+        source:'deleted', entry,
+        recId:r.id, recGroup:r.group, recOwner:r.owner,
+        recLabel:r.sku || skuTagLabel(r), recSn:r.sn||'',
+        key:`deleted:${r.id}:${entry.history_id || entry.deleted_at || entry.id}`,
         deleted:true,
-        historyTs: Number(entry.deleted_at || entry.history_id || entry.id || 0)
+        historyTs:Number(entry.deleted_at || entry.history_id || entry.id || 0)
       });
+    });
+  });
+
+  (auditLogs || []).forEach(audit => {
+    const changeSummary = (audit.changes || []).map(c =>
+      c.sensitive ? `${c.label} 변경됨` : `${c.label}: ${c.before || '—'} → ${c.after || '—'}`
+    ).join(' · ');
+    const actionText = auditActionLabel(audit.action);
+    all.push({
+      source:'audit',
+      auditId:audit.id,
+      entry:{
+        id:audit.ts,
+        type:`${audit.target_type} ${actionText}`,
+        date:auditDateText(audit.ts),
+        manager:audit.actor_name,
+        author:`${audit.actor_name || '미상'} · ${audit.actor_role || '일반사용자'}`,
+        note:audit.summary || `${audit.target_type} ${actionText}`,
+        change_summary:changeSummary,
+        audit_action:audit.action,
+        audit_role:audit.actor_role
+      },
+      recId:audit.target_type === '자산' ? audit.target_id : '',
+      recGroup:audit.group || '',
+      recOwner:audit.owner || '',
+      recLabel:audit.label || audit.target_type || '',
+      recSn:audit.sn || '',
+      key:`audit:${audit.id}`,
+      deleted:false,
+      historyTs:Number(audit.ts || 0)
     });
   });
 
@@ -4861,7 +4604,7 @@ function getAllWorkLogEntries(){
 function whAllTypes(){
   const set = new Set();
   getAllWorkLogEntries().forEach(({entry}) => { if (entry.type) set.add(entry.type); });
-  return [...set];
+  return [...set].sort((a,b)=>a.localeCompare(b,'ko'));
 }
 
 function renderWorkHistoryPage(){
@@ -4874,15 +4617,13 @@ function renderWorkHistoryPage(){
   wrap.innerHTML = `
     <div class="maint-sticky-top">
       <div class="maint-header">
-        <div class="maint-header-row">
-          <h2>작업 이력 전체보기</h2>
-        </div>
-        <p class="maint-sub">등록된 모든 자산의 작업 이력을 한 곳에서 확인합니다 · 총 ${total}건</p>
+        <div class="maint-header-row"><h2>작업 이력 전체보기</h2></div>
+        <p class="maint-sub">작업 이력과 마스터/일반사용자의 추가·편집·삭제 기록을 한 곳에서 확인합니다 · 총 ${total}건</p>
       </div>
       <div class="wh-toolbar">
         <div class="tf-search wh-search">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="whSearchInput" placeholder="법인·자산·담당자·내용으로 검색" value="${esc(whSearch)}">
+          <input type="text" id="whSearchInput" placeholder="법인·자산·사용자·내용으로 검색" value="${esc(whSearch)}">
         </div>
         <select id="whTypeSelect" class="wh-select">
           <option value="">전체 구분</option>
@@ -4894,27 +4635,10 @@ function renderWorkHistoryPage(){
         </select>
         ${isCurrentUserAdmin() ? `
           <div class="wh-admin-actions">
-        
-            <label class="wh-select-all">
-              <input type="checkbox" id="whSelectAll">
-              <span>전체 선택</span>
-            </label>
-        
-            <span class="wh-selected-count" id="whSelectedCount">
-              0건 선택
-            </span>
-        
-            <button
-              type="button"
-              class="btn wh-delete-selected"
-              id="whDeleteSelected"
-              disabled
-            >
-              선택 삭제
-            </button>
-        
-          </div>
-        ` : ''}
+            <label class="wh-select-all"><input type="checkbox" id="whSelectAll"><span>전체 선택</span></label>
+            <span class="wh-selected-count" id="whSelectedCount">0건 선택</span>
+            <button type="button" class="btn wh-delete-selected" id="whDeleteSelected" disabled>선택 삭제</button>
+          </div>` : ''}
       </div>
     </div>
     <div class="wh-list" id="whListEl"></div>`;
@@ -4923,81 +4647,37 @@ function renderWorkHistoryPage(){
   document.getElementById('whTypeSelect').onchange = (e) => { whTypeFilter = e.target.value; renderWhList(); };
   document.getElementById('whSortSelect').onchange = (e) => { whSort = e.target.value; renderWhList(); };
 
-  renderWhList();
   if (isCurrentUserAdmin()){
-    const selectAll =
-      document.getElementById('whSelectAll');
-    const deleteBtn =
-      document.getElementById('whDeleteSelected');
-  
+    const selectAll = document.getElementById('whSelectAll');
+    const deleteBtn = document.getElementById('whDeleteSelected');
     if (selectAll){
       selectAll.onchange = () => {
-        document
-          .querySelectorAll('.wh-history-checkbox')
-          .forEach(box => {
-            box.checked = selectAll.checked;
-            const key = box.dataset.whSelect;
-            if (selectAll.checked){
-              whSelectedKeys.add(key);
-            } else {
-              whSelectedKeys.delete(key);
-            }
-          });
+        document.querySelectorAll('.wh-history-checkbox').forEach(box => {
+          box.checked = selectAll.checked;
+          const key = box.dataset.whSelect;
+          if (selectAll.checked) whSelectedKeys.add(key); else whSelectedKeys.delete(key);
+        });
         updateWhSelectionUi();
       };
     }
-    if (deleteBtn){
-      deleteBtn.onclick =
-        deleteSelectedWorkHistory;
-    }
-    updateWhSelectionUi();
+    if (deleteBtn) deleteBtn.onclick = deleteSelectedWorkHistory;
   }
+
+  renderWhList();
 }
 
 function updateWhSelectionUi(){
-
   if (!isCurrentUserAdmin()) return;
-
-  const countEl =
-    document.getElementById('whSelectedCount');
-
-  const deleteBtn =
-    document.getElementById('whDeleteSelected');
-
-  const selectAll =
-    document.getElementById('whSelectAll');
-
-  const boxes = [
-    ...document.querySelectorAll(
-      '.wh-history-checkbox'
-    )
-  ];
-
-
-  if (countEl){
-    countEl.textContent =
-      `${whSelectedKeys.size}건 선택`;
-  }
-
-
-  if (deleteBtn){
-    deleteBtn.disabled =
-      whSelectedKeys.size === 0;
-  }
-
-
+  const countEl = document.getElementById('whSelectedCount');
+  const deleteBtn = document.getElementById('whDeleteSelected');
+  const selectAll = document.getElementById('whSelectAll');
+  const boxes = [...document.querySelectorAll('.wh-history-checkbox')];
+  if (countEl) countEl.textContent = `${whSelectedKeys.size}건 선택`;
+  if (deleteBtn) deleteBtn.disabled = whSelectedKeys.size === 0;
   if (selectAll){
-
-    const checked =
-      boxes.filter(box => box.checked).length;
-
-    selectAll.checked =
-      boxes.length > 0 &&
-      checked === boxes.length;
-
-    selectAll.indeterminate =
-      checked > 0 &&
-      checked < boxes.length;
+    const checked = boxes.filter(box => box.checked).length;
+    selectAll.checked = boxes.length > 0 && checked === boxes.length;
+    selectAll.indeterminate = checked > 0 && checked < boxes.length;
   }
 }
 
@@ -5009,55 +4689,66 @@ function renderWhList(){
   if (whTypeFilter) items = items.filter(({entry}) => entry.type === whTypeFilter);
   if (whSearch.trim()){
     const q = whSearch.trim().toLowerCase();
-    items = items.filter(({entry, recOwner, recLabel, recSn, deleted}) =>
-      [
-        recOwner, recLabel, recSn,
-        entry.manager, entry.author, entry.note, entry.type,
-        entry.deleted_by,
-        deleted ? '삭제 삭제됨' : ''
-      ].some(v => (v||'').toLowerCase().includes(q))
+    items = items.filter(({entry, recOwner, recLabel, recSn, deleted, source}) =>
+      [recOwner, recLabel, recSn, entry.manager, entry.author, entry.note, entry.type, entry.deleted_by,
+       deleted ? '삭제 삭제됨' : '', source === 'audit' ? '사용자 변경 감사 이력' : '']
+        .some(v => (v||'').toLowerCase().includes(q))
     );
   }
-  items.sort((a,b) => whSort === 'desc'
-    ? (b.historyTs||0) - (a.historyTs||0)
-    : (a.historyTs||0) - (b.historyTs||0));
+  items.sort((a,b) => whSort === 'desc' ? (b.historyTs||0)-(a.historyTs||0) : (a.historyTs||0)-(b.historyTs||0));
 
-  listEl.innerHTML = items.length ? items.map(({entry, recId, recGroup, recOwner, recLabel, recSn, deleted}) => {
-    const deletedAtText = deleted && entry.deleted_at
-      ? new Date(entry.deleted_at).toLocaleString('ko-KR')
-      : '';
+  listEl.innerHTML = items.length ? items.map(item => {
+    const {entry, recId, recGroup, recOwner, recLabel, recSn, deleted, source, key} = item;
+    const deletedAtText = deleted && entry.deleted_at ? new Date(entry.deleted_at).toLocaleString('ko-KR') : '';
     const revert = entry.delete_revert_result || null;
     const revertText = deleted && revert
       ? `삭제 시 자산 정보 원복 ${Number(revert.reverted||0)}건${Number(revert.skipped||0) ? ` · 유지 ${Number(revert.skipped||0)}건` : ''}`
       : '';
+    const auditBadge = source === 'audit' ? '<span class="wh-audit-badge">감사</span>' : '';
+    const canJump = !!recGroup;
 
     return `
-      <div class="wh-item ${deleted?'wh-item-deleted':''}" data-jump-group="${esc(recGroup)}" data-jump-rec="${esc(recId)}">
+      <div class="wh-item ${deleted?'wh-item-deleted':''} ${source==='audit'?'wh-item-audit':''}"
+           ${canJump ? `data-jump-group="${esc(recGroup)}" data-jump-rec="${esc(recId)}"` : ''}
+           data-history-key="${esc(key)}">
         <div class="wh-top">
-          <span class="ra-type">${esc(entry.type)}${deleted ? '<span class="wh-deleted-badge">삭제됨</span>' : ''}</span>
+          ${isCurrentUserAdmin() ? `<label class="wh-history-check" title="삭제할 이력 선택"><input type="checkbox" class="wh-history-checkbox" data-wh-select="${esc(key)}" ${whSelectedKeys.has(key)?'checked':''}></label>` : ''}
+          <span class="ra-type">${esc(entry.type)}${deleted ? '<span class="wh-deleted-badge">삭제됨</span>' : ''}${auditBadge}</span>
           <span class="ra-date">${esc(entry.date)||'날짜 미기재'}</span>
         </div>
-        <div class="ra-asset">${esc(recOwner)} · ${esc(recLabel)||'—'}${recSn ? ' · S/N '+esc(recSn) : ''}</div>
+        <div class="ra-asset">${esc(recOwner)||'—'} · ${esc(recLabel)||'—'}${recSn ? ' · S/N '+esc(recSn) : ''}</div>
         <div class="ra-note">${esc(entry.note)||'—'}</div>
         ${entry.change_summary ? `<div class="ra-changes">
-          <div class="ra-changes-label">🔧 자산 정보 변경${deleted ? ' · 삭제 시 원복 처리' : ''}</div>
+          <div class="ra-changes-label">${source==='audit' ? '📝 변경 내용' : `🔧 자산 정보 변경${deleted ? ' · 삭제 시 원복 처리' : ''}`}</div>
           ${changeSummaryRowsHtml(entry.change_summary)}
         </div>` : ''}
-        <div class="ra-author">담당자: ${esc(entry.manager)||'미기재'} · 작성: ${esc(entry.author)||'미상'}</div>
+        <div class="ra-author">${source==='audit' ? `작업자: ${esc(entry.author)||'미상'}` : `담당자: ${esc(entry.manager)||'미기재'} · 작성: ${esc(entry.author)||'미상'}`}</div>
         ${deleted ? `<div class="wh-delete-meta">삭제: ${esc(entry.deleted_by)||'미상'} · ${esc(deletedAtText)||'시간 미기재'}${revertText ? ` · ${esc(revertText)}` : ''}</div>` : ''}
       </div>`;
-  }).join('')
-    : `<div class="ra-empty wh-empty">조건에 맞는 작업 이력이 없습니다.</div>`;
+  }).join('') : `<div class="ra-empty wh-empty">조건에 맞는 이력이 없습니다.</div>`;
+
+  listEl.querySelectorAll('.wh-history-check').forEach(label => {
+    label.onclick = e => e.stopPropagation();
+  });
+  listEl.querySelectorAll('.wh-history-checkbox').forEach(box => {
+    box.onchange = e => {
+      e.stopPropagation();
+      const key = box.dataset.whSelect;
+      if (box.checked) whSelectedKeys.add(key); else whSelectedKeys.delete(key);
+      updateWhSelectionUi();
+    };
+  });
 
   listEl.querySelectorAll('[data-jump-group]').forEach(el=>{
-    el.onclick = () => {
+    el.onclick = (e) => {
+      if (e.target.closest('.wh-history-check')) return;
       const gid = el.dataset.jumpGroup;
       const recId = el.dataset.jumpRec;
       setViewMode('list');
       expandGroupWithAncestors(gid);
       render();
       requestAnimationFrame(()=>{
-        const row = document.querySelector(`tr[data-id="${CSS.escape(recId)}"]`);
+        const row = recId ? document.querySelector(`tr[data-id="${CSS.escape(recId)}"]`) : null;
         const target = row || document.querySelector(`.group-card[data-gid="${CSS.escape(gid)}"]`);
         if (target){
           target.scrollIntoView({behavior:'smooth', block:'center'});
@@ -5067,219 +4758,70 @@ function renderWhList(){
       });
     };
   });
-  if (isCurrentUserAdmin() && items.length){
-    const cards = [
-      ...listEl.querySelectorAll('.wh-item')
-    ];
-    cards.forEach((card, index) => {
-      const item = items[index];
-      if (!item) return;
-      const key =
-        item.key ||
-        activityKeyOf(
-          item.recId,
-          item.entry.id
-        );
-  
-      const label =
-        document.createElement('label');
-      label.className =
-        'wh-history-check';
-      label.title =
-        '삭제할 작업 이력 선택';
-  
-      label.innerHTML = `
-        <input
-          type="checkbox"
-          class="wh-history-checkbox"
-          data-wh-select="${esc(key)}"
-          ${whSelectedKeys.has(key) ? 'checked' : ''}
-        >
-      `;
 
-      label.onclick = e => {
-        e.stopPropagation();
-      };
-  
-      const box =
-        label.querySelector(
-          '.wh-history-checkbox'
-        );
-  
-      box.onchange = e => {
-        e.stopPropagation();
-        if (box.checked){
-          whSelectedKeys.add(key);
-        }
-        else{
-          whSelectedKeys.delete(key);
-        }
-        updateWhSelectionUi();
-      };
-
-      const top =
-        card.querySelector('.wh-top');
-      if (top){
-        top.prepend(label);
-      }
-      else{
-        card.prepend(label);
-      }
-    });
-  }
   updateWhSelectionUi();
 }
 
-/* =========================================================
-   마스터 - 작업 이력 히스토리 선택 영구 삭제
-   ========================================================= */
 async function deleteSelectedWorkHistory(){
-  if (!isCurrentUserAdmin()){
-    alert('마스터만 작업 이력을 삭제할 수 있습니다.');
-    return;
-  }
+  if (!isCurrentUserAdmin()){ alert('마스터만 이력을 삭제할 수 있습니다.'); return; }
+  if (!whSelectedKeys.size){ alert('삭제할 이력을 선택해 주세요.'); return; }
 
-  if (!whSelectedKeys.size){
-    alert('삭제할 작업 이력을 선택해 주세요.');
-    return;
-  }
-  const allItems =
-    getAllWorkLogEntries();
+  const selectedItems = getAllWorkLogEntries().filter(item => whSelectedKeys.has(item.key));
+  if (!selectedItems.length){ whSelectedKeys.clear(); renderWhList(); return; }
 
-  const selectedItems =
-    allItems.filter(item => {
-      const key =
-        item.key ||
-        activityKeyOf(
-          item.recId,
-          item.entry.id
+  const auditCount = selectedItems.filter(i=>i.source==='audit').length;
+  const workCount = selectedItems.filter(i=>i.source==='worklog').length;
+  const deletedCount = selectedItems.filter(i=>i.source==='deleted').length;
+  let message = `선택한 이력 ${selectedItems.length}건을 영구 삭제하시겠습니까?\n\n`;
+  if (workCount) message += `현재 작업 이력: ${workCount}건\n`;
+  if (deletedCount) message += `삭제된 작업 이력: ${deletedCount}건\n`;
+  if (auditCount) message += `사용자 감사 이력: ${auditCount}건\n`;
+  message += '\n히스토리 페이지에서 마스터가 삭제한 기록은 복구할 수 없습니다.';
+  if (workCount) message += '\n자산 정보 변경이 포함된 현재 작업 이력은 가능한 범위에서 변경 전 값으로 원복됩니다.';
+  if (!confirm(message)) return;
+
+  let removed=0, reverted=0, skipped=0;
+  suppressAuditCapture = true;
+  try{
+    for (const item of selectedItems){
+      if (item.source === 'audit'){
+        auditLogs = (auditLogs || []).filter(a => String(a.id) !== String(item.auditId));
+        removed++;
+        continue;
+      }
+      const rec = records.find(r => String(r.id) === String(item.recId));
+      if (!rec) continue;
+
+      if (item.source === 'deleted'){
+        const targetId = item.entry.history_id || item.entry.deleted_at || item.entry.id;
+        rec.deleted_work_log = (rec.deleted_work_log || []).filter(entry =>
+          String(entry.history_id || entry.deleted_at || entry.id) !== String(targetId)
         );
-      return whSelectedKeys.has(key);
-    });
+        removed++;
+        continue;
+      }
 
-  if (!selectedItems.length){
-    whSelectedKeys.clear();
-    renderWhList();
-    return;
-  }
-
-  const activeCount =
-    selectedItems.filter(
-      item => !item.deleted
-    ).length;
-
-  const deletedCount =
-    selectedItems.filter(
-      item => item.deleted
-    ).length;
-
-  let message =
-    `선택한 작업 이력 ${selectedItems.length}건을 삭제하시겠습니까?\n\n`;
-
-  if (activeCount){
-    message +=
-      `현재 작업 이력: ${activeCount}건\n`;
-  }
-
-  if (deletedCount){
-    message +=
-      `삭제 이력: ${deletedCount}건\n`;
-  }
-
-  message +=
-    '\n히스토리 페이지에서 삭제하면 완전히 삭제되며 다시 복구할 수 없습니다.';
-
-  if (activeCount){
-    message +=
-      '\n\n자산 정보 변경이 포함된 작업 이력은 가능한 경우 변경 전 값으로 원복합니다.';
-  }
-
-  if (!confirm(message)){
-    return;
-  }
-
-  let removed = 0;
-  let reverted = 0;
-  let skipped = 0;
-
-  for (const item of selectedItems){
-    const rec =
-      records.find(
-        r =>
-          String(r.id) ===
-          String(item.recId)
-      );
-    if (!rec) continue;
-    if (item.deleted){
-
-      const targetId =
-        item.entry.history_id ||
-        item.entry.deleted_at ||
-        item.entry.id;
-
-      rec.deleted_work_log =
-        (rec.deleted_work_log || [])
-          .filter(entry => {
-
-            const entryId =
-              entry.history_id ||
-              entry.deleted_at ||
-              entry.id;
-
-            return (
-              String(entryId) !==
-              String(targetId)
-            );
-          });
+      if (item.entry.rollback_changes && Object.keys(item.entry.rollback_changes).length){
+        const result = await revertWorkLogChanges(rec,item.entry);
+        reverted += Number(result.reverted||0);
+        skipped += Number(result.skipped||0);
+      }
+      rec.work_log = (rec.work_log || []).filter(entry => String(entry.id) !== String(item.entry.id));
       removed++;
-      continue;
     }
-
-    if (
-      item.entry.rollback_changes &&
-      Object.keys(
-        item.entry.rollback_changes
-      ).length
-    ){
-
-      const result =
-        await revertWorkLogChanges(
-          rec,
-          item.entry
-        );
-      reverted +=
-        Number(
-          result.reverted || 0
-        );
-      skipped +=
-        Number(
-          result.skipped || 0
-        );
-    }
-
-    rec.work_log =
-      (rec.work_log || [])
-        .filter(entry =>
-          String(entry.id) !==
-          String(item.entry.id)
-        );
-    removed++;
+    whSelectedKeys.clear();
+    refreshAuditSnapshot();
+  } finally {
+    suppressAuditCapture = false;
   }
-  whSelectedKeys.clear();
+
   scheduleAutoSync();
   updateActivityBadge();
   renderWorkHistoryPage();
 
-  let resultMessage =
-    `${removed}건의 작업 이력을 삭제했습니다.`;
-  if (reverted){
-    resultMessage +=
-      `\n자산 정보 ${reverted}개 항목을 변경 전 값으로 원복했습니다.`;
-  }
-  if (skipped){
-    resultMessage +=
-      `\n${skipped}개 항목은 이후 다른 변경이 있어 현재 값을 유지했습니다.`;
-  }
+  let resultMessage = `${removed}건의 이력을 삭제했습니다.`;
+  if (reverted) resultMessage += `\n자산 정보 ${reverted}개 항목을 변경 전 값으로 원복했습니다.`;
+  if (skipped) resultMessage += `\n${skipped}개 항목은 이후 다른 변경이 있어 현재 값을 유지했습니다.`;
   alert(resultMessage);
 }
 
@@ -5459,13 +5001,8 @@ function openWorkLogModal(recIdOrIds){
     assetListEl.style.display = '';
     assetListEl.innerHTML = `<div class="wl-asset-list-label">선택된 자산 (${recs.length}개)</div>` +
       recs.map(r => `<div class="wl-asset-chip">${esc(r.sku || '장비')}${r.sn ? ' · ' + esc(r.sn) : ''}</div>`).join('');
-    if (fieldChangeWrap){
-      fieldChangeWrap.style.display = '';
-    }
-    
-    if (historyWrap){
-      historyWrap.style.display = 'none';
-    }
+    if (fieldChangeWrap) fieldChangeWrap.style.display = '';
+    if (historyWrap) historyWrap.style.display = 'none';
   } else {
     const rec = recs[0];
     document.getElementById('wlSubtitle').textContent =
@@ -5481,7 +5018,6 @@ function openWorkLogModal(recIdOrIds){
   document.getElementById('wl_manager').value = currentUserName() || '';
   document.getElementById('wl_note').value = '';
   resetFieldChangeInputs();
-  wlMultiChangeState = {};
   workLogEditId = null;
   setWorkLogFormMode(false);
   renderWorkLogList();
@@ -5506,6 +5042,8 @@ let wlChangeValues = {};
 let wlOriginalValues = {};
 let wlMultiChangeState = {};
 
+// 현재 등록된 자산 정보를 그대로 불러와 wlChangeFields/Values에 채워 넣는다.
+// (체크박스를 켜면 모든 항목이 현재 값으로 채워진 상태로 보이고, 그 중 원하는 항목만 고쳐서 저장하면 된다.)
 async function populateAllWlFieldsFromRecord(rec){
   wlChangeFields = WL_FIELD_DEFS.map(d => d.field);
   wlChangeValues = {};
@@ -5525,292 +5063,94 @@ async function populateAllWlFieldsFromRecord(rec){
 
 async function populateMultiWlFields(recs){
   wlMultiChangeState = {};
-
   for (const rec of recs){
-    const values = {};
-    const originals = {};
-
+    const values = {}, originals = {};
     for (const def of WL_FIELD_DEFS){
       let current = '';
-
-      if (def.sensitive){
-        current = rec[def.encField]
-          ? await decryptField(rec[def.encField])
-          : '';
-      } else {
-        current = rec[def.field] || '';
-      }
-
+      if (def.sensitive) current = rec[def.encField] ? await decryptField(rec[def.encField]) : '';
+      else current = rec[def.field] || '';
       values[def.field] = current;
       originals[def.field] = current;
     }
-
-    wlMultiChangeState[String(rec.id)] = {
-      values,
-      originals
-    };
+    wlMultiChangeState[String(rec.id)] = {values, originals};
   }
-
   renderMultiWlChangeRows(recs);
 }
 
 function wlMultiChangedCount(recId){
   const state = wlMultiChangeState[String(recId)];
   if (!state) return 0;
-
-  return WL_FIELD_DEFS.filter(def =>
-    String(state.values[def.field] ?? '') !==
-    String(state.originals[def.field] ?? '')
-  ).length;
+  return WL_FIELD_DEFS.filter(def => String(state.values[def.field] ?? '') !== String(state.originals[def.field] ?? '')).length;
 }
 
-
 function renderMultiWlChangeRows(recs){
-  const wrap =
-    document.getElementById('wl_fieldchange_rows');
-
+  const wrap = document.getElementById('wl_fieldchange_rows');
   if (!wrap) return;
-
-  const locked =
-    viewOnly || !sessionKey;
-
+  const locked = viewOnly || !sessionKey;
   wrap.innerHTML = `
     <div class="wl-multi-toolbar">
-      <span>
-        선택한 자산별로 변경할 내용을 수정하세요.
-      </span>
-
+      <span>선택한 자산별로 변경할 내용을 수정하세요.</span>
       <div>
-        <button
-          type="button"
-          class="wl-multi-toggle-btn"
-          id="wlMultiExpandAll"
-        >
-          전체 펼치기
-        </button>
-
-        <button
-          type="button"
-          class="wl-multi-toggle-btn"
-          id="wlMultiCollapseAll"
-        >
-          전체 접기
-        </button>
+        <button type="button" class="wl-multi-toggle-btn" id="wlMultiExpandAll">전체 펼치기</button>
+        <button type="button" class="wl-multi-toggle-btn" id="wlMultiCollapseAll">전체 접기</button>
       </div>
     </div>
-
     <div class="wl-multi-assets">
-      ${recs.map((rec, index) => {
-
-        const state =
-          wlMultiChangeState[String(rec.id)];
-
-        const changedCount =
-          wlMultiChangedCount(rec.id);
-
+      ${recs.map((rec,index) => {
+        const state = wlMultiChangeState[String(rec.id)];
+        const changedCount = wlMultiChangedCount(rec.id);
         return `
-          <details
-            class="wl-multi-asset"
-            data-wl-multi-asset="${esc(rec.id)}"
-            ${index === 0 ? 'open' : ''}
-          >
-
+          <details class="wl-multi-asset" data-wl-multi-asset="${esc(rec.id)}" ${index===0?'open':''}>
             <summary class="wl-multi-summary">
-
               <div class="wl-multi-summary-main">
-
-                <strong>
-                  ${esc(rec.sku || '장비')}
-                </strong>
-
-                ${rec.sn ? `
-                  <span>
-                    S/N ${esc(rec.sn)}
-                  </span>
-                ` : ''}
-
-                <span class="wl-multi-owner">
-                  ${esc(rec.owner || '')}
-                </span>
-
+                <strong>${esc(rec.sku || '장비')}</strong>
+                ${rec.sn ? `<span>S/N ${esc(rec.sn)}</span>` : ''}
+                <span class="wl-multi-owner">${esc(rec.owner || '')}</span>
               </div>
-
-              <span
-                class="wl-multi-change-count"
-                data-wl-change-count="${esc(rec.id)}"
-                style="${changedCount ? '' : 'display:none;'}"
-              >
-                ${changedCount}개 변경
-              </span>
-
+              <span class="wl-multi-change-count" data-wl-change-count="${esc(rec.id)}" style="${changedCount?'':'display:none;'}">${changedCount}개 변경</span>
             </summary>
-
-
             <div class="wl-multi-fields">
-
               ${WL_FIELD_DEFS.map(def => {
-
-                const value =
-                  state?.values?.[def.field] ?? '';
-
-                const original =
-                  state?.originals?.[def.field] ?? '';
-
-                const changed =
-                  String(value) !== String(original);
-
-                const sensitiveLocked =
-                  def.sensitive && locked;
-
+                const value = state?.values?.[def.field] ?? '';
+                const original = state?.originals?.[def.field] ?? '';
+                const changed = String(value) !== String(original);
+                const sensitiveLocked = def.sensitive && locked;
                 const input = def.type === 'textarea'
-                  ? `
-                    <textarea
-                      class="wl-multi-input ${changed ? 'is-changed' : ''}"
-                      data-rec-id="${esc(rec.id)}"
-                      data-field="${esc(def.field)}"
-                      ${sensitiveLocked ? 'disabled' : ''}
-                      placeholder="${sensitiveLocked ? '잠금 해제 후 수정 가능' : ''}"
-                    >${esc(value)}</textarea>
-                  `
-                  : `
-                    <input
-                      class="wl-multi-input ${changed ? 'is-changed' : ''}"
-                      data-rec-id="${esc(rec.id)}"
-                      data-field="${esc(def.field)}"
-                      value="${esc(value)}"
-                      ${sensitiveLocked ? 'disabled' : ''}
-                      placeholder="${sensitiveLocked ? '잠금 해제 후 수정 가능' : ''}"
-                    >
-                  `;
-
+                  ? `<textarea class="wl-multi-input ${changed?'is-changed':''}" data-rec-id="${esc(rec.id)}" data-field="${esc(def.field)}" ${sensitiveLocked?'disabled':''} placeholder="${sensitiveLocked?'잠금 해제 후 수정 가능':''}">${esc(value)}</textarea>`
+                  : `<input class="wl-multi-input ${changed?'is-changed':''}" data-rec-id="${esc(rec.id)}" data-field="${esc(def.field)}" value="${esc(value)}" ${sensitiveLocked?'disabled':''} placeholder="${sensitiveLocked?'잠금 해제 후 수정 가능':''}">`;
                 return `
-                  <div
-                    class="wl-multi-field ${changed ? 'is-changed' : ''}"
-                  >
-                    <label>
-                      ${esc(def.label)}
-                      ${def.sensitive ? ' 🔒' : ''}
-                    </label>
-
+                  <div class="wl-multi-field ${changed?'is-changed':''}">
+                    <label>${esc(def.label)}${def.sensitive?' 🔒':''}</label>
                     ${input}
-
-                    <span
-                      class="wl-multi-changed-badge"
-                      style="${changed ? '' : 'display:none;'}"
-                    >
-                      변경됨
-                    </span>
-                  </div>
-                `;
+                    <span class="wl-multi-changed-badge" style="${changed?'':'display:none;'}">변경됨</span>
+                  </div>`;
               }).join('')}
-
             </div>
-          </details>
-        `;
+          </details>`;
       }).join('')}
-    </div>
-  `;
+    </div>`;
 
-
-  /* 값 변경 */
-  wrap
-    .querySelectorAll('.wl-multi-input')
-    .forEach(el => {
-
-      el.addEventListener('input', () => {
-
-        const recId =
-          String(el.dataset.recId);
-
-        const field =
-          el.dataset.field;
-
-        const state =
-          wlMultiChangeState[recId];
-
-        if (!state) return;
-
-        state.values[field] =
-          el.value;
-
-
-        const changed =
-          String(el.value) !==
-          String(state.originals[field] ?? '');
-
-
-        el.classList.toggle(
-          'is-changed',
-          changed
-        );
-
-
-        const fieldRow =
-          el.closest('.wl-multi-field');
-
-        if (fieldRow){
-
-          fieldRow.classList.toggle(
-            'is-changed',
-            changed
-          );
-
-          const badge =
-            fieldRow.querySelector(
-              '.wl-multi-changed-badge'
-            );
-
-          if (badge){
-            badge.style.display =
-              changed ? '' : 'none';
-          }
-        }
-
-
-        /* 해당 자산 변경 개수 */
-        const count =
-          wlMultiChangedCount(recId);
-
-        const countEl =
-          wrap.querySelector(
-            `[data-wl-change-count="${CSS.escape(recId)}"]`
-          );
-
-        if (countEl){
-          countEl.textContent =
-            `${count}개 변경`;
-
-          countEl.style.display =
-            count ? '' : 'none';
-        }
-      });
+  wrap.querySelectorAll('.wl-multi-input').forEach(el => {
+    el.addEventListener('input', () => {
+      const recId = String(el.dataset.recId), field = el.dataset.field;
+      const state = wlMultiChangeState[recId];
+      if (!state) return;
+      state.values[field] = el.value;
+      const changed = String(el.value) !== String(state.originals[field] ?? '');
+      el.classList.toggle('is-changed',changed);
+      const fieldRow = el.closest('.wl-multi-field');
+      if (fieldRow){
+        fieldRow.classList.toggle('is-changed',changed);
+        const badge = fieldRow.querySelector('.wl-multi-changed-badge');
+        if (badge) badge.style.display = changed ? '' : 'none';
+      }
+      const count = wlMultiChangedCount(recId);
+      const countEl = wrap.querySelector(`[data-wl-change-count="${CSS.escape(recId)}"]`);
+      if (countEl){ countEl.textContent = `${count}개 변경`; countEl.style.display = count ? '' : 'none'; }
     });
-
-
-  /* 전체 펼치기 */
-  document
-    .getElementById('wlMultiExpandAll')
-    ?.addEventListener('click', () => {
-
-      wrap
-        .querySelectorAll('.wl-multi-asset')
-        .forEach(el => {
-          el.open = true;
-        });
-    });
-
-
-  /* 전체 접기 */
-  document
-    .getElementById('wlMultiCollapseAll')
-    ?.addEventListener('click', () => {
-
-      wrap
-        .querySelectorAll('.wl-multi-asset')
-        .forEach(el => {
-          el.open = false;
-        });
-    });
+  });
+  document.getElementById('wlMultiExpandAll')?.addEventListener('click', () => wrap.querySelectorAll('.wl-multi-asset').forEach(el=>{el.open=true;}));
+  document.getElementById('wlMultiCollapseAll')?.addEventListener('click', () => wrap.querySelectorAll('.wl-multi-asset').forEach(el=>{el.open=false;}));
 }
 
 function getWlSingleRecord(){
@@ -5870,48 +5210,25 @@ function resetFieldChangeInputs(){
   wlChangeFields = [];
   wlChangeValues = {};
   wlOriginalValues = {};
+  wlMultiChangeState = {};
   renderWlChangeRows();
 }
 
 document.getElementById('wl_apply_toggle').addEventListener('change', async (e) => {
-    const checked =
-      e.target.checked;
-    const section =
-      document.getElementById(
-        'wl_fieldchange_section'
-      );
-    section.style.display =
-      checked ? '' : 'none';
-    const targetRecs =
-      records.filter(r =>
-        workLogRecordIds.includes(
-          String(r.id)
-        )
-      );
-    if (!checked){
-      wlChangeFields = [];
-      wlChangeValues = {};
-      wlOriginalValues = {};
-      wlMultiChangeState = {};
-      document.getElementById('wl_fieldchange_rows').innerHTML = '';
-      return;
-    }
-
-    if (targetRecs.length > 1){
-      await populateMultiWlFields(
-        targetRecs
-      );
-      return;
-    }
-
-    const rec =
-      targetRecs[0];
-    if (rec){
-      await populateAllWlFieldsFromRecord(
-        rec
-      );
-    }
-  });
+  const checked = e.target.checked;
+  document.getElementById('wl_fieldchange_section').style.display = checked ? '' : 'none';
+  const targetRecs = records.filter(r => workLogRecordIds.includes(String(r.id)));
+  if (!checked){
+    wlChangeFields = []; wlChangeValues = {}; wlOriginalValues = {}; wlMultiChangeState = {};
+    document.getElementById('wl_fieldchange_rows').innerHTML = '';
+    return;
+  }
+  if (targetRecs.length > 1){
+    await populateMultiWlFields(targetRecs);
+    return;
+  }
+  if (targetRecs[0]) await populateAllWlFieldsFromRecord(targetRecs[0]);
+});
 
 async function applyFieldChanges(rec){
   const changes = [];
@@ -5962,87 +5279,32 @@ async function applyFieldChanges(rec){
 }
 
 async function applyMultiFieldChanges(rec){
-  const state =
-    wlMultiChangeState[String(rec.id)];
-
-  const changes = [];
-  const fieldChanges = {};
-  const rollbackChanges = {};
-
-  if (!state){
-    return {
-      changes,
-      fieldChanges,
-      rollbackChanges
-    };
-  }
-
+  const state = wlMultiChangeState[String(rec.id)];
+  const changes = [], fieldChanges = {}, rollbackChanges = {};
+  if (!state) return {changes,fieldChanges,rollbackChanges};
 
   for (const def of WL_FIELD_DEFS){
-
     const field = def.field;
     const before = state.originals[field] ?? '';
     const after = state.values[field] ?? '';
-    if (String(before) === String(after)){
-      continue;
-    }
-    if (def.sensitive){
-      if (viewOnly || !sessionKey){
-        continue;
-      }
-      const beforeEnc =
-        rec[def.encField]
-          ? JSON.parse(
-              JSON.stringify(
-                rec[def.encField]
-              )
-            )
-          : null;
-      const afterEnc =
-        after.trim()
-          ? await encryptField(after.trim())
-          : null;
-      rec[def.encField] =
-        afterEnc;
-      changes.push({
-        field,
-        label:def.label,
-        sensitive:true
-      });
-      fieldChanges[field] = true;
-      rollbackChanges[field] = {
-        sensitive:true,
-        encField:def.encField,
-        before:beforeEnc,
-        after:afterEnc
-          ? JSON.parse(
-              JSON.stringify(afterEnc)
-            )
-          : null
-      };
+    if (String(before) === String(after)) continue;
 
+    if (def.sensitive){
+      if (viewOnly || !sessionKey) continue;
+      const beforeEnc = rec[def.encField] ? JSON.parse(JSON.stringify(rec[def.encField])) : null;
+      const afterEnc = String(after).trim() ? await encryptField(String(after).trim()) : null;
+      rec[def.encField] = afterEnc;
+      changes.push({field,label:def.label,sensitive:true});
+      fieldChanges[field] = true;
+      rollbackChanges[field] = {sensitive:true,encField:def.encField,before:beforeEnc,after:afterEnc?JSON.parse(JSON.stringify(afterEnc)):null};
     } else {
       rec[field] = after;
-      changes.push({
-        field,
-        label:def.label,
-        from:before || '—',
-        to:after || '—'
-      });
-      fieldChanges[field] =
-        after;
-      rollbackChanges[field] = {
-        sensitive:false,
-        before,
-        after
-      };
+      changes.push({field,label:def.label,from:before||'—',to:after||'—'});
+      fieldChanges[field] = after;
+      rollbackChanges[field] = {sensitive:false,before,after};
     }
   }
-  return {
-    changes,
-    fieldChanges,
-    rollbackChanges
-  };
+  return {changes,fieldChanges,rollbackChanges};
 }
 
 function fieldChangesSummary(changes){
@@ -6284,108 +5546,50 @@ document.getElementById('wlAddBtn').onclick = async () => {
   if (!date && !manager && !note){ alert('날짜, 담당자, 내용 중 하나 이상을 입력해 주세요.'); return; }
 
   if (targetRecs.length > 1){
-    if (
-      !currentUserId &&
-      !confirm(
-        '현재 로그인된 사용자가 없어 이 이력의 작성자가 "미상"으로 표시됩니다.\n' +
-        '로그인 없이 계속 저장할까요?'
-      )
-    ){
-      return;
-    }
-    const author =
-      currentUserName();
-  
-    const applyChanges =
-      document
-        .getElementById('wl_apply_toggle')
-        .checked;
+    if (!currentUserId && !confirm('현재 로그인된 사용자가 없어 이 이력의 작성자가 "미상"으로 표시됩니다.\n로그인 없이 계속 저장할까요?')) return;
+
+    const author = currentUserName();
+    const applyChanges = document.getElementById('wl_apply_toggle').checked;
+
     if (applyChanges){
-      const sensitiveTouched =
-        targetRecs.some(rec => {
-          const state =
-            wlMultiChangeState[
-              String(rec.id)
-            ];
-          if (!state) return false;
-          return WL_FIELD_DEFS.some(def => {
-            if (!def.sensitive){
-              return false;
-            }
-            return (
-              String(
-                state.values[def.field] ?? ''
-              ) !==
-              String(
-                state.originals[def.field] ?? ''
-              )
-            );
-          });
-        });
-      if (
-        sensitiveTouched &&
-        (viewOnly || !sessionKey)
-      ){
-        alert(
-          'IP / 계정 ID / 비밀번호를 변경하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'
-        );
+      const sensitiveTouched = targetRecs.some(rec => {
+        const state = wlMultiChangeState[String(rec.id)];
+        if (!state) return false;
+        return WL_FIELD_DEFS.some(def => def.sensitive && String(state.values[def.field] ?? '') !== String(state.originals[def.field] ?? ''));
+      });
+      if (sensitiveTouched && (viewOnly || !sessionKey)){
+        alert('IP / 계정 ID / 비밀번호를 변경하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.');
         return;
       }
     }
-    let totalChangedAssets = 0;
-    let totalChangedFields = 0;
-    const baseId =
-      Date.now();
-    for (
-      let idx = 0;
-      idx < targetRecs.length;
-      idx++
-    ){
-      const rec =
-        targetRecs[idx];
-      if (!Array.isArray(rec.work_log)){
-        rec.work_log = [];
-      }
-      const entry = {
-        id:baseId + idx,
-        type,
-        date,
-        manager,
-        note,
-        author
-      };
+
+    let totalChangedAssets = 0, totalChangedFields = 0;
+    const baseId = Date.now();
+    for (let idx=0; idx<targetRecs.length; idx++){
+      const rec = targetRecs[idx];
+      if (!Array.isArray(rec.work_log)) rec.work_log = [];
+      const entry = {id:baseId+idx,type,date,manager,note,author};
       if (applyChanges){
-        const result =
-          await applyMultiFieldChanges(rec);
+        const result = await applyMultiFieldChanges(rec);
         if (result.changes.length){
-          entry.field_changes =
-            result.fieldChanges;
-          entry.change_summary =
-            fieldChangesSummary(
-              result.changes
-            );
-          entry.rollback_changes =
-            result.rollbackChanges;
+          entry.field_changes = result.fieldChanges;
+          entry.change_summary = fieldChangesSummary(result.changes);
+          entry.rollback_changes = result.rollbackChanges;
           totalChangedAssets++;
-          totalChangedFields +=
-            result.changes.length;
+          totalChangedFields += result.changes.length;
         }
       }
       rec.work_log.push(entry);
     }
-    document
-      .getElementById('workLogModal')
-      .classList.remove('open');
+
+    document.getElementById('workLogModal').classList.remove('open');
     workLogRecordIds = [];
     wlMultiChangeState = {};
     selectedAssetIds.clear();
     render();
     scheduleAutoSync();
     if (applyChanges && totalChangedFields){
-      alert(
-        `작업 이력이 ${targetRecs.length}개 자산에 등록되었습니다.\n\n` +
-        `자산 정보 변경: ${totalChangedAssets}개 자산 · ${totalChangedFields}개 항목`
-      );
+      alert(`작업 이력이 ${targetRecs.length}개 자산에 등록되었습니다.\n\n자산 정보 변경: ${totalChangedAssets}개 자산 · ${totalChangedFields}개 항목`);
     }
     return;
   }
