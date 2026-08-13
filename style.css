@@ -1552,34 +1552,99 @@ textarea.wl-fc-input.is-changed{
 /* =========================================================
    업데이트 전체보기 - 한 이력 = 최대한 한 줄
    ========================================================= */
+/* ---------- 상단 도구 ---------- */
+.wh-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  width:100%;
+  padding:8px 0 12px;
+}
+
+/* 왼쪽 - 전체선택 */
+.wh-admin-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:0 0 auto;
+  margin:0;
+}
+
+/* 오른쪽 - 검색 / 구분 / 정렬 */
+.wh-filter-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:6px;
+  margin-left:auto;
+  min-width:0;
+}
+
+/* 검색창 폭 고정 */
+.wh-search{
+  flex:0 0 300px !important;
+  width:300px;
+}
+
+/* select 크기 고정 */
+.wh-select{
+  flex:0 0 auto;
+  width:105px;
+  height:30px;
+  padding:0 8px;
+  background:var(--surface2);
+  border:1px solid var(--border-solid);
+  border-radius:7px;
+  color:var(--text-dim);
+  font-size:11px;
+  outline:none;
+}
+
+#whSortSelect{
+  width:88px;
+}
+/* ---------- 목록 ---------- */
 
 .wh-list{
   display:flex;
   flex-direction:column;
+
   gap:6px;
 
   width:100%;
-  padding:4px 0 40px;
+
+  padding:3px 0 40px;
 }
 
 
 /*
-  체크 | 작업구분 | 날짜 | 법인/자산 | 내용 | 변경내용 | 작업자
+  고정열 구성
+
+  체크     24
+  날짜     132
+  구분     110
+  자산     255
+  내용     180
+  변경     나머지 전체
+  작업자   125
 */
 .wh-item{
   display:grid;
 
   grid-template-columns:
-    22px
-    125px
-    125px
-    minmax(190px, 1.25fr)
-    minmax(180px, 1.45fr)
-    minmax(220px, 1.8fr)
-    minmax(165px, .9fr);
+    24px
+    132px
+    110px
+    255px
+    180px
+    minmax(260px, 1fr)
+    125px;
 
-  align-items:center;
-  column-gap:10px;
+  align-items:start;
+
+  column-gap:9px;
+  row-gap:5px;
 
   width:100%;
   min-width:0;
@@ -1587,6 +1652,7 @@ textarea.wl-fc-input.is-changed{
   padding:8px 10px;
 
   background:var(--surface);
+
   border:1px solid var(--border-solid);
   border-radius:8px;
 
@@ -1597,60 +1663,63 @@ textarea.wl-fc-input.is-changed{
     background .12s;
 }
 
+
 .wh-item:hover{
-  border-color:#B9DCEC;
-  background:#FAFCFE;
+  border-color:#BCDDEA;
+  background:#FBFDFE;
 }
 
 
 /*
-  wh-top을 레이아웃 박스에서 제거.
-  안에 있는 체크박스 / 작업구분 / 날짜가
-  wh-item grid의 직접 자식처럼 동작한다.
+  체크박스 / 작업 구분 / 날짜를
+  wh-item grid에 직접 배치
 */
 .wh-top{
   display:contents;
 }
 
 
-/* 체크박스 */
+/* 체크 */
 .wh-history-check{
   grid-column:1;
 
   display:flex;
-  align-items:center;
+
+  align-items:flex-start;
   justify-content:center;
 
-  width:22px;
+  margin:1px 0 0;
+}
+
+
+/* 날짜 + 시간 */
+.wh-item .ra-date{
+  grid-column:2;
+
   margin:0;
+
+  color:var(--text-faint);
+
+  font-family:var(--mono);
+  font-size:9.5px;
+
+  line-height:1.4;
+
+  white-space:nowrap;
 }
 
 
 /* 작업 구분 */
 .wh-item .ra-type{
-  grid-column:2;
+  grid-column:3;
 
   min-width:0;
 
-  font-size:11.5px;
+  color:var(--accent);
+  font-size:10.8px;
   font-weight:700;
-  line-height:1.3;
 
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-
-/* 날짜 */
-.wh-item .ra-date{
-  grid-column:3;
-
-  margin:0;
-
-  color:var(--text-faint);
-  font-family:var(--mono);
-  font-size:10px;
+  line-height:1.4;
 
   white-space:nowrap;
   overflow:hidden;
@@ -1663,12 +1732,14 @@ textarea.wl-fc-input.is-changed{
   grid-column:4;
 
   min-width:0;
+
   margin:0;
 
   color:var(--text);
-  font-size:11.5px;
-  font-weight:600;
-  line-height:1.35;
+  font-size:11px;
+  font-weight:700;
+
+  line-height:1.4;
 
   white-space:nowrap;
   overflow:hidden;
@@ -1681,11 +1752,13 @@ textarea.wl-fc-input.is-changed{
   grid-column:5;
 
   min-width:0;
+
   margin:0;
 
   color:var(--text-dim);
-  font-size:11.5px;
-  line-height:1.35;
+  font-size:10.8px;
+
+  line-height:1.4;
 
   white-space:nowrap;
   overflow:hidden;
@@ -1693,162 +1766,192 @@ textarea.wl-fc-input.is-changed{
 }
 
 
-/* 변경 내용 */
+/* ---------- 변경 내용 ---------- */
+
 .wh-item .ra-changes{
   grid-column:6;
 
   min-width:0;
 
   display:flex;
-  align-items:center;
-  gap:6px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+
+  gap:3px 5px;
 
   margin:0;
-  padding:4px 7px;
+  padding:5px 7px;
 
   background:var(--surface2);
+
   border:1px solid var(--border-solid);
   border-radius:6px;
 
-  overflow:hidden;
+  /*
+    중요:
+    변경내용은 2줄, 3줄 이상 자유롭게 확장
+  */
+  white-space:normal;
+  overflow:visible;
 }
 
 
-/* "변경 내용" 제목 */
+/* 변경 내용 제목 */
 .wh-item .ra-changes-label{
   flex:0 0 auto;
 
-  margin:0;
+  margin:0 3px 0 0;
 
   color:var(--text-faint);
+
   font-size:9px;
   font-weight:700;
+
+  line-height:1.45;
 
   white-space:nowrap;
 }
 
 
-/* 실제 변경값들을 가로로 나열 */
+/* 변경 항목 */
 .wh-item .ra-change-row{
   flex:0 1 auto;
 
   display:inline-flex;
-  align-items:center;
-  flex-wrap:nowrap;
+  align-items:baseline;
+
+  flex-wrap:wrap;
 
   min-width:0;
 
-  margin:0 !important;
   gap:3px;
 
-  font-size:10px;
-  line-height:1.3;
+  margin:0 !important;
 
-  white-space:nowrap;
+  font-size:9.7px;
+  line-height:1.45;
+
+  white-space:normal;
 }
 
 
-/* 변경값이 여러 개면 구분점 */
-.wh-item .ra-change-row + .ra-change-row::before{
+/* 변경 항목 간 구분 */
+.wh-item .ra-change-row +
+.wh-item .ra-change-row::before{
   content:'·';
-  margin-right:3px;
+
+  flex:0 0 auto;
+
+  margin-right:2px;
+
   color:var(--text-faint);
 }
 
 
-/* 변경 내용 내부 텍스트는 한 줄 유지 */
+/*
+  변경 전 / 변경 후 값이 길면
+  해당 칸 안에서 자연스럽게 줄바꿈
+*/
 .wh-item .ra-change-label,
 .wh-item .ra-change-before,
-.wh-item .ra-change-arrow,
 .wh-item .ra-change-after{
+  white-space:normal;
+
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+
+.wh-item .ra-change-arrow{
+  flex:0 0 auto;
+
   white-space:nowrap;
 }
 
 
-/* 작업자 / 담당자 */
+/* ---------- 작업자 ---------- */
+
 .wh-item .ra-author{
   grid-column:7;
 
   min-width:0;
+
   margin:0;
 
   color:var(--text-faint);
+
   font-family:var(--mono);
   font-size:9.5px;
-  line-height:1.3;
 
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  line-height:1.4;
+
+  white-space:normal;
+  word-break:keep-all;
 }
 
 
-/* 변경 내역 자체가 없는 경우
-   author가 변경내용 칸까지 일부 사용 */
+/*
+  변경내용이 없는 행은
+  작업자 앞 공간을 굳이 빈칸으로 두지 않음
+*/
 .wh-item:not(:has(.ra-changes)) .ra-author{
   grid-column:6 / 8;
 }
 
 
-/* 삭제 이력은 삭제정보를 다음 줄에 작게 표시 */
+/* 삭제 정보만 두 번째 줄 사용 */
 .wh-delete-meta{
-  grid-column:4 / 8;
+  grid-column:2 / 8;
 
-  margin:4px 0 0;
-  padding:4px 0 0;
+  margin:1px 0 0;
+  padding-top:5px;
 
-  border-top:1px dashed #D9DEE6;
+  border-top:1px dashed #D8DEE7;
 
-  color:#B42318;
+  color:#D64545;
+
   font-family:var(--mono);
-  font-size:9.5px;
+  font-size:9px;
 
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  line-height:1.4;
+
+  white-space:normal;
 }
 
 
-/* 삭제됨 / 감사 배지는 작업구분 칸 내부 유지 */
-.wh-deleted-badge,
-.wh-audit-badge{
-  margin-left:4px;
-  padding:1px 5px;
-
-  font-size:8.5px;
-  line-height:1.2;
-
-  vertical-align:middle;
+/* 선택 행 */
+.wh-item:has(.wh-history-checkbox:checked){
+  border-color:#DFB1B1;
+  background:#FFF9F9;
 }
 
 
-/* 빈 결과 */
+/* 검색 결과 없음 */
 .wh-empty{
   padding:40px 10px;
   text-align:center;
 }
-@media (max-width:1350px){
+
+
+/* 작은 화면에서만 최소 대응 */
+@media(max-width:1250px){
+
+  .wh-search{
+    flex-basis:220px !important;
+    width:220px;
+  }
+
   .wh-item{
     grid-template-columns:
-      22px
-      110px
-      105px
-      minmax(160px, 1.2fr)
-      minmax(150px, 1.2fr)
-      minmax(190px, 1.5fr)
-      minmax(135px, .8fr);
+      24px
+      125px
+      95px
+      210px
+      150px
+      minmax(220px, 1fr)
+      110px;
 
     column-gap:7px;
-  }
-
-  .wh-item .ra-type,
-  .wh-item .ra-asset,
-  .wh-item .ra-note{
-    font-size:10.8px;
-  }
-
-  .wh-item .ra-author{
-    font-size:9px;
   }
 }
 
