@@ -5476,7 +5476,7 @@ function renderWorkHistoryPage(){
   const total = getAllWorkLogEntries().length;
 
   wrap.innerHTML = `
-    <div class="maint-sticky-top">
+    <div class="maint-sticky-top wh-sticky-top">
       <div class="maint-header">
         <div class="maint-header-row"><h2>업데이트 전체보기</h2></div>
         <p class="maint-sub">모든 업데이트 내역(추가·편집·삭제 기록)을 한 곳에서 확인합니다 · 총 ${total}건</p>
@@ -5528,6 +5528,17 @@ function renderWorkHistoryPage(){
             <option value="asc" ${whSort==='asc' ? 'selected' : ''}>오래된순</option>
           </select>
         </div>
+      </div>
+
+      <!-- 업데이트 목록 열 제목 -->
+      <div class="wh-column-header" aria-hidden="true">
+        <div class="wh-col-select"></div>
+        <div class="wh-col-date">날짜 / 시간</div>
+        <div class="wh-col-type">작업명</div>
+        <div class="wh-col-asset">자산</div>
+        <div class="wh-col-note">내용</div>
+        <div class="wh-col-changes">변경 내용</div>
+        <div class="wh-col-author">담당자</div>
       </div>
     </div>
     <div class="wh-list" id="whListEl"></div>`;
@@ -5665,16 +5676,6 @@ function renderWhList(){
             </label>
           ` : ''}
   
-          <span class="ra-type">
-            ${esc(entry.type)}
-  
-            ${deleted
-              ? '<span class="wh-deleted-badge">삭제됨</span>'
-              : ''}
-  
-            ${auditBadge}
-          </span>
-  
           <!-- 날짜 + 시간 -->
           <span class="ra-date">
             ${esc(
@@ -5683,6 +5684,17 @@ function renderWhList(){
                 entry.date
               )
             )}
+          </span>
+
+          <!-- 작업명 -->
+          <span class="ra-type">
+            ${esc(entry.type)}
+  
+            ${deleted
+              ? '<span class="wh-deleted-badge">삭제됨</span>'
+              : ''}
+  
+            ${auditBadge}
           </span>
         </div>
   
