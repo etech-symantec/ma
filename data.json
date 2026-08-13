@@ -15536,11 +15536,11 @@
       "date": "2026.2.27",
       "manager": "김상문",
       "note": "",
-      "done": false,
+      "done": true,
       "incomplete": false,
       "uncontracted": false,
       "author": "김상문",
-      "updated_at": 1786607731481
+      "updated_at": 1786608668813
     },
     {
       "id": 1786607784148,
@@ -17442,6 +17442,30 @@
       "sn": "",
       "summary": "2026년 6월 유지보수 점검 등록",
       "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786608668832-kgakzm",
+      "ts": 1786608668832,
+      "action": "edit",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607731481",
+      "group": "kr-009",
+      "owner": "삼성 인력개발원(창조관)",
+      "label": "2026-02",
+      "sn": "",
+      "summary": "2026년 2월 유지보수 점검 수정",
+      "changes": [
+        {
+          "field": "done",
+          "label": "완료",
+          "before": "false",
+          "after": "true",
+          "sensitive": false
+        }
+      ],
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
       "actor_role": "일반사용자"
