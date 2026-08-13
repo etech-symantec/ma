@@ -250,7 +250,7 @@
       "build_engineer": "",
       "build_date": "",
       "cust_memo": "",
-      "asset_order": 5
+      "asset_order": 4
     },
     {
       "group": "jp-sds",
@@ -311,7 +311,7 @@
       "build_engineer": "",
       "build_date": "",
       "cust_memo": "",
-      "asset_order": 4
+      "asset_order": 5
     },
     {
       "group": "tw-ds",
@@ -14841,6 +14841,54 @@
           "label": "자산 순서",
           "before": "—",
           "after": "4",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786599492666-dddxzm",
+      "ts": 1786599492666,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "4",
+      "group": "jp-sds",
+      "owner": "삼성SDS 일본",
+      "label": "MC-S400-20-100",
+      "sn": "5017320101",
+      "summary": "자산 순서 변경 · MC-S400-20-100",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "5",
+          "after": "4",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터"
+    },
+    {
+      "id": "audit-1786599492666-6h5ecq",
+      "ts": 1786599492666,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "5",
+      "group": "jp-sds",
+      "owner": "삼성SDS 일본",
+      "label": "RP-V100-1Y",
+      "sn": "26482591",
+      "summary": "자산 순서 변경 · RP-V100-1Y",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "4",
+          "after": "5",
           "sensitive": false
         }
       ],
