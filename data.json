@@ -15944,6 +15944,19 @@
       "uncontracted": false,
       "author": "김상문",
       "updated_at": 1786608447583
+    },
+    {
+      "id": 1786608607600,
+      "group": "custom-1786348956934",
+      "ym": "2026-07",
+      "date": "2026.7.30",
+      "manager": "김상문",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1786608607600
     }
   ],
   "auditLogs": [
@@ -17428,6 +17441,22 @@
       "label": "2026-06",
       "sn": "",
       "summary": "2026년 6월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786608607620-oc2gxl",
+      "ts": 1786608607620,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608607600",
+      "group": "custom-1786348956934",
+      "owner": "삼성전자 SEAU",
+      "label": "2026-07",
+      "sn": "",
+      "summary": "2026년 7월 유지보수 점검 등록",
       "changes": [],
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
