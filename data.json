@@ -5114,14 +5114,14 @@
         "tag": "essAVX+2QhYEPPwwE1s8Fw=="
       },
       "id_enc": {
-        "iv": "47YqPRpIOXhvLIQW",
-        "ct": "89sj1OBRUEyYCbdYapBbBtTOKSU=",
-        "tag": "2ga9xkXyjYcveHxrl/U6KQ=="
+        "iv": "1TQu8vtfpe/U4i5W",
+        "ct": "WXp394raxjZCKtRc8AMmQcsotHB5",
+        "tag": "aAXGH8+qce15JvWHhqKMDg=="
       },
       "pw_enc": {
-        "iv": "Y359bDBJE9QC6IzJ",
-        "ct": "3Z5I9rWXS6aN22INq/VMhyvOW73Xww8=",
-        "tag": "Tvl7kTPxa32x5PQz+Va00g=="
+        "iv": "Vh8hm1geD+YYOE+5",
+        "ct": "4DtLfo0i+c0j5MogB4kInx2wmT2lIAaL",
+        "tag": "TEGahQwwD2WwUv2ivEtvwQ=="
       },
       "config_mode": "Explicit",
       "group_remarks": "",
@@ -5138,7 +5138,52 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": "2023.05"
+      "build_date": "2023.05",
+      "work_log": [
+        {
+          "id": 1786581674120,
+          "type": "라이선스 갱신",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "id/pw 변경",
+          "author": "윤태리",
+          "field_changes": {
+            "id": true,
+            "pw": true
+          },
+          "change_summary": "계정 ID (여러 개면 줄바꿈으로 구분) 변경됨 · 비밀번호 (여러 개면 줄바꿈으로 구분) 변경됨",
+          "rollback_changes": {
+            "id": {
+              "sensitive": true,
+              "encField": "id_enc",
+              "before": {
+                "iv": "47YqPRpIOXhvLIQW",
+                "ct": "89sj1OBRUEyYCbdYapBbBtTOKSU=",
+                "tag": "2ga9xkXyjYcveHxrl/U6KQ=="
+              },
+              "after": {
+                "iv": "1TQu8vtfpe/U4i5W",
+                "ct": "WXp394raxjZCKtRc8AMmQcsotHB5",
+                "tag": "aAXGH8+qce15JvWHhqKMDg=="
+              }
+            },
+            "pw": {
+              "sensitive": true,
+              "encField": "pw_enc",
+              "before": {
+                "iv": "Y359bDBJE9QC6IzJ",
+                "ct": "3Z5I9rWXS6aN22INq/VMhyvOW73Xww8=",
+                "tag": "Tvl7kTPxa32x5PQz+Va00g=="
+              },
+              "after": {
+                "iv": "Vh8hm1geD+YYOE+5",
+                "ct": "4DtLfo0i+c0j5MogB4kInx2wmT2lIAaL",
+                "tag": "TEGahQwwD2WwUv2ivEtvwQ=="
+              }
+            }
+          }
+        }
+      ]
     },
     {
       "group": "cn-001",
