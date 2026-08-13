@@ -4442,6 +4442,7 @@ function getRecentWorkLogEntries(limit){
 let whSearch = '';
 let whTypeFilter = '';
 let whSort = 'desc';
+let whSelectedKeys = new Set();
 
 function getAllWorkLogEntries(){
   const all = [];
@@ -4515,6 +4516,29 @@ function renderWorkHistoryPage(){
           <option value="desc" ${whSort==='desc'?'selected':''}>최신순</option>
           <option value="asc" ${whSort==='asc'?'selected':''}>오래된순</option>
         </select>
+        ${isCurrentUserAdmin() ? `
+          <div class="wh-admin-actions">
+        
+            <label class="wh-select-all">
+              <input type="checkbox" id="whSelectAll">
+              <span>전체 선택</span>
+            </label>
+        
+            <span class="wh-selected-count" id="whSelectedCount">
+              0건 선택
+            </span>
+        
+            <button
+              type="button"
+              class="btn wh-delete-selected"
+              id="whDeleteSelected"
+              disabled
+            >
+              선택 삭제
+            </button>
+        
+          </div>
+        ` : ''}
       </div>
     </div>
     <div class="wh-list" id="whListEl"></div>`;
@@ -4524,6 +4548,81 @@ function renderWorkHistoryPage(){
   document.getElementById('whSortSelect').onchange = (e) => { whSort = e.target.value; renderWhList(); };
 
   renderWhList();
+  if (isCurrentUserAdmin()){
+    const selectAll =
+      document.getElementById('whSelectAll');
+    const deleteBtn =
+      document.getElementById('whDeleteSelected');
+  
+    if (selectAll){
+      selectAll.onchange = () => {
+        document
+          .querySelectorAll('.wh-history-checkbox')
+          .forEach(box => {
+            box.checked = selectAll.checked;
+            const key = box.dataset.whSelect;
+            if (selectAll.checked){
+              whSelectedKeys.add(key);
+            } else {
+              whSelectedKeys.delete(key);
+            }
+          });
+        updateWhSelectionUi();
+      };
+    }
+    if (deleteBtn){
+      deleteBtn.onclick =
+        deleteSelectedWorkHistory;
+    }
+    updateWhSelectionUi();
+  }
+}
+
+function updateWhSelectionUi(){
+
+  if (!isCurrentUserAdmin()) return;
+
+  const countEl =
+    document.getElementById('whSelectedCount');
+
+  const deleteBtn =
+    document.getElementById('whDeleteSelected');
+
+  const selectAll =
+    document.getElementById('whSelectAll');
+
+  const boxes = [
+    ...document.querySelectorAll(
+      '.wh-history-checkbox'
+    )
+  ];
+
+
+  if (countEl){
+    countEl.textContent =
+      `${whSelectedKeys.size}건 선택`;
+  }
+
+
+  if (deleteBtn){
+    deleteBtn.disabled =
+      whSelectedKeys.size === 0;
+  }
+
+
+  if (selectAll){
+
+    const checked =
+      boxes.filter(box => box.checked).length;
+
+    selectAll.checked =
+      boxes.length > 0 &&
+      checked === boxes.length;
+
+    selectAll.indeterminate =
+      checked > 0 &&
+      checked < boxes.length;
+  }
 }
 
 function renderWhList(){
@@ -4592,6 +4691,220 @@ function renderWhList(){
       });
     };
   });
+  if (isCurrentUserAdmin() && items.length){
+    const cards = [
+      ...listEl.querySelectorAll('.wh-item')
+    ];
+    cards.forEach((card, index) => {
+      const item = items[index];
+      if (!item) return;
+      const key =
+        item.key ||
+        activityKeyOf(
+          item.recId,
+          item.entry.id
+        );
+  
+      const label =
+        document.createElement('label');
+      label.className =
+        'wh-history-check';
+      label.title =
+        '삭제할 작업 이력 선택';
+  
+      label.innerHTML = `
+        <input
+          type="checkbox"
+          class="wh-history-checkbox"
+          data-wh-select="${esc(key)}"
+          ${whSelectedKeys.has(key) ? 'checked' : ''}
+        >
+      `;
+
+      label.onclick = e => {
+        e.stopPropagation();
+      };
+  
+      const box =
+        label.querySelector(
+          '.wh-history-checkbox'
+        );
+  
+      box.onchange = e => {
+        e.stopPropagation();
+        if (box.checked){
+          whSelectedKeys.add(key);
+        }
+        else{
+          whSelectedKeys.delete(key);
+        }
+        updateWhSelectionUi();
+      };
+
+      const top =
+        card.querySelector('.wh-top');
+      if (top){
+        top.prepend(label);
+      }
+      else{
+        card.prepend(label);
+      }
+    });
+  }
+  updateWhSelectionUi();
+}
+
+/* =========================================================
+   마스터 - 작업 이력 히스토리 선택 영구 삭제
+   ========================================================= */
+async function deleteSelectedWorkHistory(){
+  if (!isCurrentUserAdmin()){
+    alert('마스터만 작업 이력을 삭제할 수 있습니다.');
+    return;
+  }
+
+  if (!whSelectedKeys.size){
+    alert('삭제할 작업 이력을 선택해 주세요.');
+    return;
+  }
+  const allItems =
+    getAllWorkLogEntries();
+
+  const selectedItems =
+    allItems.filter(item => {
+      const key =
+        item.key ||
+        activityKeyOf(
+          item.recId,
+          item.entry.id
+        );
+      return whSelectedKeys.has(key);
+    });
+
+  if (!selectedItems.length){
+    whSelectedKeys.clear();
+    renderWhList();
+    return;
+  }
+
+  const activeCount =
+    selectedItems.filter(
+      item => !item.deleted
+    ).length;
+
+  const deletedCount =
+    selectedItems.filter(
+      item => item.deleted
+    ).length;
+
+  let message =
+    `선택한 작업 이력 ${selectedItems.length}건을 삭제하시겠습니까?\n\n`;
+
+  if (activeCount){
+    message +=
+      `현재 작업 이력: ${activeCount}건\n`;
+  }
+
+  if (deletedCount){
+    message +=
+      `삭제 이력: ${deletedCount}건\n`;
+  }
+
+  message +=
+    '\n히스토리 페이지에서 삭제하면 완전히 삭제되며 다시 복구할 수 없습니다.';
+
+  if (activeCount){
+    message +=
+      '\n\n자산 정보 변경이 포함된 작업 이력은 가능한 경우 변경 전 값으로 원복합니다.';
+  }
+
+  if (!confirm(message)){
+    return;
+  }
+
+  let removed = 0;
+  let reverted = 0;
+  let skipped = 0;
+
+  for (const item of selectedItems){
+    const rec =
+      records.find(
+        r =>
+          String(r.id) ===
+          String(item.recId)
+      );
+    if (!rec) continue;
+    if (item.deleted){
+
+      const targetId =
+        item.entry.history_id ||
+        item.entry.deleted_at ||
+        item.entry.id;
+
+      rec.deleted_work_log =
+        (rec.deleted_work_log || [])
+          .filter(entry => {
+
+            const entryId =
+              entry.history_id ||
+              entry.deleted_at ||
+              entry.id;
+
+            return (
+              String(entryId) !==
+              String(targetId)
+            );
+          });
+      removed++;
+      continue;
+    }
+
+    if (
+      item.entry.rollback_changes &&
+      Object.keys(
+        item.entry.rollback_changes
+      ).length
+    ){
+
+      const result =
+        await revertWorkLogChanges(
+          rec,
+          item.entry
+        );
+      reverted +=
+        Number(
+          result.reverted || 0
+        );
+      skipped +=
+        Number(
+          result.skipped || 0
+        );
+    }
+
+    rec.work_log =
+      (rec.work_log || [])
+        .filter(entry =>
+          String(entry.id) !==
+          String(item.entry.id)
+        );
+    removed++;
+  }
+  whSelectedKeys.clear();
+  scheduleAutoSync();
+  updateActivityBadge();
+  renderWorkHistoryPage();
+
+  let resultMessage =
+    `${removed}건의 작업 이력을 삭제했습니다.`;
+  if (reverted){
+    resultMessage +=
+      `\n자산 정보 ${reverted}개 항목을 변경 전 값으로 원복했습니다.`;
+  }
+  if (skipped){
+    resultMessage +=
+      `\n${skipped}개 항목은 이후 다른 변경이 있어 현재 값을 유지했습니다.`;
+  }
+  alert(resultMessage);
 }
 
 function updateActivityBadge(){
