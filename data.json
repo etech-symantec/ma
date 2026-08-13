@@ -10643,19 +10643,19 @@
       "tag_note": "우면 R&D 센터",
       "id": 279,
       "ip_enc": {
-        "iv": "b8/bR0CnEIIu9ZZm",
-        "ct": "SC0I/+LQ/Eef0KfSSOjGSQ==",
-        "tag": "jewUHYZV7CtnWxen46vrLw=="
+        "iv": "cGSRwo1504epu7Oy",
+        "ct": "bVKjRRwcP3uOfmb5qmTXrg==",
+        "tag": "/5ve8WGbh5jDlo31ya3s+Q=="
       },
       "id_enc": {
-        "iv": "Ln2URUvUcA0XmCTH",
-        "ct": "0o4f0nh2J/hig0Rgm+X3GyVVQ/mp+em5qPgG8aDzrjaDKg4=",
-        "tag": "bwJdJp1oMY4j3p0xoYKS/g=="
+        "iv": "wCGcMYm4BnAjDEzg",
+        "ct": "GOIG9VjEtvRO6p5V+Aw4r9Zgy/rFANBJj/a22u14snagWmA=",
+        "tag": "IjO7YoBpu4465I//nwstJg=="
       },
       "pw_enc": {
-        "iv": "hJTaPumI3ei0eKcA",
-        "ct": "2pyfsblulTOI4eh6k4HLhWJfmh6qiwv2xnTHQVyy5F9UbPyJkhqh5/gfn4QA",
-        "tag": "wKSUP/NDd5UQM9htqEEyow=="
+        "iv": "5ieilSulN9gQ/04Y",
+        "ct": "KMnWBoaNsCD16nn8BdCQuRHgEwdfrZcMvUQSM6hw79bUDphFqdl35vZWFJ39",
+        "tag": "vXgmSR0aOctgkM7N6kVnoA=="
       },
       "config_mode": "Explicit",
       "group_remarks": "",
