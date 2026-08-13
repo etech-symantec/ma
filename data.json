@@ -5401,7 +5401,17 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": "2023.05"
+      "build_date": "2023.05",
+      "work_log": [
+        {
+          "id": 1786607546789,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "23.05 강성준 신규\n23.08 강성준(RMA) 2.3.7.1",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "cn-001",
@@ -5459,7 +5469,17 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": "2023.05"
+      "build_date": "2023.05",
+      "work_log": [
+        {
+          "id": 1786607546790,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "23.05 강성준 신규\n23.08 강성준(RMA) 2.3.7.1",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "cn-001",
