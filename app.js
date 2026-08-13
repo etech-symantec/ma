@@ -971,6 +971,32 @@ function subGroupMeta(items){
     build_date: items.map(i=>i.build_date).find(Boolean) || ''
   };
 }
+
+function assetOrderValue(rec){
+  const n = Number(rec.asset_order);
+  return Number.isFinite(n)
+    ? n
+    : Number.MAX_SAFE_INTEGER;
+}
+
+function sortAssetsByOrder(items){
+  return items
+    .map((rec, originalIndex) => ({
+      rec,
+      originalIndex
+    }))
+    .sort((a, b) => {
+      const diff =
+        assetOrderValue(a.rec) -
+        assetOrderValue(b.rec);
+      if (diff !== 0){
+        return diff;
+      }
+      return a.originalIndex - b.originalIndex;
+    })
+    .map(x => x.rec);
+}
+
 function buildSubGroups(items){
   const realItems = items.filter(r => !r.is_group_shell);
   const sourceItems = realItems.length ? realItems : items.filter(r => r.is_group_shell);
@@ -980,7 +1006,17 @@ function buildSubGroups(items){
     if (!map.has(key)) map.set(key, []);
     map.get(key).push(it);
   }
-  const arr = [...map.entries()].map(([sid, its]) => ({ sid, items: its, meta: subGroupMeta(its) }));
+  const arr = [...map.entries()].map(
+    ([sid, its]) => {
+      const sortedItems =
+        sortAssetsByOrder(its);
+      return {
+        sid,
+        items:sortedItems,
+        meta:subGroupMeta(sortedItems)
+      };
+    }
+  );
   arr.sort((a,b) => {
     if (!a.sid && b.sid) return 1;
     if (a.sid && !b.sid) return -1;
@@ -2536,6 +2572,7 @@ function render(){
   buildFilters();
   updateActivityBadge();
   populateSecretFields();
+  bindAssetDragDrop();
   bindAssetUpdateTooltips();
 }
 
@@ -3078,8 +3115,17 @@ function rowHtml(r, groupSupportId){
   return `
   <tr data-id="${r.id}">
     ${canSelectAssets() ? `<td class="col-select" data-label=""><input type="checkbox" class="asset-select-cb" data-select-asset="${r.id}" ${selectedAssetIds.has(String(r.id))?'checked':''} title="일괄 이동/작업 이력 등록을 위해 선택"></td>` : ''}
-    <td class="sku col-sku" data-label="SKU / 제품">
-      ${skuBadge(r.sku)}${skuKeywordTagsHtml(r.sku)}
+    <td class="sku" data-label="SKU / 제품">
+      ${canReorderAssets() ? `
+        <span
+          class="asset-drag-handle"
+          draggable="true"
+          data-drag-asset="${r.id}"
+          title="드래그하여 자산 순서 변경"
+        >⋮⋮</span>
+      ` : ''}
+      ${skuBadge(r.sku)}
+      ${skuKeywordTagsHtml(r.sku)}
     </td>
     
     <td class="sn col-sn" data-label="S/N">
@@ -3982,6 +4028,335 @@ document.getElementById('saveSgBtn').onclick = () => {
 // ---------- 자산을 다른 법인으로 이동 ----------
 let moveAssetRecIds = [];
 let selectedAssetIds = new Set();
+/* =========================================================
+   같은 법인 내 자산 순서 드래그 앤 드롭
+   ========================================================= */
+let draggingAssetId = null;
+function canReorderAssets(){
+  return !!currentUserName();
+}
+
+function assetSupportKey(rec){
+  return String(
+    rec?.support_id || ''
+  ).trim();
+}
+
+function sameAssetOrderScope(a, b){
+  if (!a || !b){
+    return false;
+  }
+  return (
+    String(a.group) === String(b.group) &&
+    assetSupportKey(a) === assetSupportKey(b)
+  );
+}
+
+function assetOrderScope(rec){
+  if (!rec){
+    return [];
+  }
+  const group =
+    String(rec.group);
+  const support =
+    assetSupportKey(rec);
+
+  return sortAssetsByOrder(
+    records.filter(r =>
+      !r.is_group_shell &&
+      String(r.group) === group &&
+      assetSupportKey(r) === support
+    )
+  );
+}
+
+function clearAssetDragVisuals(){
+  document
+    .querySelectorAll(
+      'tr.asset-dragging, ' +
+      'tr.asset-drop-before, ' +
+      'tr.asset-drop-after'
+    )
+    .forEach(row => {
+      row.classList.remove(
+        'asset-dragging',
+        'asset-drop-before',
+        'asset-drop-after'
+      );
+    });
+}
+
+function reorderAssetRows(
+  sourceId,
+  targetId,
+  insertAfter
+){
+  const source =
+    records.find(
+      r =>
+        String(r.id) ===
+        String(sourceId)
+    );
+  const target =
+    records.find(
+      r =>
+        String(r.id) ===
+        String(targetId)
+    );
+  if (
+    !source ||
+    !target ||
+    source === target
+  ){
+    return;
+  }
+  if (!sameAssetOrderScope(source, target)){
+    return;
+  }
+  const ordered =
+    assetOrderScope(source);
+  const sourceIndex =
+    ordered.findIndex(
+      r =>
+        String(r.id) ===
+        String(source.id)
+    );
+  if (sourceIndex < 0){
+    return;
+  }
+  const [moved] =
+    ordered.splice(
+      sourceIndex,
+      1
+    );
+  let targetIndex =
+    ordered.findIndex(
+      r =>
+        String(r.id) ===
+        String(target.id)
+    );
+  if (targetIndex < 0){
+    return;
+  }
+  if (insertAfter){
+    targetIndex++;
+  }
+  ordered.splice(
+    targetIndex,
+    0,
+    moved
+  );
+  ordered.forEach(
+    (rec, index) => {
+
+      rec.asset_order =
+        index + 1;
+    }
+  );
+  render();
+  scheduleAutoSync();
+}
+
+function bindAssetDragDrop(){
+  if (!canReorderAssets()){
+    return;
+  }
+  const handles =
+    document.querySelectorAll(
+      '.asset-drag-handle'
+    );
+  handles.forEach(handle => {
+    handle.addEventListener(
+      'dragstart',
+      e => {
+        const recId =
+          String(
+            handle.dataset.dragAsset || ''
+          );
+        if (!recId){
+          e.preventDefault();
+          return;
+        }
+        draggingAssetId =
+          recId;
+        const row =
+          handle.closest(
+            'tr[data-id]'
+          );
+        if (row){
+          row.classList.add(
+            'asset-dragging'
+          );
+        }
+        if (e.dataTransfer){
+          e.dataTransfer.effectAllowed =
+            'move';
+          e.dataTransfer.setData(
+            'text/plain',
+            recId
+          );
+        }
+      }
+    );
+    handle.addEventListener(
+      'dragend',
+      () => {
+        draggingAssetId = null;
+        clearAssetDragVisuals();
+      }
+    );
+  });
+  const rows =
+    document.querySelectorAll(
+      'tbody tr[data-id]'
+    );
+  rows.forEach(row => {
+    row.addEventListener(
+      'dragover',
+      e => {
+        if (!draggingAssetId){
+          return;
+        }
+        const targetId =
+          String(
+            row.dataset.id || ''
+          );
+        if (
+          !targetId ||
+          targetId === draggingAssetId
+        ){
+          return;
+        }
+        const source =
+          records.find(
+            r =>
+              String(r.id) ===
+              draggingAssetId
+          );
+        const target =
+          records.find(
+            r =>
+              String(r.id) ===
+              targetId
+          );
+        if (
+          !sameAssetOrderScope(
+            source,
+            target
+          )
+        ){
+          return;
+        }
+        e.preventDefault();
+        if (e.dataTransfer){
+          e.dataTransfer.dropEffect =
+            'move';
+        }
+        document
+          .querySelectorAll(
+            'tr.asset-drop-before, ' +
+            'tr.asset-drop-after'
+          )
+          .forEach(el => {
+            if (el !== row){
+              el.classList.remove(
+                'asset-drop-before',
+                'asset-drop-after'
+              );
+            }
+          });
+
+        const rect =
+          row.getBoundingClientRect();
+
+        const insertAfter =
+          e.clientY >
+          (
+            rect.top +
+            rect.height / 2
+          );
+        row.classList.toggle(
+          'asset-drop-before',
+          !insertAfter
+        );
+        row.classList.toggle(
+          'asset-drop-after',
+          insertAfter
+        );
+      }
+    );
+    row.addEventListener(
+      'dragleave',
+      e => {
+        if (
+          e.relatedTarget &&
+          row.contains(e.relatedTarget)
+        ){
+          return;
+        }
+        row.classList.remove(
+          'asset-drop-before',
+          'asset-drop-after'
+        );
+
+      }
+    );
+    row.addEventListener(
+      'drop',
+      e => {
+        if (!draggingAssetId){
+          return;
+        }
+        const targetId =
+          String(
+            row.dataset.id || ''
+          );
+        if (
+          !targetId ||
+          targetId === draggingAssetId
+        ){
+          return;
+        }
+        const source =
+          records.find(
+            r =>
+              String(r.id) ===
+              draggingAssetId
+          );
+        const target =
+          records.find(
+            r =>
+              String(r.id) ===
+              targetId
+          );
+        if (
+          !sameAssetOrderScope(
+            source,
+            target
+          )
+        ){
+          return;
+        }
+        e.preventDefault();
+        const insertAfter =
+          row.classList.contains(
+            'asset-drop-after'
+          );
+
+        const sourceId =
+          draggingAssetId;
+
+        draggingAssetId = null;
+        clearAssetDragVisuals();
+        reorderAssetRows(
+          sourceId,
+          targetId,
+          insertAfter
+        );
+      }
+    );
+  });
+}
 
 function canBulkMove(){
   return isCurrentUserAdmin() && !viewOnly && sessionKey;
