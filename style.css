@@ -3513,3 +3513,174 @@ tbody td[data-label="비고"] .remarks-txt{
   margin-top:14px;
   padding:8px 18px;
 }
+/* =========================================================
+   업데이트 전체보기 - 툴바/열헤더 최종 강제 보정
+   기존/외부 스타일의 중복 선언보다 항상 마지막에 적용
+   ========================================================= */
+
+/* 제목 + 선택도구 + 검색필터 + 열 헤더 전체가 sticky 영역 안에서 정상 표시 */
+.wh-sticky-top{
+  overflow:visible !important;
+  height:auto !important;
+  min-height:0 !important;
+}
+
+/* 선택 도구 + 검색 필터 한 줄 복구 */
+.wh-sticky-top .wh-toolbar{
+  position:static !important;
+  inset:auto !important;
+  transform:none !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+
+  width:100% !important;
+  height:auto !important;
+  min-height:38px !important;
+
+  margin:0 !important;
+  padding:8px 0 10px !important;
+  gap:12px !important;
+
+  opacity:1 !important;
+  visibility:visible !important;
+  overflow:visible !important;
+}
+
+/* 좌측: 전체 선택 / 0건 선택 / 선택 삭제 */
+.wh-sticky-top .wh-admin-actions{
+  position:static !important;
+  inset:auto !important;
+  transform:none !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+
+  flex:0 0 auto !important;
+  width:auto !important;
+  height:32px !important;
+
+  margin:0 !important;
+  padding:0 !important;
+  gap:8px !important;
+
+  opacity:1 !important;
+  visibility:visible !important;
+  overflow:visible !important;
+  white-space:nowrap !important;
+}
+
+.wh-sticky-top .wh-select-all{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:5px !important;
+  margin:0 !important;
+  color:var(--text-dim) !important;
+  font-size:11px !important;
+  line-height:1 !important;
+}
+
+.wh-sticky-top .wh-selected-count{
+  display:inline-block !important;
+  min-width:48px !important;
+  margin:0 !important;
+  color:var(--text-faint) !important;
+  font-size:10.5px !important;
+  line-height:1 !important;
+  text-align:left !important;
+}
+
+.wh-sticky-top .wh-delete-selected{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 auto !important;
+  width:auto !important;
+  height:30px !important;
+  margin:0 !important;
+  padding:0 11px !important;
+}
+
+/* 우측: 검색 / 구분 / 정렬 */
+.wh-sticky-top .wh-filter-actions{
+  position:static !important;
+  inset:auto !important;
+  transform:none !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+
+  flex:0 0 auto !important;
+  width:auto !important;
+  height:32px !important;
+
+  margin:0 0 0 auto !important;
+  padding:0 !important;
+  gap:6px !important;
+
+  opacity:1 !important;
+  visibility:visible !important;
+  overflow:visible !important;
+}
+
+.wh-sticky-top .wh-search{
+  display:flex !important;
+  flex:0 0 300px !important;
+  width:300px !important;
+  height:30px !important;
+  margin:0 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+.wh-sticky-top .wh-select{
+  display:block !important;
+  flex:0 0 auto !important;
+  height:30px !important;
+  margin:0 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+
+/* 열 제목 글자 크기 확대 */
+.wh-sticky-top .wh-column-header{
+  min-height:36px !important;
+  padding:8px 10px !important;
+
+  font-size:11.5px !important;
+  font-weight:700 !important;
+  line-height:1.2 !important;
+  color:#738096 !important;
+}
+
+.wh-sticky-top .wh-column-header > div{
+  font-size:inherit !important;
+  font-weight:inherit !important;
+  line-height:inherit !important;
+}
+
+/* 담당자 헤더는 실제 담당자 열과 동일하게 우측 정렬 */
+.wh-sticky-top .wh-col-author{
+  text-align:right !important;
+}
+
+/* 작은 화면에서도 툴 자체가 사라지지 않도록 가로 스크롤 허용 */
+@media(max-width:900px){
+  .wh-sticky-top .wh-toolbar{
+    overflow-x:auto !important;
+    overflow-y:visible !important;
+  }
+
+  .wh-sticky-top .wh-admin-actions,
+  .wh-sticky-top .wh-filter-actions{
+    flex-shrink:0 !important;
+  }
+
+  .wh-sticky-top .wh-search{
+    flex-basis:220px !important;
+    width:220px !important;
+  }
+}
