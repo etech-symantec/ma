@@ -16000,6 +16000,19 @@
       "uncontracted": false,
       "author": "김상문",
       "updated_at": 1786608918345
+    },
+    {
+      "id": 1786608937880,
+      "group": "sg-001",
+      "ym": "2026-03",
+      "date": "2026.3.27",
+      "manager": "김상문",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1786608937880
     }
   ],
   "auditLogs": [
@@ -17562,22 +17575,6 @@
       "actor_role": "마스터"
     },
     {
-      "id": "audit-1786608842777-b618wr",
-      "ts": 1786608842777,
-      "action": "add",
-      "target_type": "유지보수 점검",
-      "target_id": "1786608842759",
-      "group": "sg-001",
-      "owner": "삼성SDS SDSAP",
-      "label": "2026-01",
-      "sn": "",
-      "summary": "2026년 1월 유지보수 점검 등록",
-      "changes": [],
-      "actor_id": "u1786596131396",
-      "actor_name": "김상문",
-      "actor_role": "일반사용자"
-    },
-    {
       "id": "audit-1786608751141-y840ao",
       "ts": 1786608751141,
       "action": "edit",
@@ -17634,6 +17631,22 @@
       "actor_role": "마스터"
     },
     {
+      "id": "audit-1786608842777-b618wr",
+      "ts": 1786608842777,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608842759",
+      "group": "sg-001",
+      "owner": "삼성SDS SDSAP",
+      "label": "2026-01",
+      "sn": "",
+      "summary": "2026년 1월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
       "id": "audit-1786608918353-0e869o",
       "ts": 1786608918353,
       "action": "add",
@@ -17644,6 +17657,22 @@
       "label": "2026-02",
       "sn": "",
       "summary": "2026년 2월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786608937890-u6nyhw",
+      "ts": 1786608937890,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786608937880",
+      "group": "sg-001",
+      "owner": "삼성SDS SDSAP",
+      "label": "2026-03",
+      "sn": "",
+      "summary": "2026년 3월 유지보수 점검 등록",
       "changes": [],
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
