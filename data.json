@@ -13501,12 +13501,12 @@
       "ym": "2026-03",
       "date": "",
       "manager": "신호근",
-      "note": "",
+      "note": "ㅇㅇㅇ",
       "done": false,
-      "incomplete": false,
-      "uncontracted": true,
+      "incomplete": true,
+      "uncontracted": false,
       "author": "신호근",
-      "updated_at": 1786515968812
+      "updated_at": 1786580689081
     },
     {
       "id": 1786515970437,
