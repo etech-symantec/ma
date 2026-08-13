@@ -392,6 +392,14 @@
           "manager": "윤태리",
           "note": "7.3.3.3 > 7.3.11.3",
           "author": "윤태리"
+        },
+        {
+          "id": 1786603587561,
+          "type": "OS 업그레이드",
+          "date": "2023.11.11",
+          "manager": "윤태리",
+          "note": "7.3.11.3 > 7.3.16.2 #no internet",
+          "author": "윤태리"
         }
       ],
       "enable_pw_enc": null,
