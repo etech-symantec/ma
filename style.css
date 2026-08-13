@@ -1549,24 +1549,309 @@ textarea.wl-fc-input.is-changed{
 .maint-toolbar{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px; }
 .maint-toolbar label{ font-size:11px; color:var(--text-faint); font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em; margin-right:6px; }
 
-/* 작업 이력 전체보기 페이지 */
-.wh-toolbar{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:14px 0 16px; }
-.wh-search{ flex:1 1 260px; }
-.wh-select{
-  flex:0 0 auto; padding:8px 10px; font-size:12.5px; color:var(--text-dim);
-  background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px; outline:none;
+/* =========================================================
+   업데이트 전체보기 - 한 이력 = 최대한 한 줄
+   ========================================================= */
+
+.wh-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+
+  width:100%;
+  padding:4px 0 40px;
 }
-.wh-select:focus{ border-color:var(--accent); }
-.wh-list{ display:flex; flex-direction:column; gap:10px; padding:4px 0 40px; }
+
+
+/*
+  체크 | 작업구분 | 날짜 | 법인/자산 | 내용 | 변경내용 | 작업자
+*/
 .wh-item{
-  background:var(--surface); border:1px solid var(--border-solid); border-radius:12px;
-  padding:14px 16px; cursor:pointer; transition:border-color .12s, box-shadow .12s;
+  display:grid;
+
+  grid-template-columns:
+    22px
+    125px
+    125px
+    minmax(190px, 1.25fr)
+    minmax(180px, 1.45fr)
+    minmax(220px, 1.8fr)
+    minmax(165px, .9fr);
+
+  align-items:center;
+  column-gap:10px;
+
+  width:100%;
+  min-width:0;
+
+  padding:8px 10px;
+
+  background:var(--surface);
+  border:1px solid var(--border-solid);
+  border-radius:8px;
+
+  cursor:pointer;
+
+  transition:
+    border-color .12s,
+    background .12s;
 }
-.wh-item:hover{ border-color:var(--accent); box-shadow:0 1px 6px rgba(0,0,0,0.06); }
-.wh-item .ra-asset{ font-size:13px; font-weight:600; color:var(--text); margin-top:4px; }
-.wh-item .ra-note{ font-size:12.8px; margin-top:5px; }
-.wh-item .ra-changes{ margin-top:9px; }
-.wh-item .ra-author{ margin-top:8px; }
+
+.wh-item:hover{
+  border-color:#B9DCEC;
+  background:#FAFCFE;
+}
+
+
+/*
+  wh-top을 레이아웃 박스에서 제거.
+  안에 있는 체크박스 / 작업구분 / 날짜가
+  wh-item grid의 직접 자식처럼 동작한다.
+*/
+.wh-top{
+  display:contents;
+}
+
+
+/* 체크박스 */
+.wh-history-check{
+  grid-column:1;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width:22px;
+  margin:0;
+}
+
+
+/* 작업 구분 */
+.wh-item .ra-type{
+  grid-column:2;
+
+  min-width:0;
+
+  font-size:11.5px;
+  font-weight:700;
+  line-height:1.3;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/* 날짜 */
+.wh-item .ra-date{
+  grid-column:3;
+
+  margin:0;
+
+  color:var(--text-faint);
+  font-family:var(--mono);
+  font-size:10px;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/* 법인 / SKU / S/N */
+.wh-item .ra-asset{
+  grid-column:4;
+
+  min-width:0;
+  margin:0;
+
+  color:var(--text);
+  font-size:11.5px;
+  font-weight:600;
+  line-height:1.35;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/* 작업 내용 */
+.wh-item .ra-note{
+  grid-column:5;
+
+  min-width:0;
+  margin:0;
+
+  color:var(--text-dim);
+  font-size:11.5px;
+  line-height:1.35;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/* 변경 내용 */
+.wh-item .ra-changes{
+  grid-column:6;
+
+  min-width:0;
+
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  margin:0;
+  padding:4px 7px;
+
+  background:var(--surface2);
+  border:1px solid var(--border-solid);
+  border-radius:6px;
+
+  overflow:hidden;
+}
+
+
+/* "변경 내용" 제목 */
+.wh-item .ra-changes-label{
+  flex:0 0 auto;
+
+  margin:0;
+
+  color:var(--text-faint);
+  font-size:9px;
+  font-weight:700;
+
+  white-space:nowrap;
+}
+
+
+/* 실제 변경값들을 가로로 나열 */
+.wh-item .ra-change-row{
+  flex:0 1 auto;
+
+  display:inline-flex;
+  align-items:center;
+  flex-wrap:nowrap;
+
+  min-width:0;
+
+  margin:0 !important;
+  gap:3px;
+
+  font-size:10px;
+  line-height:1.3;
+
+  white-space:nowrap;
+}
+
+
+/* 변경값이 여러 개면 구분점 */
+.wh-item .ra-change-row + .ra-change-row::before{
+  content:'·';
+  margin-right:3px;
+  color:var(--text-faint);
+}
+
+
+/* 변경 내용 내부 텍스트는 한 줄 유지 */
+.wh-item .ra-change-label,
+.wh-item .ra-change-before,
+.wh-item .ra-change-arrow,
+.wh-item .ra-change-after{
+  white-space:nowrap;
+}
+
+
+/* 작업자 / 담당자 */
+.wh-item .ra-author{
+  grid-column:7;
+
+  min-width:0;
+  margin:0;
+
+  color:var(--text-faint);
+  font-family:var(--mono);
+  font-size:9.5px;
+  line-height:1.3;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/* 변경 내역 자체가 없는 경우
+   author가 변경내용 칸까지 일부 사용 */
+.wh-item:not(:has(.ra-changes)) .ra-author{
+  grid-column:6 / 8;
+}
+
+
+/* 삭제 이력은 삭제정보를 다음 줄에 작게 표시 */
+.wh-delete-meta{
+  grid-column:4 / 8;
+
+  margin:4px 0 0;
+  padding:4px 0 0;
+
+  border-top:1px dashed #D9DEE6;
+
+  color:#B42318;
+  font-family:var(--mono);
+  font-size:9.5px;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+
+/* 삭제됨 / 감사 배지는 작업구분 칸 내부 유지 */
+.wh-deleted-badge,
+.wh-audit-badge{
+  margin-left:4px;
+  padding:1px 5px;
+
+  font-size:8.5px;
+  line-height:1.2;
+
+  vertical-align:middle;
+}
+
+
+/* 빈 결과 */
+.wh-empty{
+  padding:40px 10px;
+  text-align:center;
+}
+@media (max-width:1350px){
+  .wh-item{
+    grid-template-columns:
+      22px
+      110px
+      105px
+      minmax(160px, 1.2fr)
+      minmax(150px, 1.2fr)
+      minmax(190px, 1.5fr)
+      minmax(135px, .8fr);
+
+    column-gap:7px;
+  }
+
+  .wh-item .ra-type,
+  .wh-item .ra-asset,
+  .wh-item .ra-note{
+    font-size:10.8px;
+  }
+
+  .wh-item .ra-author{
+    font-size:9px;
+  }
+}
+
 .wh-top{
   display:flex;
   align-items:center;
