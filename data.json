@@ -552,7 +552,7 @@
       "qty": "1",
       "start": "2025.1.1",
       "end": "2026.12.31",
-      "remarks": "accelerated_pac, 4717320089(RMA 24.06.17), #35226792(장비부팅안됨) >前219320126, 2024.09.18 return完 #3571770, 25.04.23 장비down",
+      "remarks": "accelerated_pac\n4717320089(RMA 24.06.17)\n#35226792(장비부팅안됨)\n>前219320126\n2024.09.18 return完 #3571770\n25.04.23 장비down",
       "deploy_date": "",
       "deploy_log": "23.07.22 윤태리 6.7.4.3>7.3.14.2 / 23.07.22 윤태리 7.3.14.2>6.7.4.3 / 23.08.03 윤태리 6.7.4.3>7.3.11.3 (vpm xml issue 7.3.14.2)",
       "mode": "Explicit",
@@ -567,19 +567,19 @@
       "tag_note": "인도 SDN (Proxy/RP/PS)",
       "id": 14,
       "ip_enc": {
-        "iv": "uERD01HDHw70dByh",
-        "ct": "jfmM9THuhGsZCeMS",
-        "tag": "in6CNN9gBeMi0XtXPC5H0A=="
+        "iv": "KUCs8vTbU+4XTiS5",
+        "ct": "WSgo8bKkK2fV5qN2",
+        "tag": "EuSHP+d9jOgjTZYslurUng=="
       },
       "id_enc": {
-        "iv": "ZCMGesynVeiK0uKZ",
-        "ct": "uXVerZPUPa0FWg==",
-        "tag": "IIgZeOsb8+54esHFXkTz6g=="
+        "iv": "k3Dz9auVemn9uJZ1",
+        "ct": "Uh9EqfAwePJEcg==",
+        "tag": "TK2FsOr2rvuYhCrh8i2P4w=="
       },
       "pw_enc": {
-        "iv": "FWstY2967ay05aCf",
-        "ct": "xXJYXX/8Th98mlLH",
-        "tag": "wFcBxLeRk2eOEOxNf1X85Q=="
+        "iv": "fPlYOuDzdiU9i2zl",
+        "ct": "n+lTQUqbk7H6GISQ",
+        "tag": "25NTKnamiD9ncMTO1uUV0Q=="
       },
       "group_remarks": "",
       "cust_contacts": [
@@ -603,7 +603,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "enable_pw_enc": null
     },
     {
       "group": "in-sdn-cama",
