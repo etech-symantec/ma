@@ -3840,12 +3840,13 @@
       },
       "country": "미국",
       "config_mode": "Transparent",
-      "group_remarks": "",
+      "group_remarks": "미국 HQ",
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "is_parent": false
     },
     {
       "group": "us-006",
@@ -3890,12 +3891,13 @@
       },
       "country": "미국",
       "config_mode": "Transparent",
-      "group_remarks": "",
+      "group_remarks": "미국 HQ",
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "is_parent": false
     },
     {
       "group": "us-006",
@@ -3940,12 +3942,13 @@
       },
       "country": "미국",
       "config_mode": "Transparent",
-      "group_remarks": "",
+      "group_remarks": "미국 HQ",
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "is_parent": false
     },
     {
       "group": "us-006",
@@ -3990,12 +3993,13 @@
       },
       "country": "미국",
       "config_mode": "Transparent",
-      "group_remarks": "",
+      "group_remarks": "미국 HQ",
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "is_parent": false
     },
     {
       "group": "us-006",
@@ -4040,12 +4044,13 @@
       },
       "country": "미국",
       "config_mode": "Transparent",
-      "group_remarks": "",
+      "group_remarks": "미국 HQ",
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "is_parent": false
     },
     {
       "group": "us-006",
@@ -4078,12 +4083,13 @@
       "pw_enc": null,
       "country": "미국",
       "config_mode": "Transparent",
-      "group_remarks": "",
+      "group_remarks": "미국 HQ",
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "is_parent": false
     },
     {
       "group": "us-006",
@@ -4116,11 +4122,12 @@
       "pw_enc": null,
       "country": "미국",
       "config_mode": "Transparent",
-      "group_remarks": "",
+      "group_remarks": "미국 HQ",
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
-      "build_date": "2024.12"
+      "build_date": "2024.12",
+      "is_parent": false
     },
     {
       "group": "us-007",
