@@ -4592,7 +4592,17 @@
       "build_engineer": "신호근",
       "build_date": "2024.12",
       "enable_pw_enc": null,
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607450006,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.05 신호근 11.0.2.1 신규",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-006",
