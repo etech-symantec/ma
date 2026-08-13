@@ -5885,7 +5885,34 @@ async function applyMultiFieldChanges(rec){
 
 function fieldChangesSummary(changes){
   if (!changes || !changes.length) return '';
-  return changes.map(c => c.sensitive ? `${c.label} 변경됨` : `${c.label}: ${c.from} → ${c.to}`).join(' · ');
+  const normalParts = [];
+  const sensitiveLabels = [];
+  changes.forEach(c => {
+    const cleanLabel = String(c.label || '')
+      .replace(/\s*\([^)]*\)\s*/g, '')
+      .trim();
+
+    if (c.sensitive){
+      if (
+        cleanLabel &&
+        !sensitiveLabels.includes(cleanLabel)
+      ){
+        sensitiveLabels.push(cleanLabel);
+      }
+      return;
+    }
+
+    normalParts.push(
+      `${cleanLabel}: ${c.from} → ${c.to}`
+    );
+  });
+
+  if (sensitiveLabels.length){
+    normalParts.push(
+      `${sensitiveLabels.join(' · ')} 변경됨`
+    );
+  }
+  return normalParts.join(' · ');
 }
 
 function changeSummaryRowsHtml(summary){
