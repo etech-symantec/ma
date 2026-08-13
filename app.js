@@ -91,6 +91,10 @@ let lastSyncedState = null;
 let maintenanceGithubSha = null;
 let lastSyncedMaintenanceState = null;
 
+/* 감사기록과 별개인 경량 동기화 작업 ID 목록 */
+let dataSyncMutations = [];
+let maintenanceSyncMutations = [];
+
 function cloneSyncState(v){
   return v == null
     ? v
@@ -105,14 +109,16 @@ function currentSyncState(){
 
     records: cloneSyncState(records || []),
     users: cloneSyncState(users || []),
-    auditLogs: cloneSyncState(auditLogs || [])
+    auditLogs: cloneSyncState(auditLogs || []),
+    syncMutations: cloneSyncState(dataSyncMutations || [])
   };
 }
 
 /* ma.json: 유지보수 점검 기록만 저장 */
 function currentMaintenanceState(){
   return {
-    maintenanceLogs: cloneSyncState(maintenanceLogs || [])
+    maintenanceLogs: cloneSyncState(maintenanceLogs || []),
+    syncMutations: cloneSyncState(maintenanceSyncMutations || [])
   };
 }
 
@@ -154,14 +160,197 @@ function _decodeAuth(){
 let autoSyncTimer = null;
 let autoSyncInFlight = false;
 let autoSyncQueued = false;
-let hasUnsyncedChanges = false;
+let dataDirty = false;
+let dataChangeVersion = 0;
 let lastAutoSyncError = null;
 
 /* ma.json 동기화는 data.json과 완전히 별도 상태로 관리 */
 let maintenanceSyncInFlight = false;
 let maintenanceSyncQueued = false;
-let hasUnsyncedMaintenanceChanges = false;
+let maintenanceDirty = false;
+let maintenanceChangeVersion = 0;
 let lastMaintenanceSyncError = null;
+
+/* =========================================================
+   브라우저 단일 저장 Queue
+   - data.json / ma.json 포함 모든 GitHub 저장 요청을 한 줄로 직렬화
+   - 같은 브라우저에서 GET → merge → PUT 작업이 절대 겹치지 않음
+   ========================================================= */
+let browserSyncQueue = Promise.resolve();
+let browserSyncQueuePending = 0;
+
+function enqueueBrowserSync(kind, task){
+  browserSyncQueuePending += 1;
+
+  const run = async () => {
+    try{
+      return await task();
+    }
+    finally{
+      browserSyncQueuePending = Math.max(0, browserSyncQueuePending - 1);
+    }
+  };
+
+  const queued = browserSyncQueue.then(run, run);
+
+  /* 앞 작업 실패가 다음 작업을 막지 않도록 Queue 체인은 항상 복구 */
+  browserSyncQueue = queued.catch(() => {});
+
+  return queued;
+}
+
+/* =========================================================
+   변경 작업 고유 ID
+   - 한 번의 사용자 변경 작업은 하나의 mutation_id를 사용
+   - 자산/법인/사용자/작업이력/유지보수 점검에 기록
+   ========================================================= */
+function createMutationId(scope='data'){
+  let randomPart = '';
+
+  try{
+    if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function'){
+      randomPart = globalThis.crypto.randomUUID();
+    }
+  }
+  catch(e){}
+
+  if (!randomPart){
+    randomPart =
+      Math.random().toString(36).slice(2,10) +
+      Math.random().toString(36).slice(2,10);
+  }
+
+  return `${scope}-${Date.now().toString(36)}-${randomPart}`;
+}
+
+function mutationComparable(value){
+  if (value === null || value === undefined) return value;
+
+  const cloned = cloneSyncState(value);
+
+  const strip = obj => {
+    if (!obj || typeof obj !== 'object') return;
+
+    delete obj.last_mutation_id;
+    delete obj.mutation_id;
+
+    if (Array.isArray(obj.work_log)){
+      obj.work_log.forEach(strip);
+    }
+    if (Array.isArray(obj.deleted_work_log)){
+      obj.deleted_work_log.forEach(strip);
+    }
+  };
+
+  strip(cloned);
+  return cloned;
+}
+
+/* 현재 auditSnapshot과 비교해 실제로 변경된 data.json 객체에 mutation_id를 남긴다. */
+function stampDataMutation(mutationId){
+  if (!mutationId || !auditSnapshot) return;
+
+  const beforeRecords = new Map(
+    (auditSnapshot.records || []).map(r => [String(r.id), r])
+  );
+  const beforeUsers = new Map(
+    (auditSnapshot.users || []).map(u => [String(u.id), u])
+  );
+
+  records.forEach(rec => {
+    const before = beforeRecords.get(String(rec.id));
+    const changed =
+      !before ||
+      !syncEqual(
+        mutationComparable(before),
+        mutationComparable(rec)
+      );
+
+    if (!changed) return;
+
+    rec.last_mutation_id = mutationId;
+
+    const oldWork = new Map(
+      ((before && before.work_log) || []).map(e => [String(e.id), e])
+    );
+    (rec.work_log || []).forEach(entry => {
+      const oldEntry = oldWork.get(String(entry.id));
+      if (
+        !oldEntry ||
+        !syncEqual(
+          mutationComparable(oldEntry),
+          mutationComparable(entry)
+        )
+      ){
+        entry.mutation_id = mutationId;
+      }
+    });
+
+    const oldDeleted = new Map(
+      ((before && before.deleted_work_log) || []).map(e => [String(e.history_id || e.id), e])
+    );
+    (rec.deleted_work_log || []).forEach(entry => {
+      const key = String(entry.history_id || entry.id);
+      const oldEntry = oldDeleted.get(key);
+      if (
+        !oldEntry ||
+        !syncEqual(
+          mutationComparable(oldEntry),
+          mutationComparable(entry)
+        )
+      ){
+        entry.mutation_id = mutationId;
+      }
+    });
+  });
+
+  users.forEach(user => {
+    const before = beforeUsers.get(String(user.id));
+    const changed =
+      !before ||
+      !syncEqual(
+        mutationComparable(before),
+        mutationComparable(user)
+      );
+
+    if (changed){
+      user.last_mutation_id = mutationId;
+    }
+  });
+}
+
+function rememberSyncMutation(list, mutationId, scope){
+  if (!mutationId) return;
+
+  if (!list.some(x => String(x.id) === String(mutationId))){
+    list.push({
+      id: String(mutationId),
+      ts: Date.now(),
+      scope: String(scope || '')
+    });
+  }
+
+  /* 동기화 메타데이터가 무한히 커지지 않도록 최근 500건만 유지 */
+  if (list.length > 500){
+    list.splice(0, list.length - 500);
+  }
+}
+
+function markDataDirty(mutationId){
+  const mid = mutationId || createMutationId('data');
+  rememberSyncMutation(dataSyncMutations, mid, 'data');
+  dataDirty = true;
+  dataChangeVersion += 1;
+  return mid;
+}
+
+function markMaintenanceDirty(mutationId){
+  const mid = mutationId || createMutationId('ma');
+  rememberSyncMutation(maintenanceSyncMutations, mid, 'maintenance');
+  maintenanceDirty = true;
+  maintenanceChangeVersion += 1;
+  return mid;
+}
 
 function setSyncStatus(state, msg){
   const el = document.getElementById('githubSyncStatus');
@@ -195,13 +384,17 @@ function setSyncStatus(state, msg){
   }
 }
 
-function scheduleAutoSync(){
-  captureAuditFromStateDiff();
-  hasUnsyncedChanges = true;
+function scheduleAutoSync(mutationId){
+  const mid = mutationId || createMutationId('data');
+
+  /* 실제 변경된 객체/작업이력에 같은 mutation_id를 기록 */
+  stampDataMutation(mid);
+  captureAuditFromStateDiff(mid);
+  markDataDirty(mid);
 
   if (!githubConfig || !githubToken){
     setSyncStatus('error', 'GitHub 연결 정보가 없습니다.');
-    return;
+    return mid;
   }
 
   setSyncStatus('pending');
@@ -210,6 +403,8 @@ function scheduleAutoSync(){
     autoSyncTimer = null;
     runAutoSync();
   }, 1200);
+
+  return mid;
 }
 
 /* =========================================================
@@ -371,9 +566,10 @@ async function flushAutoSyncNow(){
   /*
     감사로그도 현재 변경사항까지 먼저 생성
   */
-  captureAuditFromStateDiff();
-
-  hasUnsyncedChanges = true;
+  const mutationId = createMutationId('data');
+  stampDataMutation(mutationId);
+  captureAuditFromStateDiff(mutationId);
+  markDataDirty(mutationId);
 
 
   if (
@@ -423,9 +619,9 @@ async function flushAutoSyncNow(){
 
   /*
     runAutoSync() 내부에서 오류를 catch하므로
-    hasUnsyncedChanges로 최종 성공 여부 확인
+    dataDirty로 최종 성공 여부 확인
   */
-  if (hasUnsyncedChanges){
+  if (dataDirty){
 
     throw (
       lastAutoSyncError ||
@@ -444,7 +640,9 @@ async function flushAutoSyncNow(){
 
 /* ma.json 유지보수 점검을 즉시 동기화 */
 async function flushMaintenanceSyncNow(){
-  hasUnsyncedMaintenanceChanges = true;
+  if (!maintenanceDirty){
+    markMaintenanceDirty(createMutationId('ma-sync'));
+  }
 
   if (!githubConfig || !githubToken){
     throw new Error('GitHub 연결 정보가 없습니다.');
@@ -459,7 +657,7 @@ async function flushMaintenanceSyncNow(){
 
   await runMaintenanceSync();
 
-  if (hasUnsyncedMaintenanceChanges){
+  if (maintenanceDirty){
     throw (
       lastMaintenanceSyncError ||
       new Error('유지보수 점검 GitHub 동기화가 완료되지 않았습니다.')
@@ -859,6 +1057,24 @@ function mergeStateArray(
   return result;
 }
 
+function mergeSyncMutationLogs(...logs){
+  const map = new Map();
+
+  logs.flat().filter(Boolean).forEach(item => {
+    const id = String(item.id || '');
+    if (!id) return;
+
+    const prev = map.get(id);
+    if (!prev || Number(item.ts || 0) >= Number(prev.ts || 0)){
+      map.set(id, cloneSyncState(item));
+    }
+  });
+
+  return [...map.values()]
+    .sort((a,b) => Number(a.ts || 0) - Number(b.ts || 0))
+    .slice(-500);
+}
+
 function mergeSyncStates(
   base,
   local,
@@ -867,7 +1083,8 @@ function mergeSyncStates(
   base = base || {
     records:[],
     users:[],
-    auditLogs:[]
+    auditLogs:[],
+    syncMutations:[]
   };
   return {
     salt:
@@ -898,6 +1115,12 @@ function mergeSyncStates(
         local.auditLogs || [],
         remote.auditLogs || [],
         a => a.id
+      ),
+    syncMutations:
+      mergeSyncMutationLogs(
+        base.syncMutations || [],
+        local.syncMutations || [],
+        remote.syncMutations || []
       )
   };
 }
@@ -908,7 +1131,8 @@ function mergeMaintenanceStates(
   remote
 ){
   base = base || {
-    maintenanceLogs:[]
+    maintenanceLogs:[],
+    syncMutations:[]
   };
 
   return {
@@ -918,11 +1142,17 @@ function mergeMaintenanceStates(
         local.maintenanceLogs || [],
         remote.maintenanceLogs || [],
         m => m.id || `${m.group}|${m.ym}`
+      ),
+    syncMutations:
+      mergeSyncMutationLogs(
+        base.syncMutations || [],
+        local.syncMutations || [],
+        remote.syncMutations || []
       )
   };
 }
 
-async function runAutoSync(){
+async function runDataSyncCore(){
   if (!githubConfig || !githubToken){
     return;
   }
@@ -934,7 +1164,13 @@ async function runAutoSync(){
   autoSyncQueued = false;
   setSyncStatus('syncing');
 
+  const syncVersion = dataChangeVersion;
+
   try{
+    if (!dataDirty){
+      return true;
+    }
+
     const localState =
       currentSyncState();
 
@@ -1004,36 +1240,52 @@ async function runAutoSync(){
     }
     suppressAuditCapture = true;
     try{
-      records =
-        cloneSyncState(
-          mergedState.records || []
-        );
-      users =
-        cloneSyncState(
-          mergedState.users || []
-        );
-      auditLogs =
-        cloneSyncState(
-          mergedState.auditLogs || []
-        );
-      githubSha =
-        savedSha;
-      lastSyncedState =
-        cloneSyncState(
+      if (dataChangeVersion === syncVersion){
+        /* 저장 도중 추가 변경이 없었다면 서버 병합 결과를 그대로 적용 */
+        records = cloneSyncState(mergedState.records || []);
+        users = cloneSyncState(mergedState.users || []);
+        auditLogs = cloneSyncState(mergedState.auditLogs || []);
+        dataSyncMutations = cloneSyncState(mergedState.syncMutations || []);
+        dataDirty = false;
+      }
+      else {
+        /*
+          저장 중 사용자가 새 변경을 한 경우:
+          방금 저장한 서버 결과로 현재 화면을 덮어쓰면 새 변경이 사라질 수 있다.
+          저장 시작 시점(localState)을 BASE로 하여
+          현재 화면(liveState) + 방금 저장한 서버 결과(mergedState)를 다시 병합한다.
+        */
+        const liveState = currentSyncState();
+        const rebasedState = mergeSyncStates(
+          localState,
+          liveState,
           mergedState
         );
+
+        records = cloneSyncState(rebasedState.records || []);
+        users = cloneSyncState(rebasedState.users || []);
+        auditLogs = cloneSyncState(rebasedState.auditLogs || []);
+        dataSyncMutations = cloneSyncState(rebasedState.syncMutations || []);
+
+        dataDirty = true;
+        autoSyncQueued = true;
+      }
+
+      githubSha = savedSha;
+      /* BASE는 실제 GitHub에 저장된 상태로 유지 */
+      lastSyncedState = cloneSyncState(mergedState);
       refreshAuditSnapshot();
     }
     finally{
       suppressAuditCapture = false;
     }
     lastAutoSyncError = null;
-    hasUnsyncedChanges = false;
-    setSyncStatus('synced');
+
+    setSyncStatus(dataDirty ? 'pending' : 'synced');
   }
   catch(e){
   lastAutoSyncError = e;
-  hasUnsyncedChanges = true;
+  dataDirty = true;
     console.error(
       '자동 동기화 실패:',
       e
@@ -1052,12 +1304,20 @@ async function runAutoSync(){
 }
 
 
+/* data.json 저장 요청도 브라우저 공용 Queue를 반드시 통과 */
+function runAutoSync(){
+  return enqueueBrowserSync(
+    'data',
+    () => runDataSyncCore()
+  );
+}
+
 /* =========================================================
    ma.json 전용 동기화
    - data.json은 전혀 읽거나 쓰지 않음
    - 유지보수 점검 기록만 3-way merge
    ========================================================= */
-async function runMaintenanceSync(){
+async function runMaintenanceSyncCore(){
   if (!githubConfig || !githubToken){
     return;
   }
@@ -1071,7 +1331,13 @@ async function runMaintenanceSync(){
   maintenanceSyncQueued = false;
   setSyncStatus('syncing');
 
+  const syncVersion = maintenanceChangeVersion;
+
   try{
+    if (!maintenanceDirty){
+      return true;
+    }
+
     const localState = currentMaintenanceState();
     const maConfig = maintenanceGithubConfigOf(githubConfig);
 
@@ -1133,20 +1399,46 @@ async function runMaintenanceSync(){
       throw new Error('ma.json 동시 저장 충돌을 자동으로 해결하지 못했습니다.');
     }
 
-    maintenanceLogs = cloneSyncState(
-      mergedState.maintenanceLogs || []
-    );
+    if (maintenanceChangeVersion === syncVersion){
+      maintenanceLogs = cloneSyncState(
+        mergedState.maintenanceLogs || []
+      );
+      maintenanceSyncMutations = cloneSyncState(
+        mergedState.syncMutations || []
+      );
+      maintenanceDirty = false;
+    }
+    else {
+      /* 저장 중 새 점검 변경이 생기면 현재 변경을 서버 결과 위에 재병합 */
+      const liveState = currentMaintenanceState();
+      const rebasedState = mergeMaintenanceStates(
+        localState,
+        liveState,
+        mergedState
+      );
+
+      maintenanceLogs = cloneSyncState(
+        rebasedState.maintenanceLogs || []
+      );
+      maintenanceSyncMutations = cloneSyncState(
+        rebasedState.syncMutations || []
+      );
+
+      maintenanceDirty = true;
+      maintenanceSyncQueued = true;
+    }
 
     maintenanceGithubSha = savedSha;
+    /* BASE는 실제 ma.json에 저장된 상태 */
     lastSyncedMaintenanceState = cloneSyncState(mergedState);
 
     lastMaintenanceSyncError = null;
-    hasUnsyncedMaintenanceChanges = false;
-    setSyncStatus('synced');
+
+    setSyncStatus(maintenanceDirty ? 'pending' : 'synced');
   }
   catch(e){
     lastMaintenanceSyncError = e;
-    hasUnsyncedMaintenanceChanges = true;
+    maintenanceDirty = true;
 
     console.error('유지보수 점검 자동 동기화 실패:', e);
     setSyncStatus('error', e.message);
@@ -1160,13 +1452,22 @@ async function runMaintenanceSync(){
   }
 }
 
+/* ma.json 저장 요청도 같은 브라우저 공용 Queue를 반드시 통과 */
+function runMaintenanceSync(){
+  return enqueueBrowserSync(
+    'maintenance',
+    () => runMaintenanceSyncCore()
+  );
+}
+
 window.addEventListener('beforeunload', (e) => {
   const syncPending =
-    hasUnsyncedChanges ||
+    dataDirty ||
     autoSyncInFlight ||
     autoSyncTimer !== null ||
-    hasUnsyncedMaintenanceChanges ||
-    maintenanceSyncInFlight;
+    maintenanceDirty ||
+    maintenanceSyncInFlight ||
+    browserSyncQueuePending > 0;
   if (!syncPending) return;
   e.preventDefault();
   e.returnValue = '';
@@ -1186,6 +1487,7 @@ const dataReady = (async () => {
       records = (ENC_STORE.records || []).map(r => ({...r}));
       users = (ENC_STORE.users || []).map(u => ({...u}));
       auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
+      dataSyncMutations = (ENC_STORE.syncMutations || []).map(m => ({...m}));
 
       /* 구버전 data.json의 유지보수 기록은 ma.json 최초 생성용으로만 사용 */
       const legacyMaintenanceLogs =
@@ -1205,6 +1507,8 @@ const dataReady = (async () => {
 
         maintenanceLogs =
           (maJson.maintenanceLogs || []).map(m => ({...m}));
+        maintenanceSyncMutations =
+          (maJson.syncMutations || []).map(m => ({...m}));
 
         maintenanceGithubSha = maSha;
         lastSyncedMaintenanceState = currentMaintenanceState();
@@ -1214,8 +1518,9 @@ const dataReady = (async () => {
           /* ma.json이 없으면 기존 data.json 기록을 메모리로 승계.
              다음 유지보수 저장 때 ma.json만 새로 생성한다. */
           maintenanceLogs = legacyMaintenanceLogs;
+          maintenanceSyncMutations = [];
           maintenanceGithubSha = null;
-          lastSyncedMaintenanceState = {maintenanceLogs:[]};
+          lastSyncedMaintenanceState = {maintenanceLogs:[], syncMutations:[]};
         } else {
           throw maErr;
         }
@@ -1240,6 +1545,7 @@ const dataReady = (async () => {
   records = (ENC_STORE.records || []).map(r => ({...r}));
   users = (ENC_STORE.users || []).map(u => ({...u}));
   auditLogs = (ENC_STORE.auditLogs || []).map(a => ({...a}));
+  dataSyncMutations = (ENC_STORE.syncMutations || []).map(m => ({...m}));
 
   const legacyMaintenanceLogs =
     (ENC_STORE.maintenanceLogs || []).map(m => ({...m}));
@@ -1251,11 +1557,14 @@ const dataReady = (async () => {
     const maJson = await maRes.json();
     maintenanceLogs =
       (maJson.maintenanceLogs || []).map(m => ({...m}));
+    maintenanceSyncMutations =
+      (maJson.syncMutations || []).map(m => ({...m}));
     lastSyncedMaintenanceState = currentMaintenanceState();
   }
   catch(e){
     maintenanceLogs = legacyMaintenanceLogs;
-    lastSyncedMaintenanceState = {maintenanceLogs:[]};
+    maintenanceSyncMutations = [];
+    lastSyncedMaintenanceState = {maintenanceLogs:[], syncMutations:[]};
   }
 
   lastSyncedState = currentSyncState();
@@ -3214,12 +3523,15 @@ document.getElementById('saveMlBtn').onclick = async () => {
 
   errEl.textContent = '';
 
+  const mutationId = createMutationId('ma');
+
   let log = maintenanceLogFor(gid, ym);
   if (!log){
     log = { id: Date.now(), group: gid, ym };
     maintenanceLogs.push(log);
   }
 
+  log.mutation_id = mutationId;
   log.date = date;
   log.manager = manager;
   log.note = note;
@@ -3229,7 +3541,7 @@ document.getElementById('saveMlBtn').onclick = async () => {
   log.author = currentUserName() || log.author || '';
   log.updated_at = Date.now();
 
-  hasUnsyncedMaintenanceChanges = true;
+  markMaintenanceDirty(mutationId);
 
   await syncWorkLogAndWait(
     `${ymLabel(ym)} 유지보수 점검 동기화 중…`,
@@ -3247,12 +3559,13 @@ document.getElementById('mlDeleteBtn').onclick = async () => {
   if (!confirm('이 달의 점검 등록을 취소하시겠습니까?')) return;
 
   const { gid, ym } = maintenanceEditTarget;
+  const mutationId = createMutationId('ma-delete');
 
   maintenanceLogs = maintenanceLogs.filter(
     m => !(m.group === gid && m.ym === ym)
   );
 
-  hasUnsyncedMaintenanceChanges = true;
+  markMaintenanceDirty(mutationId);
 
   await syncWorkLogAndWait(
     `${ymLabel(ym)} 유지보수 점검 삭제 내용 동기화 중…`,
@@ -5200,7 +5513,11 @@ const AUDIT_FIELD_LABELS = {
 };
 
 function auditFieldChanges(before, after, ignoreFields=[]){
-  const ignore = new Set(ignoreFields);
+  const ignore = new Set([
+    ...ignoreFields,
+    'last_mutation_id',
+    'mutation_id'
+  ]);
   const keys = new Set([...Object.keys(before || {}), ...Object.keys(after || {})]);
   const out = [];
   keys.forEach(field => {
@@ -5219,7 +5536,7 @@ function auditFieldChanges(before, after, ignoreFields=[]){
   return out;
 }
 
-function addAuditLog({action, targetType, targetId='', group='', owner='', label='', sn='', summary='', changes=[], actorName='', actorRole='', actorId=''}){
+function addAuditLog({action, targetType, targetId='', group='', owner='', label='', sn='', summary='', changes=[], actorName='', actorRole='', actorId='', mutationId=''}){
   const actor = actorName
     ? {id:String(actorId || ''), name:actorName, role:actorRole || '일반사용자'}
     : auditActor();
@@ -5238,7 +5555,8 @@ function addAuditLog({action, targetType, targetId='', group='', owner='', label
     changes:(changes || []).map(c => ({...c})),
     actor_id:actor.id,
     actor_name:actor.name,
-    actor_role:actor.role
+    actor_role:actor.role,
+    mutation_id: mutationId || createMutationId('audit')
   });
 }
 
@@ -5251,7 +5569,7 @@ function recordAuditIdentity(rec){
   };
 }
 
-function captureAuditFromStateDiff(){
+function captureAuditFromStateDiff(mutationId = createMutationId('data')){
   if (suppressAuditCapture){ refreshAuditSnapshot(); return; }
   if (!auditSnapshot){ refreshAuditSnapshot(); return; }
 
@@ -5261,7 +5579,7 @@ function captureAuditFromStateDiff(){
   const pushUnique = (sig, log) => {
     if (seen.has(sig)) return;
     seen.add(sig);
-    addAuditLog(log);
+    addAuditLog({...log, mutationId});
   };
 
   const oldRecords = new Map((before.records || []).map(r => [String(r.id), r]));
@@ -5351,15 +5669,15 @@ function captureAuditFromStateDiff(){
   userIds.forEach(id => {
     const a=oldUsers.get(id), b=newUsers.get(id);
     if (!a && b){
-      addAuditLog({action:'add',targetType:'사용자 계정',targetId:id,label:b.name,summary:`사용자 계정 추가 · ${b.name}${b.isAdmin?' · 마스터':''}`});
+      addAuditLog({action:'add',targetType:'사용자 계정',targetId:id,label:b.name,summary:`사용자 계정 추가 · ${b.name}${b.isAdmin?' · 마스터':''}`,mutationId});
     } else if (a && !b){
-      addAuditLog({action:'delete',targetType:'사용자 계정',targetId:id,label:a.name,summary:`사용자 계정 삭제 · ${a.name}`,actorName:a.name,actorRole:a.isAdmin?'마스터':'일반사용자',actorId:a.id});
+      addAuditLog({action:'delete',targetType:'사용자 계정',targetId:id,label:a.name,summary:`사용자 계정 삭제 · ${a.name}`,actorName:a.name,actorRole:a.isAdmin?'마스터':'일반사용자',actorId:a.id,mutationId});
     } else if (a && b){
       const changes=auditFieldChanges(a,b,['id']);
       if (changes.length){
         const pwChanged=changes.some(c=>['pwHash','pwSalt','pwIterations'].includes(c.field));
         const visible=changes.filter(c=>!['pwSalt','pwIterations'].includes(c.field));
-        addAuditLog({action:'edit',targetType:'사용자 계정',targetId:id,label:b.name,summary:pwChanged?`사용자 비밀번호 변경 · ${b.name}`:`사용자 계정 ${visible.length}개 항목 수정 · ${b.name}`,changes:visible,actorName:b.name,actorRole:b.isAdmin?'마스터':'일반사용자',actorId:b.id});
+        addAuditLog({action:'edit',targetType:'사용자 계정',targetId:id,label:b.name,summary:pwChanged?`사용자 비밀번호 변경 · ${b.name}`:`사용자 계정 ${visible.length}개 항목 수정 · ${b.name}`,changes:visible,actorName:b.name,actorRole:b.isAdmin?'마스터':'일반사용자',actorId:b.id,mutationId});
       }
     }
   });
