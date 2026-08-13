@@ -352,9 +352,155 @@ function markMaintenanceDirty(mutationId){
   return mid;
 }
 
+/* =========================================================
+   저장 실패 수동 재시도
+   - 새 mutation을 만들지 않음
+   - 기존 실패한 변경사항 그대로 다시 저장
+   - data.json / ma.json 중 Dirty인 파일만 재시도
+   ========================================================= */
+
+let manualSyncRetryBusy = false;
+
+async function retryFailedSyncManually(){
+
+  if (manualSyncRetryBusy){
+    return;
+  }
+
+  if (!githubConfig || !githubToken){
+    setSyncStatus(
+      'error',
+      'GitHub 연결 정보가 없습니다.'
+    );
+    return;
+  }
+
+
+  const retryData =
+    dataDirty === true;
+
+  const retryMaintenance =
+    maintenanceDirty === true;
+
+
+  /*
+    이미 저장할 내용이 없다면
+    정상 상태로 복구
+  */
+  if (
+    !retryData &&
+    !retryMaintenance
+  ){
+    setSyncStatus('synced');
+    return;
+  }
+
+
+  manualSyncRetryBusy = true;
+
+
+  /*
+    기존 예약된 자동 저장은 취소.
+    수동 저장과 중복 실행 방지.
+  */
+  if (autoSyncTimer !== null){
+
+    clearTimeout(autoSyncTimer);
+
+    autoSyncTimer = null;
+  }
+
+
+  setSyncStatus('syncing');
+
+
+  try{
+
+    /*
+      data.json 실패분 재저장
+    */
+    if (retryData){
+
+      lastAutoSyncError = null;
+
+      await runAutoSync();
+
+
+      /*
+        runDataSyncCore()가 오류를 내부 catch하므로
+        Dirty 여부로 실제 성공 확인
+      */
+      if (dataDirty){
+
+        throw (
+          lastAutoSyncError ||
+          new Error(
+            'data.json 재저장에 실패했습니다.'
+          )
+        );
+
+      }
+
+    }
+
+
+    /*
+      ma.json 실패분 재저장
+    */
+    if (retryMaintenance){
+
+      lastMaintenanceSyncError = null;
+
+      await runMaintenanceSync();
+
+
+      if (maintenanceDirty){
+
+        throw (
+          lastMaintenanceSyncError ||
+          new Error(
+            'ma.json 재저장에 실패했습니다.'
+          )
+        );
+
+      }
+
+    }
+
+
+    /*
+      둘 다 정상 저장됨
+    */
+    setSyncStatus('synced');
+
+  }
+  catch(e){
+
+    console.error(
+      '수동 동기화 재시도 실패:',
+      e
+    );
+
+
+    setSyncStatus(
+      'error',
+      e.message
+    );
+
+  }
+  finally{
+
+    manualSyncRetryBusy = false;
+
+  }
+}
+
 function setSyncStatus(state, msg){
   const el = document.getElementById('githubSyncStatus');
   if (!el) return;
+  el.onclick = null;
+  el.removeAttribute('role');
+  el.removeAttribute('tabindex');
 
   if (state === 'pending'){
     el.textContent = '저장 대기';
@@ -373,9 +519,24 @@ function setSyncStatus(state, msg){
     el.className = 'sync-status synced';
   }
   else if (state === 'error'){
-    el.textContent = '⚠ 저장 실패';
-    el.title = 'GitHub 동기화 실패: ' + (msg || '');
-    el.className = 'sync-status error';
+    el.textContent =
+      '⚠ 저장 실패';
+    el.title =
+      'GitHub 동기화 실패: ' +
+      (msg || '') +
+      '\n\n클릭하면 다시 저장합니다.';
+    el.className =
+      'sync-status error';
+    el.onclick =
+      retryFailedSyncManually;
+    el.setAttribute(
+      'role',
+      'button'
+    );
+    el.setAttribute(
+      'tabindex',
+      '0'
+    );
   }
   else if (state === 'offline'){
     el.textContent = '';
@@ -383,6 +544,18 @@ function setSyncStatus(state, msg){
     el.className = 'sync-status';
   }
 }
+
+document.getElementById('githubSyncStatus')?.addEventListener('keydown', e => {
+      if ((e.key === 'Enter' || e.key === ' ') &&
+        e.currentTarget
+          .classList
+          .contains('error')
+      ){
+        e.preventDefault();
+        retryFailedSyncManually();
+      }
+    }
+  );
 
 function scheduleAutoSync(mutationId){
   const mid = mutationId || createMutationId('data');
