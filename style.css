@@ -1550,8 +1550,16 @@ textarea.wl-fc-input.is-changed{
 .maint-toolbar label{ font-size:11px; color:var(--text-faint); font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em; margin-right:6px; }
 
 /* =========================================================
-   업데이트 전체보기 - 한 줄형 최종 정리
+   업데이트 전체보기 - 가로형 + 고정 헤더
    ========================================================= */
+
+/* 히스토리 페이지에서는 제목 + 툴바 + 열 제목까지 한 덩어리로 상단 고정 */
+.wh-sticky-top{
+  z-index:25;
+  padding-bottom:0 !important;
+  background:var(--bg);
+  box-shadow:0 1px 0 var(--border-solid);
+}
 
 /* 상단: 선택 도구는 좌측 / 검색·필터는 우측 */
 .wh-toolbar{
@@ -1560,7 +1568,7 @@ textarea.wl-fc-input.is-changed{
   justify-content:flex-start;
   gap:12px;
   width:100%;
-  padding:8px 0 12px;
+  padding:8px 0 10px;
 }
 
 .wh-admin-actions{
@@ -1604,30 +1612,70 @@ textarea.wl-fc-input.is-changed{
 .wh-select:focus{ border-color:var(--accent); }
 #whSortSelect{ width:88px; }
 
+/*
+  모든 행과 제목 헤더가 반드시 같은 열 폭을 사용한다.
+  체크 | 날짜/시간 | 작업명 | 자산 | 내용 | 변경 내용 | 담당자
+*/
+.wh-column-header,
+.wh-item{
+  grid-template-columns:
+    24px
+    132px
+    108px
+    minmax(320px, 1.15fr)
+    145px
+    minmax(300px, 1.55fr)
+    145px;
+}
+
+/* 제목 헤더: 상단 고정 영역의 마지막 줄 */
+.wh-column-header{
+  display:grid;
+  align-items:center;
+  column-gap:8px;
+  width:100%;
+  min-width:0;
+  min-height:30px;
+  padding:6px 10px;
+  background:#EEF1F6;
+  border-top:1px solid var(--border-solid);
+  border-bottom:1px solid var(--border-solid);
+  color:var(--text-faint);
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.wh-column-header > div{
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.wh-col-select{ grid-column:1; }
+.wh-col-date{ grid-column:2; }
+.wh-col-type{ grid-column:3; }
+.wh-col-asset{ grid-column:4; }
+.wh-col-note{ grid-column:5; }
+.wh-col-changes{ grid-column:6; }
+.wh-col-author{
+  grid-column:7;
+  text-align:right;
+}
+
 /* 목록 */
 .wh-list{
   display:flex;
   flex-direction:column;
   gap:6px;
   width:100%;
-  padding:3px 0 40px;
+  padding:7px 0 40px;
 }
 
-/*
-  체크 | 작업구분 | 날짜+시간 | 법인/SKU/SN | 내용 | 변경내용 | 작업자
-
-  날짜는 132px로 고정하고 바로 다음 열에 법인/자산을 배치한다.
-*/
 .wh-item{
   display:grid;
-  grid-template-columns:
-    24px
-    108px
-    132px
-    minmax(320px, 1.15fr)
-    145px
-    minmax(300px, 1.55fr)
-    145px;
   align-items:start;
   column-gap:8px;
   row-gap:5px;
@@ -1646,7 +1694,7 @@ textarea.wl-fc-input.is-changed{
   background:#FBFDFE;
 }
 
-/* 매우 중요: .wh-top 자체가 별도 flex 박스를 만들면 열이 겹친다. */
+/* 매우 중요: wh-top은 실제 레이아웃 박스를 만들지 않는다. */
 .wh-item > .wh-top{
   display:contents !important;
 }
@@ -1659,9 +1707,22 @@ textarea.wl-fc-input.is-changed{
   margin:1px 0 0;
 }
 
-/* 작업 구분 */
-.wh-item .ra-type{
+/* 날짜 + 시간: 작업명보다 먼저 */
+.wh-item .ra-date{
   grid-column:2;
+  width:132px;
+  min-width:132px;
+  margin:0 !important;
+  color:var(--text-faint);
+  font-family:var(--mono);
+  font-size:9.5px;
+  line-height:1.4;
+  white-space:nowrap;
+}
+
+/* 작업명 */
+.wh-item .ra-type{
+  grid-column:3;
   min-width:0;
   margin:0;
   color:var(--accent);
@@ -1671,19 +1732,6 @@ textarea.wl-fc-input.is-changed{
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-}
-
-/* 날짜 + 시간 */
-.wh-item .ra-date{
-  grid-column:3;
-  width:132px;
-  min-width:132px;
-  margin:0 !important;
-  color:var(--text-faint);
-  font-family:var(--mono);
-  font-size:9.5px;
-  line-height:1.4;
-  white-space:nowrap;
 }
 
 /* 법인 / SKU / S/N */
@@ -1761,7 +1809,7 @@ textarea.wl-fc-input.is-changed{
   text-overflow:ellipsis;
 }
 
-/* 변경 내용: 폭이 부족하면 반드시 여러 줄로 확장 */
+/* 변경 내용: 폭이 부족하면 여러 줄 */
 .wh-item .ra-changes{
   grid-column:6;
   min-width:0;
@@ -1813,21 +1861,25 @@ textarea.wl-fc-input.is-changed{
 
 .wh-item .ra-change-arrow{ white-space:nowrap; }
 
-/* 작업자 */
+/* 담당자 정보는 항상 마지막 열의 오른쪽 끝 */
 .wh-item .ra-author{
-  grid-column:7;
+  grid-column:7 !important;
+  justify-self:stretch;
+  width:100%;
   min-width:0;
-  margin:0;
+  margin:0 !important;
   color:var(--text-faint);
   font-family:var(--mono);
   font-size:9.5px;
   line-height:1.4;
+  text-align:right;
   white-space:normal;
   word-break:keep-all;
 }
 
+/* 변경 내용이 없는 행도 담당자는 절대 앞으로 당기지 않는다. */
 .wh-item:not(:has(.ra-changes)) .ra-author{
-  grid-column:6 / 8;
+  grid-column:7 !important;
 }
 
 .wh-delete-meta{
@@ -1858,11 +1910,12 @@ textarea.wl-fc-input.is-changed{
     width:220px;
   }
 
+  .wh-column-header,
   .wh-item{
     grid-template-columns:
       24px
-      95px
       126px
+      95px
       minmax(250px, 1.1fr)
       120px
       minmax(220px, 1.4fr)
