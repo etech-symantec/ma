@@ -2413,6 +2413,7 @@ function render(){
   buildFilters();
   updateActivityBadge();
   populateSecretFields();
+  bindAssetUpdateTooltips();
 }
 
 // ---------- 자산 일괄 선택 이동 툴바 ----------
@@ -2680,6 +2681,244 @@ function supportIdChipSimple(gid, sids, editableSid){
     return `<span class="title-support-ids"><span class="family-sid-chip${editable ? ' family-sid-chip--editable' : ''}"${attrs}><span class="meta-label">Support ID</span><span class="meta-value">${esc(s)}</span></span></span>`;
   }
   return `<span class="title-support-ids"><span class="family-sid-chip"><span class="meta-label">Support ID</span><span class="meta-value">${sids.map(s=>esc(s)).join(', ')}</span></span></span>`;
+}
+
+/* =========================================================
+   자산 행 - 최근 업데이트 툴팁
+   ========================================================= */
+
+function assetRecentUpdateItems(rec){
+  const items = [];
+
+  /* 현재 작업 이력 */
+  (rec.work_log || []).forEach(entry => {
+    items.push({
+      entry,
+      deleted:false,
+      ts:Number(
+        entry.updated_at ||
+        entry.id ||
+        0
+      )
+    });
+  });
+
+  /* 삭제된 작업 이력도 감사 이력으로 표시 */
+  (rec.deleted_work_log || []).forEach(entry => {
+    items.push({
+      entry,
+      deleted:true,
+      ts:Number(
+        entry.deleted_at ||
+        entry.updated_at ||
+        entry.history_id ||
+        entry.id ||
+        0
+      )
+    });
+  });
+
+  return items
+    .sort((a, b) => b.ts - a.ts)
+    .slice(0, 5);
+}
+
+
+function assetUpdateTooltipHtml(rec){
+  const items = assetRecentUpdateItems(rec);
+
+  if (!items.length) return '';
+
+  return `
+    <div class="asset-update-tooltip-title">
+      최근 업데이트
+      <span>${items.length}건</span>
+    </div>
+
+    <div class="asset-update-tooltip-list">
+
+      ${items.map(({entry, deleted}) => {
+
+        const date =
+          entry.date ||
+          (
+            entry.updated_at
+              ? new Date(entry.updated_at).toLocaleDateString('ko-KR')
+              : ''
+          );
+
+        const manager =
+          entry.manager ||
+          entry.author ||
+          '';
+
+        /*
+          자산 정보가 변경된 경우 change_summary 우선 표시.
+          일반 작업 이력이면 note 표시.
+        */
+        const detail =
+          entry.change_summary ||
+          entry.note ||
+          '내용 없음';
+
+        return `
+          <div class="asset-update-tooltip-item ${deleted ? 'is-deleted' : ''}">
+
+            <div class="asset-update-tooltip-head">
+
+              <span class="asset-update-tooltip-type">
+                ${esc(entry.type || '작업 이력')}
+              </span>
+
+              ${deleted
+                ? `<span class="asset-update-tooltip-deleted">삭제됨</span>`
+                : ''
+              }
+
+              <span class="asset-update-tooltip-date">
+                ${esc(date)}
+              </span>
+
+            </div>
+
+            <div class="asset-update-tooltip-detail">
+              ${esc(detail)}
+            </div>
+
+            ${manager ? `
+              <div class="asset-update-tooltip-manager">
+                ${esc(manager)}
+              </div>
+            ` : ''}
+
+          </div>
+        `;
+      }).join('')}
+
+    </div>
+  `;
+}
+
+
+function getAssetUpdateTooltip(){
+  let tooltip =
+    document.getElementById('assetUpdateTooltip');
+
+  if (!tooltip){
+    tooltip = document.createElement('div');
+
+    tooltip.id = 'assetUpdateTooltip';
+    tooltip.className = 'asset-update-tooltip';
+
+    document.body.appendChild(tooltip);
+  }
+
+  return tooltip;
+}
+
+
+function positionAssetUpdateTooltip(tooltip, e){
+  const gap = 14;
+
+  let left = e.clientX + gap;
+  let top = e.clientY + gap;
+
+  /*
+    우측 화면 밖으로 나가면
+    마우스 왼쪽에 표시
+  */
+  const width =
+    tooltip.offsetWidth || 380;
+
+  const height =
+    tooltip.offsetHeight || 200;
+
+  if (left + width > window.innerWidth - 12){
+    left = e.clientX - width - gap;
+  }
+
+  /*
+    하단 화면 밖으로 나가면 위로 이동
+  */
+  if (top + height > window.innerHeight - 12){
+    top = window.innerHeight - height - 12;
+  }
+
+  if (left < 12) left = 12;
+  if (top < 12) top = 12;
+
+  tooltip.style.left = `${left}px`;
+  tooltip.style.top = `${top}px`;
+}
+
+
+function bindAssetUpdateTooltips(){
+  const tooltip = getAssetUpdateTooltip();
+
+  document
+    .querySelectorAll('tr[data-id]')
+    .forEach(row => {
+
+      const rec = records.find(
+        r => String(r.id) === String(row.dataset.id)
+      );
+
+      if (!rec) return;
+
+      const html =
+        assetUpdateTooltipHtml(rec);
+
+      /*
+        업데이트 이력이 없는 자산은
+        툴팁 표시 안 함
+      */
+      if (!html) return;
+
+
+      row.addEventListener('mouseenter', e => {
+        tooltip.innerHTML = html;
+
+        tooltip.classList.add('open');
+
+        positionAssetUpdateTooltip(
+          tooltip,
+          e
+        );
+      });
+
+
+      row.addEventListener('mousemove', e => {
+
+        /*
+          버튼 / 링크 / 체크박스 / 비밀번호 등에
+          마우스를 올렸을 때는 방해하지 않도록 숨김
+        */
+        const interactive = e.target.closest(
+          'button, a, input, select, textarea, .sec-val, .ip-chip'
+        );
+
+        if (interactive){
+          tooltip.classList.remove('open');
+          return;
+        }
+
+        if (!tooltip.classList.contains('open')){
+          tooltip.innerHTML = html;
+          tooltip.classList.add('open');
+        }
+
+        positionAssetUpdateTooltip(
+          tooltip,
+          e
+        );
+      });
+
+
+      row.addEventListener('mouseleave', () => {
+        tooltip.classList.remove('open');
+      });
+
+    });
 }
 
 function rowHtml(r, groupSupportId){
