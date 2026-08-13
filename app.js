@@ -2935,7 +2935,7 @@ document.getElementById('ml_date_picker').addEventListener('change', (e) => {
   document.getElementById('ml_date').value = fmtDateDots(e.target.value);
 });
 
-document.getElementById('saveMlBtn').onclick = () => {
+document.getElementById('saveMlBtn').onclick = async () => {
   if (!maintenanceEditTarget) return;
   const { gid, ym } = maintenanceEditTarget;
   let date = document.getElementById('ml_date').value.trim();
@@ -2984,19 +2984,46 @@ document.getElementById('saveMlBtn').onclick = () => {
   log.author = currentUserName() || log.author || '';
   log.updated_at = Date.now();
 
-  closeMaintenanceLogModal();
-  renderMaintenance();
-  scheduleAutoSync();
+  await syncWorkLogAndWait(
+    `${ymLabel(ym)} 유지보수 점검 동기화 중…`,
+    () => {
+      closeMaintenanceLogModal();
+      renderMaintenance();
+    }
+  );
 };
 
-document.getElementById('mlDeleteBtn').onclick = () => {
-  if (!maintenanceEditTarget) return;
-  if (!confirm('이 달의 점검 등록을 취소하시겠습니까?')) return;
-  const { gid, ym } = maintenanceEditTarget;
-  maintenanceLogs = maintenanceLogs.filter(m => !(m.group === gid && m.ym === ym));
-  closeMaintenanceLogModal();
-  renderMaintenance();
-  scheduleAutoSync();
+document.getElementById('mlDeleteBtn').onclick = async () => {
+  if (!maintenanceEditTarget){
+    return;
+  }
+  if (
+    !confirm(
+      '이 달의 점검 등록을 취소하시겠습니까?'
+    )
+  ){
+    return;
+  }
+  const {
+    gid,
+    ym
+  } = maintenanceEditTarget;
+  maintenanceLogs =
+    maintenanceLogs.filter(
+      m =>
+        !(
+          m.group === gid &&
+          m.ym === ym
+        )
+    );
+  await syncWorkLogAndWait(
+    `${ymLabel(ym)} 유지보수 점검 삭제 내용 동기화 중…`,
+
+    () => {
+      closeMaintenanceLogModal();
+      renderMaintenance();
+    }
+  );
 };
 
 let topFieldFilters = { country:'', location:'', support_id:'', check_method:'', config_mode:'', engineer:'', cust_contact:'' };
