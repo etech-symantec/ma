@@ -1674,23 +1674,7 @@
       "is_parent": false,
       "asset_order": 1,
       "work_log": [],
-      "deleted_work_log": [
-        {
-          "id": 1786598986647,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "윤태리",
-          "note": "",
-          "author": "윤태리",
-          "history_id": 1786599021399,
-          "deleted_at": 1786599021399,
-          "deleted_by": "윤태리",
-          "delete_revert_result": {
-            "reverted": 0,
-            "skipped": 0
-          }
-        }
-      ]
+      "deleted_work_log": []
     },
     {
       "group": "vn-sdv-new",
@@ -1744,23 +1728,7 @@
       "is_parent": false,
       "asset_order": 2,
       "work_log": [],
-      "deleted_work_log": [
-        {
-          "id": 1786598986648,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "윤태리",
-          "note": "",
-          "author": "윤태리",
-          "history_id": 1786599001608,
-          "deleted_at": 1786599001608,
-          "deleted_by": "윤태리",
-          "delete_revert_result": {
-            "reverted": 0,
-            "skipped": 0
-          }
-        }
-      ]
+      "deleted_work_log": []
     },
     {
       "group": "vn-sdv-new",
@@ -11522,23 +11490,7 @@
         "ct": "1oQOi9Cjbz5GEBGbYg7V",
         "tag": "EvXpvJONgMy4VTwMk2LnBA=="
       },
-      "deleted_work_log": [
-        {
-          "id": 1786597503344,
-          "type": "OS 업그레이드",
-          "date": "2026.8.13",
-          "manager": "윤태리",
-          "note": "7.2131",
-          "author": "윤태리",
-          "history_id": 1786597545408,
-          "deleted_at": 1786597545408,
-          "deleted_by": "윤태리",
-          "delete_revert_result": {
-            "reverted": 0,
-            "skipped": 0
-          }
-        }
-      ]
+      "deleted_work_log": []
     },
     {
       "group": "kr-010",
