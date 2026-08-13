@@ -642,7 +642,7 @@
       "deploy_date": "",
       "deploy_log": "23.07.22 윤태리 6.7.4.3>7.3.14.2 / 23.07.22 윤태리 7.3.14.2>6.7.4.3 / 23.08.03 윤태리 6.7.4.3>7.3.11.3 (vpm xml issue 7.3.14.2)",
       "mode": "Explicit",
-      "os_ver": "7.3.21.1-3",
+      "os_ver": "7.3.21.1",
       "owner_primary": "윤태리",
       "owner_secondary": "신호근",
       "check_method": "원격",
@@ -712,6 +712,24 @@
           }
         },
         {
+          "id": 1786605384231,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "ㅅㄷㄴㅅ",
+          "author": "윤태리"
+        },
+        {
+          "id": 1786605311623,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "ㅅㄷㄴㅅ",
+          "author": "윤태리"
+        }
+      ],
+      "deleted_work_log": [
+        {
           "id": 1786605186432,
           "type": "OS 업그레이드",
           "date": "2026.8.13",
@@ -728,23 +746,14 @@
           "field_changes": {
             "os_ver": "7.3.21.1-3"
           },
-          "change_summary": "OS 버전: 7.3.21.1 → 7.3.21.1-3"
-        },
-        {
-          "id": 1786605384231,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "윤태리",
-          "note": "ㅅㄷㄴㅅ",
-          "author": "윤태리"
-        },
-        {
-          "id": 1786605311623,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "윤태리",
-          "note": "ㅅㄷㄴㅅ",
-          "author": "윤태리"
+          "change_summary": "OS 버전: 7.3.21.1 → 7.3.21.1-3",
+          "history_id": 1786606239089,
+          "deleted_at": 1786606239089,
+          "deleted_by": "윤태리",
+          "delete_revert_result": {
+            "reverted": 1,
+            "skipped": 0
+          }
         }
       ]
     },
