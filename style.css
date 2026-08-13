@@ -2113,20 +2113,25 @@ footer.foot{
 }
 
 /* ---------- GitHub 자동 저장 상태 ---------- */
-
 #githubSyncStatus{
-  flex:1 1 100%;
   order:4;
 
-  display:flex;
-  align-items:center;
-  gap:6px;
+  /* My 버튼 옆, 프로필 박스 우측 끝에 배치 */
+  flex:0 0 auto;
+  width:auto;
+  margin-left:auto;
 
-  min-height:27px;
-  padding:5px 9px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+
+  height:34px;
+  min-height:34px;
+  padding:0 9px;
 
   border:1px solid var(--border-solid);
-  border-radius:7px;
+  border-radius:9px;
 
   background:#fff;
 
@@ -2136,7 +2141,6 @@ footer.foot{
 
   white-space:nowrap;
 }
-
 
 /* 저장 대기 */
 #githubSyncStatus.pending{
