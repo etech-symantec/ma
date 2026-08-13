@@ -13381,6 +13381,14 @@
       "pwIterations": 150000,
       "pwHash": "x5/x5Cch5O6LcAGbF/KvsAeAkQ7F3yNZskM/0Db662Q=",
       "isAdmin": false
+    },
+    {
+      "id": "u1786585933584",
+      "name": "최정인",
+      "pwSalt": "bJ/2fBlYFn4g6aRfSywbHg==",
+      "pwIterations": 150000,
+      "pwHash": "09km0d+ScpSzfM5RI/Ly7mA8UDX7l4qgprRXzQxPipc=",
+      "isAdmin": false
     }
   ],
   "maintenanceLogs": [
