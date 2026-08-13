@@ -15117,22 +15117,6 @@
       "actor_role": "일반사용자"
     },
     {
-      "id": "audit-1786608711454-mzinlu",
-      "ts": 1786608711454,
-      "action": "delete",
-      "target_type": "유지보수 점검",
-      "target_id": "1786608693169",
-      "group": "uk-seuk",
-      "owner": "삼성전자 SEUK",
-      "label": "2026-08",
-      "sn": "",
-      "summary": "2026년 8월 유지보수 점검 삭제",
-      "changes": [],
-      "actor_id": "u1786085321715",
-      "actor_name": "신호근",
-      "actor_role": "마스터"
-    },
-    {
       "id": "audit-1786608751141-y840ao",
       "ts": 1786608751141,
       "action": "edit",
@@ -15155,22 +15139,6 @@
       "actor_id": "u1786596131396",
       "actor_name": "김상문",
       "actor_role": "일반사용자"
-    },
-    {
-      "id": "audit-1786608778090-yq89b5",
-      "ts": 1786608778090,
-      "action": "delete",
-      "target_type": "유지보수 점검",
-      "target_id": "1786608768445",
-      "group": "uk-seuk",
-      "owner": "삼성전자 SEUK",
-      "label": "2026-08",
-      "sn": "",
-      "summary": "2026년 8월 유지보수 점검 삭제",
-      "changes": [],
-      "actor_id": "u1786085321715",
-      "actor_name": "신호근",
-      "actor_role": "마스터"
     },
     {
       "id": "audit-1786626111464-pave10",
@@ -15232,6 +15200,11 @@
     {
       "id": "data-msrkoa5r-22fdfc6e-998c-48fe-853b-dba64356cb22",
       "ts": 1786628827523,
+      "scope": "data"
+    },
+    {
+      "id": "data-msrkp4io-1c5b62b1-df21-4848-8931-1208b0c83508",
+      "ts": 1786628866860,
       "scope": "data"
     }
   ]
