@@ -5497,7 +5497,7 @@
       "deploy_date": "",
       "deploy_log": "23.08 강성준 7.3.11.3",
       "mode": "",
-      "os_ver": "7.3.27.2",
+      "os_ver": "7.3.21.1",
       "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "원격",
@@ -5537,7 +5537,28 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": "2023.05"
+      "build_date": "2023.05",
+      "work_log": [
+        {
+          "id": 1786607615255,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "23.08 강성준 7.3.11.3\n??? ??? 7.3.11.3 > 7.3.21.1",
+          "author": "윤태리",
+          "field_changes": {
+            "os_ver": "7.3.21.1"
+          },
+          "change_summary": "OS 버전: 7.3.27.2 → 7.3.21.1",
+          "rollback_changes": {
+            "os_ver": {
+              "sensitive": false,
+              "before": "7.3.27.2",
+              "after": "7.3.21.1"
+            }
+          }
+        }
+      ]
     },
     {
       "group": "cn-001",
@@ -5555,7 +5576,7 @@
       "deploy_date": "",
       "deploy_log": "23.08 강성준 7.3.11.3",
       "mode": "",
-      "os_ver": "7.3.27.2",
+      "os_ver": "7.3.21.1",
       "owner_primary": "윤태리",
       "owner_secondary": "박동석",
       "check_method": "원격",
@@ -5595,7 +5616,28 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": "2023.05"
+      "build_date": "2023.05",
+      "work_log": [
+        {
+          "id": 1786607615256,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "23.08 강성준 7.3.11.3\n??? ??? 7.3.11.3 > 7.3.21.1",
+          "author": "윤태리",
+          "field_changes": {
+            "os_ver": "7.3.21.1"
+          },
+          "change_summary": "OS 버전: 7.3.27.2 → 7.3.21.1",
+          "rollback_changes": {
+            "os_ver": {
+              "sensitive": false,
+              "before": "7.3.27.2",
+              "after": "7.3.21.1"
+            }
+          }
+        }
+      ]
     },
     {
       "group": "cn-001",
@@ -15625,22 +15667,6 @@
       "actor_role": "마스터"
     },
     {
-      "id": "audit-1786607383469-p0nu2r",
-      "ts": 1786607383469,
-      "action": "add",
-      "target_type": "유지보수 점검",
-      "target_id": "1786607383448",
-      "group": "kr-018",
-      "owner": "삼성 벤처투자",
-      "label": "2026-01",
-      "sn": "",
-      "summary": "2026년 1월 유지보수 점검 등록",
-      "changes": [],
-      "actor_id": "u1786596131396",
-      "actor_name": "김상문",
-      "actor_role": "일반사용자"
-    },
-    {
       "id": "audit-1786603756489-nq9333",
       "ts": 1786603756489,
       "action": "reorder",
@@ -15710,6 +15736,22 @@
       ],
       "actor_id": "u1786519956793",
       "actor_name": "윤태리",
+      "actor_role": "일반사용자"
+    },
+    {
+      "id": "audit-1786607383469-p0nu2r",
+      "ts": 1786607383469,
+      "action": "add",
+      "target_type": "유지보수 점검",
+      "target_id": "1786607383448",
+      "group": "kr-018",
+      "owner": "삼성 벤처투자",
+      "label": "2026-01",
+      "sn": "",
+      "summary": "2026년 1월 유지보수 점검 등록",
+      "changes": [],
+      "actor_id": "u1786596131396",
+      "actor_name": "김상문",
       "actor_role": "일반사용자"
     },
     {
