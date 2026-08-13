@@ -712,14 +712,6 @@
           }
         },
         {
-          "id": 1786605384231,
-          "type": "장비 구축",
-          "date": "2026.8.13",
-          "manager": "윤태리",
-          "note": "ㅅㄷㄴㅅ",
-          "author": "윤태리"
-        },
-        {
           "id": 1786605311623,
           "type": "장비 구축",
           "date": "2026.8.13",
@@ -752,6 +744,21 @@
           "deleted_by": "윤태리",
           "delete_revert_result": {
             "reverted": 1,
+            "skipped": 0
+          }
+        },
+        {
+          "id": 1786605384231,
+          "type": "장비 구축",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "ㅅㄷㄴㅅ",
+          "author": "윤태리",
+          "history_id": 1786606315414,
+          "deleted_at": 1786606315414,
+          "deleted_by": "윤태리",
+          "delete_revert_result": {
+            "reverted": 0,
             "skipped": 0
           }
         }
