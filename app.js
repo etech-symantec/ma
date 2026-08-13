@@ -4448,6 +4448,13 @@ function auditDateText(ts){
   const d = new Date(ts);
   return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
 }
+function workHistoryDateTime(ts, fallbackDate){
+  const n = Number(ts);
+  if (Number.isFinite(n) && n > 1000000000000){
+    return auditDateText(n);
+  }
+  return fallbackDate || '날짜 미기재';
+}
 
 function auditSafeValue(field, value){
   const sensitive = ['ip_enc','id_enc','pw_enc','enable_pw_enc','pwHash','pwSalt','pwIterations'];
@@ -5012,7 +5019,7 @@ function getAllWorkLogEntries(){
         type:`${audit.target_type} ${actionText}`,
         date:auditDateText(audit.ts),
         manager:audit.actor_name,
-        author:`${audit.actor_name || '미상'} · ${audit.actor_role || '일반사용자'}`,
+        author:audit.actor_name || '미상',
         note:audit.summary || `${audit.target_type} ${actionText}`,
         change_summary:changeSummary,
         audit_action:audit.action,
@@ -5052,24 +5059,52 @@ function renderWorkHistoryPage(){
         <p class="maint-sub">모든 업데이트 내역(추가·편집·삭제 기록)을 한 곳에서 확인합니다 · 총 ${total}건</p>
       </div>
       <div class="wh-toolbar">
-        <div class="tf-search wh-search">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="text" id="whSearchInput" placeholder="법인·자산·사용자·내용으로 검색" value="${esc(whSearch)}">
-        </div>
-        <select id="whTypeSelect" class="wh-select">
-          <option value="">전체 구분</option>
-          ${types.map(t=>`<option value="${esc(t)}" ${whTypeFilter===t?'selected':''}>${esc(t)}</option>`).join('')}
-        </select>
-        <select id="whSortSelect" class="wh-select">
-          <option value="desc" ${whSort==='desc'?'selected':''}>최신순</option>
-          <option value="asc" ${whSort==='asc'?'selected':''}>오래된순</option>
-        </select>
+        <!-- 왼쪽 : 전체 선택 / 선택 삭제 -->
         ${isCurrentUserAdmin() ? `
           <div class="wh-admin-actions">
-            <label class="wh-select-all"><input type="checkbox" id="whSelectAll"><span>전체 선택</span></label>
+            <label class="wh-select-all">
+              <input type="checkbox" id="whSelectAll">
+              <span>전체 선택</span>
+            </label>
             <span class="wh-selected-count" id="whSelectedCount">0건 선택</span>
             <button type="button" class="btn wh-delete-selected" id="whDeleteSelected" disabled>선택 삭제</button>
-          </div>` : ''}
+          </div>
+        ` : `<div></div>`}
+      
+        <!-- 오른쪽 : 검색 / 구분 / 정렬 -->
+        <div class="wh-filter-actions">
+          <div class="tf-search wh-search">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>
+      
+            <input type="text" id="whSearchInput" placeholder="법인·자산·사용자·내용으로 검색" value="${esc(whSearch)}"></div>
+      
+          <select id="whTypeSelect" class="wh-select"><option value="">전체 구분</option>      
+            ${types.map(t => `
+              <option
+                value="${esc(t)}"
+                ${whTypeFilter===t ? 'selected' : ''}
+              >
+                ${esc(t)}
+              </option>
+            `).join('')}
+          </select>
+      
+          <select id="whSortSelect" class="wh-select">
+            <option value="desc" ${whSort==='desc' ? 'selected' : ''}>최신순</option>
+      
+            <option value="asc" ${whSort==='asc' ? 'selected' : ''}>오래된순</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="wh-list" id="whListEl"></div>`;
@@ -5126,37 +5161,176 @@ function renderWhList(){
         .some(v => (v||'').toLowerCase().includes(q))
     );
   }
-  items.sort((a,b) => whSort === 'desc' ? (b.historyTs||0)-(a.historyTs||0) : (a.historyTs||0)-(b.historyTs||0));
+  items.sort((a,b) =>
+    whSort === 'desc'
+      ? (b.historyTs || 0) - (a.historyTs || 0)
+      : (a.historyTs || 0) - (b.historyTs || 0)
+  );
 
   listEl.innerHTML = items.length ? items.map(item => {
-    const {entry, recId, recGroup, recOwner, recLabel, recSn, deleted, source, key} = item;
-    const deletedAtText = deleted && entry.deleted_at ? new Date(entry.deleted_at).toLocaleString('ko-KR') : '';
-    const revert = entry.delete_revert_result || null;
-    const revertText = deleted && revert
-      ? `삭제 시 자산 정보 원복 ${Number(revert.reverted||0)}건${Number(revert.skipped||0) ? ` · 유지 ${Number(revert.skipped||0)}건` : ''}`
-      : '';
-    const auditBadge = source === 'audit' ? '<span class="wh-audit-badge">감사</span>' : '';
-    const canJump = !!recGroup;
+    const {
+      entry,
+      recId,
+      recGroup,
+      recOwner,
+      recLabel,
+      recSn,
+      deleted,
+      source,
+      key,
+      historyTs
+    } = item;
+  
+    const deletedAtText =
+      deleted && entry.deleted_at
+        ? new Date(entry.deleted_at).toLocaleString('ko-KR')
+        : '';
+  
+    const revert =
+      entry.delete_revert_result || null;
+  
+    const revertText =
+      deleted && revert
+        ? `삭제 시 자산 정보 원복 ${Number(revert.reverted || 0)}건${
+            Number(revert.skipped || 0)
+              ? ` · 유지 ${Number(revert.skipped || 0)}건`
+              : ''
+          }`
+        : '';
+  
+    const auditBadge =
+      source === 'audit'
+        ? '<span class="wh-audit-badge">감사</span>'
+        : '';
+  
+    const canJump =
+      !!recGroup;
 
+    const displayAuthor =
+      String(entry.author || '')
+        .replace(
+          /\s*·\s*(마스터|일반사용자)\s*$/g,
+          ''
+        )
+        .trim();
+  
     return `
-      <div class="wh-item ${deleted?'wh-item-deleted':''} ${source==='audit'?'wh-item-audit':''}"
-           ${canJump ? `data-jump-group="${esc(recGroup)}" data-jump-rec="${esc(recId)}"` : ''}
-           data-history-key="${esc(key)}">
+      <div
+        class="wh-item
+          ${deleted ? 'wh-item-deleted' : ''}
+          ${source === 'audit' ? 'wh-item-audit' : ''}"
+        ${canJump
+          ? `data-jump-group="${esc(recGroup)}"
+             data-jump-rec="${esc(recId)}"`
+          : ''}
+        data-history-key="${esc(key)}"
+      >
+  
         <div class="wh-top">
-          ${isCurrentUserAdmin() ? `<label class="wh-history-check" title="삭제할 이력 선택"><input type="checkbox" class="wh-history-checkbox" data-wh-select="${esc(key)}" ${whSelectedKeys.has(key)?'checked':''}></label>` : ''}
-          <span class="ra-type">${esc(entry.type)}${deleted ? '<span class="wh-deleted-badge">삭제됨</span>' : ''}${auditBadge}</span>
-          <span class="ra-date">${esc(entry.date)||'날짜 미기재'}</span>
+  
+          ${isCurrentUserAdmin() ? `
+            <label
+              class="wh-history-check"
+              title="삭제할 이력 선택"
+            >
+              <input
+                type="checkbox"
+                class="wh-history-checkbox"
+                data-wh-select="${esc(key)}"
+                ${whSelectedKeys.has(key) ? 'checked' : ''}
+              >
+            </label>
+          ` : ''}
+  
+          <span class="ra-type">
+            ${esc(entry.type)}
+  
+            ${deleted
+              ? '<span class="wh-deleted-badge">삭제됨</span>'
+              : ''}
+  
+            ${auditBadge}
+          </span>
+  
+          <!-- 날짜 + 시간 -->
+          <span class="ra-date">
+            ${esc(
+              workHistoryDateTime(
+                historyTs,
+                entry.date
+              )
+            )}
+          </span>
         </div>
-        <div class="ra-asset">${esc(recOwner)||'—'} · ${esc(recLabel)||'—'}${recSn ? ' · S/N '+esc(recSn) : ''}</div>
-        <div class="ra-note">${esc(entry.note)||'—'}</div>
-        ${entry.change_summary ? `<div class="ra-changes">
-          <div class="ra-changes-label">${source==='audit' ? '📝 변경 내용' : `🔧 자산 정보 변경${deleted ? ' · 삭제 시 원복 처리' : ''}`}</div>
-          ${changeSummaryRowsHtml(entry.change_summary)}
-        </div>` : ''}
-        <div class="ra-author">${source==='audit' ? `작업자: ${esc(entry.author)||'미상'}` : `담당자: ${esc(entry.manager)||'미기재'} · 작성: ${esc(entry.author)||'미상'}`}</div>
-        ${deleted ? `<div class="wh-delete-meta">삭제: ${esc(entry.deleted_by)||'미상'} · ${esc(deletedAtText)||'시간 미기재'}${revertText ? ` · ${esc(revertText)}` : ''}</div>` : ''}
-      </div>`;
-  }).join('') : `<div class="ra-empty wh-empty">조건에 맞는 이력이 없습니다.</div>`;
+  
+        <!-- 법인 / 자산 -->
+        <div
+          class="ra-asset"
+          title="${esc(recOwner || '—')} · ${esc(recLabel || '—')}${recSn ? ' · S/N ' + esc(recSn) : ''}"
+        >
+          ${esc(recOwner) || '—'}
+          ·
+          ${esc(recLabel) || '—'}
+          ${recSn ? ' · S/N ' + esc(recSn) : ''}
+        </div>
+  
+        <!-- 작업 내용 -->
+        <div
+          class="ra-note"
+          title="${esc(entry.note || '')}"
+        >
+          ${esc(entry.note) || '—'}
+        </div>
+  
+        <!-- 변경 내용 -->
+        ${entry.change_summary ? `
+          <div class="ra-changes">
+  
+            <div class="ra-changes-label">
+              ${source === 'audit'
+                ? '📝 변경 내용'
+                : `🔧 자산 정보 변경${deleted ? ' · 삭제 시 원복 처리' : ''}`
+              }
+            </div>
+  
+            ${changeSummaryRowsHtml(
+              entry.change_summary
+            )}
+  
+          </div>
+        ` : ''}
+  
+        <!-- 작업자 -->
+        <div class="ra-author">
+          ${source === 'audit'
+            ? `작업자: ${esc(displayAuthor) || '미상'}`
+            : `담당자: ${esc(entry.manager) || '미기재'} · 작성: ${esc(displayAuthor) || '미상'}`
+          }
+        </div>
+  
+        <!-- 삭제 정보 -->
+        ${deleted ? `
+          <div class="wh-delete-meta">
+  
+            삭제:
+            ${esc(entry.deleted_by) || '미상'}
+            ·
+            ${esc(deletedAtText) || '시간 미기재'}
+  
+            ${revertText
+              ? ` · ${esc(revertText)}`
+              : ''}
+  
+          </div>
+        ` : ''}
+      </div>
+    `;
+  
+  }).join('') : `
+    <div class="ra-empty wh-empty">
+      조건에 맞는 이력이 없습니다.
+    </div>
+  `;
 
   listEl.querySelectorAll('.wh-history-check').forEach(label => {
     label.onclick = e => e.stopPropagation();
