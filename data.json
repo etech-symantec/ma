@@ -4036,7 +4036,17 @@
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607301845,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 2.5.1.1 신규\n25.09.07 윤태리 2.5.1.1 > 2.5.2.1 RAID/restart",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-005",
@@ -4078,7 +4088,17 @@
       "group_parent": "kr-001",
       "build_engineer": "신호근",
       "build_date": "2024.12",
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607301846,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 2.5.1.1 신규\n25.09.07 윤태리 2.5.1.1 > 2.5.2.1 RAID/restart",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-005",
@@ -4259,7 +4279,17 @@
       "build_engineer": "신호근",
       "build_date": "2024.12",
       "enable_pw_enc": null,
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607301847,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 2.5.1.1 신규\n25.09.07 윤태리 2.5.1.1 > 2.5.2.1 RAID/restart",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-006",
@@ -4310,7 +4340,17 @@
       "build_engineer": "신호근",
       "build_date": "2024.12",
       "enable_pw_enc": null,
-      "is_parent": false
+      "is_parent": false,
+      "work_log": [
+        {
+          "id": 1786607301848,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 2.5.1.1 신규\n25.09.07 윤태리 2.5.1.1 > 2.5.2.1 RAID/restart",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-006",
@@ -4589,7 +4629,17 @@
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
-      "build_date": "2024.12"
+      "build_date": "2024.12",
+      "work_log": [
+        {
+          "id": 1786607301849,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 2.5.1.1 신규\n25.09.07 윤태리 2.5.1.1 > 2.5.2.1 RAID/restart",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-007",
@@ -4630,7 +4680,17 @@
       "cust_contacts": [],
       "group_parent": "kr-001",
       "build_engineer": "신호근",
-      "build_date": "2024.12"
+      "build_date": "2024.12",
+      "work_log": [
+        {
+          "id": 1786607301850,
+          "type": "OS 업그레이드",
+          "date": "2026.8.13",
+          "manager": "윤태리",
+          "note": "24.12.07 신호근 2.5.1.1 신규\n25.09.07 윤태리 2.5.1.1 > 2.5.2.1 RAID/restart",
+          "author": "윤태리"
+        }
+      ]
     },
     {
       "group": "us-007",
