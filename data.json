@@ -400,14 +400,6 @@
           "manager": "윤태리",
           "note": "7.3.11.3 > 7.3.16.2 #no internet",
           "author": "윤태리"
-        },
-        {
-          "id": 1786603706276,
-          "type": "OS 업그레이드",
-          "date": "2025.06.07",
-          "manager": "윤태리",
-          "note": "7.3.16.2 > 7.3.21.1 #mem bug",
-          "author": "윤태리"
         }
       ],
       "enable_pw_enc": null,
@@ -448,6 +440,21 @@
           "history_id": 1786604661631,
           "deleted_at": 1786604661631,
           "deleted_by": "신호근",
+          "delete_revert_result": {
+            "reverted": 0,
+            "skipped": 0
+          }
+        },
+        {
+          "id": 1786603706276,
+          "type": "OS 업그레이드",
+          "date": "2025.06.07",
+          "manager": "윤태리",
+          "note": "7.3.16.2 > 7.3.21.1 #mem bug",
+          "author": "윤태리",
+          "history_id": 1786605257576,
+          "deleted_at": 1786605257576,
+          "deleted_by": "윤태리",
           "delete_revert_result": {
             "reverted": 0,
             "skipped": 0
