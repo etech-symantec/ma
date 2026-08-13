@@ -251,13 +251,91 @@ aside.filters{
   max-height:calc(100vh - var(--global-header-h, 0px) - var(--topbar-h, 0px)); overflow-y:auto;
 }
 
-/* 로그인한 사용자 표시 + 최근 이력 알림 버튼 */
+/* 로그인 사용자 영역 */
 .panel-profile{
-  display:flex; align-items:center; gap:8px;
-  flex-wrap:wrap;                 /* 추가: 넘치면 다음 줄로 */
-  padding:12px; margin-bottom:16px;
+  display:grid;
+
+  /* 1행: 사용자 정보
+     2행: 알림 / My / 저장상태 */
+  grid-template-columns:42px 66px minmax(0, 1fr);
+  grid-template-rows:auto 34px;
+
+  gap:8px;
+
+  padding:12px;
+  margin-bottom:16px;
+
   background:linear-gradient(135deg, #E6F4FD, #EEF1F6);
-  border:1px solid var(--border-solid); border-radius:12px;
+  border:1px solid var(--border-solid);
+  border-radius:12px;
+}
+
+
+/* 첫 줄 전체 */
+.panel-profile .profile-info{
+  grid-column:1 / -1;
+  grid-row:1;
+
+  width:100%;
+  min-width:0;
+}
+
+
+/* 두 번째 줄 - 알림 */
+.panel-profile .activity-wrap{
+  grid-column:1;
+  grid-row:2;
+
+  width:42px;
+  min-width:0;
+}
+
+
+/* 두 번째 줄 - My */
+.panel-profile .my-assets-toggle{
+  grid-column:2;
+  grid-row:2;
+
+  width:66px;
+  min-width:0;
+  height:34px;
+
+  padding:0 7px;
+}
+
+
+/* 두 번째 줄 - GitHub 저장 상태 */
+#githubSyncStatus{
+  grid-column:3;
+  grid-row:2;
+
+  width:100%;
+  min-width:0;
+  height:34px;
+
+  margin:0;
+  padding:0 5px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  box-sizing:border-box;
+
+  border:1px solid var(--border-solid);
+  border-radius:9px;
+
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:700;
+  line-height:1;
+
+  text-align:center;
+
+  /* 절대 줄바꿈 안 함 */
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .profile-info{
   flex:1 1 100%; min-width:0; order:1;   /* 이름·등급이 항상 첫 줄 전체를 차지 */
