@@ -5475,7 +5475,7 @@
       "location": "천진",
       "support_id": "743737",
       "sku": "SSP-S210-10",
-      "sn": "73998789",
+      "sn": "1422710039",
       "entitlement": "🔗",
       "qty": "1",
       "start": "2026.8.1",
@@ -5495,19 +5495,19 @@
       "tag_note": "천진(톈진) SDT",
       "id": 137,
       "ip_enc": {
-        "iv": "uTfd9i7lB+oG1jif",
-        "ct": "/IddjRbMDI4/Ed1A2Uk=",
-        "tag": "wdN6smGYPltL6ZGLUlB8WA=="
+        "iv": "vq03wCZ8+qQHyDUD",
+        "ct": "cSX9FC3agS+ZOGMCtmY=",
+        "tag": "67zjzWDBwHydswXtL/MWpQ=="
       },
       "id_enc": {
-        "iv": "n9Y/UGuxAQx2wwUy",
-        "ct": "HBEJBsw=",
-        "tag": "0M28SCfOPTEp1Zxe9iMyng=="
+        "iv": "v8nlm1kevcUuOLMp",
+        "ct": "heUGKcQ=",
+        "tag": "yeZEhl4C3V4xjIXfKX6S1g=="
       },
       "pw_enc": {
-        "iv": "OL7MPIoRbpVeyjXz",
-        "ct": "Z66t1yaV2jtY",
-        "tag": "FmSw0kh9LAqxSiQleNqp3A=="
+        "iv": "4PxiXvihdnuyAMQt",
+        "ct": "ED6qdwIsIsGI",
+        "tag": "fzaKgxTMxgFajxtlRnvV+w=="
       },
       "config_mode": "Explicit",
       "group_remarks": "",
@@ -5534,7 +5534,8 @@
           "note": "23.05 강성준 신규\n23.08 강성준(RMA) 2.3.7.1",
           "author": "윤태리"
         }
-      ]
+      ],
+      "last_mutation_id": "data-mssg7sf1-d6d4273d-0bfa-4c6a-b673-048d825eb7d9"
     },
     {
       "group": "cn-001",
@@ -5913,10 +5914,10 @@
       "owner": "삼성디스플레이 SDT",
       "location": "천진",
       "support_id": "743737",
-      "sku": "ONSITE-ADVANCED",
-      "sn": "1422710025",
+      "sku": "ISG-PR-ADV-SUB",
+      "sn": "0073998789",
       "entitlement": "🔗",
-      "qty": "1",
+      "qty": "300",
       "start": "2026.8.1",
       "end": "2027.7.31",
       "remarks": "",
@@ -5951,7 +5952,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": "2023.05"
+      "build_date": "2023.05",
+      "last_mutation_id": "data-mssg8kxk-fc8c1241-7215-46ea-b21e-dd3c7de40ba2"
     },
     {
       "group": "cn-001",
@@ -18182,6 +18184,91 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssg7ep8-d4456610-a85b-447f-a6a0-10321f980d78"
+    },
+    {
+      "id": "audit-1786681805732-jbec98",
+      "ts": 1786681805732,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "137",
+      "group": "cn-001",
+      "owner": "삼성디스플레이 SDT",
+      "label": "SSP-S210-10",
+      "sn": "1422710039",
+      "summary": "자산 정보 4개 항목 수정",
+      "changes": [
+        {
+          "field": "sn",
+          "label": "S/N",
+          "before": "73998789",
+          "after": "1422710039",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "id_enc",
+          "label": "계정 ID",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "pw_enc",
+          "label": "비밀번호",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg7sf1-d6d4273d-0bfa-4c6a-b673-048d825eb7d9"
+    },
+    {
+      "id": "audit-1786681842697-a78pub",
+      "ts": 1786681842697,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "142",
+      "group": "cn-001",
+      "owner": "삼성디스플레이 SDT",
+      "label": "ISG-PR-ADV-SUB",
+      "sn": "0073998789",
+      "summary": "자산 정보 3개 항목 수정",
+      "changes": [
+        {
+          "field": "sku",
+          "label": "SKU",
+          "before": "ONSITE-ADVANCED",
+          "after": "ISG-PR-ADV-SUB",
+          "sensitive": false
+        },
+        {
+          "field": "sn",
+          "label": "S/N",
+          "before": "1422710025",
+          "after": "0073998789",
+          "sensitive": false
+        },
+        {
+          "field": "qty",
+          "label": "수량",
+          "before": "1",
+          "after": "300",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg8kxk-fc8c1241-7215-46ea-b21e-dd3c7de40ba2"
     }
   ],
   "syncMutations": [
@@ -18658,6 +18745,16 @@
     {
       "id": "data-mssg7ep8-d4456610-a85b-447f-a6a0-10321f980d78",
       "ts": 1786681787957,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg7sf1-d6d4273d-0bfa-4c6a-b673-048d825eb7d9",
+      "ts": 1786681805733,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg8kxk-fc8c1241-7215-46ea-b21e-dd3c7de40ba2",
+      "ts": 1786681842700,
       "scope": "data"
     }
   ]
