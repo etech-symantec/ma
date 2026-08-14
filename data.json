@@ -1622,14 +1622,16 @@
           "name": "Roger Alphonso",
           "org": "삼성전자",
           "phone": "",
-          "email": "r.alphonso@partner.samsung.com"
+          "email": "r.alphonso@partner.samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Suman Ghimire",
           "org": "삼성전자",
           "phone": "",
-          "email": "s.ghimire@partner.samsung.com"
+          "email": "s.ghimire@partner.samsung.com",
+          "mail_recipient_type": "to"
         }
       ],
       "config_mode": "Explicit",
@@ -1642,7 +1644,9 @@
       "build_engineer": "신호근",
       "build_date": "2026.01",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b"
     },
     {
       "group": "uk-seuk",
@@ -1692,14 +1696,16 @@
           "name": "Roger Alphonso",
           "org": "삼성전자",
           "phone": "",
-          "email": "r.alphonso@partner.samsung.com"
+          "email": "r.alphonso@partner.samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Suman Ghimire",
           "org": "삼성전자",
           "phone": "",
-          "email": "s.ghimire@partner.samsung.com"
+          "email": "s.ghimire@partner.samsung.com",
+          "mail_recipient_type": "to"
         }
       ],
       "config_mode": "Explicit",
@@ -1714,7 +1720,8 @@
       "group_parent": "",
       "is_parent": false,
       "asset_parent_id": "32",
-      "last_mutation_id": "data-mss622h2-1d6f57be-c920-4c97-bc8c-c6364b1d22f3"
+      "last_mutation_id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b",
+      "cust_memo": ""
     },
     {
       "group": "uk-seuk",
@@ -1764,14 +1771,16 @@
           "name": "Roger Alphonso",
           "org": "삼성전자",
           "phone": "",
-          "email": "r.alphonso@partner.samsung.com"
+          "email": "r.alphonso@partner.samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Suman Ghimire",
           "org": "삼성전자",
           "phone": "",
-          "email": "s.ghimire@partner.samsung.com"
+          "email": "s.ghimire@partner.samsung.com",
+          "mail_recipient_type": "to"
         }
       ],
       "config_mode": "Explicit",
@@ -1779,7 +1788,9 @@
       "build_engineer": "신호근",
       "build_date": "2026.01",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b"
     },
     {
       "group": "uk-seuk",
@@ -1829,14 +1840,16 @@
           "name": "Roger Alphonso",
           "org": "삼성전자",
           "phone": "",
-          "email": "r.alphonso@partner.samsung.com"
+          "email": "r.alphonso@partner.samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Suman Ghimire",
           "org": "삼성전자",
           "phone": "",
-          "email": "s.ghimire@partner.samsung.com"
+          "email": "s.ghimire@partner.samsung.com",
+          "mail_recipient_type": "to"
         }
       ],
       "config_mode": "Explicit",
@@ -1844,7 +1857,9 @@
       "build_engineer": "신호근",
       "build_date": "2026.01",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b"
     },
     {
       "group": "uk-seuk",
@@ -1882,14 +1897,16 @@
           "name": "Roger Alphonso",
           "org": "삼성전자",
           "phone": "",
-          "email": "r.alphonso@partner.samsung.com"
+          "email": "r.alphonso@partner.samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Suman Ghimire",
           "org": "삼성전자",
           "phone": "",
-          "email": "s.ghimire@partner.samsung.com"
+          "email": "s.ghimire@partner.samsung.com",
+          "mail_recipient_type": "to"
         }
       ],
       "config_mode": "Explicit",
@@ -1897,7 +1914,9 @@
       "build_engineer": "신호근",
       "build_date": "2026.01",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b"
     },
     {
       "group": "vn-sdv-new",
@@ -15025,6 +15044,38 @@
       "actor_name": "윤태리",
       "actor_role": "일반사용자",
       "mutation_id": "data-msskhmxl-6e9bec47-77ab-4483-a4d0-c2bbdfa0e7e1"
+    },
+    {
+      "id": "audit-1786717219190-q3twgn",
+      "ts": 1786717219190,
+      "action": "edit",
+      "target_type": "법인",
+      "target_id": "uk-seuk",
+      "group": "uk-seuk",
+      "owner": "삼성전자 SEUK",
+      "label": "SSP-S410-20B",
+      "sn": "625700032",
+      "summary": "법인 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "cust_contacts",
+          "label": "고객사 담당자",
+          "before": "운영 / Roger Alphonso / 삼성전자 / r.alphonso@partner.samsung.com, 운영 / Suman Ghimire / 삼성전자 / s.ghimire@partner.samsung.com",
+          "after": "운영 / Roger Alphonso / 삼성전자 / r.alphonso@partner.samsung.com, 운영 / Suman Ghimire / 삼성전자 / s.ghimire@partner.samsung.com",
+          "sensitive": false
+        },
+        {
+          "field": "cust_memo",
+          "label": "고객사 담당자 메모",
+          "before": "—",
+          "after": "—",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b"
     }
   ],
   "syncMutations": [
@@ -15656,6 +15707,11 @@
     {
       "id": "mail-template-msslus1w-a617131d-c04e-4e79-bdb3-93495ccc163f",
       "ts": 1786691276435,
+      "scope": "data"
+    },
+    {
+      "id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b",
+      "ts": 1786717219195,
       "scope": "data"
     }
   ]
