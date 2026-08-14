@@ -3936,9 +3936,6 @@ function openMaintenanceLogModal(gid, ym){
   const log = maintenanceLogFor(gid, ym);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
 
-  const mailMethodEl = document.getElementById('mlEmailMethod');
-  if (mailMethodEl) mailMethodEl.value = 'mailto';
-
   const mailLanguageEl = document.getElementById('mlEmailLanguage');
   if (mailLanguageEl) mailLanguageEl.value = 'ko';
 
@@ -6421,7 +6418,7 @@ function isCurrentUserAdmin(){
 }
 
 /* =========================================================
-   유지보수 점검 이메일 - 사용자별 한글/English 템플릿 / Outlook 작성
+   유지보수 점검 이메일 - 사용자별 한글/English 템플릿 / mailto 작성
    ========================================================= */
 const DEFAULT_MAINTENANCE_MAIL_SUBJECT_KO =
   '[{법인명}] {점검월} 정기점검 일정 안내';
@@ -6528,270 +6525,6 @@ function maintenanceMailSignatureHtmlForUser(user){
 }
 
 
-/* =========================================================
-   Microsoft Graph / MSAL - Outlook 초안 생성 테스트
-   ========================================================= */
-const MAINTENANCE_GRAPH_SCOPES = ['Mail.ReadWrite'];
-let maintenanceGraphMsalApp = null;
-let maintenanceGraphMsalKey = '';
-
-function maintenanceGraphRedirectUri(){
-  if (location.protocol !== 'http:' && location.protocol !== 'https:'){
-    return '';
-  }
-  return `${location.origin}${location.pathname}`;
-}
-
-function maintenanceGraphConfigForUser(user){
-  return {
-    tenantId: String(user?.maintenance_mail_graph_tenant_id || '').trim(),
-    clientId: String(user?.maintenance_mail_graph_client_id || '').trim(),
-    redirectUri: maintenanceGraphRedirectUri()
-  };
-}
-
-function resetMaintenanceGraphMsal(){
-  maintenanceGraphMsalApp = null;
-  maintenanceGraphMsalKey = '';
-}
-
-function maintenanceGraphAppForUser(user){
-  const cfg = maintenanceGraphConfigForUser(user);
-  if (!cfg.tenantId || !cfg.clientId || !cfg.redirectUri){
-    return null;
-  }
-
-  if (!window.msal || !window.msal.PublicClientApplication){
-    throw new Error('MSAL.js를 불러오지 못했습니다. Microsoft CDN 접근 여부를 확인해 주세요.');
-  }
-
-  const key = `${cfg.tenantId}|${cfg.clientId}|${cfg.redirectUri}`;
-  if (maintenanceGraphMsalApp && maintenanceGraphMsalKey === key){
-    return maintenanceGraphMsalApp;
-  }
-
-  maintenanceGraphMsalApp = new msal.PublicClientApplication({
-    auth: {
-      clientId: cfg.clientId,
-      authority: `https://login.microsoftonline.com/${encodeURIComponent(cfg.tenantId)}`,
-      redirectUri: cfg.redirectUri,
-      navigateToLoginRequestUrl: false
-    },
-    cache: {
-      cacheLocation: 'localStorage',
-      storeAuthStateInCookie: false
-    }
-  });
-  maintenanceGraphMsalKey = key;
-  return maintenanceGraphMsalApp;
-}
-
-function setMaintenanceGraphStatus(text, state=''){
-  const el = document.getElementById('mmsGraphStatus');
-  if (!el) return;
-  el.textContent = text;
-  el.className = `maintenance-mail-graph-status${state ? ' ' + state : ''}`;
-}
-
-async function maintenanceGraphAccount(user, interactive=true){
-  const app = maintenanceGraphAppForUser(user);
-  if (!app){
-    throw new Error('Tenant ID와 Application (Client) ID를 먼저 저장해 주세요.');
-  }
-
-  let account = app.getAllAccounts()[0] || null;
-  if (!account && interactive){
-    const login = await app.loginPopup({
-      scopes: MAINTENANCE_GRAPH_SCOPES,
-      prompt: 'select_account'
-    });
-    account = login.account || null;
-  }
-  return { app, account };
-}
-
-async function acquireMaintenanceGraphToken(user, interactive=true){
-  const { app, account: initialAccount } = await maintenanceGraphAccount(user, interactive);
-  let account = initialAccount;
-
-  if (!account){
-    throw new Error('Microsoft 365 로그인이 필요합니다.');
-  }
-
-  try{
-    const result = await app.acquireTokenSilent({
-      scopes: MAINTENANCE_GRAPH_SCOPES,
-      account
-    });
-    return { accessToken: result.accessToken, account: result.account || account, app };
-  }
-  catch(e){
-    if (!interactive){
-      throw e;
-    }
-    const result = await app.acquireTokenPopup({
-      scopes: MAINTENANCE_GRAPH_SCOPES,
-      account
-    });
-    account = result.account || account;
-    return { accessToken: result.accessToken, account, app };
-  }
-}
-
-async function testMaintenanceGraphConnection(){
-  const user = currentUserRecord();
-  const errEl = document.getElementById('mmsError');
-  if (!user) return;
-
-  /* 입력창 값을 저장 전에도 바로 테스트할 수 있게 임시 반영 */
-  const tenant = String(document.getElementById('mms_graph_tenant')?.value || '').trim();
-  const client = String(document.getElementById('mms_graph_client')?.value || '').trim();
-  if (!tenant || !client){
-    errEl.textContent = 'Tenant ID와 Application (Client) ID를 입력해 주세요.';
-    return;
-  }
-  if (!maintenanceGraphRedirectUri()){
-    errEl.textContent = 'Microsoft Graph 인증은 http/https 웹 주소에서만 테스트할 수 있습니다.';
-    return;
-  }
-
-  const oldTenant = user.maintenance_mail_graph_tenant_id;
-  const oldClient = user.maintenance_mail_graph_client_id;
-  user.maintenance_mail_graph_tenant_id = tenant;
-  user.maintenance_mail_graph_client_id = client;
-  resetMaintenanceGraphMsal();
-
-  setMaintenanceGraphStatus('연결 확인 중…');
-  errEl.textContent = '';
-
-  try{
-    const { account } = await acquireMaintenanceGraphToken(user, true);
-    /* 연결 테스트만으로 data.json 값이 바뀌지 않도록 원래 사용자 필드는 복원.
-       입력한 Tenant/Client 값은 아래 '저장' 버튼을 눌렀을 때만 영구 저장된다. */
-    user.maintenance_mail_graph_tenant_id = oldTenant;
-    user.maintenance_mail_graph_client_id = oldClient;
-    setMaintenanceGraphStatus(`✓ ${account?.username || account?.name || 'Microsoft 365 연결됨'}`, 'connected');
-  }
-  catch(e){
-    user.maintenance_mail_graph_tenant_id = oldTenant;
-    user.maintenance_mail_graph_client_id = oldClient;
-    resetMaintenanceGraphMsal();
-    setMaintenanceGraphStatus('연결 실패', 'error');
-    errEl.textContent = `Microsoft Graph 연결 실패: ${e?.message || e}`;
-  }
-}
-
-async function disconnectMaintenanceGraph(){
-  const user = currentUserRecord();
-  if (!user) return;
-  try{
-    const app = maintenanceGraphAppForUser(user);
-    const account = app?.getAllAccounts?.()[0];
-    if (app && account){
-      await app.logoutPopup({ account, postLogoutRedirectUri: maintenanceGraphRedirectUri() || undefined });
-    }
-  }
-  catch(e){
-    console.warn('Microsoft 365 로그아웃 처리:', e);
-  }
-  finally{
-    resetMaintenanceGraphMsal();
-    setMaintenanceGraphStatus('연결 안 됨');
-  }
-}
-
-function maintenanceMailPlainTextToHtml(text){
-  const div = document.createElement('div');
-  div.textContent = String(text || '');
-  return div.innerHTML.replace(/\r?\n/g, '<br>');
-}
-
-function maintenanceGraphSignaturePackage(user){
-  const signatureHtml = maintenanceMailSignatureHtmlForUser(user);
-  const wrap = document.createElement('div');
-  wrap.innerHTML = signatureHtml;
-  const attachments = [];
-  let seq = 0;
-
-  wrap.querySelectorAll('img[src]').forEach(img => {
-    const src = String(img.getAttribute('src') || '').trim();
-    const m = src.match(/^data:(image\/[A-Za-z0-9.+-]+);base64,([A-Za-z0-9+/=\s]+)$/i);
-    if (!m) return;
-
-    const contentType = m[1];
-    const contentBytes = m[2].replace(/\s+/g, '');
-    const approxBytes = Math.floor(contentBytes.length * 3 / 4);
-    if (approxBytes >= 2.8 * 1024 * 1024){
-      throw new Error('서명 이미지가 너무 큽니다. 인라인 이미지 1개당 약 2.8MB 이하로 줄여 주세요.');
-    }
-
-    seq += 1;
-    const ext = (contentType.split('/')[1] || 'png').replace(/[^A-Za-z0-9]/g, '') || 'png';
-    const contentId = `maintenance-signature-${Date.now()}-${seq}@etech`;
-    img.setAttribute('src', `cid:${contentId}`);
-
-    attachments.push({
-      '@odata.type': '#microsoft.graph.fileAttachment',
-      name: `signature-${seq}.${ext}`,
-      contentType,
-      contentBytes,
-      isInline: true,
-      contentId
-    });
-  });
-
-  return {
-    html: wrap.innerHTML,
-    attachments
-  };
-}
-
-async function maintenanceGraphCreateDraft(accessToken, message){
-  const response = await fetch('https://graph.microsoft.com/v1.0/me/messages', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(message)
-  });
-
-  if (!response.ok){
-    let detail = '';
-    try{
-      const json = await response.json();
-      detail = json?.error?.message || JSON.stringify(json);
-    }catch(e){
-      detail = await response.text().catch(()=>'');
-    }
-    const err = new Error(`Outlook 초안 생성 실패 (${response.status})${detail ? ': ' + detail : ''}`);
-    err.status = response.status;
-    throw err;
-  }
-  return response.json();
-}
-
-async function maintenanceGraphAddInlineAttachment(accessToken, messageId, attachment){
-  const response = await fetch(
-    `https://graph.microsoft.com/v1.0/me/messages/${encodeURIComponent(messageId)}/attachments`,
-    {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(attachment)
-    }
-  );
-  if (!response.ok){
-    let detail = '';
-    try{
-      const json = await response.json();
-      detail = json?.error?.message || JSON.stringify(json);
-    }catch(e){}
-    throw new Error(`서명 이미지 첨부 실패 (${response.status})${detail ? ': ' + detail : ''}`);
-  }
-}
 
 function insertMaintenanceSignatureHtmlAtCaret(html){
   const sel = window.getSelection();
@@ -6890,24 +6623,6 @@ function openMaintenanceMailSettingsModal(){
       maintenanceMailSignatureHtmlForUser(user);
   }
 
-  const graphTenantEl = document.getElementById('mms_graph_tenant');
-  const graphClientEl = document.getElementById('mms_graph_client');
-  const graphRedirectEl = document.getElementById('mms_graph_redirect');
-  if (graphTenantEl) graphTenantEl.value = user.maintenance_mail_graph_tenant_id || '';
-  if (graphClientEl) graphClientEl.value = user.maintenance_mail_graph_client_id || '';
-  if (graphRedirectEl) graphRedirectEl.value = maintenanceGraphRedirectUri() || 'http/https로 접속해야 Graph 인증 가능';
-
-  try{
-    const app = maintenanceGraphAppForUser(user);
-    const account = app?.getAllAccounts?.()[0];
-    if (account){
-      setMaintenanceGraphStatus(`✓ ${account.username || account.name || 'Microsoft 365 연결됨'}`, 'connected');
-    } else {
-      setMaintenanceGraphStatus('연결 안 됨');
-    }
-  }catch(e){
-    setMaintenanceGraphStatus('설정 확인 필요', 'error');
-  }
 
   errEl.textContent = '';
 
@@ -7032,27 +6747,19 @@ function applyMaintenanceMailTemplate(text, values){
   return result;
 }
 
-function maintenanceMailMethod(){
-  return document.getElementById('mlEmailMethod')?.value === 'graph'
-    ? 'graph'
-    : 'mailto';
-}
 
 function refreshMaintenanceMailButton(gid){
-  const btn = document.getElementById('mlEmailBtn');
   if (!btn) return;
 
   const recipients = maintenanceMailRecipientsForGroup(gid);
-  const method = maintenanceMailMethod();
 
   if (!recipients.length){
     btn.title = '이 법인에 등록된 고객사 담당자 이메일이 없습니다.';
     return;
   }
 
-  btn.title = method === 'graph'
-    ? `등록된 고객사 담당자 ${recipients.length}명의 이메일을 수신자로 넣어 Microsoft Graph로 Outlook 초안을 생성합니다.`
-    : `등록된 고객사 담당자 ${recipients.length}명의 이메일을 수신자로 넣어 Windows 기본 메일 앱으로 새 메일을 작성합니다.`;
+  btn.title =
+    `등록된 고객사 담당자 ${recipients.length}명의 이메일을 수신자로 넣어 Windows 기본 메일 앱으로 새 메일을 작성합니다.`;
 }
 
 function maintenanceMailPreparedContent(user, gid, ym){
@@ -7115,80 +6822,11 @@ function openMaintenanceEmailByMailto(user, recipients, subject, templateBody){
   window.location.href = mailto;
 }
 
-async function openMaintenanceEmailByGraph(user, recipients, subject, templateBody, errEl, btn){
-  const graphCfg = maintenanceGraphConfigForUser(user);
-
-  if (!graphCfg.tenantId || !graphCfg.clientId){
-    errEl.textContent = '점검 메일 설정에서 Microsoft Graph Tenant ID와 Client ID를 먼저 저장해 주세요.';
-    openMaintenanceMailSettingsModal();
-    return;
-  }
-
-  if (!graphCfg.redirectUri){
-    errEl.textContent = 'Microsoft Graph 메일은 http/https 웹 주소에서만 사용할 수 있습니다.';
-    return;
-  }
-
-  if (btn){
-    btn.disabled = true;
-    btn.dataset.originalText = btn.textContent;
-    btn.textContent = '초안 생성 중…';
-  }
-
-  try{
-    const { accessToken, account } = await acquireMaintenanceGraphToken(user, true);
-    const signature = maintenanceGraphSignaturePackage(user);
-
-    let bodyHtml = `<div>${maintenanceMailPlainTextToHtml(templateBody)}</div>`;
-    if (signature.html.trim()){
-      bodyHtml += `<div style="margin-top:18px">${signature.html}</div>`;
-    }
-
-    const message = {
-      subject,
-      body: {
-        contentType: 'HTML',
-        content: bodyHtml
-      },
-      toRecipients: recipients.map(address => ({
-        emailAddress: { address }
-      }))
-    };
-
-    const draft = await maintenanceGraphCreateDraft(accessToken, message);
-
-    for (const attachment of signature.attachments){
-      await maintenanceGraphAddInlineAttachment(accessToken, draft.id, attachment);
-    }
-
-    errEl.textContent =
-      `✓ Outlook 초안 생성 완료 · ${account?.username || ''} · 수신자 ${recipients.length}명`;
-
-    alert(
-      `Outlook 초안함에 점검 메일을 생성했습니다.\n\n` +
-      `수신자: ${recipients.join('; ')}\n` +
-      `제목: ${subject}\n\n` +
-      `메일은 아직 발송되지 않았습니다. Outlook의 초안함에서 확인 후 보내세요.`
-    );
-  }
-  catch(e){
-    console.error('Microsoft Graph 점검 메일 초안 생성 실패:', e);
-    errEl.textContent = `Microsoft Graph 초안 생성 실패: ${e?.message || e}`;
-  }
-  finally{
-    if (btn){
-      btn.disabled = false;
-      btn.textContent = btn.dataset.originalText || '✉ 점검 메일 보내기';
-    }
-  }
-}
-
 async function openMaintenanceEmailCompose(){
   if (!maintenanceEditTarget) return;
 
   const { gid, ym } = maintenanceEditTarget;
   const errEl = document.getElementById('mlError');
-  const btn = document.getElementById('mlEmailBtn');
   const user = currentUserRecord();
 
   if (!user){
@@ -7214,18 +6852,6 @@ async function openMaintenanceEmailCompose(){
 
   errEl.textContent = '';
 
-  if (maintenanceMailMethod() === 'graph'){
-    await openMaintenanceEmailByGraph(
-      user,
-      recipients,
-      prepared.subject,
-      prepared.body,
-      errEl,
-      btn
-    );
-    return;
-  }
-
   openMaintenanceEmailByMailto(
     user,
     recipients,
@@ -7234,29 +6860,12 @@ async function openMaintenanceEmailCompose(){
   );
 }
 
-const mlEmailMethodEl = document.getElementById('mlEmailMethod');
-if (mlEmailMethodEl){
-  mlEmailMethodEl.onchange = () => {
-    if (maintenanceEditTarget){
-      refreshMaintenanceMailButton(maintenanceEditTarget.gid);
-    }
-  };
-}
 
 const cancelMmsBtn = document.getElementById('cancelMmsBtn');
 if (cancelMmsBtn){
   cancelMmsBtn.onclick = closeMaintenanceMailSettingsModal;
 }
 
-const mmsGraphConnectBtn = document.getElementById('mmsGraphConnectBtn');
-if (mmsGraphConnectBtn){
-  mmsGraphConnectBtn.onclick = testMaintenanceGraphConnection;
-}
-
-const mmsGraphDisconnectBtn = document.getElementById('mmsGraphDisconnectBtn');
-if (mmsGraphDisconnectBtn){
-  mmsGraphDisconnectBtn.onclick = disconnectMaintenanceGraph;
-}
 
 const mmsSignatureEditor = document.getElementById('mms_signature');
 if (mmsSignatureEditor){
@@ -7300,9 +6909,6 @@ if (saveMmsBtn){
         signatureHtml
       );
 
-    const graphTenant = String(document.getElementById('mms_graph_tenant')?.value || '').trim();
-    const graphClient = String(document.getElementById('mms_graph_client')?.value || '').trim();
-
     const requiredFields = [
       ['한글 메일 제목', subjectKo, 'mms_subject_ko'],
       ['한글 메일 내용', bodyKo, 'mms_body_ko'],
@@ -7324,9 +6930,7 @@ if (saveMmsBtn){
       user.maintenance_mail_subject_en !== subjectEn ||
       user.maintenance_mail_body_en !== bodyEn ||
       String(user.maintenance_mail_signature_html || '') !== signatureHtml ||
-      String(user.maintenance_mail_signature_text || '') !== signatureText ||
-      String(user.maintenance_mail_graph_tenant_id || '') !== graphTenant ||
-      String(user.maintenance_mail_graph_client_id || '') !== graphClient;
+      String(user.maintenance_mail_signature_text || '') !== signatureText;
 
     if (changed){
       const mutationId = createMutationId('mail-template');
@@ -7336,13 +6940,9 @@ if (saveMmsBtn){
       user.maintenance_mail_subject_en = subjectEn;
       user.maintenance_mail_body_en = bodyEn;
 
-      /* 한글/English 공통 Outlook 서명 */
+      /* 한글/English 공통 서명 */
       user.maintenance_mail_signature_html = signatureHtml;
       user.maintenance_mail_signature_text = signatureText;
-
-      user.maintenance_mail_graph_tenant_id = graphTenant;
-      user.maintenance_mail_graph_client_id = graphClient;
-      resetMaintenanceGraphMsal();
 
       /* 구버전 앱에서 한글 템플릿을 계속 읽을 수 있도록 호환 필드도 유지 */
       user.maintenance_mail_subject = subjectKo;
@@ -7586,7 +7186,7 @@ function captureAuditFromStateDiff(mutationId = createMutationId('data')){
     } else if (a && !b){
       addAuditLog({action:'delete',targetType:'사용자 계정',targetId:id,label:a.name,summary:`사용자 계정 삭제 · ${a.name}`,actorName:a.name,actorRole:a.isAdmin?'마스터':'일반사용자',actorId:a.id,mutationId});
     } else if (a && b){
-      const changes=auditFieldChanges(a,b,['id','maintenance_mail_subject','maintenance_mail_body','maintenance_mail_subject_ko','maintenance_mail_body_ko','maintenance_mail_subject_en','maintenance_mail_body_en','maintenance_mail_signature','maintenance_mail_signature_html','maintenance_mail_signature_text','maintenance_mail_graph_tenant_id','maintenance_mail_graph_client_id']);
+      const changes=auditFieldChanges(a,b,['id','maintenance_mail_subject','maintenance_mail_body','maintenance_mail_subject_ko','maintenance_mail_body_ko','maintenance_mail_subject_en','maintenance_mail_body_en','maintenance_mail_signature','maintenance_mail_signature_html','maintenance_mail_signature_text']);
       if (changes.length){
         const pwChanged=changes.some(c=>['pwHash','pwSalt','pwIterations'].includes(c.field));
         const visible=changes.filter(c=>!['pwSalt','pwIterations'].includes(c.field));
