@@ -5503,7 +5503,7 @@ document.getElementById('cancelAddBtn').onclick = () => {
 function openAddAssetToGroup(gid){
   if (!currentUserName()){ alert('로그인 후 이용해 주세요.'); return; }
   if (viewOnly || !sessionKey){ alert('자산을 추가하려면 먼저 마스터 비밀번호로 잠금을 해제해야 합니다.'); return; }
-  if (groupChildrenOf(gid).length || groupMeta(records.filter(r=>r.group===gid)).is_parent){ alert('상위 법인은 대표 이름 역할만 하므로 자산을 직접 추가할 수 없습니다. 해당 자산이 속할 자식 법인(Support ID)에 추가해 주세요.'); return; }
+  if (groupChildrenOf(gid).length || groupMeta(records.filter(r=>r.group===gid)).is_parent){ alert('상위 법인은 대표 이름 역할만 하므로 자산을 직접 추가할 수 없습니다. 해당 자산이 속할 하위 법인(Support ID)에 추가해 주세요.'); return; }
   const items = records.filter(r=>r.group===gid);
   if (!items.length) return;
   const meta = groupMeta(items);
@@ -5511,6 +5511,7 @@ function openAddAssetToGroup(gid){
   editingRecordId = null;
   addAssetTargetGid = gid;
   clearAssetForm();
+  document.getElementById('f_support').disabled = true;
   const set = (id, v) => { document.getElementById(id).value = v || ''; };
   set('f_owner', meta.owner==='(법인명 미확인)' ? '' : meta.owner);
   set('f_country', meta.country);
@@ -5533,6 +5534,7 @@ async function openDirectEditModal(recId){
   editingRecordId = recId;
   addAssetTargetGid = null;
   clearAssetForm();
+  document.getElementById('f_support').disabled = false;
   const set = (id, v) => { document.getElementById(id).value = v || ''; };
   const meta = groupMeta(records.filter(r=>r.group===rec.group));
   set('f_owner', meta.owner==='(법인명 미확인)' ? '' : meta.owner);
