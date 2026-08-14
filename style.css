@@ -3854,3 +3854,90 @@ td.col-sku{
       0 0 0 4px rgba(217,119,6,.12);
   }
 }
+
+/* SKU 셀 기본 */
+.sku-cell{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+
+/* 하위 ISG 앱 표시 */
+.sku-cell-child-app{
+  position:relative;
+  margin-left:14px;
+  padding:8px 10px 8px 12px;
+  border-radius:10px;
+  background:#f7f8fc;
+  border:1px solid #dfe5f2;
+}
+
+/* 왼쪽 연결 포인트 */
+.sku-cell-child-app::before{
+  content:"";
+  position:absolute;
+  left:-10px;
+  top:14px;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#aab6d3;
+}
+
+/* 연결선 */
+.sku-cell-child-app::after{
+  content:"";
+  position:absolute;
+  left:-6px;
+  top:-12px;
+  width:1px;
+  height:26px;
+  background:#d7dfef;
+}
+
+.child-app-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  min-width:0;
+}
+
+.child-app-label{
+  display:inline-flex;
+  align-items:center;
+  height:22px;
+  padding:0 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  color:#4f6280;
+  background:#eef3fb;
+  border:1px solid #d7e3f7;
+  white-space:nowrap;
+}
+
+.child-app-sub{
+  font-size:11px;
+  color:#7a869d;
+  line-height:1.4;
+  padding-left:1px;
+}
+
+/* ISG SKU 뱃지 */
+.sku-badge-isg{
+  background:#f1edff;
+  border:1px solid #d9cdfd;
+  color:#6e56cf;
+}
+.asset-row.is-app-child::before,
+.asset-row.is-app-child::after{
+  display:none !important;
+}
+.child-app-label::before{
+  content:"◈";
+  font-size:10px;
+  margin-right:5px;
+  opacity:.7;
+}
