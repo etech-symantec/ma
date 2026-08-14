@@ -815,7 +815,6 @@ let workLogSyncBusy = false;
 let pendingWorkLogSyncTask = null;
 let syncStartedAt = 0;
 let syncCountdownTimer = null;
-const SYNC_STUCK_MS = 5000;
 
 function sleepMs(ms){
   return new Promise(resolve =>
