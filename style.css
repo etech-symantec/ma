@@ -3867,8 +3867,9 @@ td.col-sku{
 .col-sku-app .asset-app-display-simple{
   display:flex;
   align-items:flex-start;
-  gap:10px;
-  padding-left:8px;
+  gap:7px;          /* 화살표와 SKU 간격도 약간 축소 */
+  padding-left:0;   /* 왼쪽 여백 제거 */
+  margin-left:-6px; /* 전체를 조금 왼쪽으로 당김 */
 }
 
 /* 하위 자산 내용 */
@@ -3893,30 +3894,31 @@ td.col-sku{
 .col-sku-app .asset-child-arrow::before{
   content:'';
   position:absolute;
-  left:8px;
-  top:-10px;
-  width:1.5px;
-  height:14px;
-  background:#C9D4E5;
-  border-radius:2px;
+  left:7px;
+  top:-4px;              /* 세로선 시작 위치 아래로 */
+  width:0;
+  height:9px;            /* 세로선 길이 더 짧게 */
+  border-left:1.5px solid #C9D4E5;   /* 꺾임선과 동일 두께 */
+  border-radius:0;
 }
 
 /* 가로선 + 꺾임 */
 .col-sku-app .asset-child-arrow::after{
   content:'';
   position:absolute;
-  left:8px;
-  top:4px;
+  left:7px;
+  top:5px;
   width:10px;
-  height:10px;
-  border-left:1.5px solid #C9D4E5;
-  border-bottom:1.5px solid #C9D4E5;
+  height:9px;
+  border-left:1.5px solid #C9D4E5;   /* 동일 두께 */
+  border-bottom:1.5px solid #C9D4E5; /* 동일 두께 */
   border-bottom-left-radius:6px;
+  box-sizing:border-box;
 }
 
 /* 하위 자산 행 자체를 조금 더 부드럽게 */
 tr.asset-child-row td.col-sku{
-  padding-left:4px !important;
+  padding-left:0 !important;
 }
 
 /* 혹시 기존 트리선이 있다면 숨김 */
