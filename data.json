@@ -10355,7 +10355,7 @@
       "flag": "",
       "owner": "삼성전자 구미",
       "location": "구미",
-      "support_id": "15688931",
+      "support_id": "356307",
       "sku": "MC-S400-20-100-STANDARD",
       "sn": "5017320108",
       "entitlement": "🔗",
@@ -10401,7 +10401,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "김상문",
-      "build_date": "2025.08"
+      "build_date": "2025.08",
+      "last_mutation_id": "data-mss8kedj-6f17cdc9-2241-4f28-8815-69acce7dec91"
     },
     {
       "group": "custom-1786349440902",
@@ -16360,6 +16361,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss7www0-cc1d4906-0ba7-48ef-80f3-46b818a6d48b"
+    },
+    {
+      "id": "audit-1786668957141-yianvz",
+      "ts": 1786668957141,
+      "action": "edit",
+      "target_type": "Support ID",
+      "target_id": "custom-1786349440902:356307",
+      "group": "custom-1786349440902",
+      "owner": "삼성전자 구미",
+      "label": "MC-S400-20-100-STANDARD",
+      "sn": "5017320108",
+      "summary": "Support ID 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "support_id",
+          "label": "Support ID",
+          "before": "15688931",
+          "after": "356307",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss8kedj-6f17cdc9-2241-4f28-8815-69acce7dec91"
     }
   ],
   "syncMutations": [
@@ -16546,6 +16572,11 @@
     {
       "id": "data-mss7www0-cc1d4906-0ba7-48ef-80f3-46b818a6d48b",
       "ts": 1786667861389,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss8kedj-6f17cdc9-2241-4f28-8815-69acce7dec91",
+      "ts": 1786668957142,
       "scope": "data"
     }
   ]
