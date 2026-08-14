@@ -5571,6 +5571,7 @@ document.getElementById('saveAddBtn').onclick = async () => {
     const rec = records.find(r=>String(r.id)===String(editingRecordId));
     if (!rec){ editingRecordId = null; document.getElementById('addModal').classList.remove('open'); return; }
     Object.assign(rec, {
+      support_id: val('f_support'),
       sku:val('f_sku'), sn:val('f_sn'), qty:val('f_qty'),
       start:val('f_start'), end:val('f_end'), remarks:val('f_remarks'),
       os_ver:val('f_os'),
