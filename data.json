@@ -7602,7 +7602,7 @@
       "qty": "32",
       "start": "2025.1.1",
       "end": "2026.12.31",
-      "remarks": "인터넷 느린 현상 발생, 프록시 BCIS 다운 불가 4번 발생",
+      "remarks": "SKU: ISG-PR-SUB\n인터넷 느린 현상 발생, 프록시 BCIS 다운 불가 4번 발생",
       "deploy_date": "",
       "deploy_log": "",
       "mode": "",
@@ -7617,9 +7617,9 @@
       "tag_note": "수원 사업장",
       "id": 211,
       "ip_enc": {
-        "iv": "DLzu91wz0Yf0w/XI",
-        "ct": "HQZpeY6p5A0G9f+/+ak=",
-        "tag": "k/uv/CbFgFpe4ucKKR5MTA=="
+        "iv": "eFxSJPy2iUYYhwHR",
+        "ct": "zbdcIP+Xf7KoY2oXWuQ=",
+        "tag": "1afjGSmw7wwhb+M6ijb7Yg=="
       },
       "id_enc": null,
       "pw_enc": null,
@@ -7662,7 +7662,7 @@
       "build_date": "",
       "cust_memo": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반\n- 내방상세\n> 방문일시 :\n> 방문목적 : A/S\n> 접견자 : 김지수 프로",
       "asset_parent_id": "210",
-      "last_mutation_id": "data-mssfz27r-3602da55-5ef9-4cbb-9347-52dd0985c2b8"
+      "last_mutation_id": "data-mssfzx6w-84cd7bbe-7a65-4638-9a23-03f17cb4fb2e"
     },
     {
       "group": "kr-004",
@@ -7673,10 +7673,10 @@
       "sku": "ISG-Proxy 10",
       "sn": "32996887",
       "entitlement": "🔗",
-      "qty": "1",
+      "qty": "32",
       "start": "2025.1.1",
       "end": "2026.12.31",
-      "remarks": "",
+      "remarks": "SKU: ISG-PR-SUB",
       "deploy_date": "",
       "deploy_log": "",
       "mode": "",
@@ -7691,9 +7691,9 @@
       "tag_note": "수원 사업장",
       "id": 212,
       "ip_enc": {
-        "iv": "kqBEQTaJyUEn8iGv",
-        "ct": "BxzlihzTE/pOVH5fdFE=",
-        "tag": "upNDKxy5OL9/oKxTOVo/hg=="
+        "iv": "k0j4EV8O3/P9w+mh",
+        "ct": "3getFZ6O8ZiG1ZikA4c=",
+        "tag": "gR9QVo2DLVqyO/9mMPEw4A=="
       },
       "id_enc": null,
       "pw_enc": null,
@@ -7736,7 +7736,7 @@
       "build_date": "",
       "cust_memo": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반\n- 내방상세\n> 방문일시 :\n> 방문목적 : A/S\n> 접견자 : 김지수 프로",
       "asset_parent_id": "210",
-      "last_mutation_id": "data-mssftbl5-9be71bc0-9851-432a-ab04-0fbc91516a19"
+      "last_mutation_id": "data-mssg00o2-4a3141a1-9855-4225-98b5-6ec54e77d4eb"
     },
     {
       "group": "kr-004",
@@ -7815,10 +7815,10 @@
       "sku": "ISG-Proxy 11",
       "sn": "32996860",
       "entitlement": "🔗",
-      "qty": "1",
+      "qty": "24",
       "start": "2025.1.1",
       "end": "2026.12.31",
-      "remarks": "인터넷 느린 현상 발생",
+      "remarks": "SKU: ISG-PR-SUB\n인터넷 느린 현상 발생",
       "deploy_date": "",
       "deploy_log": "",
       "mode": "",
@@ -7833,9 +7833,9 @@
       "tag_note": "수원 사업장",
       "id": 214,
       "ip_enc": {
-        "iv": "N78Uj7BQNXQYxSg7",
-        "ct": "KHzjExEDAsgNjqk2TMQ=",
-        "tag": "jrKji73hsa/mhAhCqE/jmQ=="
+        "iv": "gfQ3E1NcevZQDNWn",
+        "ct": "BP5KX/IOLF3FijTS1Xs=",
+        "tag": "pT9GXq/Zl7f5rOxthHViWw=="
       },
       "id_enc": null,
       "pw_enc": null,
@@ -7878,7 +7878,7 @@
       "build_date": "",
       "cust_memo": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반\n- 내방상세\n> 방문일시 :\n> 방문목적 : A/S\n> 접견자 : 김지수 프로",
       "asset_parent_id": "213",
-      "last_mutation_id": "data-mssftg1n-bf887cb0-986c-4924-ab9c-f6d8a1b7d2a4"
+      "last_mutation_id": "data-mssg04x0-b17140d4-5778-411a-8379-8e7cea32f44d"
     },
     {
       "group": "kr-004",
@@ -7889,10 +7889,10 @@
       "sku": "ISG-Proxy 12",
       "sn": "32996873",
       "entitlement": "🔗",
-      "qty": "1",
+      "qty": "24",
       "start": "2025.1.1",
       "end": "2026.12.31",
-      "remarks": "프록시 BCIS 다운 불가 1번 발생, 이후 GUI / CLI 비정상 동작",
+      "remarks": "SKU: ISG-PR-SUB\n프록시 BCIS 다운 불가 1번 발생\n이후 GUI / CLI 비정상 동작",
       "deploy_date": "",
       "deploy_log": "",
       "mode": "",
@@ -7907,9 +7907,9 @@
       "tag_note": "수원 사업장",
       "id": 215,
       "ip_enc": {
-        "iv": "8e89xcwVibQM/Eys",
-        "ct": "o6Lq3URw8417McugJ5E=",
-        "tag": "mRqrn21cDRnQUgv+OUW8Fg=="
+        "iv": "IJ+3Fj9jBEjFKXaj",
+        "ct": "iix44WI5Wy4qKLTLn6I=",
+        "tag": "lBHMjFG2yQ2JvlgPzyCtkw=="
       },
       "id_enc": null,
       "pw_enc": null,
@@ -7952,7 +7952,7 @@
       "build_date": "",
       "cust_memo": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반\n- 내방상세\n> 방문일시 :\n> 방문목적 : A/S\n> 접견자 : 김지수 프로",
       "asset_parent_id": "213",
-      "last_mutation_id": "data-mssfth95-9fbdeab9-f885-407f-9283-9d232d3d8e19"
+      "last_mutation_id": "data-mssg0c19-f2a5f129-6cae-4c17-9043-50b8b68f9b04"
     },
     {
       "group": "kr-004",
@@ -17980,6 +17980,230 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssfz27r-3602da55-5ef9-4cbb-9347-52dd0985c2b8"
+    },
+    {
+      "id": "audit-1786681402438-uvib2w",
+      "ts": 1786681402438,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "212",
+      "group": "kr-004",
+      "owner": "삼성전자 수원사업장",
+      "label": "ISG-Proxy 10",
+      "sn": "32996887",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "qty",
+          "label": "수량",
+          "before": "1",
+          "after": "32",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssfz589-f76aa94f-ccc1-4f71-aa82-fde11d3192ce"
+    },
+    {
+      "id": "audit-1786681407408-k3ysum",
+      "ts": 1786681407408,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "214",
+      "group": "kr-004",
+      "owner": "삼성전자 수원사업장",
+      "label": "ISG-Proxy 11",
+      "sn": "32996860",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "qty",
+          "label": "수량",
+          "before": "1",
+          "after": "24",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssfz92h-c6de06fe-57c4-4518-8d9e-765fb2792cdd"
+    },
+    {
+      "id": "audit-1786681412108-zjp996",
+      "ts": 1786681412108,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "215",
+      "group": "kr-004",
+      "owner": "삼성전자 수원사업장",
+      "label": "ISG-Proxy 12",
+      "sn": "32996873",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "qty",
+          "label": "수량",
+          "before": "1",
+          "after": "24",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssfzcp1-4f45fafe-518f-401f-b0f2-e6fd8e0794c4"
+    },
+    {
+      "id": "audit-1786681438672-h80uci",
+      "ts": 1786681438672,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "211",
+      "group": "kr-004",
+      "owner": "삼성전자 수원사업장",
+      "label": "ISG-Proxy 9",
+      "sn": "32996856",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "remarks",
+          "label": "자산 비고",
+          "before": "인터넷 느린 현상 발생, 프록시 BCIS 다운 불가 4번 발생",
+          "after": "SKU: ISG-PR-SUB\n인터넷 느린 현상 발생, 프록시 BCIS 다운 불가 4번 발생",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssfzx6w-84cd7bbe-7a65-4638-9a23-03f17cb4fb2e"
+    },
+    {
+      "id": "audit-1786681443181-w5hfr2",
+      "ts": 1786681443181,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "212",
+      "group": "kr-004",
+      "owner": "삼성전자 수원사업장",
+      "label": "ISG-Proxy 10",
+      "sn": "32996887",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "remarks",
+          "label": "자산 비고",
+          "before": "—",
+          "after": "SKU: ISG-PR-SUB",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg00o2-4a3141a1-9855-4225-98b5-6ec54e77d4eb"
+    },
+    {
+      "id": "audit-1786681448682-8ko035",
+      "ts": 1786681448682,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "214",
+      "group": "kr-004",
+      "owner": "삼성전자 수원사업장",
+      "label": "ISG-Proxy 11",
+      "sn": "32996860",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "remarks",
+          "label": "자산 비고",
+          "before": "인터넷 느린 현상 발생",
+          "after": "SKU: ISG-PR-SUB\n인터넷 느린 현상 발생",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg04x0-b17140d4-5778-411a-8379-8e7cea32f44d"
+    },
+    {
+      "id": "audit-1786681457908-boxs8c",
+      "ts": 1786681457908,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "215",
+      "group": "kr-004",
+      "owner": "삼성전자 수원사업장",
+      "label": "ISG-Proxy 12",
+      "sn": "32996873",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "remarks",
+          "label": "자산 비고",
+          "before": "프록시 BCIS 다운 불가 1번 발생, 이후 GUI / CLI 비정상 동작",
+          "after": "SKU: ISG-PR-SUB\n프록시 BCIS 다운 불가 1번 발생\n이후 GUI / CLI 비정상 동작",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg0c19-f2a5f129-6cae-4c17-9043-50b8b68f9b04"
     }
   ],
   "syncMutations": [
@@ -18371,6 +18595,41 @@
     {
       "id": "data-mssfz27r-3602da55-5ef9-4cbb-9347-52dd0985c2b8",
       "ts": 1786681398526,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssfz589-f76aa94f-ccc1-4f71-aa82-fde11d3192ce",
+      "ts": 1786681402439,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssfz92h-c6de06fe-57c4-4518-8d9e-765fb2792cdd",
+      "ts": 1786681407409,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssfzcp1-4f45fafe-518f-401f-b0f2-e6fd8e0794c4",
+      "ts": 1786681412109,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssfzx6w-84cd7bbe-7a65-4638-9a23-03f17cb4fb2e",
+      "ts": 1786681438672,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg00o2-4a3141a1-9855-4225-98b5-6ec54e77d4eb",
+      "ts": 1786681443183,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg04x0-b17140d4-5778-411a-8379-8e7cea32f44d",
+      "ts": 1786681448683,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg0c19-f2a5f129-6cae-4c17-9043-50b8b68f9b04",
+      "ts": 1786681457909,
       "scope": "data"
     }
   ]
