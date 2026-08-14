@@ -3705,14 +3705,16 @@
           "name": "Drake Fisher",
           "org": "삼성전자",
           "phone": "",
-          "email": "d.fisher@samsung.com"
+          "email": "d.fisher@samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Eric Sandberg",
           "org": "삼성전자",
           "phone": "",
-          "email": "e.sandberg@samsung.com"
+          "email": "e.sandberg@samsung.com",
+          "mail_recipient_type": "cc"
         }
       ],
       "country": "미국",
@@ -3720,7 +3722,9 @@
       "build_engineer": "신호근",
       "build_date": "2024.10",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
     },
     {
       "group": "seha",
@@ -3762,14 +3766,16 @@
           "name": "Drake Fisher",
           "org": "삼성전자",
           "phone": "",
-          "email": "d.fisher@samsung.com"
+          "email": "d.fisher@samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Eric Sandberg",
           "org": "삼성전자",
           "phone": "",
-          "email": "e.sandberg@samsung.com"
+          "email": "e.sandberg@samsung.com",
+          "mail_recipient_type": "cc"
         }
       ],
       "country": "미국",
@@ -3777,7 +3783,9 @@
       "build_engineer": "신호근",
       "build_date": "2024.10",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
     },
     {
       "group": "seha",
@@ -3827,14 +3835,16 @@
           "name": "Drake Fisher",
           "org": "삼성전자",
           "phone": "",
-          "email": "d.fisher@samsung.com"
+          "email": "d.fisher@samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Eric Sandberg",
           "org": "삼성전자",
           "phone": "",
-          "email": "e.sandberg@samsung.com"
+          "email": "e.sandberg@samsung.com",
+          "mail_recipient_type": "cc"
         }
       ],
       "country": "미국",
@@ -3845,7 +3855,8 @@
       "is_parent": false,
       "enable_pw_enc": null,
       "asset_parent_id": "80",
-      "last_mutation_id": "data-mss62fn1-734d4cec-31e3-4be4-afec-44e836279a8b"
+      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02",
+      "cust_memo": ""
     },
     {
       "group": "seha",
@@ -3887,14 +3898,16 @@
           "name": "Drake Fisher",
           "org": "삼성전자",
           "phone": "",
-          "email": "d.fisher@samsung.com"
+          "email": "d.fisher@samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Eric Sandberg",
           "org": "삼성전자",
           "phone": "",
-          "email": "e.sandberg@samsung.com"
+          "email": "e.sandberg@samsung.com",
+          "mail_recipient_type": "cc"
         }
       ],
       "country": "미국",
@@ -3905,7 +3918,8 @@
       "is_parent": false,
       "enable_pw_enc": null,
       "asset_parent_id": "81",
-      "last_mutation_id": "data-mss62h0g-e6af0e68-4430-40e2-87c7-5bd94eecefd6"
+      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02",
+      "cust_memo": ""
     },
     {
       "group": "seha",
@@ -3943,14 +3957,16 @@
           "name": "Drake Fisher",
           "org": "삼성전자",
           "phone": "",
-          "email": "d.fisher@samsung.com"
+          "email": "d.fisher@samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Eric Sandberg",
           "org": "삼성전자",
           "phone": "",
-          "email": "e.sandberg@samsung.com"
+          "email": "e.sandberg@samsung.com",
+          "mail_recipient_type": "cc"
         }
       ],
       "country": "미국",
@@ -3958,7 +3974,9 @@
       "build_engineer": "신호근",
       "build_date": "2024.10",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
     },
     {
       "group": "seha",
@@ -4008,14 +4026,16 @@
           "name": "Drake Fisher",
           "org": "삼성전자",
           "phone": "",
-          "email": "d.fisher@samsung.com"
+          "email": "d.fisher@samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Eric Sandberg",
           "org": "삼성전자",
           "phone": "",
-          "email": "e.sandberg@samsung.com"
+          "email": "e.sandberg@samsung.com",
+          "mail_recipient_type": "cc"
         }
       ],
       "country": "미국",
@@ -4023,7 +4043,9 @@
       "build_engineer": "신호근",
       "build_date": "2024.10",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
     },
     {
       "group": "seha",
@@ -4073,14 +4095,16 @@
           "name": "Drake Fisher",
           "org": "삼성전자",
           "phone": "",
-          "email": "d.fisher@samsung.com"
+          "email": "d.fisher@samsung.com",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "Eric Sandberg",
           "org": "삼성전자",
           "phone": "",
-          "email": "e.sandberg@samsung.com"
+          "email": "e.sandberg@samsung.com",
+          "mail_recipient_type": "cc"
         }
       ],
       "country": "미국",
@@ -4088,7 +4112,9 @@
       "build_engineer": "신호근",
       "build_date": "2024.10",
       "group_parent": "",
-      "is_parent": false
+      "is_parent": false,
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
     },
     {
       "group": "us-005",
@@ -15141,6 +15167,38 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mst1h0wc-0ec67458-4429-4224-b48a-b4f4ba235e3f"
+    },
+    {
+      "id": "audit-1786717520847-f5at7o",
+      "ts": 1786717520847,
+      "action": "edit",
+      "target_type": "법인",
+      "target_id": "seha",
+      "group": "seha",
+      "owner": "삼성전자 SEHA",
+      "label": "SSP-S210-10",
+      "sn": "924710022",
+      "summary": "법인 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "cust_contacts",
+          "label": "고객사 담당자",
+          "before": "운영 / Drake Fisher / 삼성전자 / d.fisher@samsung.com, 운영 / Eric Sandberg / 삼성전자 / e.sandberg@samsung.com",
+          "after": "운영 / Drake Fisher / 삼성전자 / d.fisher@samsung.com, 운영 / Eric Sandberg / 삼성전자 / e.sandberg@samsung.com",
+          "sensitive": false
+        },
+        {
+          "field": "cust_memo",
+          "label": "고객사 담당자 메모",
+          "before": "—",
+          "after": "—",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
     }
   ],
   "syncMutations": [
@@ -15782,6 +15840,11 @@
     {
       "id": "data-mst1h0wc-0ec67458-4429-4224-b48a-b4f4ba235e3f",
       "ts": 1786717508572,
+      "scope": "data"
+    },
+    {
+      "id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02",
+      "ts": 1786717520850,
       "scope": "data"
     }
   ]
