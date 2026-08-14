@@ -8316,7 +8316,9 @@
       "is_parent": false,
       "build_engineer": "",
       "build_date": "",
-      "cust_memo": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반\n- 내방상세\n> 방문일시 :\n> 방문목적 : A/S\n> 접견자 : 김지수 프로"
+      "cust_memo": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반\n- 내방상세\n> 방문일시 :\n> 방문목적 : A/S\n> 접견자 : 김지수 프로",
+      "asset_parent_id": "219",
+      "last_mutation_id": "data-mssfvapj-698f073e-2a31-4099-84d2-320998f73b54"
     },
     {
       "group": "kr-004",
@@ -17624,6 +17626,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssftn5t-bd1fa04c-161e-400b-bcec-747a4d67f2b6"
+    },
+    {
+      "id": "audit-1786681222910-4y0jqc",
+      "ts": 1786681222910,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "220",
+      "group": "kr-004",
+      "owner": "삼성전자 수원사업장",
+      "label": "ISG-Proxy 3",
+      "sn": "81993721",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "219",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssfvapj-698f073e-2a31-4099-84d2-320998f73b54"
     }
   ],
   "syncMutations": [
@@ -17950,6 +17977,11 @@
     {
       "id": "data-mssftn5t-bd1fa04c-161e-400b-bcec-747a4d67f2b6",
       "ts": 1786681145748,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssfvapj-698f073e-2a31-4099-84d2-320998f73b54",
+      "ts": 1786681222910,
       "scope": "data"
     }
   ]
