@@ -11270,7 +11270,8 @@
       "build_engineer": "신호근",
       "build_date": "2026.05",
       "asset_order": 11,
-      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+      "last_mutation_id": "data-mss7d1gt-2a6713c6-beab-49ab-96c1-87f99d162e13",
+      "asset_parent_id": "275"
     },
     {
       "group": "custom-msnzlh9m",
@@ -16150,6 +16151,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss7cz97-295951c9-4b85-4af9-881d-29f06bf768c2"
+    },
+    {
+      "id": "audit-1786666934203-hxrzbm",
+      "ts": 1786666934203,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "276",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-MC",
+      "sn": "91997687",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "275",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7d1gt-2a6713c6-beab-49ab-96c1-87f99d162e13"
     }
   ],
   "syncMutations": [
@@ -16306,6 +16332,11 @@
     {
       "id": "data-mss7cz97-295951c9-4b85-4af9-881d-29f06bf768c2",
       "ts": 1786666931335,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss7d1gt-2a6713c6-beab-49ab-96c1-87f99d162e13",
+      "ts": 1786666934203,
       "scope": "data"
     }
   ]
