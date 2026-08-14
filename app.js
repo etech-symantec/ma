@@ -811,10 +811,11 @@ function scheduleAutoSync(mutationId){
 /* =========================================================
    작업 이력 - 저장 완료까지 화면 잠금
    ========================================================= */
-
 let workLogSyncBusy = false;
 let pendingWorkLogSyncTask = null;
-
+let syncStartedAt = 0;
+let syncCountdownTimer = null;
+const SYNC_STUCK_MS = 5000;
 
 function sleepMs(ms){
   return new Promise(resolve =>
@@ -872,11 +873,10 @@ function ensureWorkLogSyncOverlay(){
         type="button"
         class="btn btn-primary worklog-sync-retry"
         id="workLogSyncRetryBtn"
-        style="display:none;"
+        disabled
       >
-        다시 시도
+        ↻ 강제 재저장 (10초 후)
       </button>
-
     </div>
   `;
 
@@ -893,24 +893,11 @@ function ensureWorkLogSyncOverlay(){
 
 
   retryBtn.onclick = async () => {
-
-    if (
-      !pendingWorkLogSyncTask ||
-      workLogSyncBusy
-    ){
+    if (retryBtn.disabled){
       return;
     }
-
-
-    await syncWorkLogAndWait(
-      pendingWorkLogSyncTask.label,
-      pendingWorkLogSyncTask.onSuccess,
-      true,
-      pendingWorkLogSyncTask.syncKind || 'data'
-    );
-
+    await forceManualResave();
   };
-
 
   return overlay;
 }
@@ -952,21 +939,61 @@ function showWorkLogSyncOverlay(label){
     'GitHub 저장이 완료될 때까지 다른 작업을 할 수 없습니다.';
 
 
-  document.getElementById(
-    'workLogSyncRetryBtn'
-  ).style.display = 'none';
+  const retryBtn =
+    document.getElementById(
+      'workLogSyncRetryBtn'
+    );
+
+  if (!syncStartedAt){
+    syncStartedAt = Date.now();
+  }
+  
+  retryBtn.style.display = '';
+  retryBtn.disabled = true;
+  
+  if (syncCountdownTimer){
+    clearInterval(syncCountdownTimer);
+    syncCountdownTimer = null;
+  }
+    
+  function updateForceRetryButton(){
+    const elapsed =
+      Date.now() - syncStartedAt;
+    const remain =
+      Math.max(
+        0,
+        Math.ceil(
+          (SYNC_STUCK_MS - elapsed) / 1000
+        )
+      );
+  
+    if (remain > 0){
+      retryBtn.disabled = true;
+      retryBtn.textContent =
+        `↻ 강제 재저장 (${remain}초 후)`;
+      return;
+    }
+  
+    retryBtn.disabled = false;
+    retryBtn.textContent =
+      '↻ 강제 재저장';
+  
+    if (syncCountdownTimer){
+      clearInterval(
+        syncCountdownTimer
+      );
+      syncCountdownTimer = null;
+    }
+  }
+  updateForceRetryButton();
+  syncCountdownTimer =
+    setInterval(
+      updateForceRetryButton,
+      250
+    );
 }
 
-
-/*
-  자동 동기화 타이머를 기다리지 않고
-  지금 즉시 GitHub 저장
-*/
 async function flushAutoSyncNow(){
-
-  /*
-    감사로그도 현재 변경사항까지 먼저 생성
-  */
   const mutationId = createMutationId('data');
   stampDataMutation(mutationId);
   captureAuditFromStateDiff(mutationId);
@@ -982,10 +1009,6 @@ async function flushAutoSyncNow(){
     );
   }
 
-
-  /*
-    기존 1.2초 자동 저장 예약이 있다면 취소
-  */
   if (autoSyncTimer !== null){
 
     clearTimeout(
@@ -1154,68 +1177,49 @@ async function syncWorkLogAndWait(
       await flushAutoSyncNow();
     }
 
-
-    /*
-      GitHub 저장이 성공한 뒤에만
-      모달 닫기/입력 초기화/화면 갱신
-    */
     const completeTask =
       pendingWorkLogSyncTask;
 
-
     pendingWorkLogSyncTask =
       null;
-
 
     if (
       completeTask &&
       completeTask.onSuccess
     ){
-
       try{
-
         await completeTask.onSuccess();
-
       }
       catch(e){
-
         console.error(
           '작업 이력 저장 후 화면 갱신 오류:',
           e
         );
-
       }
-
     }
-
 
     overlay.classList.add(
       'is-success'
     );
 
-
     spinner.style.display =
       'none';
-
 
     title.textContent =
       '✓ 동기화 완료';
 
-
     message.textContent =
       'GitHub에 정상적으로 저장되었습니다.';
 
-
     retryBtn.style.display =
       'none';
-
-
-    /*
-      완료 메시지를 잠깐 보여준 뒤 해제
-    */
     await sleepMs(500);
-
-
+    if (syncCountdownTimer){
+      clearInterval(syncCountdownTimer);
+      syncCountdownTimer = null;
+    }
+    
+    syncStartedAt = 0;
     overlay.classList.remove(
       'open',
       'is-success',
@@ -1233,35 +1237,35 @@ async function syncWorkLogAndWait(
       e
     );
 
-
     overlay.classList.add(
       'is-error'
     );
 
-
     spinner.style.display =
       'none';
-
 
     title.textContent =
       '⚠ 동기화 실패';
 
-
     message.textContent =
       '입력한 내용은 현재 화면에 유지됩니다. GitHub 저장이 완료될 때까지 다시 시도해 주세요.';
 
-
-    retryBtn.style.display =
-      '';
-
-
-    /*
-      overlay는 닫지 않는다.
-      따라서 뒤쪽 화면 클릭은 계속 차단됨.
-    */
+    if (syncCountdownTimer){
+      clearInterval(syncCountdownTimer);
+      syncCountdownTimer = null;
+    }
+    
+    syncStartedAt = 0;
+    
+    retryBtn.style.display = '';
+    retryBtn.disabled = false;
+    retryBtn.textContent = '↻ 다시 저장';
+    
+    retryBtn.onclick = async () => {
+      await forceManualResave();
+    };
 
     return false;
-
   }
   finally{
 
