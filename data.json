@@ -13678,7 +13678,7 @@
       "cust_contact": "",
       "cust_phone": "",
       "cust_email": "",
-      "group_remarks": "accelerated_pac",
+      "group_remarks": "accelerated_pac / 27년 말 410-20B 교체 예정(라이선스 등 문의)",
       "group_parent": "",
       "is_parent": true,
       "support_id": "",
@@ -13689,7 +13689,8 @@
       "end": "",
       "os_ver": "",
       "work_log": [],
-      "cust_memo": "cc. sdv.itsec@samsung.com"
+      "cust_memo": "cc. sdv.itsec@samsung.com",
+      "last_mutation_id": "data-msskhmxl-6e9bec47-77ab-4483-a4d0-c2bbdfa0e7e1"
     },
     {
       "id": 1786349440901,
@@ -14990,6 +14991,31 @@
       "actor_name": "윤태리",
       "actor_role": "일반사용자",
       "mutation_id": "data-msskb0o4-e90b498a-f4d1-4a4e-a0ce-93af43272f6b"
+    },
+    {
+      "id": "audit-1786688983654-9iyn8j",
+      "ts": 1786688983654,
+      "action": "edit",
+      "target_type": "법인",
+      "target_id": "custom-1786348811427",
+      "group": "custom-1786348811427",
+      "owner": "삼성디스플레이 SDV",
+      "label": "삼성디스플레이 SDV",
+      "sn": "",
+      "summary": "법인 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "group_remarks",
+          "label": "법인 비고",
+          "before": "accelerated_pac",
+          "after": "accelerated_pac / 27년 말 410-20B 교체 예정(라이선스 등 문의)",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786519956793",
+      "actor_name": "윤태리",
+      "actor_role": "일반사용자",
+      "mutation_id": "data-msskhmxl-6e9bec47-77ab-4483-a4d0-c2bbdfa0e7e1"
     }
   ],
   "syncMutations": [
@@ -15596,6 +15622,11 @@
     {
       "id": "data-msskb0o4-e90b498a-f4d1-4a4e-a0ce-93af43272f6b",
       "ts": 1786688674861,
+      "scope": "data"
+    },
+    {
+      "id": "data-msskhmxl-6e9bec47-77ab-4483-a4d0-c2bbdfa0e7e1",
+      "ts": 1786688983654,
       "scope": "data"
     }
   ]
