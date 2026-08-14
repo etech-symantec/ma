@@ -4206,7 +4206,9 @@
           "note": "24.12.07 신호근 7.3.18.2 신규",
           "author": "윤태리"
         }
-      ]
+      ],
+      "asset_parent_id": "102",
+      "last_mutation_id": "data-mssg3v4p-44b59b60-b11e-497f-87cd-05943f5892e0"
     },
     {
       "group": "us-005",
@@ -9853,7 +9855,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "김상문",
-      "build_date": "2025.08"
+      "build_date": "2025.08",
+      "asset_parent_id": "251",
+      "last_mutation_id": "data-mssg1mc1-d80a0236-67e0-45b1-874e-8731c7cff0ee"
     },
     {
       "group": "custom-1786349440902",
@@ -9959,7 +9963,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "김상문",
-      "build_date": "2025.08"
+      "build_date": "2025.08",
+      "asset_parent_id": "253",
+      "last_mutation_id": "data-mssg1ojd-06910ad4-7b3b-424f-902a-376c17d70abe"
     },
     {
       "group": "custom-1786349440902",
@@ -10065,7 +10071,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "김상문",
-      "build_date": "2025.08"
+      "build_date": "2025.08",
+      "asset_parent_id": "255",
+      "last_mutation_id": "data-mssg1rx4-6c984ff6-3138-439a-86ef-ba8f771cd41b"
     },
     {
       "group": "custom-1786349440902",
@@ -10171,7 +10179,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "김상문",
-      "build_date": "2025.08"
+      "build_date": "2025.08",
+      "asset_parent_id": "257",
+      "last_mutation_id": "data-mssg1tqk-f083d9f2-0a6d-4162-a605-095dfd85a369"
     },
     {
       "group": "custom-1786349440902",
@@ -18000,6 +18010,131 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssg0o1b-fea72d19-1d6c-44ea-8120-7af4688cdf5f"
+    },
+    {
+      "id": "audit-1786681517923-8ck834",
+      "ts": 1786681517923,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "252",
+      "group": "custom-1786349440902",
+      "owner": "삼성전자 구미",
+      "label": "ISG-Proxy 1",
+      "sn": "82995034",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "251",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg1mc1-d80a0236-67e0-45b1-874e-8731c7cff0ee"
+    },
+    {
+      "id": "audit-1786681520770-0xg08k",
+      "ts": 1786681520770,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "254",
+      "group": "custom-1786349440902",
+      "owner": "삼성전자 구미",
+      "label": "ISG-Proxy 2",
+      "sn": "82995034",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "253",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg1ojd-06910ad4-7b3b-424f-902a-376c17d70abe"
+    },
+    {
+      "id": "audit-1786681525159-zzzkj1",
+      "ts": 1786681525159,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "256",
+      "group": "custom-1786349440902",
+      "owner": "삼성전자 구미",
+      "label": "ISG-Proxy 3",
+      "sn": "82995034",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "255",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg1rx4-6c984ff6-3138-439a-86ef-ba8f771cd41b"
+    },
+    {
+      "id": "audit-1786681527509-7xfi5v",
+      "ts": 1786681527509,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "258",
+      "group": "custom-1786349440902",
+      "owner": "삼성전자 구미",
+      "label": "ISG-Proxy 4",
+      "sn": "82995034",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "257",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg1tqk-f083d9f2-0a6d-4162-a605-095dfd85a369"
+    },
+    {
+      "id": "audit-1786681622623-zg6ze5",
+      "ts": 1786681622623,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "104",
+      "group": "us-005",
+      "owner": "삼성전자 RP (동부)",
+      "label": "ISG-Proxy 1",
+      "sn": "81991537",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "102",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg3v4p-44b59b60-b11e-497f-87cd-05943f5892e0"
     }
   ],
   "syncMutations": [
@@ -18446,6 +18581,31 @@
     {
       "id": "data-mssg0o1b-fea72d19-1d6c-44ea-8120-7af4688cdf5f",
       "ts": 1786681473463,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg1mc1-d80a0236-67e0-45b1-874e-8731c7cff0ee",
+      "ts": 1786681517924,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg1ojd-06910ad4-7b3b-424f-902a-376c17d70abe",
+      "ts": 1786681520771,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg1rx4-6c984ff6-3138-439a-86ef-ba8f771cd41b",
+      "ts": 1786681525161,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg1tqk-f083d9f2-0a6d-4162-a605-095dfd85a369",
+      "ts": 1786681527510,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg3v4p-44b59b60-b11e-497f-87cd-05943f5892e0",
+      "ts": 1786681622624,
       "scope": "data"
     }
   ]
