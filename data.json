@@ -10668,7 +10668,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_parent_id": "266",
+      "last_mutation_id": "data-mss7crdx-1b4065ee-8b6c-4879-bbd9-aa9ee5c59387"
     },
     {
       "group": "custom-msnzlh9m",
@@ -10812,7 +10814,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_parent_id": "269",
+      "last_mutation_id": "data-mss7ct1s-c58e5001-2097-4199-bb64-d83724647299"
     },
     {
       "group": "custom-msnzlh9m",
@@ -15589,6 +15593,56 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss7cq44-ee315067-f2ba-4efe-88d6-36ae3a7ab6f1"
+    },
+    {
+      "id": "audit-1786666921131-zn8e3g",
+      "ts": 1786666921131,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "268",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 2",
+      "sn": "91997320",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "266",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7crdx-1b4065ee-8b6c-4879-bbd9-aa9ee5c59387"
+    },
+    {
+      "id": "audit-1786666923287-rreyqn",
+      "ts": 1786666923287,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "270",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 3",
+      "sn": "91997320",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "269",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7ct1s-c58e5001-2097-4199-bb64-d83724647299"
     }
   ],
   "syncMutations": [
@@ -15715,6 +15769,16 @@
     {
       "id": "data-mss7cq44-ee315067-f2ba-4efe-88d6-36ae3a7ab6f1",
       "ts": 1786666919490,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss7crdx-1b4065ee-8b6c-4879-bbd9-aa9ee5c59387",
+      "ts": 1786666921132,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss7ct1s-c58e5001-2097-4199-bb64-d83724647299",
+      "ts": 1786666923287,
       "scope": "data"
     }
   ]
