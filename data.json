@@ -13691,14 +13691,16 @@
           "name": "함우철",
           "org": "이테크시스템",
           "phone": "",
-          "email": ""
+          "email": "",
+          "mail_recipient_type": "to"
         },
         {
           "role": "운영",
           "name": "문다형",
           "org": "한화시스템",
           "phone": "",
-          "email": ""
+          "email": "",
+          "mail_recipient_type": "exclude"
         }
       ],
       "cust_contact": "",
@@ -13716,7 +13718,9 @@
       "os_ver": "",
       "work_log": [],
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1hgml-fdedc5c2-d82e-47c8-a9e9-df18c3e4d558"
     },
     {
       "id": 1786348956933,
@@ -15199,6 +15203,38 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
+    },
+    {
+      "id": "audit-1786717528950-340eg6",
+      "ts": 1786717528950,
+      "action": "edit",
+      "target_type": "법인",
+      "target_id": "custom-1786348497151",
+      "group": "custom-1786348497151",
+      "owner": "한화큐셀",
+      "label": "한화큐셀",
+      "sn": "",
+      "summary": "법인 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "cust_contacts",
+          "label": "고객사 담당자",
+          "before": "운영 / 함우철 / 이테크시스템, 운영 / 문다형 / 한화시스템",
+          "after": "운영 / 함우철 / 이테크시스템, 운영 / 문다형 / 한화시스템",
+          "sensitive": false
+        },
+        {
+          "field": "cust_memo",
+          "label": "고객사 담당자 메모",
+          "before": "—",
+          "after": "—",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mst1hgml-fdedc5c2-d82e-47c8-a9e9-df18c3e4d558"
     }
   ],
   "syncMutations": [
@@ -15845,6 +15881,11 @@
     {
       "id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02",
       "ts": 1786717520850,
+      "scope": "data"
+    },
+    {
+      "id": "data-mst1hgml-fdedc5c2-d82e-47c8-a9e9-df18c3e4d558",
+      "ts": 1786717528950,
       "scope": "data"
     }
   ]
