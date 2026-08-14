@@ -14037,6 +14037,67 @@
         "tag": "41aF6NWcZSRyaluoWBL9MA=="
       },
       "enable_pw_enc": null
+    },
+    {
+      "id": 1786349440908,
+      "group": "custom-mspt0fl7",
+      "flag": "",
+      "owner": "동우화인켐",
+      "country": "한국",
+      "location": "평택",
+      "support_id": "546252",
+      "build_engineer": "홍진영",
+      "build_date": "2024.03",
+      "sku": "ISG-Proxy",
+      "sn": "0076996458",
+      "qty": "1",
+      "start": "2026. 3. 31",
+      "end": "2027. 3. 31",
+      "remarks": "",
+      "deploy_date": "",
+      "mode": "",
+      "os_ver": "7.3.18.2",
+      "owner_primary": "홍진영",
+      "owner_secondary": "박동석",
+      "check_method": "방문",
+      "config_mode": "Inline",
+      "cust_contacts": [
+        {
+          "role": "운영",
+          "name": "김태형 선임",
+          "org": "동우화인켐",
+          "phone": "010-3753-3920",
+          "email": "taehyeongkim@dwchem.co.kr"
+        },
+        {
+          "role": "운영",
+          "name": "전달수 책임",
+          "org": "동우화인켐",
+          "phone": "01087717383",
+          "email": "dsjeon@dwchem.co.kr"
+        }
+      ],
+      "cust_memo": "",
+      "cust_contact": "",
+      "cust_phone": "",
+      "cust_email": "",
+      "group_remarks": "",
+      "group_parent": "",
+      "is_parent": false,
+      "work_log": [],
+      "ip_enc": {
+        "iv": "eC9giYf3jEsd0Mi+",
+        "ct": "EFZOs212UTM=",
+        "tag": "T6s3LCEKIBkAh2LQAdVzTw=="
+      },
+      "id_enc": {
+        "iv": "ZDYo7kVv5+wXwu9s",
+        "ct": "Me184F0=",
+        "tag": "xq3rcK2NeUbkDSurUNd+5g=="
+      },
+      "pw_enc": null,
+      "enable_pw_enc": null,
+      "last_mutation_id": "data-mssgetwk-83de8179-e3fe-441b-8f67-6c334973adbc"
     }
   ],
   "users": [
@@ -18496,6 +18557,23 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssgcnlc-2d142148-696e-43c0-bdb9-d62e454c8d14"
+    },
+    {
+      "id": "audit-1786682134259-bizq8b",
+      "ts": 1786682134259,
+      "action": "add",
+      "target_type": "자산",
+      "target_id": "1786349440908",
+      "group": "custom-mspt0fl7",
+      "owner": "동우화인켐",
+      "label": "ISG-Proxy",
+      "sn": "0076996458",
+      "summary": "자산 추가 · ISG-Proxy · S/N 0076996458",
+      "changes": [],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgetwk-83de8179-e3fe-441b-8f67-6c334973adbc"
     }
   ],
   "syncMutations": [
@@ -19037,6 +19115,11 @@
     {
       "id": "data-mssgcnlc-2d142148-696e-43c0-bdb9-d62e454c8d14",
       "ts": 1786682032773,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgetwk-83de8179-e3fe-441b-8f67-6c334973adbc",
+      "ts": 1786682134259,
       "scope": "data"
     }
   ]
