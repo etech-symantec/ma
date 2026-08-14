@@ -3824,3 +3824,33 @@ tbody tr.asset-parent-row
 td.col-sku{
   font-weight:700;
 }
+
+#githubSyncStatus.sync-stuck{
+  cursor:pointer;
+
+  color:#B45309;
+  background:#FFF7E6;
+  border-color:#F0C36D;
+
+  font-weight:700;
+
+  animation:
+    sync-stuck-pulse 1.2s ease-in-out infinite;
+}
+
+#githubSyncStatus.sync-stuck:hover{
+  background:#FFEDC2;
+  border-color:#DF9D32;
+}
+
+@keyframes sync-stuck-pulse{
+  0%,100%{
+    box-shadow:
+      0 0 0 0 rgba(217,119,6,0);
+  }
+
+  50%{
+    box-shadow:
+      0 0 0 4px rgba(217,119,6,.12);
+  }
+}
