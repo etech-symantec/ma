@@ -433,6 +433,12 @@ aside.filters{
   transition:color .15s;
 }
 .profile-logout-text:hover{ color:var(--red); }
+.profile-mail-settings-text{
+  background:none; border:none; padding:0; margin:0; cursor:pointer;
+  font-size:11px; color:var(--accent-dim); font-family:var(--body);
+  transition:color .15s; white-space:nowrap;
+}
+.profile-mail-settings-text:hover{ color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
 .profile-sub{
   font-size:11px; color:var(--text-faint); font-family:var(--mono); letter-spacing:.03em;
   white-space:nowrap;
@@ -1146,12 +1152,12 @@ textarea.wl-fc-input.is-changed{
 #wl_fieldchange_grid{ margin-top:12px; }
 
 /* add form / modals */
-#addModal, #workLogModal, #groupEditModal, #addGroupModal, #subGroupEditModal, #custContactsModal, #moveAssetModal, #maintenanceLogModal{
+#addModal, #workLogModal, #groupEditModal, #addGroupModal, #subGroupEditModal, #custContactsModal, #moveAssetModal, #maintenanceLogModal, #maintenanceMailSettingsModal{
   position:fixed; inset:0; z-index:1200; background:rgba(15,23,42,0.45); backdrop-filter:blur(3px);
   display:none; align-items:flex-start; justify-content:center; overflow-y:auto;
   padding:calc(var(--global-header-h, 0px) + 24px) 20px 40px;
 }
-#addModal.open, #workLogModal.open, #groupEditModal.open, #addGroupModal.open, #subGroupEditModal.open, #custContactsModal.open, #moveAssetModal.open, #maintenanceLogModal.open{ display:flex; }
+#addModal.open, #workLogModal.open, #groupEditModal.open, #addGroupModal.open, #subGroupEditModal.open, #custContactsModal.open, #moveAssetModal.open, #maintenanceLogModal.open, #maintenanceMailSettingsModal.open{ display:flex; }
 .cp-error{ color:var(--red); font-size:12.5px; margin-top:14px; min-height:16px; }
 .modal-card{
   width:100%; max-width:640px; background:var(--surface); border:1px solid var(--border-solid);
@@ -1432,9 +1438,9 @@ textarea.wl-fc-input.is-changed{
   inset:auto !important;
   transform:none !important;
 
-  display:flex !important;
+  display:grid !important;
+  grid-template-columns:1fr auto 1fr !important;
   align-items:center !important;
-  justify-content:flex-end !important;
 
   width:100% !important;
   margin:16px 0 0 !important;
@@ -1446,7 +1452,34 @@ textarea.wl-fc-input.is-changed{
 }
 
 #maintenanceLogModal > .modal-card > .ml-modal-actions #mlDeleteBtn{
-  margin-right:auto !important;
+  grid-column:1;
+  justify-self:start;
+  margin:0 !important;
+}
+
+#maintenanceLogModal .ml-email-btn{
+  grid-column:2;
+  justify-self:center;
+  min-width:190px !important;
+  color:#2563A8 !important;
+  background:#EEF6FD !important;
+  border-color:#C6DDF1 !important;
+  white-space:nowrap;
+}
+
+#maintenanceLogModal .ml-email-btn:hover{
+  color:#164E85 !important;
+  background:#E2F0FB !important;
+  border-color:#9FC8E8 !important;
+}
+
+#maintenanceLogModal .ml-right-actions{
+  grid-column:3;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:7px;
+  min-width:0;
 }
 
 #maintenanceLogModal > .modal-card > .ml-modal-actions .btn{
@@ -1491,8 +1524,53 @@ textarea.wl-fc-input.is-changed{
   border-color:var(--accent) !important;
 }
 
+/* 점검 이메일 사용자별 템플릿 설정 */
+#maintenanceMailSettingsModal{
+  align-items:center !important;
+  justify-content:center !important;
+  padding:20px !important;
+}
+
+#maintenanceMailSettingsModal > .maintenance-mail-settings-card{
+  max-width:620px;
+  margin:0;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-settings-form{
+  grid-template-columns:1fr;
+}
+
+#maintenanceMailSettingsModal #mms_body{
+  min-height:220px;
+  line-height:1.6;
+  resize:vertical;
+}
+
 /* 좁은 화면에서는 날짜/상태를 두 줄로 */
 @media (max-width:460px){
+  #maintenanceLogModal > .modal-card > .ml-modal-actions{
+    grid-template-columns:1fr !important;
+  }
+
+  #maintenanceLogModal > .modal-card > .ml-modal-actions #mlDeleteBtn,
+  #maintenanceLogModal .ml-email-btn,
+  #maintenanceLogModal .ml-right-actions{
+    grid-column:1;
+    justify-self:stretch;
+  }
+
+  #maintenanceLogModal .ml-email-btn{
+    width:100% !important;
+  }
+
+  #maintenanceLogModal .ml-right-actions{
+    width:100%;
+  }
+
+  #maintenanceLogModal .ml-right-actions .btn{
+    flex:1 1 0 !important;
+  }
+
   #maintenanceLogModal .ml-date-row{
     flex-direction:column;
     align-items:stretch;
