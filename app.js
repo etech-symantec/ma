@@ -6418,7 +6418,7 @@ function isCurrentUserAdmin(){
 }
 
 /* =========================================================
-   유지보수 점검 이메일 - 사용자별 한글/English 템플릿 / mailto 작성
+   유지보수 점검 이메일 - 사용자별 한글/English 템플릿 / Outlook 작성
    ========================================================= */
 const DEFAULT_MAINTENANCE_MAIL_SUBJECT_KO =
   '[{법인명}] {점검월} 정기점검 일정 안내';
@@ -6477,7 +6477,7 @@ function sanitizeMaintenanceMailSignatureHtml(html){
 
       if (name === 'src'){
         /* Outlook 복사에서 나오는 http(s)/data 이미지 정도만 허용 */
-        if (!/^(https?:|data:image\/|cid:)/i.test(value)){
+        if (!/^(https?:|data:image\/)/i.test(value)){
           el.removeAttribute(attr.name);
         }
       }
@@ -6524,60 +6524,6 @@ function maintenanceMailSignatureHtmlForUser(user){
   return div.innerHTML.replace(/\n/g, '<br>');
 }
 
-
-
-function insertMaintenanceSignatureHtmlAtCaret(html){
-  const sel = window.getSelection();
-  if (!sel || !sel.rangeCount) return false;
-  const range = sel.getRangeAt(0);
-  range.deleteContents();
-  const frag = range.createContextualFragment(html);
-  const last = frag.lastChild;
-  range.insertNode(frag);
-  if (last){
-    range.setStartAfter(last);
-    range.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(range);
-  }
-  return true;
-}
-
-function blobToDataUrl(blob){
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result || ''));
-    reader.onerror = () => reject(reader.error || new Error('이미지 읽기 실패'));
-    reader.readAsDataURL(blob);
-  });
-}
-
-async function handleMaintenanceSignaturePaste(e){
-  const html = e.clipboardData?.getData('text/html') || '';
-  const imageFiles = [...(e.clipboardData?.items || [])]
-    .filter(item => item.kind === 'file' && /^image\//i.test(item.type || ''))
-    .map(item => item.getAsFile())
-    .filter(Boolean);
-
-  if (!html || !imageFiles.length) return;
-
-  e.preventDefault();
-  const wrap = document.createElement('div');
-  wrap.innerHTML = html;
-  const pendingImgs = [...wrap.querySelectorAll('img')]
-    .filter(img => !/^(https?:|data:image\/)/i.test(String(img.getAttribute('src') || '')));
-
-  for (let i = 0; i < pendingImgs.length && i < imageFiles.length; i++){
-    pendingImgs[i].setAttribute('src', await blobToDataUrl(imageFiles[i]));
-  }
-
-  const safeHtml = sanitizeMaintenanceMailSignatureHtml(wrap.innerHTML);
-  if (!insertMaintenanceSignatureHtmlAtCaret(safeHtml)){
-    const editor = document.getElementById('mms_signature');
-    if (editor) editor.insertAdjacentHTML('beforeend', safeHtml);
-  }
-}
-
 function currentUserRecord(){
   return users.find(
     x => String(x.id) === String(currentUserId)
@@ -6622,7 +6568,6 @@ function openMaintenanceMailSettingsModal(){
     signatureEl.innerHTML =
       maintenanceMailSignatureHtmlForUser(user);
   }
-
 
   errEl.textContent = '';
 
@@ -6747,22 +6692,37 @@ function applyMaintenanceMailTemplate(text, values){
   return result;
 }
 
-
 function refreshMaintenanceMailButton(gid){
+  const btn = document.getElementById('mlEmailBtn');
   if (!btn) return;
 
   const recipients = maintenanceMailRecipientsForGroup(gid);
 
-  if (!recipients.length){
-    btn.title = '이 법인에 등록된 고객사 담당자 이메일이 없습니다.';
+  btn.title = recipients.length
+    ? `등록된 고객사 담당자 ${recipients.length}명의 이메일을 수신자로 넣어 선택한 언어의 점검 메일을 작성합니다. Outlook이 기본 메일 앱으로 설정되어 있어야 합니다.`
+    : '이 법인에 등록된 고객사 담당자 이메일이 없습니다.';
+}
+
+function openMaintenanceEmailCompose(){
+  if (!maintenanceEditTarget) return;
+
+  const { gid, ym } = maintenanceEditTarget;
+  const errEl = document.getElementById('mlError');
+  const user = currentUserRecord();
+
+  if (!user){
+    errEl.textContent = '로그인 사용자를 확인할 수 없습니다.';
     return;
   }
 
-  btn.title =
-    `등록된 고객사 담당자 ${recipients.length}명의 이메일을 수신자로 넣어 Windows 기본 메일 앱으로 새 메일을 작성합니다.`;
-}
+  const recipients = maintenanceMailRecipientsForGroup(gid);
 
-function maintenanceMailPreparedContent(user, gid, ym){
+  if (!recipients.length){
+    errEl.textContent =
+      '이 법인에 등록된 고객사 담당자 이메일이 없습니다. 법인 정보의 고객사 담당자 이메일을 먼저 등록해 주세요.';
+    return;
+  }
+
   const language =
     document.getElementById('mlEmailLanguage')?.value === 'en'
       ? 'en'
@@ -6785,24 +6745,18 @@ function maintenanceMailPreparedContent(user, gid, ym){
       ).trim();
 
   if (!subjectTemplate || !bodyTemplate){
-    return {
-      language,
-      error: language === 'en'
-        ? '현재 사용자의 English 점검 메일 제목/내용이 등록되어 있지 않습니다. 점검 메일 설정에서 먼저 저장해 주세요.'
-        : '현재 사용자의 한글 점검 메일 제목/내용이 등록되어 있지 않습니다. 점검 메일 설정에서 먼저 저장해 주세요.'
-    };
+    errEl.textContent = language === 'en'
+      ? '현재 사용자의 English 점검 메일 제목/내용이 등록되어 있지 않습니다. 점검 메일 설정에서 먼저 저장해 주세요.'
+      : '현재 사용자의 한글 점검 메일 제목/내용이 등록되어 있지 않습니다. 점검 메일 설정에서 먼저 저장해 주세요.';
+    openMaintenanceMailSettingsModal();
+    return;
   }
 
   const values = maintenanceMailTemplateValues(gid, ym, language);
+  const subject = applyMaintenanceMailTemplate(subjectTemplate, values);
+  const templateBody = applyMaintenanceMailTemplate(bodyTemplate, values);
 
-  return {
-    language,
-    subject: applyMaintenanceMailTemplate(subjectTemplate, values),
-    body: applyMaintenanceMailTemplate(bodyTemplate, values)
-  };
-}
-
-function openMaintenanceEmailByMailto(user, recipients, subject, templateBody){
+  /* 한글/English에 공통으로 사용하는 서명을 메일 본문 마지막에 추가 */
   const signatureText = String(
     user.maintenance_mail_signature_text ||
     maintenanceMailSignatureTextFromHtml(
@@ -6819,61 +6773,14 @@ function openMaintenanceEmailByMailto(user, recipients, subject, templateBody){
     `?subject=${encodeURIComponent(subject)}` +
     `&body=${encodeURIComponent(body)}`;
 
-  window.location.href = mailto;
-}
-
-async function openMaintenanceEmailCompose(){
-  if (!maintenanceEditTarget) return;
-
-  const { gid, ym } = maintenanceEditTarget;
-  const errEl = document.getElementById('mlError');
-  const user = currentUserRecord();
-
-  if (!user){
-    errEl.textContent = '로그인 사용자를 확인할 수 없습니다.';
-    return;
-  }
-
-  const recipients = maintenanceMailRecipientsForGroup(gid);
-
-  if (!recipients.length){
-    errEl.textContent =
-      '이 법인에 등록된 고객사 담당자 이메일이 없습니다. 법인 정보의 고객사 담당자 이메일을 먼저 등록해 주세요.';
-    return;
-  }
-
-  const prepared = maintenanceMailPreparedContent(user, gid, ym);
-
-  if (prepared.error){
-    errEl.textContent = prepared.error;
-    openMaintenanceMailSettingsModal();
-    return;
-  }
-
   errEl.textContent = '';
 
-  openMaintenanceEmailByMailto(
-    user,
-    recipients,
-    prepared.subject,
-    prepared.body
-  );
+  window.location.href = mailto;
 }
-
 
 const cancelMmsBtn = document.getElementById('cancelMmsBtn');
 if (cancelMmsBtn){
   cancelMmsBtn.onclick = closeMaintenanceMailSettingsModal;
-}
-
-
-const mmsSignatureEditor = document.getElementById('mms_signature');
-if (mmsSignatureEditor){
-  mmsSignatureEditor.addEventListener('paste', e => {
-    handleMaintenanceSignaturePaste(e).catch(err => {
-      console.warn('Outlook 서명 붙여넣기 이미지 처리 실패:', err);
-    });
-  });
 }
 
 const saveMmsBtn = document.getElementById('saveMmsBtn');
@@ -6940,7 +6847,7 @@ if (saveMmsBtn){
       user.maintenance_mail_subject_en = subjectEn;
       user.maintenance_mail_body_en = bodyEn;
 
-      /* 한글/English 공통 서명 */
+      /* 한글/English 공통 Outlook 서명 */
       user.maintenance_mail_signature_html = signatureHtml;
       user.maintenance_mail_signature_text = signatureText;
 
