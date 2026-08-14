@@ -2751,7 +2751,7 @@
       "flag": "",
       "owner": "삼성전자 SAMEX",
       "location": "티후아나",
-      "support_id": "4050417",
+      "support_id": "2065519",
       "sku": "MC-S400-20-100",
       "sn": "3120320113",
       "entitlement": "🔗",
@@ -2773,19 +2773,19 @@
       "tag_note": "삼성전자 멕시코 (SAMEX)",
       "id": 63,
       "ip_enc": {
-        "iv": "CxU/RyGfJS9EsOYz",
-        "ct": "QpC6cDCvEMetwWKVRg==",
-        "tag": "m8fIntDTrXQ1rsTGMaMtAg=="
+        "iv": "4XCIIc0DJYii/0qZ",
+        "ct": "MWIsCkEKqyquC0Afow==",
+        "tag": "FySbDkgxyCv+inboDN4q9g=="
       },
       "id_enc": {
-        "iv": "oE8xxliJHRQ+zZjU",
-        "ct": "2Ern0QeNw0A8",
-        "tag": "Xlkqt2mvOYbmDK7Q4GaVUQ=="
+        "iv": "uEAPWRNnQ/qSgVqC",
+        "ct": "72eXL7h6VsDQ",
+        "tag": "HrTueGEjih5KiQkZVCSFtA=="
       },
       "pw_enc": {
-        "iv": "FvhfHr84ht0vAl3H",
-        "ct": "zAmkd531MsvL",
-        "tag": "Mr3IWG2ZqBfMCLQ+U4qUnA=="
+        "iv": "FnJNVLWvetsdNwGr",
+        "ct": "3vYnn1i0A53X",
+        "tag": "2oUPZSWMVWgNvNdHIxWVng=="
       },
       "group_remarks": "",
       "cust_contacts": [],
@@ -2794,12 +2794,13 @@
       "build_engineer": "신호근",
       "build_date": "2022.07",
       "enable_pw_enc": {
-        "iv": "tvvFeHiy30wmOc5R",
-        "ct": "H+RD2Lhk16/sFg==",
-        "tag": "NeRazxqYjxxor0hTxM4yyQ=="
+        "iv": "l6vRf9Jac8IESpNs",
+        "ct": "nzMwqlhYv4V0sg==",
+        "tag": "o3SLIuHU4xZfIQPa+VD1Vw=="
       },
       "group_parent": "custom-1786344991848",
-      "is_parent": false
+      "is_parent": false,
+      "last_mutation_id": "data-mss8mmtg-987f37f9-e68c-4eab-8046-2caf6e117f22"
     },
     {
       "group": "custom-473",
@@ -13756,7 +13757,7 @@
       "owner": "삼성전자 미주법인",
       "country": "미국",
       "location": "뉴저지",
-      "support_id": "298214",
+      "support_id": "697943",
       "sku": "MC-S400-20-100-ONSITEADV",
       "sn": "2117320266",
       "qty": "1",
@@ -13778,16 +13779,17 @@
       "group_parent": "kr-001",
       "work_log": [],
       "ip_enc": {
-        "iv": "0MHiDyvltpYukg3l",
-        "ct": "UZ6Yz18fNxHp/NFEfg==",
-        "tag": "reGJ2MFVjCoS1FhnnbkcXg=="
+        "iv": "cFXhQoipbNYcSj3i",
+        "ct": "ZLO04/X+nntUP3HxaA==",
+        "tag": "K+HTp5YK/3TozhlNv458WA=="
       },
       "id_enc": null,
       "pw_enc": null,
       "enable_pw_enc": null,
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "last_mutation_id": "data-mss8lr8m-ce7806e3-633d-4887-9787-2cb78a8cfe7e"
     },
     {
       "id": 1786348497147,
@@ -16418,6 +16420,91 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss8l38a-4e4cb6ee-80db-480a-9d90-abd3ad252225"
+    },
+    {
+      "id": "audit-1786669020469-0ckj9x",
+      "ts": 1786669020469,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "1786344991847",
+      "group": "custom-1786344991846",
+      "owner": "삼성전자 미주법인",
+      "label": "MC-S400-20-100-ONSITEADV",
+      "sn": "2117320266",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "support_id",
+          "label": "Support ID",
+          "before": "298214",
+          "after": "697943",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss8lr8m-ce7806e3-633d-4887-9787-2cb78a8cfe7e"
+    },
+    {
+      "id": "audit-1786669061403-fs4neq",
+      "ts": 1786669061403,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "63",
+      "group": "custom-473",
+      "owner": "삼성전자 SAMEX",
+      "label": "MC-S400-20-100",
+      "sn": "3120320113",
+      "summary": "자산 정보 5개 항목 수정",
+      "changes": [
+        {
+          "field": "support_id",
+          "label": "Support ID",
+          "before": "4050417",
+          "after": "2065519",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "id_enc",
+          "label": "계정 ID",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "pw_enc",
+          "label": "비밀번호",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "enable_pw_enc",
+          "label": "Enable 비밀번호",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss8mmtg-987f37f9-e68c-4eab-8046-2caf6e117f22"
     }
   ],
   "syncMutations": [
@@ -16614,6 +16701,16 @@
     {
       "id": "data-mss8l38a-4e4cb6ee-80db-480a-9d90-abd3ad252225",
       "ts": 1786668989359,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss8lr8m-ce7806e3-633d-4887-9787-2cb78a8cfe7e",
+      "ts": 1786669020469,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss8mmtg-987f37f9-e68c-4eab-8046-2caf6e117f22",
+      "ts": 1786669061410,
       "scope": "data"
     }
   ]
