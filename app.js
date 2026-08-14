@@ -5211,6 +5211,83 @@ function bindAssetDragDrop(){
   });
 }
 
+function assetSkuDisplayHtml(
+  r,
+  isAssetChild = false,
+  hasAssetChildren = false
+){
+
+  /*
+    SSP 아래에 연결된 ISG Application
+  */
+  if (
+    isAssetChild &&
+    isIsgChildAsset(r)
+  ){
+
+    const parent =
+      records.find(
+        x =>
+          String(x.id) ===
+          String(r.asset_parent_id || '')
+      );
+
+    return `
+      <div class="asset-app-display">
+
+        <div class="asset-app-relation">
+          <span class="asset-app-icon">◆</span>
+          <span class="asset-app-label">
+            INSTALLED APP
+          </span>
+        </div>
+        <div class="asset-app-sku">
+          ${skuBadge(r.sku)}
+        </div>
+        ${
+          parent
+            ? `
+              <div class="asset-app-host">
+                <span class="asset-app-host-arrow">↳</span>
+                <span class="asset-app-host-label">Host</span>
+                <span class="asset-app-host-name">
+                  ${esc(parent.sku || 'SSP')}
+                </span>
+              </div>
+            `
+            : ''
+        }
+        ${skuKeywordTagsHtml(r.sku)}
+      </div>
+    `;
+  }
+
+  if (
+    hasAssetChildren &&
+    isSspParentAsset(r)
+  ){
+    return `
+      <div class="asset-host-display">
+        <div class="asset-host-relation">
+          <span class="asset-host-icon">▣</span>
+          <span class="asset-host-label">
+            SSP HOST
+          </span>
+        </div>
+        <div class="asset-host-sku">
+          ${skuBadge(r.sku)}
+        </div>
+        ${skuKeywordTagsHtml(r.sku)}
+      </div>
+    `;
+  }
+
+  return `
+    ${skuBadge(r.sku)}
+    ${skuKeywordTagsHtml(r.sku)}
+  `;
+}
+
 function rowHtml(
     r,
     groupSupportId,
@@ -5267,9 +5344,19 @@ function rowHtml(
         </div>
       </td>
     ` : ''}
-    <td class="sku col-sku" data-label="SKU / 제품">
-      ${skuBadge(r.sku)}
-      ${skuKeywordTagsHtml(r.sku)}
+    <td class="sku col-sku ${isAssetChild? 'col-sku-app': (
+              hasAssetChildren
+                ? 'col-sku-host'
+                : ''
+            )
+      }"
+      data-label="SKU / 제품"
+    >
+      ${assetSkuDisplayHtml(
+        r,
+        isAssetChild,
+        hasAssetChildren
+      )}
     </td>
     <td class="sn col-sn" data-label="S/N">${snLink(r, groupSupportId)}</td>
     <td class="col-qty" data-label="수량">${esc(r.qty)||''}</td>
