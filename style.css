@@ -3850,17 +3850,13 @@ tr.asset-child-row:has(+ tr.asset-child-row)
   height:auto;
 }
 
-tr.asset-child-row
-+
-tr.asset-child-row
+tr.asset-child-row+tr.asset-child-row
 .asset-child-arrow::before{
-  top:-16px;
-  height:30px;
+  top:-11px;
+  height:21px;
 }
 
-tr.asset-child-row
-+
-tr.asset-child-row:has(+ tr.asset-child-row)
+tr.asset-child-row+tr.asset-child-row:has(+ tr.asset-child-row)
 .asset-child-arrow::before{
   top:-16px;
   bottom:-16px;
