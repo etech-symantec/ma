@@ -3283,7 +3283,16 @@
           "name": "공기덕 프로",
           "org": "SHI",
           "phone": "",
-          "email": "gideok.gong@samsung.com"
+          "email": "gideok.gong@samsung.com",
+          "mail_recipient_type": "exclude"
+        },
+        {
+          "role": "운영",
+          "name": "Pamela Azike",
+          "org": "SHI",
+          "phone": "+234 803 951 9261",
+          "email": "p.azike@samsung.com",
+          "mail_recipient_type": "to"
         }
       ],
       "country": "나이지리아",
@@ -3291,7 +3300,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1h0wc-0ec67458-4429-4224-b48a-b4f4ba235e3f"
     },
     {
       "group": "ng",
@@ -3329,7 +3340,16 @@
           "name": "공기덕 프로",
           "org": "SHI",
           "phone": "",
-          "email": "gideok.gong@samsung.com"
+          "email": "gideok.gong@samsung.com",
+          "mail_recipient_type": "exclude"
+        },
+        {
+          "role": "운영",
+          "name": "Pamela Azike",
+          "org": "SHI",
+          "phone": "+234 803 951 9261",
+          "email": "p.azike@samsung.com",
+          "mail_recipient_type": "to"
         }
       ],
       "country": "나이지리아",
@@ -3337,7 +3357,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1h0wc-0ec67458-4429-4224-b48a-b4f4ba235e3f"
     },
     {
       "group": "ng",
@@ -3375,7 +3397,16 @@
           "name": "공기덕 프로",
           "org": "SHI",
           "phone": "",
-          "email": "gideok.gong@samsung.com"
+          "email": "gideok.gong@samsung.com",
+          "mail_recipient_type": "exclude"
+        },
+        {
+          "role": "운영",
+          "name": "Pamela Azike",
+          "org": "SHI",
+          "phone": "+234 803 951 9261",
+          "email": "p.azike@samsung.com",
+          "mail_recipient_type": "to"
         }
       ],
       "country": "나이지리아",
@@ -3383,7 +3414,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "cust_memo": "",
+      "last_mutation_id": "data-mst1h0wc-0ec67458-4429-4224-b48a-b4f4ba235e3f"
     },
     {
       "group": "au-ccc",
@@ -15076,6 +15109,38 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b"
+    },
+    {
+      "id": "audit-1786717508568-6mxuu1",
+      "ts": 1786717508568,
+      "action": "edit",
+      "target_type": "법인",
+      "target_id": "ng",
+      "group": "ng",
+      "owner": "삼성중공업 SHI-MCI",
+      "label": "ASG-S400-20",
+      "sn": "5216320027",
+      "summary": "법인 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "cust_contacts",
+          "label": "고객사 담당자",
+          "before": "운영 / 공기덕 프로 / SHI / gideok.gong@samsung.com",
+          "after": "운영 / 공기덕 프로 / SHI / gideok.gong@samsung.com, 운영 / Pamela Azike / SHI / +234 803 951 9261 / p.azike@samsung.com",
+          "sensitive": false
+        },
+        {
+          "field": "cust_memo",
+          "label": "고객사 담당자 메모",
+          "before": "—",
+          "after": "—",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mst1h0wc-0ec67458-4429-4224-b48a-b4f4ba235e3f"
     }
   ],
   "syncMutations": [
@@ -15712,6 +15777,11 @@
     {
       "id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b",
       "ts": 1786717219195,
+      "scope": "data"
+    },
+    {
+      "id": "data-mst1h0wc-0ec67458-4429-4224-b48a-b4f4ba235e3f",
+      "ts": 1786717508572,
       "scope": "data"
     }
   ]
