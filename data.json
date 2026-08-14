@@ -2744,7 +2744,9 @@
       "group_parent": "custom-1786344991848",
       "is_parent": false,
       "build_engineer": "",
-      "build_date": ""
+      "build_date": "",
+      "asset_parent_id": "57",
+      "last_mutation_id": "data-mssgcnlc-2d142148-696e-43c0-bdb9-d62e454c8d14"
     },
     {
       "group": "custom-473",
@@ -4260,7 +4262,9 @@
           "note": "24.12.07 신호근 7.3.18.2 신규",
           "author": "윤태리"
         }
-      ]
+      ],
+      "asset_parent_id": "103",
+      "last_mutation_id": "data-mssgbqse-4471a195-16ed-4495-b3a5-f2fab81827d7"
     },
     {
       "group": "us-005",
@@ -4481,7 +4485,9 @@
           "note": "24.12.07 신호근 7.3.18.2 신규",
           "author": "윤태리"
         }
-      ]
+      ],
+      "asset_parent_id": "107",
+      "last_mutation_id": "data-mssgccm4-15a1da1a-91f8-4bcc-b86a-a7fea1f28979"
     },
     {
       "group": "us-006",
@@ -4542,7 +4548,9 @@
           "note": "24.12.07 신호근 7.3.18.2 신규",
           "author": "윤태리"
         }
-      ]
+      ],
+      "asset_parent_id": "108",
+      "last_mutation_id": "data-mssgceae-6659f186-2b30-4996-b360-c678083f3064"
     },
     {
       "group": "us-006",
@@ -4859,7 +4867,9 @@
           "note": "24.12.07 신호근 7.3.18.2 신규",
           "author": "윤태리"
         }
-      ]
+      ],
+      "asset_parent_id": "114",
+      "last_mutation_id": "data-mssgcgop-c27a18b8-1d9d-4037-96c6-9fcfc053cc6d"
     },
     {
       "group": "us-007",
@@ -4910,7 +4920,9 @@
           "note": "24.12.07 신호근 7.3.18.2 신규",
           "author": "윤태리"
         }
-      ]
+      ],
+      "asset_parent_id": "115",
+      "last_mutation_id": "data-mssgci0c-5015978f-2e66-46ce-89eb-ffb45e8edd15"
     },
     {
       "group": "us-007",
@@ -18334,6 +18346,156 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssga3fe-1812e2a4-4e60-4b19-bec6-7ce89f8c49bb"
+    },
+    {
+      "id": "audit-1786681990247-a7ip3j",
+      "ts": 1786681990247,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "105",
+      "group": "us-005",
+      "owner": "삼성전자 RP (동부)",
+      "label": "ISG-Proxy 2",
+      "sn": "81991537",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "103",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgbqse-4471a195-16ed-4495-b3a5-f2fab81827d7"
+    },
+    {
+      "id": "audit-1786682018530-vyu4yn",
+      "ts": 1786682018530,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "109",
+      "group": "us-006",
+      "owner": "삼성전자 TX (중부)",
+      "label": "ISG-Proxy 1",
+      "sn": "81991418",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "107",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgccm4-15a1da1a-91f8-4bcc-b86a-a7fea1f28979"
+    },
+    {
+      "id": "audit-1786682020711-yjcfwx",
+      "ts": 1786682020711,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "110",
+      "group": "us-006",
+      "owner": "삼성전자 TX (중부)",
+      "label": "ISG-Proxy 2",
+      "sn": "81991418",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "108",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgceae-6659f186-2b30-4996-b360-c678083f3064"
+    },
+    {
+      "id": "audit-1786682023813-tuldat",
+      "ts": 1786682023813,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "116",
+      "group": "us-007",
+      "owner": "삼성전자 SJ (서부)",
+      "label": "ISG-Proxy 1",
+      "sn": "81991690",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "114",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgcgop-c27a18b8-1d9d-4037-96c6-9fcfc053cc6d"
+    },
+    {
+      "id": "audit-1786682025525-l6gx5u",
+      "ts": 1786682025525,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "117",
+      "group": "us-007",
+      "owner": "삼성전자 SJ (서부)",
+      "label": "ISG-Proxy 2",
+      "sn": "81991690",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "115",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgci0c-5015978f-2e66-46ce-89eb-ffb45e8edd15"
+    },
+    {
+      "id": "audit-1786682032767-7rwim0",
+      "ts": 1786682032767,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "58",
+      "group": "mx-samex-srt",
+      "owner": "삼성전자 SAMEX SRT",
+      "label": "ISG-Proxy",
+      "sn": "91991640",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "57",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgcnlc-2d142148-696e-43c0-bdb9-d62e454c8d14"
     }
   ],
   "syncMutations": [
@@ -18845,6 +19007,36 @@
     {
       "id": "data-mssga3fe-1812e2a4-4e60-4b19-bec6-7ce89f8c49bb",
       "ts": 1786681913319,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgbqse-4471a195-16ed-4495-b3a5-f2fab81827d7",
+      "ts": 1786681990250,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgccm4-15a1da1a-91f8-4bcc-b86a-a7fea1f28979",
+      "ts": 1786682018532,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgceae-6659f186-2b30-4996-b360-c678083f3064",
+      "ts": 1786682020714,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgcgop-c27a18b8-1d9d-4037-96c6-9fcfc053cc6d",
+      "ts": 1786682023818,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgci0c-5015978f-2e66-46ce-89eb-ffb45e8edd15",
+      "ts": 1786682025526,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgcnlc-2d142148-696e-43c0-bdb9-d62e454c8d14",
+      "ts": 1786682032773,
       "scope": "data"
     }
   ]
