@@ -215,7 +215,22 @@
   color:#164E85 !important;
   background:#E2F0FB !important;
   border-color:#9FC8E8 !important;
-}#maintenanceLogModal .ml-right-actions{
+}#maintenanceLogModal .ml-mail-notice{
+  display:none;
+  margin-top:9px;
+  padding:9px 11px;
+  border:1px solid #BFDDF3;
+  border-radius:8px;
+  background:#EEF7FD;
+  color:#2563A8;
+  font-size:11px;
+  font-weight:700;
+  line-height:1.55;
+}
+#maintenanceLogModal .ml-mail-notice.show{
+  display:block;
+}
+#maintenanceLogModal .ml-right-actions{
   display:flex;
   align-items:center;
   margin-left:auto;
@@ -534,6 +549,18 @@
   text-align:center;
 }.maint-cell-incomplete .maint-cell-note{
   color:#C95A5A;
+}
+.maint-cell-mail-inquiry{
+  margin-top:3px;
+  color:#2563A8;
+  font-size:9.5px;
+  font-weight:800;
+  line-height:1.2;
+  text-align:center;
+  white-space:nowrap;
+}
+.maint-cell.is-current .maint-cell-mail-inquiry{
+  color:#1D5F9D;
 }.maint-license-notice-btn{
   display:inline-flex;
   align-items:center;
