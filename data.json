@@ -2944,7 +2944,7 @@
       "flag": "",
       "owner": "삼성전자 SAMEX SRT",
       "location": "티후아나",
-      "support_id": "4050417",
+      "support_id": "2065519",
       "sku": "WEB-PROTECT-SUB",
       "sn": "53304946-1-1",
       "entitlement": "🔗",
@@ -2967,14 +2967,14 @@
       "id": 1786348497149,
       "ip_enc": null,
       "id_enc": {
-        "iv": "1NJA2ihabdc68/WF",
-        "ct": "/PQzhhQ5QlaA6MR/WLKJuTBo0gn2",
-        "tag": "wfjPcdNdm+F4A7ARar4BGg=="
+        "iv": "50auOIFn6gsSLerC",
+        "ct": "AuO57VsWT4Mt0rXFjBBLp1Xnxp1+",
+        "tag": "CcD0HqIIUvl8Zp2wapygwA=="
       },
       "pw_enc": {
-        "iv": "cYPeVsBj1C6krFMN",
-        "ct": "c/GpB8VSbGQO",
-        "tag": "OzfvAHdMoFvOrN/lKdicog=="
+        "iv": "EaXjeTaLpOSn3n5I",
+        "ct": "RLpHzRwTirDX",
+        "tag": "bf4x/18jBtq5cgjOAYqwnQ=="
       },
       "group_remarks": "",
       "cust_contacts": [],
@@ -2983,7 +2983,8 @@
       "build_engineer": "신호근",
       "build_date": "2022.07",
       "group_parent": "custom-1786344991848",
-      "is_parent": false
+      "is_parent": false,
+      "last_mutation_id": "data-mss8oc51-019e283e-9412-4ecf-90c3-4e88006deded"
     },
     {
       "group": "dup-1786348497148",
@@ -16592,6 +16593,45 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss8o8m4-0126285a-dcd2-43f1-bad3-da60f29139c3"
+    },
+    {
+      "id": "audit-1786669140863-5ys4e5",
+      "ts": 1786669140863,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "1786348497149",
+      "group": "dup-1786348497148",
+      "owner": "삼성전자 SAMEX SRT",
+      "label": "WEB-PROTECT-SUB",
+      "sn": "53304946-1-1",
+      "summary": "자산 정보 3개 항목 수정",
+      "changes": [
+        {
+          "field": "support_id",
+          "label": "Support ID",
+          "before": "4050417",
+          "after": "2065519",
+          "sensitive": false
+        },
+        {
+          "field": "id_enc",
+          "label": "계정 ID",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "pw_enc",
+          "label": "비밀번호",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss8oc51-019e283e-9412-4ecf-90c3-4e88006deded"
     }
   ],
   "syncMutations": [
@@ -16808,6 +16848,11 @@
     {
       "id": "data-mss8o8m4-0126285a-dcd2-43f1-bad3-da60f29139c3",
       "ts": 1786669136303,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss8oc51-019e283e-9412-4ecf-90c3-4e88006deded",
+      "ts": 1786669140868,
       "scope": "data"
     }
   ]
