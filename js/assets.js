@@ -4362,35 +4362,26 @@ function getMySiteGroupIds(){
 
 function getMyTopLevelGroupCount(){
   const me = currentUserName();
-  if (!me){
-    return 0;
-  }
+  if (!me) return 0;
+
   let count = 0;
   const groups = groupRecords(records);
+
   for (const items of groups.values()){
-    if (!items.length){
-      continue;
-    }
+    if (!items.length) continue;
+
     const meta = groupMeta(items);
-    const hasRealAsset =
-      items.some(r => !r.is_group_shell);
+    const hasRealAsset = items.some(r => !r.is_group_shell);
+    const isTopLevel = !meta.group_parent && (meta.is_parent || hasRealAsset);
 
-    const isTopLevel =
-      !meta.group_parent &&
-      (
-        meta.is_parent ||
-        hasRealAsset
-      );
-
-    if (
-      isTopLevel &&
-      meta.owner_primary === me
-    ){
+    if (isTopLevel && meta.owner_primary === me){
       count++;
     }
   }
+
   return count;
 }
+
 function updateMyAssetsToggle(){
   const btn = document.getElementById('myAssetsToggle');
   const cntEl = document.getElementById('myAssetsCount');
