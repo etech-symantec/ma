@@ -362,17 +362,8 @@ function markMaintenanceDirty(mutationId){
   return mid;
 }
 
-/* =========================================================
-   저장 실패 수동 재시도
-   - 새 mutation을 만들지 않음
-   - 기존 실패한 변경사항 그대로 다시 저장
-   - data.json / ma.json 중 Dirty인 파일만 재시도
-   ========================================================= */
-
 let manualSyncRetryBusy = false;
-
 async function retryFailedSyncManually(){
-
   if (manualSyncRetryBusy){
     return;
   }
@@ -385,18 +376,12 @@ async function retryFailedSyncManually(){
     return;
   }
 
-
   const retryData =
     dataDirty === true;
 
   const retryMaintenance =
     maintenanceDirty === true;
 
-
-  /*
-    이미 저장할 내용이 없다면
-    정상 상태로 복구
-  */
   if (
     !retryData &&
     !retryMaintenance
@@ -404,113 +389,63 @@ async function retryFailedSyncManually(){
     setSyncStatus('synced');
     return;
   }
-
-
   manualSyncRetryBusy = true;
 
-
-  /*
-    기존 예약된 자동 저장은 취소.
-    수동 저장과 중복 실행 방지.
-  */
   if (autoSyncTimer !== null){
-
     clearTimeout(autoSyncTimer);
-
     autoSyncTimer = null;
   }
-
-
   setSyncStatus('syncing');
-
-
   try{
-
-    /*
-      data.json 실패분 재저장
-    */
     if (retryData){
-
       lastAutoSyncError = null;
-
       await runAutoSync();
-
-
-      /*
-        runDataSyncCore()가 오류를 내부 catch하므로
-        Dirty 여부로 실제 성공 확인
-      */
       if (dataDirty){
-
         throw (
           lastAutoSyncError ||
           new Error(
             'data.json 재저장에 실패했습니다.'
           )
         );
-
       }
-
     }
 
-
-    /*
-      ma.json 실패분 재저장
-    */
     if (retryMaintenance){
-
       lastMaintenanceSyncError = null;
-
       await runMaintenanceSync();
 
-
       if (maintenanceDirty){
-
         throw (
           lastMaintenanceSyncError ||
           new Error(
             'ma.json 재저장에 실패했습니다.'
           )
         );
-
       }
-
     }
 
-
-    /*
-      둘 다 정상 저장됨
-    */
     setSyncStatus('synced');
-
   }
   catch(e){
-
     console.error(
       '수동 동기화 재시도 실패:',
       e
     );
 
-
     setSyncStatus(
       'error',
       e.message
     );
-
   }
   finally{
-
     manualSyncRetryBusy = false;
-
   }
 }
 
 async function forceManualResave(){
-
   if (forceManualRetryBusy){
     return;
   }
-
   if (!githubConfig || !githubToken){
     setSyncStatus(
       'error',
@@ -518,189 +453,112 @@ async function forceManualResave(){
     );
     return;
   }
-
-
   forceManualRetryBusy = true;
 
-
-  /*
-    현재 어떤 파일을 저장 중이었는지 기억
-  */
   let retryKind =
     activeSyncKind;
 
-
   if (!retryKind){
-
     if (maintenanceDirty && !dataDirty){
       retryKind = 'maintenance';
     }
     else {
       retryKind = 'data';
     }
-
   }
 
-
   try{
-
     clearTimeout(syncStuckTimer);
     syncStuckTimer = null;
 
-
-    /*
-      예약된 일반 자동저장 제거
-    */
     if (autoSyncTimer !== null){
-
       clearTimeout(autoSyncTimer);
       autoSyncTimer = null;
-
     }
 
-
-    /*
-      기존 Queue의 자동 재실행 방지
-    */
     autoSyncQueued = false;
     maintenanceSyncQueued = false;
 
-
-    /*
-      현재 진행 중인 GitHub GET / PUT 중단
-    */
     if (
       activeSyncAbortController &&
       !activeSyncAbortController.signal.aborted
     ){
-
       console.warn(
         `진행 중인 ${retryKind} 동기화를 중단하고 수동 재저장을 시작합니다.`
       );
-
       activeSyncAbortController.abort();
-
     }
-
 
     setSyncStatus(
       'pending',
       '기존 요청 중단 후 다시 저장합니다.'
     );
 
-
-    /*
-      기존 요청이 Abort 처리되어
-      finally에 진입할 때까지 기다림
-    */
     const waitStartedAt =
       Date.now();
-
 
     while (
       autoSyncInFlight ||
       maintenanceSyncInFlight
     ){
-
       await sleepMs(50);
-
-
-      /*
-        Abort인데도 5초 이상 풀리지 않는 경우
-        더 이상 무한대기하지 않음
-      */
       if (
         Date.now() -
         waitStartedAt >
         5000
       ){
-
         console.warn(
           '기존 동기화 종료 대기 시간이 초과되었습니다.'
         );
-
         break;
-
       }
-
     }
 
-
-    /*
-      새로운 저장 작업 시작
-      기존 변경 내용은 유지하고
-      새로운 mutation을 만들지는 않음
-    */
     if (retryKind === 'maintenance'){
-
       maintenanceDirty = true;
-
       lastMaintenanceSyncError =
         null;
 
-
       await runMaintenanceSync();
-
-
       if (maintenanceDirty){
-
         throw (
           lastMaintenanceSyncError ||
           new Error(
             'ma.json 수동 재저장에 실패했습니다.'
           )
         );
-
       }
-
     }
     else {
-
       dataDirty = true;
-
       lastAutoSyncError =
         null;
 
-
       await runAutoSync();
-
-
       if (dataDirty){
-
         throw (
           lastAutoSyncError ||
           new Error(
             'data.json 수동 재저장에 실패했습니다.'
           )
         );
-
       }
-
     }
-
-
     setSyncStatus('synced');
-
   }
   catch(e){
-
     console.error(
       '강제 수동 재저장 실패:',
       e
     );
-
-
     setSyncStatus(
       'error',
       e.message
     );
-
   }
   finally{
-
     forceManualRetryBusy =
       false;
-
   }
 }
 
@@ -2083,8 +1941,8 @@ const SKU_TAG_STYLES = {
   */
   WPS:{
     color:'#34D399',
-    background:'#30363D',
-    border:'#4B5563'
+    background:'#3F474F',
+    border:'#59636E'
   },
 
   /*
@@ -2092,14 +1950,14 @@ const SKU_TAG_STYLES = {
   */
   BCWF:{
     color:'#60A5FA',
-    background:'#30363D',
-    border:'#4B5563'
+    background:'#3F474F',
+    border:'#59636E'
   },
 
   BCIS:{
     color:'#60A5FA',
-    background:'#30363D',
-    border:'#4B5563'
+    background:'#3F474F',
+    border:'#59636E'
   }
 };
 
