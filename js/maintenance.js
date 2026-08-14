@@ -128,7 +128,7 @@ function maintenanceMailInquiryHtml(log){
     when
   ].filter(Boolean).join(' · ');
 
-  return `<div class="maint-cell-mail-inquiry" title="${esc(tip)}">메일문의</div>`;
+  return `<div class="maint-cell-mail-inquiry" title="${esc(tip)}">메일 문의</div>`;
 }
 
 function markMaintenanceMailInquiry(gid, ym){
@@ -150,7 +150,6 @@ function markMaintenanceMailInquiry(gid, ym){
 
   markMaintenanceDirty(mutationId);
 
-  /* 메일 작성 자체는 막지 않고 ma.json은 백그라운드 저장 */
   runMaintenanceSync().catch(e => {
     console.error('메일 문의 상태 저장 실패:', e);
   });
@@ -158,32 +157,27 @@ function markMaintenanceMailInquiry(gid, ym){
   return log;
 }
 
-let maintenanceMailNoticeTimer = null;
+function removeMaintenanceMailInquiry(gid, ym){
+  const log = maintenanceLogFor(gid, ym);
+  if (!log || !log.mail_inquiry) return false;
 
-function showMaintenanceMailCopyNotice(gid, ym){
-  const notice = document.getElementById('mlMailNotice');
-  if (notice){
-    notice.textContent =
-      '메일 내용이 클립보드에 복사되었습니다. Outlook 메일 본문에서 Ctrl+V로 붙여넣어 주세요. 5초 후 점검창이 자동으로 닫힙니다.';
-    notice.classList.add('show');
+  const mutationId = createMutationId('ma-mail-delete');
+
+  delete log.mail_inquiry;
+  delete log.mail_inquiry_at;
+  delete log.mail_inquiry_author;
+
+  if (maintenanceLogHasInspectionData(log)){
+    log.mutation_id = mutationId;
+    log.updated_at = Date.now();
+  } else {
+    maintenanceLogs = maintenanceLogs.filter(
+      m => !(m.group === gid && m.ym === ym)
+    );
   }
 
-  if (maintenanceMailNoticeTimer){
-    clearTimeout(maintenanceMailNoticeTimer);
-  }
-
-  maintenanceMailNoticeTimer = setTimeout(() => {
-    maintenanceMailNoticeTimer = null;
-
-    if (
-      maintenanceEditTarget &&
-      maintenanceEditTarget.gid === gid &&
-      maintenanceEditTarget.ym === ym
-    ){
-      closeMaintenanceLogModal();
-      renderMaintenance();
-    }
-  }, 5000);
+  markMaintenanceDirty(mutationId);
+  return true;
 }
 
 function maintenanceVisibleGroupList(){
@@ -325,7 +319,7 @@ function maintenanceEntryTabHtml(){
           </td>
         `;
       }
-      return `<td class="maint-cell maint-cell-blank ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(ymLabel(ym))} 점검 등록${log && log.mail_inquiry ? ' · 메일문의' : ''}">
+      return `<td class="maint-cell maint-cell-blank ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(ymLabel(ym))} 점검 등록${log && log.mail_inquiry ? ' · 메일 문의' : ''}">
         ${mailInquiryHtml || '<span class="maint-cell-dash">–</span>'}
       </td>`;
     }).join('');
@@ -755,28 +749,18 @@ function openMaintenanceLogModal(gid, ym){
   
   syncMaintenanceStatusControls();
   document.getElementById('mlError').textContent = '';
-  const mailNotice = document.getElementById('mlMailNotice');
-  if (mailNotice){
-    mailNotice.textContent = '';
-    mailNotice.classList.remove('show');
-  }
   document.getElementById('mlDeleteBtn').style.display = hasInspectionLog ? '' : 'none';
+
+  const mailInquiryDeleteBtn = document.getElementById('mlMailInquiryDeleteBtn');
+  if (mailInquiryDeleteBtn){
+    mailInquiryDeleteBtn.style.display = log && log.mail_inquiry ? '' : 'none';
+  }
+
   refreshMaintenanceMailButton(gid);
   document.getElementById('maintenanceLogModal').classList.add('open');
 }
 
 function closeMaintenanceLogModal(){
-  if (maintenanceMailNoticeTimer){
-    clearTimeout(maintenanceMailNoticeTimer);
-    maintenanceMailNoticeTimer = null;
-  }
-
-  const mailNotice = document.getElementById('mlMailNotice');
-  if (mailNotice){
-    mailNotice.textContent = '';
-    mailNotice.classList.remove('show');
-  }
-
   document.getElementById('maintenanceLogModal').classList.remove('open');
   maintenanceEditTarget = null;
 }
@@ -880,6 +864,30 @@ document.getElementById('ml_date_picker').addEventListener('change', (e) => {
 document.getElementById('mlEmailBtn').onclick = () => {
   openMaintenanceEmailCompose();
 };
+
+const mlMailInquiryDeleteBtn = document.getElementById('mlMailInquiryDeleteBtn');
+if (mlMailInquiryDeleteBtn){
+  mlMailInquiryDeleteBtn.onclick = async () => {
+    if (!maintenanceEditTarget) return;
+
+    const { gid, ym } = maintenanceEditTarget;
+    const log = maintenanceLogFor(gid, ym);
+    if (!log || !log.mail_inquiry) return;
+
+    if (!confirm(`${ymLabel(ym)}의 '메일 문의' 표시를 삭제하시겠습니까?`)) return;
+    if (!removeMaintenanceMailInquiry(gid, ym)) return;
+
+    await syncWorkLogAndWait(
+      `${ymLabel(ym)} 메일 문의 삭제 내용 동기화 중…`,
+      () => {
+        closeMaintenanceLogModal();
+        renderMaintenance();
+      },
+      false,
+      'maintenance'
+    );
+  };
+}
 
 document.getElementById('saveMlBtn').onclick = async () => {
   if (!maintenanceEditTarget) return;
