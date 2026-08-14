@@ -6448,6 +6448,82 @@ Engineer: {Engineer}
 Please review the schedule.
 Thank you.`;
 
+/* Outlook에서 복사한 서명을 저장할 때 위험한 실행 요소만 제거하고
+   일반적인 서식/링크/표/이미지는 최대한 유지한다. */
+function sanitizeMaintenanceMailSignatureHtml(html){
+  const template = document.createElement('template');
+  template.innerHTML = String(html || '');
+
+  template.content.querySelectorAll(
+    'script, iframe, object, embed, form, input, button, textarea, select, meta, link, base'
+  ).forEach(el => el.remove());
+
+  template.content.querySelectorAll('*').forEach(el => {
+    [...el.attributes].forEach(attr => {
+      const name = attr.name.toLowerCase();
+      const value = String(attr.value || '').trim();
+
+      if (name.startsWith('on')){
+        el.removeAttribute(attr.name);
+        return;
+      }
+
+      if (name === 'href'){
+        if (!/^(https?:|mailto:|tel:|#)/i.test(value)){
+          el.removeAttribute(attr.name);
+        }
+        return;
+      }
+
+      if (name === 'src'){
+        /* Outlook 복사에서 나오는 http(s)/data 이미지 정도만 허용 */
+        if (!/^(https?:|data:image\/)/i.test(value)){
+          el.removeAttribute(attr.name);
+        }
+      }
+    });
+  });
+
+  return template.innerHTML.trim();
+}
+
+function maintenanceMailSignatureTextFromHtml(html){
+  const wrap = document.createElement('div');
+  wrap.innerHTML = sanitizeMaintenanceMailSignatureHtml(html);
+
+  /* innerText가 표/문단/BR의 줄바꿈을 Outlook 서명과 가장 비슷하게 보존 */
+  const text = String(wrap.innerText || wrap.textContent || '')
+    .replace(/\u00a0/g, ' ')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return text;
+}
+
+function maintenanceMailSignatureHtmlForUser(user){
+  if (!user) return '';
+
+  if (user.maintenance_mail_signature_html){
+    return sanitizeMaintenanceMailSignatureHtml(
+      user.maintenance_mail_signature_html
+    );
+  }
+
+  /* 혹시 텍스트 서명 필드만 존재하는 데이터가 있으면 HTML로 승계 */
+  const legacyText = String(
+    user.maintenance_mail_signature_text ||
+    user.maintenance_mail_signature ||
+    ''
+  ).trim();
+
+  if (!legacyText) return '';
+
+  const div = document.createElement('div');
+  div.textContent = legacyText;
+  return div.innerHTML.replace(/\n/g, '<br>');
+}
+
 function currentUserRecord(){
   return users.find(
     x => String(x.id) === String(currentUserId)
@@ -6466,6 +6542,7 @@ function openMaintenanceMailSettingsModal(){
   const bodyKoEl = document.getElementById('mms_body_ko');
   const subjectEnEl = document.getElementById('mms_subject_en');
   const bodyEnEl = document.getElementById('mms_body_en');
+  const signatureEl = document.getElementById('mms_signature');
   const errEl = document.getElementById('mmsError');
 
   /* 기존 단일 한글 템플릿을 사용 중인 데이터도 자동 승계 */
@@ -6486,6 +6563,11 @@ function openMaintenanceMailSettingsModal(){
   bodyEnEl.value =
     user.maintenance_mail_body_en ||
     DEFAULT_MAINTENANCE_MAIL_BODY_EN;
+
+  if (signatureEl){
+    signatureEl.innerHTML =
+      maintenanceMailSignatureHtmlForUser(user);
+  }
 
   errEl.textContent = '';
 
@@ -6672,7 +6754,19 @@ function openMaintenanceEmailCompose(){
 
   const values = maintenanceMailTemplateValues(gid, ym, language);
   const subject = applyMaintenanceMailTemplate(subjectTemplate, values);
-  const body = applyMaintenanceMailTemplate(bodyTemplate, values);
+  const templateBody = applyMaintenanceMailTemplate(bodyTemplate, values);
+
+  /* 한글/English에 공통으로 사용하는 서명을 메일 본문 마지막에 추가 */
+  const signatureText = String(
+    user.maintenance_mail_signature_text ||
+    maintenanceMailSignatureTextFromHtml(
+      user.maintenance_mail_signature_html || ''
+    )
+  ).trim();
+
+  const body = signatureText
+    ? `${templateBody.trimEnd()}\n\n${signatureText}`
+    : templateBody;
 
   const mailto =
     `mailto:${recipients.join(',')}` +
@@ -6709,6 +6803,19 @@ if (saveMmsBtn){
     const bodyEn =
       document.getElementById('mms_body_en').value.trim();
 
+    const signatureEl =
+      document.getElementById('mms_signature');
+
+    const signatureHtml =
+      sanitizeMaintenanceMailSignatureHtml(
+        signatureEl?.innerHTML || ''
+      );
+
+    const signatureText =
+      maintenanceMailSignatureTextFromHtml(
+        signatureHtml
+      );
+
     const requiredFields = [
       ['한글 메일 제목', subjectKo, 'mms_subject_ko'],
       ['한글 메일 내용', bodyKo, 'mms_body_ko'],
@@ -6728,7 +6835,9 @@ if (saveMmsBtn){
       user.maintenance_mail_subject_ko !== subjectKo ||
       user.maintenance_mail_body_ko !== bodyKo ||
       user.maintenance_mail_subject_en !== subjectEn ||
-      user.maintenance_mail_body_en !== bodyEn;
+      user.maintenance_mail_body_en !== bodyEn ||
+      String(user.maintenance_mail_signature_html || '') !== signatureHtml ||
+      String(user.maintenance_mail_signature_text || '') !== signatureText;
 
     if (changed){
       const mutationId = createMutationId('mail-template');
@@ -6737,6 +6846,10 @@ if (saveMmsBtn){
       user.maintenance_mail_body_ko = bodyKo;
       user.maintenance_mail_subject_en = subjectEn;
       user.maintenance_mail_body_en = bodyEn;
+
+      /* 한글/English 공통 Outlook 서명 */
+      user.maintenance_mail_signature_html = signatureHtml;
+      user.maintenance_mail_signature_text = signatureText;
 
       /* 구버전 앱에서 한글 템플릿을 계속 읽을 수 있도록 호환 필드도 유지 */
       user.maintenance_mail_subject = subjectKo;
@@ -6980,7 +7093,7 @@ function captureAuditFromStateDiff(mutationId = createMutationId('data')){
     } else if (a && !b){
       addAuditLog({action:'delete',targetType:'사용자 계정',targetId:id,label:a.name,summary:`사용자 계정 삭제 · ${a.name}`,actorName:a.name,actorRole:a.isAdmin?'마스터':'일반사용자',actorId:a.id,mutationId});
     } else if (a && b){
-      const changes=auditFieldChanges(a,b,['id','maintenance_mail_subject','maintenance_mail_body','maintenance_mail_subject_ko','maintenance_mail_body_ko','maintenance_mail_subject_en','maintenance_mail_body_en']);
+      const changes=auditFieldChanges(a,b,['id','maintenance_mail_subject','maintenance_mail_body','maintenance_mail_subject_ko','maintenance_mail_body_ko','maintenance_mail_subject_en','maintenance_mail_body_en','maintenance_mail_signature','maintenance_mail_signature_html','maintenance_mail_signature_text']);
       if (changes.length){
         const pwChanged=changes.some(c=>['pwHash','pwSalt','pwIterations'].includes(c.field));
         const visible=changes.filter(c=>!['pwSalt','pwIterations'].includes(c.field));
