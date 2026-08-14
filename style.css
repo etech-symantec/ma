@@ -1467,9 +1467,9 @@ textarea.wl-fc-input.is-changed{
   white-space:nowrap;
 }
 
+#maintenanceLogModal .ml-email-method,
 #maintenanceLogModal .ml-email-language{
   height:32px;
-  min-width:76px;
   padding:0 8px;
   border:1px solid #C6DDF1;
   border-radius:8px;
@@ -1482,6 +1482,15 @@ textarea.wl-fc-input.is-changed{
   cursor:pointer;
 }
 
+#maintenanceLogModal .ml-email-method{
+  min-width:152px;
+}
+
+#maintenanceLogModal .ml-email-language{
+  min-width:76px;
+}
+
+#maintenanceLogModal .ml-email-method:focus,
 #maintenanceLogModal .ml-email-language:focus{
   border-color:#86BFE4;
 }
@@ -4122,4 +4131,104 @@ tr.asset-child-row+tr.asset-child-row:has(+ tr.asset-child-row)
 tr.asset-child-row td.col-sku::before,
 tr.asset-child-row td.col-sku::after{
   display:none !important;
+}
+
+/* =========================================================
+   Microsoft Graph 점검 메일 테스트 버전
+   ========================================================= */
+#maintenanceMailSettingsModal .maintenance-mail-graph-card{
+  margin-top:14px;
+  padding:14px;
+  border:1px solid #C9DBEE;
+  border-radius:10px;
+  background:#F5FAFE;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-graph-hint{
+  margin:0 0 11px !important;
+  color:var(--text-dim);
+  font-size:11px !important;
+  line-height:1.55;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-graph-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px 12px;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-graph-redirect{
+  grid-column:1 / -1;
+}
+
+#maintenanceMailSettingsModal #mms_graph_redirect{
+  color:#64748B;
+  background:#EEF2F6;
+  font-family:var(--mono);
+  font-size:10.5px;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-graph-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:7px;
+  margin-top:11px;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-graph-status{
+  margin-right:auto;
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  padding:0 9px;
+  border:1px solid var(--border-solid);
+  border-radius:999px;
+  background:#fff;
+  color:var(--text-faint);
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:700;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-graph-status.connected{
+  color:#2F8F52;
+  border-color:#B8DDC4;
+  background:#EAF7EF;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-graph-status.error{
+  color:#C62828;
+  border-color:#E9B2B2;
+  background:#FDECEC;
+}
+
+#maintenanceMailSettingsModal .maint-graph-connect-btn{
+  flex:none;
+  color:#2563A8;
+  border-color:#9FC8E8;
+  background:#EAF5FC;
+}
+
+#maintenanceMailSettingsModal .maint-graph-connect-btn:hover{
+  color:#164E85;
+  border-color:#7BB5DD;
+  background:#DDEFFA;
+}
+
+@media(max-width:760px){
+  #maintenanceMailSettingsModal .maintenance-mail-graph-grid{
+    grid-template-columns:1fr;
+  }
+  #maintenanceMailSettingsModal .maintenance-mail-graph-redirect{
+    grid-column:1;
+  }
+  #maintenanceMailSettingsModal .maintenance-mail-graph-actions{
+    flex-wrap:wrap;
+    justify-content:flex-start;
+  }
+  #maintenanceMailSettingsModal .maintenance-mail-graph-status{
+    flex:1 1 100%;
+    margin-right:0;
+  }
 }
