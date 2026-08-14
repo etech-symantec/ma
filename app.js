@@ -4099,8 +4099,8 @@ document.getElementById('ml_date_picker').addEventListener('change', (e) => {
   document.getElementById('ml_date').value = fmtDateDots(e.target.value);
 });
 
-document.getElementById('mlEmailBtn').onclick = async () => {
-  await openMaintenanceEmailCompose();
+document.getElementById('mlEmailBtn').onclick = () => {
+  openMaintenanceEmailCompose();
 };
 
 document.getElementById('saveMlBtn').onclick = async () => {
@@ -6448,82 +6448,6 @@ Engineer: {Engineer}
 Please review the schedule.
 Thank you.`;
 
-/* Outlook에서 복사한 서명을 저장할 때 위험한 실행 요소만 제거하고
-   일반적인 서식/링크/표/이미지는 최대한 유지한다. */
-function sanitizeMaintenanceMailSignatureHtml(html){
-  const template = document.createElement('template');
-  template.innerHTML = String(html || '');
-
-  template.content.querySelectorAll(
-    'script, iframe, object, embed, form, input, button, textarea, select, meta, link, base'
-  ).forEach(el => el.remove());
-
-  template.content.querySelectorAll('*').forEach(el => {
-    [...el.attributes].forEach(attr => {
-      const name = attr.name.toLowerCase();
-      const value = String(attr.value || '').trim();
-
-      if (name.startsWith('on')){
-        el.removeAttribute(attr.name);
-        return;
-      }
-
-      if (name === 'href'){
-        if (!/^(https?:|mailto:|tel:|#)/i.test(value)){
-          el.removeAttribute(attr.name);
-        }
-        return;
-      }
-
-      if (name === 'src'){
-        /* Outlook 복사에서 나오는 http(s)/data 이미지 정도만 허용 */
-        if (!/^(https?:|data:image\/)/i.test(value)){
-          el.removeAttribute(attr.name);
-        }
-      }
-    });
-  });
-
-  return template.innerHTML.trim();
-}
-
-function maintenanceMailSignatureTextFromHtml(html){
-  const wrap = document.createElement('div');
-  wrap.innerHTML = sanitizeMaintenanceMailSignatureHtml(html);
-
-  /* innerText가 표/문단/BR의 줄바꿈을 Outlook 서명과 가장 비슷하게 보존 */
-  const text = String(wrap.innerText || wrap.textContent || '')
-    .replace(/\u00a0/g, ' ')
-    .replace(/[ \t]+\n/g, '\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-
-  return text;
-}
-
-function maintenanceMailSignatureHtmlForUser(user){
-  if (!user) return '';
-
-  if (user.maintenance_mail_signature_html){
-    return sanitizeMaintenanceMailSignatureHtml(
-      user.maintenance_mail_signature_html
-    );
-  }
-
-  /* 혹시 텍스트 서명 필드만 존재하는 데이터가 있으면 HTML로 승계 */
-  const legacyText = String(
-    user.maintenance_mail_signature_text ||
-    user.maintenance_mail_signature ||
-    ''
-  ).trim();
-
-  if (!legacyText) return '';
-
-  const div = document.createElement('div');
-  div.textContent = legacyText;
-  return div.innerHTML.replace(/\n/g, '<br>');
-}
-
 function currentUserRecord(){
   return users.find(
     x => String(x.id) === String(currentUserId)
@@ -6542,7 +6466,6 @@ function openMaintenanceMailSettingsModal(){
   const bodyKoEl = document.getElementById('mms_body_ko');
   const subjectEnEl = document.getElementById('mms_subject_en');
   const bodyEnEl = document.getElementById('mms_body_en');
-  const signatureEl = document.getElementById('mms_signature');
   const errEl = document.getElementById('mmsError');
 
   /* 기존 단일 한글 템플릿을 사용 중인 데이터도 자동 승계 */
@@ -6564,10 +6487,6 @@ function openMaintenanceMailSettingsModal(){
     user.maintenance_mail_body_en ||
     DEFAULT_MAINTENANCE_MAIL_BODY_EN;
 
-  if (signatureEl){
-    signatureEl.innerHTML =
-      maintenanceMailSignatureHtmlForUser(user);
-  }
 
   errEl.textContent = '';
 
@@ -6699,129 +6618,41 @@ function refreshMaintenanceMailButton(gid){
   const recipients = maintenanceMailRecipientsForGroup(gid);
 
   btn.title = recipients.length
-    ? `고객사 담당자 ${recipients.length}명을 수신자로 넣고 제목만 채운 새 메일을 엽니다. 등록된 메일 내용과 서명은 클립보드에 자동 복사되므로 본문에서 Ctrl+V로 붙여넣으세요.`
+    ? `등록된 고객사 담당자 ${recipients.length}명을 수신자로 넣고 제목을 채웁니다. 메일 내용은 클립보드에 자동 복사됩니다.`
     : '이 법인에 등록된 고객사 담당자 이메일이 없습니다.';
 }
 
-function maintenanceMailPlainTextToHtml(text){
-  return esc(String(text || ''))
-    .replace(/\r\n|\r|\n/g, '<br>');
-}
+async function copyMaintenanceMailBodyToClipboard(text){
+  const body = String(text || '');
 
-function maintenanceMailClipboardPayload(templateBody, user){
-  const signatureHtml =
-    maintenanceMailSignatureHtmlForUser(user);
-
-  const signatureText = String(
-    user?.maintenance_mail_signature_text ||
-    maintenanceMailSignatureTextFromHtml(signatureHtml)
-  ).trim();
-
-  const bodyText =
-    String(templateBody || '').trimEnd();
-
-  const plainText = signatureText
-    ? `${bodyText}\n\n${signatureText}`
-    : bodyText;
-
-  const bodyHtml =
-    maintenanceMailPlainTextToHtml(bodyText);
-
-  const html = signatureHtml
-    ? `${bodyHtml}<br><br>${signatureHtml}`
-    : bodyHtml;
-
-  return {
-    plainText,
-    html
-  };
-}
-
-/*
-  점검 메일 본문 + 서명을 클립보드에 복사한다.
-  - Chromium 계열 브라우저의 ClipboardItem 지원 시 text/html + text/plain 동시 저장
-  - 지원하지 않으면 text/plain으로 자동 fallback
-*/
-async function copyMaintenanceMailContentToClipboard(payload){
-  const plainText = String(payload?.plainText || '');
-  const html = String(payload?.html || '');
-
-  if (
-    navigator.clipboard &&
-    typeof navigator.clipboard.write === 'function' &&
-    typeof ClipboardItem !== 'undefined'
-  ){
-    try{
-      const item = new ClipboardItem({
-        'text/plain': new Blob(
-          [plainText],
-          { type:'text/plain' }
-        ),
-        'text/html': new Blob(
-          [html],
-          { type:'text/html' }
-        )
-      });
-
-      await navigator.clipboard.write([item]);
-      return 'html';
-    }
-    catch(e){
-      console.warn(
-        'HTML 클립보드 복사 실패, 텍스트 복사로 재시도합니다.',
-        e
-      );
-    }
+  if (navigator.clipboard && window.isSecureContext){
+    await navigator.clipboard.writeText(body);
+    return true;
   }
 
-  if (
-    navigator.clipboard &&
-    typeof navigator.clipboard.writeText === 'function'
-  ){
-    try{
-      await navigator.clipboard.writeText(plainText);
-      return 'text';
-    }
-    catch(e){
-      console.warn(
-        'Clipboard API 텍스트 복사 실패, 구형 복사 방식으로 재시도합니다.',
-        e
-      );
-    }
-  }
-
-  /* file:// 또는 일부 브라우저의 Clipboard API 제한에 대한 마지막 fallback */
-  const textarea =
-    document.createElement('textarea');
-
-  textarea.value = plainText;
-  textarea.setAttribute('readonly', '');
-  textarea.style.position = 'fixed';
-  textarea.style.left = '-9999px';
-  textarea.style.top = '0';
-
-  document.body.appendChild(textarea);
-  textarea.focus();
-  textarea.select();
+  /* 구형/제한 브라우저 fallback */
+  const ta = document.createElement('textarea');
+  ta.value = body;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  ta.style.top = '0';
+  document.body.appendChild(ta);
+  ta.select();
 
   let copied = false;
-
   try{
     copied = document.execCommand('copy');
   }
-  catch(e){
-    copied = false;
+  finally{
+    ta.remove();
   }
-
-  textarea.remove();
 
   if (!copied){
-    throw new Error(
-      '메일 내용을 클립보드에 복사하지 못했습니다. 브라우저의 클립보드 권한을 확인해 주세요.'
-    );
+    throw new Error('클립보드 복사에 실패했습니다.');
   }
 
-  return 'text';
+  return true;
 }
 
 async function openMaintenanceEmailCompose(){
@@ -6829,7 +6660,6 @@ async function openMaintenanceEmailCompose(){
 
   const { gid, ym } = maintenanceEditTarget;
   const errEl = document.getElementById('mlError');
-  const btn = document.getElementById('mlEmailBtn');
   const user = currentUserRecord();
 
   if (!user){
@@ -6874,71 +6704,26 @@ async function openMaintenanceEmailCompose(){
     return;
   }
 
-  const values =
-    maintenanceMailTemplateValues(
-      gid,
-      ym,
-      language
-    );
-
-  const subject =
-    applyMaintenanceMailTemplate(
-      subjectTemplate,
-      values
-    );
-
-  const templateBody =
-    applyMaintenanceMailTemplate(
-      bodyTemplate,
-      values
-    );
-
-  const clipboardPayload =
-    maintenanceMailClipboardPayload(
-      templateBody,
-      user
-    );
+  const values = maintenanceMailTemplateValues(gid, ym, language);
+  const subject = applyMaintenanceMailTemplate(subjectTemplate, values);
+  const body = applyMaintenanceMailTemplate(bodyTemplate, values);
 
   try{
-    await copyMaintenanceMailContentToClipboard(
-      clipboardPayload
-    );
+    /* 본문은 mailto에 넣지 않고 클립보드로 복사 */
+    await copyMaintenanceMailBodyToClipboard(body);
   }
   catch(e){
-    console.error(
-      '점검 메일 클립보드 복사 실패:',
-      e
-    );
-
+    console.error('점검 메일 본문 클립보드 복사 실패:', e);
     errEl.textContent =
-      e?.message ||
-      '메일 내용을 클립보드에 복사하지 못했습니다.';
-
+      '메일 내용을 클립보드에 복사하지 못했습니다. 브라우저의 클립보드 권한을 확인해 주세요.';
     return;
   }
 
-  /*
-    mailto에는 BODY를 넣지 않는다.
-    수신자 + 제목만 채우고 본문은 사용자가 Ctrl+V로 붙여넣는다.
-  */
   const mailto =
     `mailto:${recipients.join(',')}` +
     `?subject=${encodeURIComponent(subject)}`;
 
-  errEl.textContent =
-    '✓ 메일 내용과 서명이 클립보드에 복사되었습니다. 새 메일 본문에서 Ctrl+V로 붙여넣으세요.';
-
-  if (btn){
-    const originalText = btn.textContent;
-    btn.textContent = '✓ 내용 복사됨';
-
-    setTimeout(() => {
-      if (btn.isConnected){
-        btn.textContent = originalText;
-      }
-    }, 1600);
-  }
-
+  errEl.textContent = '';
   window.location.href = mailto;
 }
 
@@ -6967,19 +6752,6 @@ if (saveMmsBtn){
     const bodyEn =
       document.getElementById('mms_body_en').value.trim();
 
-    const signatureEl =
-      document.getElementById('mms_signature');
-
-    const signatureHtml =
-      sanitizeMaintenanceMailSignatureHtml(
-        signatureEl?.innerHTML || ''
-      );
-
-    const signatureText =
-      maintenanceMailSignatureTextFromHtml(
-        signatureHtml
-      );
-
     const requiredFields = [
       ['한글 메일 제목', subjectKo, 'mms_subject_ko'],
       ['한글 메일 내용', bodyKo, 'mms_body_ko'],
@@ -6999,9 +6771,7 @@ if (saveMmsBtn){
       user.maintenance_mail_subject_ko !== subjectKo ||
       user.maintenance_mail_body_ko !== bodyKo ||
       user.maintenance_mail_subject_en !== subjectEn ||
-      user.maintenance_mail_body_en !== bodyEn ||
-      String(user.maintenance_mail_signature_html || '') !== signatureHtml ||
-      String(user.maintenance_mail_signature_text || '') !== signatureText;
+      user.maintenance_mail_body_en !== bodyEn;
 
     if (changed){
       const mutationId = createMutationId('mail-template');
@@ -7010,10 +6780,6 @@ if (saveMmsBtn){
       user.maintenance_mail_body_ko = bodyKo;
       user.maintenance_mail_subject_en = subjectEn;
       user.maintenance_mail_body_en = bodyEn;
-
-      /* 한글/English 공통 Outlook 서명 */
-      user.maintenance_mail_signature_html = signatureHtml;
-      user.maintenance_mail_signature_text = signatureText;
 
       /* 구버전 앱에서 한글 템플릿을 계속 읽을 수 있도록 호환 필드도 유지 */
       user.maintenance_mail_subject = subjectKo;
@@ -7257,7 +7023,7 @@ function captureAuditFromStateDiff(mutationId = createMutationId('data')){
     } else if (a && !b){
       addAuditLog({action:'delete',targetType:'사용자 계정',targetId:id,label:a.name,summary:`사용자 계정 삭제 · ${a.name}`,actorName:a.name,actorRole:a.isAdmin?'마스터':'일반사용자',actorId:a.id,mutationId});
     } else if (a && b){
-      const changes=auditFieldChanges(a,b,['id','maintenance_mail_subject','maintenance_mail_body','maintenance_mail_subject_ko','maintenance_mail_body_ko','maintenance_mail_subject_en','maintenance_mail_body_en','maintenance_mail_signature','maintenance_mail_signature_html','maintenance_mail_signature_text']);
+      const changes=auditFieldChanges(a,b,['id','maintenance_mail_subject','maintenance_mail_body','maintenance_mail_subject_ko','maintenance_mail_body_ko','maintenance_mail_subject_en','maintenance_mail_body_en']);
       if (changes.length){
         const pwChanged=changes.some(c=>['pwHash','pwSalt','pwIterations'].includes(c.field));
         const visible=changes.filter(c=>!['pwSalt','pwIterations'].includes(c.field));
