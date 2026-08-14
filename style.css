@@ -3684,7 +3684,10 @@ tbody tr.asset-parent-row{
 
 /* ISG 하위 자산 */
 tbody tr.asset-child-row{
-  background:#F8FBFD;
+  background:#F3F7FA;
+}
+tbody tr.asset-child-row:hover{
+  background:#EDF3F7;
 }
 
 tbody tr.asset-child-row
