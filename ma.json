@@ -1821,6 +1821,16 @@
       "uncontracted": false,
       "author": "김상문",
       "updated_at": 1786608976851
+    },
+    {
+      "id": 1786712293779,
+      "group": "ng",
+      "ym": "2026-08",
+      "mutation_id": "ma-mail-mssyd95f-33319f81-88b4-4d73-aa53-888401b0324f",
+      "mail_inquiry": true,
+      "mail_inquiry_at": 1786712293779,
+      "mail_inquiry_author": "신호근",
+      "updated_at": 1786712293779
     }
   ],
   "syncMutations": [
@@ -1867,6 +1877,11 @@
     {
       "id": "ma-msrlcbp7-6f5d3241-441e-4d23-9db3-a2c008c7056e",
       "ts": 1786629949243,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-mail-mssyd95f-33319f81-88b4-4d73-aa53-888401b0324f",
+      "ts": 1786712293779,
       "scope": "maintenance"
     }
   ]
