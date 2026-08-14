@@ -2011,56 +2011,186 @@ function skuTagLabel(r){
   return tags.length ? tags.join('/') : '미지정';
 }
 
-// ---------- SKU category tags ----------
-const SKU_CATEGORIES = [
-  // -- prefix rules --
-  { match:'prefix', value:'ISG-Pro',     color:'#A78BFA' }, // ISG family (violet)
-  { match:'prefix', value:'ISG-MA',      color:'#8B5CF6' }, // ISG family
-  { match:'prefix', value:'ISG-MC',      color:'#7C3AED' }, // ISG family
-  { match:'prefix', value:'MA-CAS',      color:'#2DD4BF' }, // CAS family (teal)
-  { match:'prefix', value:'CLD-',        color:'#60A5FA' }, // network/security family (blue)
-  { match:'prefix', value:'ASG-',        color:'#3B82F6' }, // network/security family
-  { match:'prefix', value:'SG-S',        color:'#D97706' }, // endpoint family (amber) — checked before generic SG-prefixed rules
-  { match:'prefix', value:'SG900',       color:'#22C55E' }, // misc hardware family (green)
-  { match:'prefix', value:'MC-',         color:'#FBBF24' }, // endpoint family
-  { match:'prefix', value:'IS-',         color:'#F59E0B' }, // endpoint family
-  { match:'prefix', value:'CPOS-',       color:'#F472B6' }, // POS/hardware family (pink)
-  { match:'prefix', value:'SW_Flash-',   color:'#EC4899' }, // POS/hardware family
-  { match:'prefix', value:'PS-S',        color:'#DB2777' }, // POS/hardware family
-  { match:'prefix', value:'VIP-',        color:'#4ADE80' }, // misc hardware family (green)
-  { match:'prefix', value:'ELK',         color:'#16A34A' }, // misc hardware family
-  // -- contains rules --
-  { match:'contains', value:'ISG-PR-',   color:'#6D28D9' }, // ISG family
-  { match:'contains', value:'ISG-CA',    color:'#5B21B6' }, // ISG family
-  { match:'contains', value:'CAS-',      color:'#14B8A6' }, // CAS family
-  { match:'contains', value:'CA-VA',     color:'#14B8A6' }, // CAS family
-  { match:'contains', value:'FI-',       color:'#2563EB' }, // network/security family
-  { match:'contains', value:'RP-',       color:'#22D3EE' }, // RP/BC family (cyan)
-  { match:'contains', value:'BCWF',      color:'#06B6D4' }, // RP/BC family
-  { match:'contains', value:'SW-E-TAP',  color:'#0891B2' }, // RP/BC family
-  { match:'contains', value:'SSP-S',     color:'#FB7185' }, // SSP/WSS family (rose)
-  { match:'contains', value:'WSS',       color:'#F43F5E' }, // SSP/WSS family
-  // -- exact rules --
-  { match:'exact', value:'WEB-PROTECT-SUB', color:'#94A3B8' }, // standalone (slate)
+/* =========================================================
+   SKU 표시 색상
+   - SKU 문자열이 아니라 SKU_TAG_RULES에서 판별된 Tag 기준
+   ========================================================= */
+
+const SKU_TAG_STYLES = {
+
+  ASG:{
+    color:'#C76A00',
+    background:'#FFF1D6',
+    border:'#F2C778'
+  },
+
+  SG:{
+    color:'#9A7600',
+    background:'#FFF7C7',
+    border:'#EAD56C'
+  },
+
+  MC:{
+    color:'#16834A',
+    background:'#E7F7EE',
+    border:'#9CD6B7'
+  },
+
+  RP:{
+    color:'#2563EB',
+    background:'#EAF2FF',
+    border:'#AFC8F7'
+  },
+
+  CA:{
+    color:'#8B6BC9',
+    background:'#F3EDFC',
+    border:'#D8C8EF'
+  },
+
+  MA:{
+    color:'#6D28D9',
+    background:'#EEE5FC',
+    border:'#C5A9ED'
+  },
+
+  ISG:{
+    color:'#D73A49',
+    background:'#FDEBED',
+    border:'#F2B6BC'
+  },
+
+  ELK:{
+    color:'#D9468B',
+    background:'#FCEAF3',
+    border:'#F3B8D4'
+  },
+
+  PAC:{
+    color:'#8B5A2B',
+    background:'#F5EBDD',
+    border:'#D8BC98'
+  },
+
+  WSS:{
+    color:'#1688C4',
+    background:'#E7F6FD',
+    border:'#A8D9F0'
+  },
+
+  /*
+    어두운 진회색 배경 + 에메랄드
+  */
+  WPS:{
+    color:'#34D399',
+    background:'#30363D',
+    border:'#4B5563'
+  },
+
+  /*
+    어두운 진회색 배경 + 파랑
+  */
+  BCWF:{
+    color:'#60A5FA',
+    background:'#30363D',
+    border:'#4B5563'
+  },
+
+  BCIS:{
+    color:'#60A5FA',
+    background:'#30363D',
+    border:'#4B5563'
+  }
+};
+
+
+/*
+  하나의 SKU가 여러 Tag에 동시에 매칭될 경우
+  아래 순서의 Tag 색상을 우선 적용
+*/
+const SKU_COLOR_TAG_PRIORITY = [
+  'ASG',
+  'SG',
+  'MC',
+  'RP',
+  'CA',
+  'MA',
+  'ISG',
+  'ELK',
+  'PAC',
+  'WSS',
+  'WPS',
+  'BCWF',
+  'BCIS'
 ];
 
-function skuCategory(sku){
-  if (!sku) return null;
-  for (const c of SKU_CATEGORIES){
-    if (c.match==='prefix' && sku.startsWith(c.value)) return c;
-    if (c.match==='contains' && sku.includes(c.value)) return c;
-    if (c.match==='exact' && sku===c.value) return c;
+
+function skuTagStyle(sku){
+
+  if (!sku){
+    return null;
   }
-  return null;
+
+  const tags =
+    skuKeywordMatches(sku);
+
+  const tag =
+    SKU_COLOR_TAG_PRIORITY.find(
+      key => tags.includes(key)
+    );
+
+  if (!tag){
+    return null;
+  }
+
+  return {
+    tag,
+    ...SKU_TAG_STYLES[tag]
+  };
 }
+
 function skuBadge(sku){
-  const label = esc(sku) || '—';
-  if (!sku) return label;
-  const cat = skuCategory(sku);
-  if (!cat) return label;
-  return `<span class="sku-tag" style="color:${cat.color}; border-color:${cat.color}55; background:${cat.color}1a;">
-    <span class="sku-dot" style="background:${cat.color}"></span>${label}
-  </span>`;
+
+  const label =
+    esc(sku) || '—';
+
+  if (!sku){
+    return label;
+  }
+
+  const style =
+    skuTagStyle(sku);
+
+  /*
+    지정된 Tag가 없는 SKU는
+    기존 기본 형태로 표시
+  */
+  if (!style){
+    return `
+      <span class="sku-tag">
+        ${label}
+      </span>
+    `;
+  }
+
+  return `
+    <span
+      class="sku-tag"
+      data-sku-color-tag="${esc(style.tag)}"
+      style="
+        color:${style.color};
+        background:${style.background};
+        border-color:${style.border};
+      "
+    >
+      <span
+        class="sku-dot"
+        style="background:${style.color}"
+      ></span>
+
+      ${label}
+    </span>
+  `;
 }
 
 // ---------- SKU keyword tags (filterable/searchable) ----------
