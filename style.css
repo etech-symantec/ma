@@ -3863,15 +3863,6 @@ td.col-sku{
   gap:4px;
 }
 
-/* 하위 ISG SKU 셀 */
-.col-sku-app .asset-app-display-simple{
-  display:flex;
-  align-items:flex-start;
-  gap:7px;          /* 화살표와 SKU 간격도 약간 축소 */
-  padding-left:0;   /* 왼쪽 여백 제거 */
-  margin-left:-6px; /* 전체를 조금 왼쪽으로 당김 */
-}
-
 /* 하위 자산 내용 */
 .col-sku-app .asset-app-main{
   display:flex;
@@ -3890,42 +3881,163 @@ td.col-sku{
   margin-top:2px;
 }
 
-/* 세로선 */
-.col-sku-app .asset-child-arrow::before{
-  content:'';
-  position:absolute;
-  left:7px;
-  top:-4px;              /* 세로선 시작 위치 아래로 */
-  width:0;
-  height:9px;            /* 세로선 길이 더 짧게 */
-  border-left:1.5px solid #C9D4E5;   /* 꺾임선과 동일 두께 */
-  border-radius:0;
+/* =========================================================
+   SSP → ISG 하위 자산 연결선
+   ========================================================= */
+tr.asset-child-row td.col-sku{
+  position:relative;
+  padding-left:0 !important;
 }
 
-/* 가로선 + 꺾임 */
-.col-sku-app .asset-child-arrow::after{
+/* 하위 자산 전체 위치 */
+.col-sku-app .asset-app-display-simple{
+  display:flex;
+  align-items:flex-start;
+
+  gap:6px;
+
+  padding-left:0;
+
+  /*
+    하위 자산을 너무 오른쪽으로 넣지 않음
+  */
+  margin-left:-10px;
+
+  position:relative;
+}
+
+
+/* 연결선 영역 */
+.col-sku-app .asset-child-arrow{
+  position:relative;
+
+  flex:0 0 17px;
+  width:17px;
+
+  min-height:24px;
+
+  align-self:stretch;
+
+  margin-top:0;
+}
+
+
+/* ---------------------------------------------------------
+   기본 세로선
+   - 하위 자산이 1개뿐이거나
+   - 마지막 하위 자산일 때
+   - 꺾이는 부분까지만 짧게 표시
+   --------------------------------------------------------- */
+.col-sku-app .asset-child-arrow::before{
   content:'';
+
   position:absolute;
-  left:7px;
-  top:5px;
-  width:10px;
-  height:9px;
-  border-left:1.5px solid #C9D4E5;   /* 동일 두께 */
-  border-bottom:1.5px solid #C9D4E5; /* 동일 두께 */
-  border-bottom-left-radius:6px;
+
+  left:6px;
+
+  top:-4px;
+
+  width:0;
+  height:16px;
+
+  border-left:
+    1px solid #C9D4E5;
+
   box-sizing:border-box;
 }
 
-/* 하위 자산 행 자체를 조금 더 부드럽게 */
-tr.asset-child-row td.col-sku{
-  padding-left:0 !important;
-}
-.col-sku-app .asset-app-display-simple{
-  margin-left:-10px;
+
+/* ---------------------------------------------------------
+   둥근 ㄴ자 연결선
+   --------------------------------------------------------- */
+.col-sku-app .asset-child-arrow::after{
+  content:'';
+
+  position:absolute;
+
+  left:6px;
+  top:11px;
+
+  width:10px;
+  height:8px;
+
+  border-left:
+    1px solid #C9D4E5;
+
+  border-bottom:
+    1px solid #C9D4E5;
+
+  border-bottom-left-radius:
+    5px;
+
+  box-sizing:border-box;
 }
 
-/* 혹시 기존 트리선이 있다면 숨김 */
+
+/* =========================================================
+   현재 하위 자산 다음에도 또 하위 자산이 있는 경우
+
+   첫 번째 ISG
+        │
+        ├─ ISG-Proxy
+        │
+        └─ ISG-MA
+
+   이런 식으로 세로선을 다음 행까지 연장
+   ========================================================= */
+tr.asset-child-row:has(+ tr.asset-child-row)
+.asset-child-arrow::before{
+
+  top:-4px;
+
+  bottom:-18px;
+
+  height:auto;
+}
+
+
+/* =========================================================
+   두 번째 이후 하위 자산
+
+   이전 행에서 내려온 세로선과
+   현재 행의 세로선이 자연스럽게 연결되도록
+   위쪽으로 조금 연장
+   ========================================================= */
+tr.asset-child-row
++
+tr.asset-child-row
+.asset-child-arrow::before{
+
+  top:-18px;
+
+  height:30px;
+}
+
+
+/* =========================================================
+   두 번째 이후 자산인데
+   그 아래에도 하위 자산이 더 있는 경우
+
+   위/아래 모두 연결
+   ========================================================= */
+tr.asset-child-row
++
+tr.asset-child-row:has(+ tr.asset-child-row)
+.asset-child-arrow::before{
+
+  top:-18px;
+
+  bottom:-18px;
+
+  height:auto;
+}
+
+
+/* 기존 td 자체의 트리선은 사용하지 않음 */
 tr.asset-child-row td.col-sku::before,
 tr.asset-child-row td.col-sku::after{
   display:none !important;
+}
+.col-sku-app .asset-app-display-simple{
+  margin-left:-30px;
 }
