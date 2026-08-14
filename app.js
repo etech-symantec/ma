@@ -8520,3 +8520,103 @@ function dashboardCountryLocationSectionHtml(items){
     </div>
   `;
 }
+
+// =========================================================
+// ESC 키로 현재 열려 있는 최상단 모달 닫기
+// =========================================================
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  const syncOverlay =
+    document.getElementById('workLogSyncOverlay');
+  if (
+    syncOverlay &&
+    syncOverlay.classList.contains('open')
+  ){
+    return;
+  }
+
+  const openModals =
+    Array.from(
+      document.querySelectorAll(
+        [
+          '#addModal.open',
+          '#workLogModal.open',
+          '#groupEditModal.open',
+          '#addGroupModal.open',
+          '#subGroupEditModal.open',
+          '#custContactsModal.open',
+          '#moveAssetModal.open',
+          '#maintenanceLogModal.open'
+        ].join(',')
+      )
+    );
+
+  if (!openModals.length){
+    return;
+  }
+
+  const topModal =
+    openModals
+      .slice()
+      .sort((a, b) => {
+        const za =
+          Number(
+            getComputedStyle(a).zIndex
+          ) || 0;
+        const zb =
+          Number(
+            getComputedStyle(b).zIndex
+          ) || 0;
+        if (za !== zb){
+          return za - zb;
+        }
+
+        return (
+          Array.from(
+            document.body.querySelectorAll('*')
+          ).indexOf(a) -
+          Array.from(
+            document.body.querySelectorAll('*')
+          ).indexOf(b)
+        );
+      })
+      .pop();
+
+  if (!topModal){
+    return;
+  }
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const closeButtonMap = {
+    addModal:
+      'cancelAddBtn',
+    workLogModal:
+      'wlCloseBtn',
+    groupEditModal:
+      'cancelGeBtn',
+    addGroupModal:
+      'cancelNgBtn',
+    subGroupEditModal:
+      'cancelSgBtn',
+    custContactsModal:
+      'custContactsModalCloseBtn',
+    moveAssetModal:
+      'cancelMaBtn',
+    maintenanceLogModal:
+      'cancelMlBtn'
+  };
+  const closeBtnId =
+    closeButtonMap[topModal.id];
+  const closeBtn =
+    closeBtnId
+      ? document.getElementById(closeBtnId)
+      : null;
+  if (closeBtn){
+    closeBtn.click();
+  }
+  else {
+    topModal.classList.remove('open');
+  }
+});
