@@ -1457,10 +1457,37 @@ textarea.wl-fc-input.is-changed{
   margin:0 !important;
 }
 
-#maintenanceLogModal .ml-email-btn{
+#maintenanceLogModal .ml-email-actions{
   grid-column:2;
   justify-self:center;
-  min-width:190px !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  white-space:nowrap;
+}
+
+#maintenanceLogModal .ml-email-language{
+  height:32px;
+  min-width:76px;
+  padding:0 8px;
+  border:1px solid #C6DDF1;
+  border-radius:8px;
+  background:#fff;
+  color:#2563A8;
+  font-family:var(--body);
+  font-size:10.5px;
+  font-weight:700;
+  outline:none;
+  cursor:pointer;
+}
+
+#maintenanceLogModal .ml-email-language:focus{
+  border-color:#86BFE4;
+}
+
+#maintenanceLogModal .ml-email-btn{
+  min-width:124px !important;
   color:#2563A8 !important;
   background:#EEF6FD !important;
   border-color:#C6DDF1 !important;
@@ -1524,7 +1551,7 @@ textarea.wl-fc-input.is-changed{
   border-color:var(--accent) !important;
 }
 
-/* 점검 이메일 사용자별 템플릿 설정 */
+/* 점검 이메일 사용자별 한글/English 템플릿 설정 */
 #maintenanceMailSettingsModal{
   align-items:center !important;
   justify-content:center !important;
@@ -1532,18 +1559,72 @@ textarea.wl-fc-input.is-changed{
 }
 
 #maintenanceMailSettingsModal > .maintenance-mail-settings-card{
-  max-width:620px;
+  max-width:900px;
   margin:0;
 }
 
 #maintenanceMailSettingsModal .maintenance-mail-settings-form{
-  grid-template-columns:1fr;
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:14px;
 }
 
-#maintenanceMailSettingsModal #mms_body{
-  min-height:220px;
+#maintenanceMailSettingsModal .maintenance-mail-language-card{
+  min-width:0;
+  padding:14px;
+  border:1px solid var(--border-solid);
+  border-radius:10px;
+  background:#FAFCFE;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-language-title{
+  margin-bottom:12px;
+  color:var(--text);
+  font-size:12.5px;
+  font-weight:700;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-field + .maintenance-mail-field{
+  margin-top:11px;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-field label{
+  display:block;
+  margin-bottom:5px;
+  color:var(--text-faint);
+  font-family:var(--mono);
+  font-size:10.5px;
+  font-weight:700;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-field input,
+#maintenanceMailSettingsModal .maintenance-mail-field textarea{
+  width:100%;
+  padding:9px 10px;
+  border:1px solid var(--border-solid);
+  border-radius:8px;
+  background:var(--surface2);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:12px;
+  outline:none;
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-field input:focus,
+#maintenanceMailSettingsModal .maintenance-mail-field textarea:focus{
+  border-color:var(--accent);
+}
+
+#maintenanceMailSettingsModal .maintenance-mail-field textarea{
+  min-height:230px;
   line-height:1.6;
   resize:vertical;
+}
+
+@media (max-width:760px){
+  #maintenanceMailSettingsModal .maintenance-mail-settings-form{
+    grid-template-columns:1fr;
+  }
 }
 
 /* 좁은 화면에서는 날짜/상태를 두 줄로 */
@@ -1553,14 +1634,19 @@ textarea.wl-fc-input.is-changed{
   }
 
   #maintenanceLogModal > .modal-card > .ml-modal-actions #mlDeleteBtn,
-  #maintenanceLogModal .ml-email-btn,
+  #maintenanceLogModal .ml-email-actions,
   #maintenanceLogModal .ml-right-actions{
     grid-column:1;
     justify-self:stretch;
   }
 
+  #maintenanceLogModal .ml-email-actions{
+    width:100%;
+  }
+
   #maintenanceLogModal .ml-email-btn{
-    width:100% !important;
+    flex:1 1 auto !important;
+    width:auto !important;
   }
 
   #maintenanceLogModal .ml-right-actions{
@@ -2494,8 +2580,9 @@ textarea.wl-fc-input.is-changed{
 }
 .maint-header-actions{
   display:flex;
-  align-items:center;
-  gap:8px;
+  flex-direction:column;
+  align-items:stretch;
+  gap:6px;
   flex-shrink:0;
 }
 
@@ -2534,6 +2621,24 @@ textarea.wl-fc-input.is-changed{
 
 .maint-license-notice-icon{
   font-size:12px;
+}
+
+.maint-header-actions .maint-license-notice-btn{
+  width:100%;
+  font-family:var(--body);
+}
+
+.maint-mail-settings-btn{
+  cursor:pointer;
+  background:#EEF6FD;
+  border-color:#C6DDF1;
+  color:#2563A8;
+}
+
+.maint-mail-settings-btn:hover{
+  background:#E2F0FB;
+  border-color:#9FC8E8;
+  color:#164E85;
 }
 
 /* 미계약 */
