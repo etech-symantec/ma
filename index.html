@@ -11,14 +11,14 @@
 <title>Broadcom 유지보수 자산</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260814-05-dual">
+<link rel="stylesheet" href="style.css?v=20260814-07-mailto">
 </head>
 <body>
 
 <!-- 공통 헤더 + 제목 + 버전 -->
 <script>
   window.pageTitle = "Broadcom 유지보수 자산 (Maintenance Assets)";
-  window.pageVersion = "ver.2026.08.14.05-DUAL";
+  window.pageVersion = "ver.2026.08.14.07-MAILTO";
 </script>
 <script src="https://etech-symantec.github.io/header.js"></script>
 
@@ -453,10 +453,6 @@
     <div class="ml-modal-actions">
       <button class="btn btn-ghost" id="mlDeleteBtn" style="display:none;">등록 취소</button>
       <div class="ml-email-actions">
-        <select id="mlEmailMethod" class="ml-email-method" title="점검 메일 전송 방식 선택">
-          <option value="mailto">기본 메일 앱 (mailto)</option>
-          <option value="graph">Outlook Graph (초안)</option>
-        </select>
         <select id="mlEmailLanguage" class="ml-email-language" title="점검 메일 언어 선택">
           <option value="ko">한글</option>
           <option value="en">English</option>
@@ -520,37 +516,7 @@
         data-placeholder="Outlook 서명을 여기에 복사해서 붙여넣으세요."
       ></div>
       <div class="maintenance-mail-signature-note">
-        ※ <b>기본 메일 앱 (mailto)</b> 방식은 서명을 일반 텍스트로 넣습니다. <b>Outlook Graph</b> 방식은 HTML 본문으로 Outlook 초안을 생성하므로 글꼴/색상/링크/표를 유지하며, data 이미지로 들어온 로고는 인라인 첨부파일로 변환합니다.
-      </div>
-    </section>
-
-    <section class="maintenance-mail-graph-card">
-      <div class="maintenance-mail-language-title">☁ Microsoft Graph 연결</div>
-      <p class="maintenance-mail-graph-hint">
-        Microsoft Entra ID에 SPA 앱을 등록한 뒤 Tenant ID와 Application (Client) ID를 입력하세요.
-        점검 등록창에서 <b>Outlook Graph (초안)</b>을 선택한 경우에만 사용합니다. 메일을 즉시 발송하지 않고 Outlook <b>초안함(Drafts)</b>에 생성합니다.
-      </p>
-      <div class="maintenance-mail-graph-grid">
-        <div class="maintenance-mail-field">
-          <label>TENANT ID</label>
-          <input id="mms_graph_tenant" placeholder="Directory (tenant) ID">
-        </div>
-        <div class="maintenance-mail-field">
-          <label>APPLICATION (CLIENT) ID</label>
-          <input id="mms_graph_client" placeholder="Application (client) ID">
-        </div>
-        <div class="maintenance-mail-field maintenance-mail-graph-redirect">
-          <label>SPA REDIRECT URI · Entra에 이 주소를 그대로 등록</label>
-          <input id="mms_graph_redirect" readonly>
-        </div>
-      </div>
-      <div class="maintenance-mail-graph-actions">
-        <span id="mmsGraphStatus" class="maintenance-mail-graph-status">연결 안 됨</span>
-        <button type="button" class="btn btn-ghost" id="mmsGraphDisconnectBtn">연결 해제</button>
-        <button type="button" class="btn maint-graph-connect-btn" id="mmsGraphConnectBtn">Microsoft 365 연결 테스트</button>
-      </div>
-      <div class="maintenance-mail-signature-note">
-        필요 권한: Microsoft Graph Delegated <b>Mail.ReadWrite</b>. Client Secret은 이 브라우저 앱에 입력하지 않습니다.
+        ※ 점검 메일은 <b>기본 메일 앱 (mailto)</b>으로 작성됩니다. 아래 서명은 메일 본문에 일반 텍스트로 변환되어 자동으로 추가됩니다. 이미지·색상·글꼴 등 HTML 서식은 mailto 방식에서는 전달되지 않습니다.
       </div>
     </section>
 
@@ -577,7 +543,6 @@
   <div id="recentActivityList"></div>
 </div>
 
-<script src="https://alcdn.msauth.net/browser/2.35.0/js/msal-browser.min.js"></script>
-<script src="app.js?v=20260814-05-dual"></script>
+<script src="app.js?v=20260814-07-mailto"></script>
 </body>
 </html>
