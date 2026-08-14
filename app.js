@@ -5431,13 +5431,39 @@ function buildFilters(){
   });
 
   const kwBox = document.getElementById('skuKeywordFilters');
-  kwBox.innerHTML = SKU_TAG_KEYS.map(k=>{
-    const cnt = records.filter(r=>!r.is_group_shell && skuKeywordMatches(r.sku).includes(k)).length;
-    return `
-    <div class="filter-item ${activeSkuKeywordFilters.has(k)?'active':''}" data-skukw="${esc(k)}">
-      <span>${esc(k)}</span><span class="cnt">${cnt}</span>
-    </div>`;
-  }).join('');
+  
+  kwBox.innerHTML = SKU_TAG_KEYS.map(k => {
+        const cnt = records.filter(
+            r =>
+              !r.is_group_shell &&
+              skuKeywordMatches(r.sku).includes(k)
+          ).length;
+  
+        return {
+          key: k,
+          count: cnt
+        };
+  
+      })
+      .filter(item =>
+        item.count > 0
+      )
+  
+      .map(item => `
+        <div
+          class="filter-item ${
+            activeSkuKeywordFilters.has(item.key)
+              ? 'active'
+              : ''
+          }"
+          data-skukw="${esc(item.key)}"
+        >
+          <span>${esc(item.key)}</span>
+          <span class="cnt">${item.count}</span>
+        </div>
+      `)
+  
+      .join('');
   kwBox.querySelectorAll('[data-skukw]').forEach(el=>{
     el.onclick = ()=>{
       const k = el.dataset.skukw;
