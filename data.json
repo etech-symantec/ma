@@ -3485,7 +3485,7 @@
       "flag": "",
       "owner": "삼성전자 SEAU",
       "location": "시드니",
-      "support_id": "4109283",
+      "support_id": "946874",
       "sku": "SG-S400-20-PR-ONSITEADV",
       "sn": "2815320191",
       "entitlement": "🔗",
@@ -3520,14 +3520,15 @@
       "build_engineer": "",
       "build_date": "",
       "group_parent": "custom-1786348956934",
-      "is_parent": false
+      "is_parent": false,
+      "last_mutation_id": "data-mss8pqfy-08e42114-aa82-471c-88d5-8f7c46845c35"
     },
     {
       "group": "au-seau",
       "flag": "",
       "owner": "삼성전자 SEAU",
       "location": "시드니",
-      "support_id": "4109283",
+      "support_id": "946874",
       "sku": "BCWF-B-100-249",
       "sn": "QAERM-LZSU5",
       "entitlement": "🔗",
@@ -3558,14 +3559,15 @@
       "build_engineer": "",
       "build_date": "",
       "group_parent": "custom-1786348956934",
-      "is_parent": false
+      "is_parent": false,
+      "last_mutation_id": "data-mss8pqfy-08e42114-aa82-471c-88d5-8f7c46845c35"
     },
     {
       "group": "au-seau",
       "flag": "",
       "owner": "삼성전자 SEAU",
       "location": "시드니",
-      "support_id": "4109283",
+      "support_id": "946874",
       "sku": "WEB-PROTECT-SUB",
       "sn": "52387837-1-1",
       "entitlement": "🔗",
@@ -3596,7 +3598,8 @@
       "build_engineer": "",
       "build_date": "",
       "group_parent": "custom-1786348956934",
-      "is_parent": false
+      "is_parent": false,
+      "last_mutation_id": "data-mss8pqfy-08e42114-aa82-471c-88d5-8f7c46845c35"
     },
     {
       "group": "seha",
@@ -16661,6 +16664,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss8pczp-a1fc447a-6250-4c12-b7d0-b1b7584d89d3"
+    },
+    {
+      "id": "audit-1786669206059-5q8a75",
+      "ts": 1786669206059,
+      "action": "edit",
+      "target_type": "Support ID",
+      "target_id": "au-seau:946874",
+      "group": "au-seau",
+      "owner": "삼성전자 SEAU",
+      "label": "SG-S400-20-PR-ONSITEADV",
+      "sn": "2815320191",
+      "summary": "Support ID 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "support_id",
+          "label": "Support ID",
+          "before": "4109283",
+          "after": "946874",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss8pqfy-08e42114-aa82-471c-88d5-8f7c46845c35"
     }
   ],
   "syncMutations": [
@@ -16887,6 +16915,11 @@
     {
       "id": "data-mss8pczp-a1fc447a-6250-4c12-b7d0-b1b7584d89d3",
       "ts": 1786669188638,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss8pqfy-08e42114-aa82-471c-88d5-8f7c46845c35",
+      "ts": 1786669206062,
       "scope": "data"
     }
   ]
