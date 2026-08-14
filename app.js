@@ -3976,6 +3976,7 @@ function openMaintenanceLogModal(gid, ym){
   syncMaintenanceStatusControls();
   document.getElementById('mlError').textContent = '';
   document.getElementById('mlDeleteBtn').style.display = log ? '' : 'none';
+  refreshMaintenanceMailButton(gid);
   document.getElementById('maintenanceLogModal').classList.add('open');
 }
 
@@ -4079,6 +4080,10 @@ document.getElementById('ml_date_pick_btn').onclick = () => {
 document.getElementById('ml_date_picker').addEventListener('change', (e) => {
   document.getElementById('ml_date').value = fmtDateDots(e.target.value);
 });
+
+document.getElementById('mlEmailBtn').onclick = () => {
+  openMaintenanceEmailCompose();
+};
 
 document.getElementById('saveMlBtn').onclick = async () => {
   if (!maintenanceEditTarget) return;
@@ -6395,6 +6400,243 @@ function isCurrentUserAdmin(){
 }
 
 /* =========================================================
+   유지보수 점검 이메일 - 사용자별 템플릿 / Outlook 작성
+   ========================================================= */
+const DEFAULT_MAINTENANCE_MAIL_SUBJECT =
+  '[{법인명}] {점검월} 정기점검 일정 안내';
+
+const DEFAULT_MAINTENANCE_MAIL_BODY =
+`안녕하세요.
+
+{법인명} {점검월} 정기점검 관련하여 안내드립니다.
+
+점검 예정일: {점검일}
+점검 담당자: {담당자}
+
+확인 부탁드립니다.
+감사합니다.`;
+
+function currentUserRecord(){
+  return users.find(
+    x => String(x.id) === String(currentUserId)
+  ) || null;
+}
+
+function openMaintenanceMailSettingsModal(){
+  const user = currentUserRecord();
+
+  if (!user){
+    alert('로그인 사용자를 확인할 수 없습니다.');
+    return;
+  }
+
+  const subjectEl = document.getElementById('mms_subject');
+  const bodyEl = document.getElementById('mms_body');
+  const errEl = document.getElementById('mmsError');
+
+  subjectEl.value =
+    user.maintenance_mail_subject ||
+    DEFAULT_MAINTENANCE_MAIL_SUBJECT;
+
+  bodyEl.value =
+    user.maintenance_mail_body ||
+    DEFAULT_MAINTENANCE_MAIL_BODY;
+
+  errEl.textContent = '';
+
+  document
+    .getElementById('maintenanceMailSettingsModal')
+    .classList.add('open');
+
+  requestAnimationFrame(() => subjectEl.focus());
+}
+
+function closeMaintenanceMailSettingsModal(){
+  document
+    .getElementById('maintenanceMailSettingsModal')
+    .classList.remove('open');
+}
+
+function maintenanceMailRecipientsForGroup(gid){
+  const items = records.filter(r => r.group === gid);
+  if (!items.length) return [];
+
+  const meta = groupMeta(items);
+  const seen = new Set();
+  const out = [];
+
+  (meta.cust_contacts || []).forEach(contact => {
+    const email = String(contact?.email || '').trim();
+    if (!email) return;
+
+    /* 공백과 세미콜론이 섞여 저장된 경우도 개별 주소로 처리 */
+    email
+      .split(/[;,\s]+/)
+      .map(x => x.trim())
+      .filter(Boolean)
+      .forEach(addr => {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr)) return;
+        const key = addr.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        out.push(addr);
+      });
+  });
+
+  return out;
+}
+
+function maintenanceMailTemplateValues(gid, ym){
+  const items = records.filter(r => r.group === gid);
+  const meta = groupMeta(items);
+
+  const date =
+    String(document.getElementById('ml_date')?.value || '').trim() ||
+    '미정';
+
+  const manager =
+    String(document.getElementById('ml_manager')?.value || '').trim() ||
+    currentUserName() ||
+    meta.owner_primary ||
+    '미정';
+
+  return {
+    '{법인명}': meta.owner || '',
+    '{위치}': meta.location || '',
+    '{점검월}': ymLabel(ym),
+    '{점검일}': date,
+    '{담당자}': manager
+  };
+}
+
+function applyMaintenanceMailTemplate(text, values){
+  let result = String(text || '');
+
+  Object.entries(values || {}).forEach(([key, value]) => {
+    result = result.split(key).join(String(value ?? ''));
+  });
+
+  return result;
+}
+
+function refreshMaintenanceMailButton(gid){
+  const btn = document.getElementById('mlEmailBtn');
+  if (!btn) return;
+
+  const recipients = maintenanceMailRecipientsForGroup(gid);
+
+  btn.title = recipients.length
+    ? `등록된 고객사 담당자 ${recipients.length}명의 이메일을 수신자로 넣어 새 메일을 작성합니다. Outlook이 기본 메일 앱으로 설정되어 있어야 합니다.`
+    : '이 법인에 등록된 고객사 담당자 이메일이 없습니다.';
+}
+
+function openMaintenanceEmailCompose(){
+  if (!maintenanceEditTarget) return;
+
+  const { gid, ym } = maintenanceEditTarget;
+  const errEl = document.getElementById('mlError');
+  const user = currentUserRecord();
+
+  if (!user){
+    errEl.textContent = '로그인 사용자를 확인할 수 없습니다.';
+    return;
+  }
+
+  const recipients = maintenanceMailRecipientsForGroup(gid);
+
+  if (!recipients.length){
+    errEl.textContent =
+      '이 법인에 등록된 고객사 담당자 이메일이 없습니다. 법인 정보의 고객사 담당자 이메일을 먼저 등록해 주세요.';
+    return;
+  }
+
+  const subjectTemplate =
+    String(user.maintenance_mail_subject || '').trim();
+
+  const bodyTemplate =
+    String(user.maintenance_mail_body || '').trim();
+
+  if (!subjectTemplate || !bodyTemplate){
+    errEl.textContent =
+      '현재 사용자의 점검 이메일 제목/내용이 등록되어 있지 않습니다. 메일 설정에서 먼저 저장해 주세요.';
+    openMaintenanceMailSettingsModal();
+    return;
+  }
+
+  const values = maintenanceMailTemplateValues(gid, ym);
+  const subject = applyMaintenanceMailTemplate(subjectTemplate, values);
+  const body = applyMaintenanceMailTemplate(bodyTemplate, values);
+
+  const mailto =
+    `mailto:${recipients.join(',')}` +
+    `?subject=${encodeURIComponent(subject)}` +
+    `&body=${encodeURIComponent(body)}`;
+
+  errEl.textContent = '';
+
+  /* Windows 기본 메일 앱이 Outlook이면 Outlook 새 메일 쓰기로 열림 */
+  window.location.href = mailto;
+}
+
+const maintenanceMailSettingsBtn =
+  document.getElementById('maintenanceMailSettingsBtn');
+
+if (maintenanceMailSettingsBtn){
+  maintenanceMailSettingsBtn.onclick =
+    openMaintenanceMailSettingsModal;
+}
+
+const cancelMmsBtn = document.getElementById('cancelMmsBtn');
+if (cancelMmsBtn){
+  cancelMmsBtn.onclick = closeMaintenanceMailSettingsModal;
+}
+
+const saveMmsBtn = document.getElementById('saveMmsBtn');
+if (saveMmsBtn){
+  saveMmsBtn.onclick = () => {
+    const user = currentUserRecord();
+    const errEl = document.getElementById('mmsError');
+
+    if (!user){
+      errEl.textContent = '로그인 사용자를 확인할 수 없습니다.';
+      return;
+    }
+
+    const subject =
+      document.getElementById('mms_subject').value.trim();
+
+    const body =
+      document.getElementById('mms_body').value.trim();
+
+    if (!subject){
+      errEl.textContent = '메일 제목을 입력해 주세요.';
+      document.getElementById('mms_subject').focus();
+      return;
+    }
+
+    if (!body){
+      errEl.textContent = '메일 내용을 입력해 주세요.';
+      document.getElementById('mms_body').focus();
+      return;
+    }
+
+    const changed =
+      user.maintenance_mail_subject !== subject ||
+      user.maintenance_mail_body !== body;
+
+    if (changed){
+      const mutationId = createMutationId('mail-template');
+      user.maintenance_mail_subject = subject;
+      user.maintenance_mail_body = body;
+      scheduleAutoSync(mutationId);
+    }
+
+    errEl.textContent = '';
+    closeMaintenanceMailSettingsModal();
+  };
+}
+
+/* =========================================================
    감사 이력 - 모든 사용자 추가/편집/삭제 기록
    ========================================================= */
 let suppressAuditCapture = false;
@@ -6624,7 +6866,7 @@ function captureAuditFromStateDiff(mutationId = createMutationId('data')){
     } else if (a && !b){
       addAuditLog({action:'delete',targetType:'사용자 계정',targetId:id,label:a.name,summary:`사용자 계정 삭제 · ${a.name}`,actorName:a.name,actorRole:a.isAdmin?'마스터':'일반사용자',actorId:a.id,mutationId});
     } else if (a && b){
-      const changes=auditFieldChanges(a,b,['id']);
+      const changes=auditFieldChanges(a,b,['id','maintenance_mail_subject','maintenance_mail_body']);
       if (changes.length){
         const pwChanged=changes.some(c=>['pwHash','pwSalt','pwIterations'].includes(c.field));
         const visible=changes.filter(c=>!['pwSalt','pwIterations'].includes(c.field));
@@ -6638,9 +6880,13 @@ function captureAuditFromStateDiff(mutationId = createMutationId('data')){
 function updateSidebarProfile(){
   const nameEl = document.getElementById('profileName');
   const subEl = document.getElementById('profileSub');
+  const mailSettingsBtn = document.getElementById('maintenanceMailSettingsBtn');
   if (!nameEl) return;
   const name = currentUserName();
   nameEl.textContent = name || '로그인 필요';
+  if (mailSettingsBtn){
+    mailSettingsBtn.style.display = name ? '' : 'none';
+  }
   if (subEl){
     const isAdmin = isCurrentUserAdmin();
     subEl.textContent = isAdmin ? '👑 마스터' : '';
@@ -8621,7 +8867,8 @@ document.addEventListener('keydown', (e) => {
           '#subGroupEditModal.open',
           '#custContactsModal.open',
           '#moveAssetModal.open',
-          '#maintenanceLogModal.open'
+          '#maintenanceLogModal.open',
+          '#maintenanceMailSettingsModal.open'
         ].join(',')
       )
     );
@@ -8680,7 +8927,9 @@ document.addEventListener('keydown', (e) => {
     moveAssetModal:
       'cancelMaBtn',
     maintenanceLogModal:
-      'cancelMlBtn'
+      'cancelMlBtn',
+    maintenanceMailSettingsModal:
+      'cancelMmsBtn'
   };
   const closeBtnId =
     closeButtonMap[topModal.id];
