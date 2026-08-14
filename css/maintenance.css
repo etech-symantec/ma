@@ -166,7 +166,7 @@
 
   border-top:1px solid var(--border-solid);
   box-sizing:border-box;
-}#maintenanceLogModal > .modal-card > .ml-modal-actions #mlDeleteBtn{
+}#maintenanceLogModal .ml-left-actions #mlDeleteBtn{
   margin:0 !important;
 }#maintenanceLogModal .ml-manager-mail-row{
   display:flex;
@@ -215,20 +215,21 @@
   color:#164E85 !important;
   background:#E2F0FB !important;
   border-color:#9FC8E8 !important;
-}#maintenanceLogModal .ml-mail-notice{
-  display:none;
-  margin-top:9px;
-  padding:9px 11px;
-  border:1px solid #BFDDF3;
-  border-radius:8px;
-  background:#EEF7FD;
-  color:#2563A8;
-  font-size:11px;
-  font-weight:700;
-  line-height:1.55;
+}#maintenanceLogModal .ml-left-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
 }
-#maintenanceLogModal .ml-mail-notice.show{
-  display:block;
+#maintenanceLogModal .ml-mail-inquiry-delete-btn{
+  color:#2563A8 !important;
+  background:#fff !important;
+  border-color:#BFDDF3 !important;
+}
+#maintenanceLogModal .ml-mail-inquiry-delete-btn:hover{
+  color:#174D7A !important;
+  background:#EEF7FD !important;
+  border-color:#9FC8E8 !important;
 }
 #maintenanceLogModal .ml-right-actions{
   display:flex;
@@ -679,3 +680,13 @@ td.maint-cell-owner{
 
   padding-left:13px;
 }
+/* 메일 본문 복사 확인용 작은 모달 */
+#maintenanceMailCopyModal{position:fixed;inset:0;z-index:1450;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.38);backdrop-filter:blur(2px)}
+#maintenanceMailCopyModal.open{display:flex !important}
+#maintenanceMailCopyModal .maintenance-mail-copy-card{width:100%;max-width:390px;padding:22px 22px 18px;border:1px solid #CFE3F2;border-radius:14px;background:#fff;box-shadow:0 14px 40px rgba(15,23,42,.22);text-align:center}
+#maintenanceMailCopyModal .maintenance-mail-copy-icon{display:flex;align-items:center;justify-content:center;width:38px;height:38px;margin:0 auto 10px;border-radius:50%;background:#EAF7EF;color:#2F8F52;font-size:20px;font-weight:800}
+#maintenanceMailCopyModal h3{margin:0 0 10px;color:var(--text);font-size:15px}
+#maintenanceMailCopyModal p{margin:0;color:var(--text-dim);font-size:12px;line-height:1.65}
+#maintenanceMailCopyModal .maintenance-mail-copy-sub{margin-top:8px;padding:8px 10px;border-radius:8px;background:#EEF7FD;color:#2563A8;font-size:11px}
+#maintenanceMailCopyModal .maintenance-mail-copy-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+#maintenanceMailCopyModal .maintenance-mail-copy-actions .btn{min-width:72px;height:34px;padding:0 14px;font-size:11.5px}
