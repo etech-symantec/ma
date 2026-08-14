@@ -3863,6 +3863,14 @@ function renderMaintenance(){
               <span class="maint-license-notice-icon">🔔</span>
               <span>라이선스 만료 2달 전 공지글</span>
             </a>
+
+            <button type="button"
+                    class="maint-license-notice-btn maint-mail-settings-btn"
+                    id="maintenanceMailSettingsBtn"
+                    title="내 점검 이메일 한글/English 템플릿 설정">
+              <span class="maint-license-notice-icon">✉</span>
+              <span>점검 메일 설정</span>
+            </button>
         
           </div>
         </div>
@@ -3879,6 +3887,13 @@ function renderMaintenance(){
   wrap.querySelectorAll('[data-maint-tab]').forEach(btn => {
     btn.onclick = () => setMaintenanceTab(btn.dataset.maintTab);
   });
+
+  const maintenanceMailSettingsBtn =
+    wrap.querySelector('#maintenanceMailSettingsBtn');
+  if (maintenanceMailSettingsBtn){
+    maintenanceMailSettingsBtn.onclick =
+      openMaintenanceMailSettingsModal;
+  }
 
   const yearPrevBtn = document.getElementById('maintYearPrevBtn');
   if (yearPrevBtn){
@@ -3920,6 +3935,9 @@ function openMaintenanceLogModal(gid, ym){
   maintenanceEditTarget = { gid, ym };
   const log = maintenanceLogFor(gid, ym);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
+
+  const mailLanguageEl = document.getElementById('mlEmailLanguage');
+  if (mailLanguageEl) mailLanguageEl.value = 'ko';
 
   const dateEl = document.getElementById('ml_date');
   const datePicker = document.getElementById('ml_date_picker');
@@ -6400,12 +6418,12 @@ function isCurrentUserAdmin(){
 }
 
 /* =========================================================
-   유지보수 점검 이메일 - 사용자별 템플릿 / Outlook 작성
+   유지보수 점검 이메일 - 사용자별 한글/English 템플릿 / Outlook 작성
    ========================================================= */
-const DEFAULT_MAINTENANCE_MAIL_SUBJECT =
+const DEFAULT_MAINTENANCE_MAIL_SUBJECT_KO =
   '[{법인명}] {점검월} 정기점검 일정 안내';
 
-const DEFAULT_MAINTENANCE_MAIL_BODY =
+const DEFAULT_MAINTENANCE_MAIL_BODY_KO =
 `안녕하세요.
 
 {법인명} {점검월} 정기점검 관련하여 안내드립니다.
@@ -6415,6 +6433,20 @@ const DEFAULT_MAINTENANCE_MAIL_BODY =
 
 확인 부탁드립니다.
 감사합니다.`;
+
+const DEFAULT_MAINTENANCE_MAIL_SUBJECT_EN =
+  '[{Company}] {InspectionMonth} Maintenance Inspection Schedule';
+
+const DEFAULT_MAINTENANCE_MAIL_BODY_EN =
+`Hello,
+
+This is to inform you about the scheduled maintenance inspection for {Company} in {InspectionMonth}.
+
+Inspection date: {InspectionDate}
+Engineer: {Engineer}
+
+Please review the schedule.
+Thank you.`;
 
 function currentUserRecord(){
   return users.find(
@@ -6430,17 +6462,30 @@ function openMaintenanceMailSettingsModal(){
     return;
   }
 
-  const subjectEl = document.getElementById('mms_subject');
-  const bodyEl = document.getElementById('mms_body');
+  const subjectKoEl = document.getElementById('mms_subject_ko');
+  const bodyKoEl = document.getElementById('mms_body_ko');
+  const subjectEnEl = document.getElementById('mms_subject_en');
+  const bodyEnEl = document.getElementById('mms_body_en');
   const errEl = document.getElementById('mmsError');
 
-  subjectEl.value =
+  /* 기존 단일 한글 템플릿을 사용 중인 데이터도 자동 승계 */
+  subjectKoEl.value =
+    user.maintenance_mail_subject_ko ||
     user.maintenance_mail_subject ||
-    DEFAULT_MAINTENANCE_MAIL_SUBJECT;
+    DEFAULT_MAINTENANCE_MAIL_SUBJECT_KO;
 
-  bodyEl.value =
+  bodyKoEl.value =
+    user.maintenance_mail_body_ko ||
     user.maintenance_mail_body ||
-    DEFAULT_MAINTENANCE_MAIL_BODY;
+    DEFAULT_MAINTENANCE_MAIL_BODY_KO;
+
+  subjectEnEl.value =
+    user.maintenance_mail_subject_en ||
+    DEFAULT_MAINTENANCE_MAIL_SUBJECT_EN;
+
+  bodyEnEl.value =
+    user.maintenance_mail_body_en ||
+    DEFAULT_MAINTENANCE_MAIL_BODY_EN;
 
   errEl.textContent = '';
 
@@ -6448,7 +6493,7 @@ function openMaintenanceMailSettingsModal(){
     .getElementById('maintenanceMailSettingsModal')
     .classList.add('open');
 
-  requestAnimationFrame(() => subjectEl.focus());
+  requestAnimationFrame(() => subjectKoEl.focus());
 }
 
 function closeMaintenanceMailSettingsModal(){
@@ -6469,7 +6514,6 @@ function maintenanceMailRecipientsForGroup(gid){
     const email = String(contact?.email || '').trim();
     if (!email) return;
 
-    /* 공백과 세미콜론이 섞여 저장된 경우도 개별 주소로 처리 */
     email
       .split(/[;,\s]+/)
       .map(x => x.trim())
@@ -6486,11 +6530,42 @@ function maintenanceMailRecipientsForGroup(gid){
   return out;
 }
 
-function maintenanceMailTemplateValues(gid, ym){
+function maintenanceMonthLabelEnglish(ym){
+  const [year, month] = String(ym || '').split('-').map(Number);
+  if (!year || !month) return String(ym || '');
+
+  const monthNames = [
+    'January','February','March','April','May','June',
+    'July','August','September','October','November','December'
+  ];
+
+  return `${monthNames[month - 1]} ${year}`;
+}
+
+function maintenanceDateLabelEnglish(dateText){
+  const raw = String(dateText || '').trim();
+  if (!raw || raw === '미정') return 'TBD';
+
+  const parts = raw.split(/[.\/-]/).map(Number);
+  if (parts.length >= 3 && parts.slice(0,3).every(Number.isFinite)){
+    const [year, month, day] = parts;
+    const monthNames = [
+      'January','February','March','April','May','June',
+      'July','August','September','October','November','December'
+    ];
+    if (month >= 1 && month <= 12){
+      return `${monthNames[month - 1]} ${day}, ${year}`;
+    }
+  }
+
+  return raw;
+}
+
+function maintenanceMailTemplateValues(gid, ym, language = 'ko'){
   const items = records.filter(r => r.group === gid);
   const meta = groupMeta(items);
 
-  const date =
+  const rawDate =
     String(document.getElementById('ml_date')?.value || '').trim() ||
     '미정';
 
@@ -6500,12 +6575,28 @@ function maintenanceMailTemplateValues(gid, ym){
     meta.owner_primary ||
     '미정';
 
-  return {
+  const koValues = {
     '{법인명}': meta.owner || '',
     '{위치}': meta.location || '',
     '{점검월}': ymLabel(ym),
-    '{점검일}': date,
+    '{점검일}': rawDate,
     '{담당자}': manager
+  };
+
+  const enValues = {
+    '{Company}': meta.owner || '',
+    '{Location}': meta.location || '',
+    '{InspectionMonth}': maintenanceMonthLabelEnglish(ym),
+    '{InspectionDate}': maintenanceDateLabelEnglish(rawDate),
+    '{Engineer}': manager
+  };
+
+  /* 어느 언어 템플릿에서도 두 종류 치환 문자를 모두 사용할 수 있게 지원 */
+  return {
+    ...koValues,
+    ...enValues,
+    '{점검월}': language === 'en' ? maintenanceMonthLabelEnglish(ym) : koValues['{점검월}'],
+    '{점검일}': language === 'en' ? maintenanceDateLabelEnglish(rawDate) : koValues['{점검일}']
   };
 }
 
@@ -6526,7 +6617,7 @@ function refreshMaintenanceMailButton(gid){
   const recipients = maintenanceMailRecipientsForGroup(gid);
 
   btn.title = recipients.length
-    ? `등록된 고객사 담당자 ${recipients.length}명의 이메일을 수신자로 넣어 새 메일을 작성합니다. Outlook이 기본 메일 앱으로 설정되어 있어야 합니다.`
+    ? `등록된 고객사 담당자 ${recipients.length}명의 이메일을 수신자로 넣어 선택한 언어의 점검 메일을 작성합니다. Outlook이 기본 메일 앱으로 설정되어 있어야 합니다.`
     : '이 법인에 등록된 고객사 담당자 이메일이 없습니다.';
 }
 
@@ -6550,20 +6641,36 @@ function openMaintenanceEmailCompose(){
     return;
   }
 
-  const subjectTemplate =
-    String(user.maintenance_mail_subject || '').trim();
+  const language =
+    document.getElementById('mlEmailLanguage')?.value === 'en'
+      ? 'en'
+      : 'ko';
 
-  const bodyTemplate =
-    String(user.maintenance_mail_body || '').trim();
+  const subjectTemplate = language === 'en'
+    ? String(user.maintenance_mail_subject_en || '').trim()
+    : String(
+        user.maintenance_mail_subject_ko ||
+        user.maintenance_mail_subject ||
+        ''
+      ).trim();
+
+  const bodyTemplate = language === 'en'
+    ? String(user.maintenance_mail_body_en || '').trim()
+    : String(
+        user.maintenance_mail_body_ko ||
+        user.maintenance_mail_body ||
+        ''
+      ).trim();
 
   if (!subjectTemplate || !bodyTemplate){
-    errEl.textContent =
-      '현재 사용자의 점검 이메일 제목/내용이 등록되어 있지 않습니다. 메일 설정에서 먼저 저장해 주세요.';
+    errEl.textContent = language === 'en'
+      ? '현재 사용자의 English 점검 메일 제목/내용이 등록되어 있지 않습니다. 점검 메일 설정에서 먼저 저장해 주세요.'
+      : '현재 사용자의 한글 점검 메일 제목/내용이 등록되어 있지 않습니다. 점검 메일 설정에서 먼저 저장해 주세요.';
     openMaintenanceMailSettingsModal();
     return;
   }
 
-  const values = maintenanceMailTemplateValues(gid, ym);
+  const values = maintenanceMailTemplateValues(gid, ym, language);
   const subject = applyMaintenanceMailTemplate(subjectTemplate, values);
   const body = applyMaintenanceMailTemplate(bodyTemplate, values);
 
@@ -6574,16 +6681,7 @@ function openMaintenanceEmailCompose(){
 
   errEl.textContent = '';
 
-  /* Windows 기본 메일 앱이 Outlook이면 Outlook 새 메일 쓰기로 열림 */
   window.location.href = mailto;
-}
-
-const maintenanceMailSettingsBtn =
-  document.getElementById('maintenanceMailSettingsBtn');
-
-if (maintenanceMailSettingsBtn){
-  maintenanceMailSettingsBtn.onclick =
-    openMaintenanceMailSettingsModal;
 }
 
 const cancelMmsBtn = document.getElementById('cancelMmsBtn');
@@ -6602,32 +6700,48 @@ if (saveMmsBtn){
       return;
     }
 
-    const subject =
-      document.getElementById('mms_subject').value.trim();
+    const subjectKo =
+      document.getElementById('mms_subject_ko').value.trim();
+    const bodyKo =
+      document.getElementById('mms_body_ko').value.trim();
+    const subjectEn =
+      document.getElementById('mms_subject_en').value.trim();
+    const bodyEn =
+      document.getElementById('mms_body_en').value.trim();
 
-    const body =
-      document.getElementById('mms_body').value.trim();
+    const requiredFields = [
+      ['한글 메일 제목', subjectKo, 'mms_subject_ko'],
+      ['한글 메일 내용', bodyKo, 'mms_body_ko'],
+      ['English 메일 제목', subjectEn, 'mms_subject_en'],
+      ['English 메일 내용', bodyEn, 'mms_body_en']
+    ];
 
-    if (!subject){
-      errEl.textContent = '메일 제목을 입력해 주세요.';
-      document.getElementById('mms_subject').focus();
-      return;
-    }
-
-    if (!body){
-      errEl.textContent = '메일 내용을 입력해 주세요.';
-      document.getElementById('mms_body').focus();
-      return;
+    for (const [label, value, id] of requiredFields){
+      if (!value){
+        errEl.textContent = `${label}을(를) 입력해 주세요.`;
+        document.getElementById(id).focus();
+        return;
+      }
     }
 
     const changed =
-      user.maintenance_mail_subject !== subject ||
-      user.maintenance_mail_body !== body;
+      user.maintenance_mail_subject_ko !== subjectKo ||
+      user.maintenance_mail_body_ko !== bodyKo ||
+      user.maintenance_mail_subject_en !== subjectEn ||
+      user.maintenance_mail_body_en !== bodyEn;
 
     if (changed){
       const mutationId = createMutationId('mail-template');
-      user.maintenance_mail_subject = subject;
-      user.maintenance_mail_body = body;
+
+      user.maintenance_mail_subject_ko = subjectKo;
+      user.maintenance_mail_body_ko = bodyKo;
+      user.maintenance_mail_subject_en = subjectEn;
+      user.maintenance_mail_body_en = bodyEn;
+
+      /* 구버전 앱에서 한글 템플릿을 계속 읽을 수 있도록 호환 필드도 유지 */
+      user.maintenance_mail_subject = subjectKo;
+      user.maintenance_mail_body = bodyKo;
+
       scheduleAutoSync(mutationId);
     }
 
@@ -6866,7 +6980,7 @@ function captureAuditFromStateDiff(mutationId = createMutationId('data')){
     } else if (a && !b){
       addAuditLog({action:'delete',targetType:'사용자 계정',targetId:id,label:a.name,summary:`사용자 계정 삭제 · ${a.name}`,actorName:a.name,actorRole:a.isAdmin?'마스터':'일반사용자',actorId:a.id,mutationId});
     } else if (a && b){
-      const changes=auditFieldChanges(a,b,['id','maintenance_mail_subject','maintenance_mail_body']);
+      const changes=auditFieldChanges(a,b,['id','maintenance_mail_subject','maintenance_mail_body','maintenance_mail_subject_ko','maintenance_mail_body_ko','maintenance_mail_subject_en','maintenance_mail_body_en']);
       if (changes.length){
         const pwChanged=changes.some(c=>['pwHash','pwSalt','pwIterations'].includes(c.field));
         const visible=changes.filter(c=>!['pwSalt','pwIterations'].includes(c.field));
@@ -6880,13 +6994,9 @@ function captureAuditFromStateDiff(mutationId = createMutationId('data')){
 function updateSidebarProfile(){
   const nameEl = document.getElementById('profileName');
   const subEl = document.getElementById('profileSub');
-  const mailSettingsBtn = document.getElementById('maintenanceMailSettingsBtn');
   if (!nameEl) return;
   const name = currentUserName();
   nameEl.textContent = name || '로그인 필요';
-  if (mailSettingsBtn){
-    mailSettingsBtn.style.display = name ? '' : 'none';
-  }
   if (subEl){
     const isAdmin = isCurrentUserAdmin();
     subEl.textContent = isAdmin ? '👑 마스터' : '';
