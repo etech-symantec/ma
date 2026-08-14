@@ -105,6 +105,87 @@ function maintenanceLogsForGroup(gid){
   return maintenanceLogs.filter(m => m.group === gid);
 }
 
+function maintenanceLogHasInspectionData(log){
+  if (!log) return false;
+  return !!(
+    String(log.date || '').trim() ||
+    String(log.manager || '').trim() ||
+    String(log.note || '').trim() ||
+    log.done ||
+    log.incomplete ||
+    log.uncontracted
+  );
+}
+
+function maintenanceMailInquiryHtml(log){
+  if (!log || !log.mail_inquiry) return '';
+  const when = log.mail_inquiry_at
+    ? new Date(log.mail_inquiry_at).toLocaleString('ko-KR')
+    : '';
+  const tip = [
+    '점검 메일 문의',
+    log.mail_inquiry_author ? `담당 ${log.mail_inquiry_author}` : '',
+    when
+  ].filter(Boolean).join(' · ');
+
+  return `<div class="maint-cell-mail-inquiry" title="${esc(tip)}">메일문의</div>`;
+}
+
+function markMaintenanceMailInquiry(gid, ym){
+  if (!gid || !ym) return null;
+
+  const mutationId = createMutationId('ma-mail');
+  let log = maintenanceLogFor(gid, ym);
+
+  if (!log){
+    log = { id: Date.now(), group: gid, ym };
+    maintenanceLogs.push(log);
+  }
+
+  log.mutation_id = mutationId;
+  log.mail_inquiry = true;
+  log.mail_inquiry_at = Date.now();
+  log.mail_inquiry_author = currentUserName() || log.mail_inquiry_author || '';
+  log.updated_at = Date.now();
+
+  markMaintenanceDirty(mutationId);
+
+  /* 메일 작성 자체는 막지 않고 ma.json은 백그라운드 저장 */
+  runMaintenanceSync().catch(e => {
+    console.error('메일 문의 상태 저장 실패:', e);
+  });
+
+  return log;
+}
+
+let maintenanceMailNoticeTimer = null;
+
+function showMaintenanceMailCopyNotice(gid, ym){
+  const notice = document.getElementById('mlMailNotice');
+  if (notice){
+    notice.textContent =
+      '메일 내용이 클립보드에 복사되었습니다. Outlook 메일 본문에서 Ctrl+V로 붙여넣어 주세요. 5초 후 점검창이 자동으로 닫힙니다.';
+    notice.classList.add('show');
+  }
+
+  if (maintenanceMailNoticeTimer){
+    clearTimeout(maintenanceMailNoticeTimer);
+  }
+
+  maintenanceMailNoticeTimer = setTimeout(() => {
+    maintenanceMailNoticeTimer = null;
+
+    if (
+      maintenanceEditTarget &&
+      maintenanceEditTarget.gid === gid &&
+      maintenanceEditTarget.ym === ym
+    ){
+      closeMaintenanceLogModal();
+      renderMaintenance();
+    }
+  }, 5000);
+}
+
 function maintenanceVisibleGroupList(){
   const groups = maintenanceGroupList();
   if (!activeMyAssetsFilter) return groups;
@@ -166,6 +247,7 @@ function maintenanceEntryTabHtml(){
     const monthCellsHtml = MAINT_MONTHS.map(m => {
       const ym = `${maintenanceYear}-${pad2(m)}`;
       const log = maintenanceLogFor(g.gid, ym);
+      const mailInquiryHtml = maintenanceMailInquiryHtml(log);
       const isCurrent = ym === thisYm;
       const isUncontracted = !!(log && log.uncontracted);
       if (isUncontracted){
@@ -177,6 +259,7 @@ function maintenanceEntryTabHtml(){
             <span class="maint-cell-uncontracted-label">
               미계약
             </span>
+            ${mailInquiryHtml}
       
           </td>
         `;
@@ -210,6 +293,7 @@ function maintenanceEntryTabHtml(){
           </div>
       
           ${noteHtml}
+          ${mailInquiryHtml}
         </td>
       `;
       }
@@ -237,11 +321,12 @@ function maintenanceEntryTabHtml(){
             </div>
         
             ${noteHtml}
+            ${mailInquiryHtml}
           </td>
         `;
       }
-      return `<td class="maint-cell maint-cell-blank ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(ymLabel(ym))} 점검 등록">
-        <span class="maint-cell-dash">–</span>
+      return `<td class="maint-cell maint-cell-blank ${isCurrent?'is-current':''}" data-maint-cell="${esc(g.gid)}|${ym}" title="${esc(ymLabel(ym))} 점검 등록${log && log.mail_inquiry ? ' · 메일문의' : ''}">
+        ${mailInquiryHtml || '<span class="maint-cell-dash">–</span>'}
       </td>`;
     }).join('');
 
@@ -610,6 +695,7 @@ function openMaintenanceLogModal(gid, ym){
   if (!g) return;
   maintenanceEditTarget = { gid, ym };
   const log = maintenanceLogFor(gid, ym);
+  const hasInspectionLog = maintenanceLogHasInspectionData(log);
   document.getElementById('mlModalTitle').textContent = `${g.meta.owner} · ${ymLabel(ym)} 점검 등록`;
 
   const mailLanguageEl = document.getElementById('mlEmailLanguage');
@@ -618,7 +704,7 @@ function openMaintenanceLogModal(gid, ym){
   const dateEl = document.getElementById('ml_date');
   const datePicker = document.getElementById('ml_date_picker');
 
-  if (log && !log.incomplete && !log.uncontracted){
+  if (hasInspectionLog && !log.incomplete && !log.uncontracted){
     dateEl.value = log.date || '';
 
     if (log.date){
@@ -631,7 +717,7 @@ function openMaintenanceLogModal(gid, ym){
       datePicker.value = `${ym}-01`;
     }
   }
-  else if (log){
+  else if (hasInspectionLog){
     dateEl.value = '';
     datePicker.value = '';
   }
@@ -651,30 +737,46 @@ function openMaintenanceLogModal(gid, ym){
   }
   
   document.getElementById('ml_manager').value =
-    log
+    hasInspectionLog
       ? (log.manager || '')
       : (currentUserName() || g.meta.owner_primary || '');
   
   document.getElementById('ml_done').checked =
-    log ? !!log.done : true;
+    hasInspectionLog ? !!log.done : true;
   
   document.getElementById('ml_incomplete').checked =
-    log ? !!log.incomplete : false;
+    hasInspectionLog ? !!log.incomplete : false;
   
   document.getElementById('ml_uncontracted').checked =
-    log ? !!log.uncontracted : false;
+    hasInspectionLog ? !!log.uncontracted : false;
   
   document.getElementById('ml_note').value =
-    log ? (log.note || '') : '';
+    hasInspectionLog ? (log.note || '') : '';
   
   syncMaintenanceStatusControls();
   document.getElementById('mlError').textContent = '';
-  document.getElementById('mlDeleteBtn').style.display = log ? '' : 'none';
+  const mailNotice = document.getElementById('mlMailNotice');
+  if (mailNotice){
+    mailNotice.textContent = '';
+    mailNotice.classList.remove('show');
+  }
+  document.getElementById('mlDeleteBtn').style.display = hasInspectionLog ? '' : 'none';
   refreshMaintenanceMailButton(gid);
   document.getElementById('maintenanceLogModal').classList.add('open');
 }
 
 function closeMaintenanceLogModal(){
+  if (maintenanceMailNoticeTimer){
+    clearTimeout(maintenanceMailNoticeTimer);
+    maintenanceMailNoticeTimer = null;
+  }
+
+  const mailNotice = document.getElementById('mlMailNotice');
+  if (mailNotice){
+    mailNotice.textContent = '';
+    mailNotice.classList.remove('show');
+  }
+
   document.getElementById('maintenanceLogModal').classList.remove('open');
   maintenanceEditTarget = null;
 }
@@ -856,9 +958,23 @@ document.getElementById('mlDeleteBtn').onclick = async () => {
   const { gid, ym } = maintenanceEditTarget;
   const mutationId = createMutationId('ma-delete');
 
-  maintenanceLogs = maintenanceLogs.filter(
-    m => !(m.group === gid && m.ym === ym)
-  );
+  const existingLog = maintenanceLogFor(gid, ym);
+
+  if (existingLog && existingLog.mail_inquiry){
+    /* 점검 등록만 취소하고 메일 문의 이력은 유지 */
+    existingLog.mutation_id = mutationId;
+    existingLog.date = '';
+    existingLog.manager = '';
+    existingLog.note = '';
+    existingLog.done = false;
+    existingLog.incomplete = false;
+    existingLog.uncontracted = false;
+    existingLog.updated_at = Date.now();
+  } else {
+    maintenanceLogs = maintenanceLogs.filter(
+      m => !(m.group === gid && m.ym === ym)
+    );
+  }
 
   markMaintenanceDirty(mutationId);
 
