@@ -1941,8 +1941,8 @@ const SKU_TAG_STYLES = {
   */
   WPS:{
     color:'#34D399',
-    background:'#88939e',
-    border:'#748291'
+    background:'#3F474F',
+    border:'#59636E'
   },
 
   /*
@@ -1950,14 +1950,14 @@ const SKU_TAG_STYLES = {
   */
   BCWF:{
     color:'#60A5FA',
-    background:'#88939e',
-    border:'#748291'
+    background:'#3F474F',
+    border:'#59636E'
   },
-
+  
   BCIS:{
     color:'#60A5FA',
-    background:'#88939e',
-    border:'#748291'
+    background:'#3F474F',
+    border:'#59636E'
   }
 };
 
