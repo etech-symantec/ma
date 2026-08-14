@@ -3920,6 +3920,9 @@ td.col-sku{
 tr.asset-child-row td.col-sku{
   padding-left:0 !important;
 }
+.col-sku-app .asset-app-display-simple{
+  margin-left:-10px;
+}
 
 /* 혹시 기존 트리선이 있다면 숨김 */
 tr.asset-child-row td.col-sku::before,
