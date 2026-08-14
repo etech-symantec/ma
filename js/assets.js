@@ -2008,24 +2008,23 @@ function skuTagStyle(sku){
 }
 
 function skuBadge(sku){
-
   const label =
     esc(sku) || '—';
-
   if (!sku){
     return label;
   }
+  const tags = skuKeywordMatches(sku);
+  const style = skuTagStyle(sku);
+  const borderStyle = tags.includes('VA')
+      ? 'dashed'
+      : 'solid';
 
-  const style =
-    skuTagStyle(sku);
-
-  /*
-    지정된 Tag가 없는 SKU는
-    기존 기본 형태로 표시
-  */
   if (!style){
     return `
-      <span class="sku-tag">
+      <span
+        class="sku-tag"
+        style="border-style:${borderStyle};"
+      >
         ${label}
       </span>
     `;
@@ -2039,6 +2038,7 @@ function skuBadge(sku){
         color:${style.color};
         background:${style.background};
         border-color:${style.border};
+        border-style:${borderStyle};
       "
     >
       <span
