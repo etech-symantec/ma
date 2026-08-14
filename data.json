@@ -3215,7 +3215,8 @@
       "build_date": "2026.04",
       "group_parent": "custom-1786344991848",
       "is_parent": false,
-      "last_mutation_id": "data-mss8pczp-a1fc447a-6250-4c12-b7d0-b1b7584d89d3"
+      "last_mutation_id": "data-mss8snwd-f1f51f7f-1922-431c-ba3d-163ffcd4d712",
+      "asset_parent_id": "67"
     },
     {
       "group": "ng",
@@ -16715,6 +16716,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss8sl8r-48423002-51dc-46fd-a2fe-50d5f9db0cf9"
+    },
+    {
+      "id": "audit-1786669342727-9isyp5",
+      "ts": 1786669342727,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "69",
+      "group": "mx-samex",
+      "owner": "삼성전자 SAMEX",
+      "label": "ISG-Proxy",
+      "sn": "91991158",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "67",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss8snwd-f1f51f7f-1922-431c-ba3d-163ffcd4d712"
     }
   ],
   "syncMutations": [
@@ -16951,6 +16977,11 @@
     {
       "id": "data-mss8sl8r-48423002-51dc-46fd-a2fe-50d5f9db0cf9",
       "ts": 1786669339325,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss8snwd-f1f51f7f-1922-431c-ba3d-163ffcd4d712",
+      "ts": 1786669342732,
       "scope": "data"
     }
   ]
