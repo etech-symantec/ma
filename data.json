@@ -14125,11 +14125,13 @@
       "isAdmin": true,
       "maintenance_mail_subject": "[{법인명}] 정기점검 일정 안내 - {점검월}",
       "maintenance_mail_body": "안녕하세요.\n\n{법인명} {점검월} 정기점검 관련하여 안내드립니다.\n\n점검 예정일: {점검일}\n점검 담당자: {담당자}\n\n확인 부탁드립니다.\n감사합니다.",
-      "last_mutation_id": "mail-template-msslj495-3583a22c-b88c-41df-a297-fe23b1a03d1d",
+      "last_mutation_id": "mail-template-msslus1w-a617131d-c04e-4e79-bdb3-93495ccc163f",
       "maintenance_mail_subject_ko": "[{법인명}] 정기점검 일정 안내 - {점검월}",
       "maintenance_mail_body_ko": "안녕하세요.\n\n{법인명} {점검월} 정기점검 관련하여 안내드립니다.\n\n점검 예정일: {점검일}\n점검 담당자: {담당자}\n\n확인 부탁드립니다.\n감사합니다.",
       "maintenance_mail_subject_en": "[{Company}] Monthly Maintenance Schedule - {InspectionMonth}",
-      "maintenance_mail_body_en": "Hi,\n\nLet me know your availability for the proxy maintenance this month.\nAs usual, there is no network interruption during the check-up.\n\nIf you cannot join the remote session, you can also send me the sysinfo files for maintenance check-up.\nYou can download it from Administration > Snapshots > Show All Snapshots > download 000 sysinfo files for both proxy.\n\nRegards,"
+      "maintenance_mail_body_en": "Hi,\n\nLet me know your availability for the proxy maintenance this month.\nAs usual, there is no network interruption during the check-up.\n\nIf you cannot join the remote session, you can also send me the sysinfo files for maintenance check-up.\nYou can download it from Administration > Snapshots > Show All Snapshots > download 000 sysinfo files for both proxy.\n\nRegards,",
+      "maintenance_mail_signature_html": "<p><strong><span style=\"font-family:&quot;맑은 고딕&quot;;mso-ascii-theme-font:minor-latin;\nmso-fareast-theme-font:minor-latin;mso-hansi-theme-font:minor-latin;mso-bidi-font-family:\nArial;color:#0014B9\">신호근<span lang=\"EN-US\"> </span></span></strong><strong><span lang=\"EN-US\" style=\"font-size:7.5pt;font-family:&quot;맑은 고딕&quot;;mso-ascii-theme-font:\nminor-latin;mso-fareast-theme-font:minor-latin;mso-hansi-theme-font:minor-latin;\nmso-bidi-font-family:Arial;color:#0014B9\">/ </span></strong><strong><span style=\"font-size:7.5pt;font-family:&quot;맑은 고딕&quot;;mso-ascii-theme-font:minor-latin;\nmso-fareast-theme-font:minor-latin;mso-hansi-theme-font:minor-latin;mso-bidi-font-family:\nArial;color:#0014B9\">수석연구원</span></strong><strong><span lang=\"EN-US\" style=\"font-family:&quot;맑은 고딕&quot;;mso-ascii-theme-font:minor-latin;mso-fareast-theme-font:\nminor-latin;mso-hansi-theme-font:minor-latin;mso-bidi-font-family:Arial;\ncolor:#0014B9\">&nbsp; |&nbsp;&nbsp;Hokeun Shin </span></strong><strong><span lang=\"EN-US\" style=\"font-size:7.5pt;font-family:&quot;맑은 고딕&quot;;mso-ascii-theme-font:\nminor-latin;mso-fareast-theme-font:minor-latin;mso-hansi-theme-font:minor-latin;\nmso-bidi-font-family:Arial;color:#0014B9\">/ Principle Research Engineer</span></strong><span lang=\"EN-US\" style=\"font-size:10.0pt;font-family:&quot;맑은 고딕&quot;;mso-ascii-theme-font:\nminor-latin;mso-fareast-theme-font:minor-latin;mso-hansi-theme-font:minor-latin;\nmso-bidi-font-family:Arial;color:#1A1A1A\"><o:p></o:p></span></p><p><strong><span lang=\"EN-US\" style=\"font-size:7.5pt;font-family:&quot;맑은 고딕&quot;;mso-ascii-theme-font:\nminor-latin;mso-fareast-theme-font:minor-latin;mso-hansi-theme-font:minor-latin;\nmso-bidi-font-family:Arial;color:#0014B9\"><br></span></strong></p>\n\n<p><strong><span lang=\"EN-US\" style=\"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;\ncolor:#0014B9\">ETECH SYSTEM / SOL Business Division</span></strong><span lang=\"EN-US\" style=\"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;color:#1A1A1A\"><br>\n</span><strong><span lang=\"EN-US\" style=\"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;\ncolor:#333333\">Moblie / KakaoTalk / WhatsApp </span></strong><span lang=\"EN-US\" style=\"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333\">:\n+82-10-3062-0266</span><span lang=\"EN-US\" style=\"font-size:10.0pt;font-family:\n&quot;Arial&quot;,sans-serif;color:#1A1A1A\"><br>\n</span><strong><span lang=\"EN-US\" style=\"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif;\ncolor:#333333\">Address </span></strong><span lang=\"EN-US\" style=\"font-size:\n10.0pt;font-family:&quot;Arial&quot;,sans-serif;color:#333333\">: 17F, ETEVERS tower,\nSowal-ro 3, Jung-gu, Seoul, Republic of Korea</span><span lang=\"EN-US\" style=\"font-family:&quot;Arial&quot;,sans-serif;color:#1A1A1A\"><o:p></o:p></span></p>",
+      "maintenance_mail_signature_text": "신호근 / 수석연구원  |  Hokeun Shin / Principle Research Engineer\n\nETECH SYSTEM / SOL Business Division\nMoblie / KakaoTalk / WhatsApp :\n+82-10-3062-0266\nAddress : 17F, ETEVERS tower,\nSowal-ro 3, Jung-gu, Seoul, Republic of Korea"
     },
     {
       "id": "u1786283710129",
@@ -15649,6 +15651,11 @@
     {
       "id": "mail-template-msslj495-3583a22c-b88c-41df-a297-fe23b1a03d1d",
       "ts": 1786690732377,
+      "scope": "data"
+    },
+    {
+      "id": "mail-template-msslus1w-a617131d-c04e-4e79-bdb3-93495ccc163f",
+      "ts": 1786691276435,
       "scope": "data"
     }
   ]
