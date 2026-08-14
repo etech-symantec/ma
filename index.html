@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌠%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://etech-symantec.github.io/style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Broadcom 유지보수 자산</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/core.css?v=20260814-fast01">
+<link rel="stylesheet" href="css/assets.css?v=20260814-fast01">
+</head>
+<body>
+
+<!-- 공통 헤더 + 제목 + 버전 -->
+<script>
+  window.pageTitle = "Broadcom 유지보수 자산 (Maintenance Assets)";
+  window.pageVersion = "ver.2026.08.14.06 FAST";
+</script>
+<script src="https://etech-symantec.github.io/header.js"></script>
+
+<div id="lockOverlay">
+  <div class="lock-card" id="accountGateCard">
+    <h1>유지보수 자산 관리</h1>
+    <p id="agIntro">이용하려면 먼저 본인 계정으로 로그인하세요. 계정이 없다면 아래에서 새로 만들 수 있습니다.</p>
+
+    <div id="agLoginView">
+      <div id="ag_user_list" class="user-list"></div>
+    </div>
+
+    <div id="agRegisterView" style="display:none;">
+      <div class="ag-reg-fields">
+        <input id="ag_reg_name" placeholder="이름 (예: 김철수)">
+        <input type="password" id="ag_reg_pass" placeholder="비밀번호 (4자 이상)" autocomplete="new-password">
+        <input type="password" id="ag_reg_pass2" placeholder="비밀번호 확인" autocomplete="new-password">
+      </div>
+      <div id="agRegisterError" class="cp-error"></div>
+      <div class="lock-actions">
+        <button class="btn btn-primary" id="ag_register_btn">계정 만들고 로그인</button>
+      </div>
+    </div>
+
+    <div class="lock-meta">
+      <button id="ag_toggle_btn">새 계정 만들기</button>
+    </div>
+  </div>
+
+  <div class="lock-card" id="masterGateCard" style="display:none;">
+    <h1>민감정보 잠금 해제</h1>
+    <p>계정 ID / 비밀번호 / IP 정보는 AES‑256‑GCM으로 암호화되어 저장되어 있습니다. 마스터 비밀번호를 입력하면 24시간 동안 복호화하여 열람할 수 있습니다.</p>
+    <input type="password" id="passInput" placeholder="모두가 아는 그 키" autocomplete="off" />
+    <div id="lockError"></div>
+    <div class="lock-actions">
+      <button class="btn btn-ghost" id="viewOnlyBtn">비밀번호 없이 보기 (민감정보 제외)</button>
+      <button class="btn btn-primary" id="unlockBtn">잠금 해제</button>
+    </div>
+    <div class="lock-meta">
+      <button id="howBtn">이 비밀번호는 어디서 확인하나요?</button>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="layout">
+    <aside class="filters">
+      <div class="panel-profile">
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">-</div>
+          <div class="profile-info-right">
+            <button type="button" class="profile-logout-text" id="logoutBtn">로그아웃</button>
+            <div class="profile-sub" id="profileSub">로그인됨</div>
+          </div>
+        </div>
+        <div class="activity-wrap">
+          <button class="icon-btn icon-only" id="recentActivityBtn" title="최근 이력">🔔<span id="raBadge" class="ra-badge" style="display:none;"></span></button>
+        </div>
+        <button type="button" class="my-assets-toggle" id="myAssetsToggle">
+          <span class="mat-label">My</span>
+          <span class="mat-count" id="myAssetsCount">0</span>
+        </button>
+        <div id="githubSyncStatus" class="sync-status synced" title="GitHub 데이터 동기화 상태">✓ 저장됨</div>
+      </div>
+
+      <div class="panel-top-actions">
+        <button type="button" class="icon-btn icon-only" id="dashboardToggle" title="대시보드 보기">📊</button>
+        <button type="button" class="icon-btn icon-only" id="maintenanceToggle" title="유지보수 점검 관리">🛠️</button>
+        <button type="button" class="icon-btn icon-only" id="workHistoryToggle" title="업데이트 전체보기">📜</button>
+        <button class="icon-btn icon-only" id="expandAllBtn" title="전체 펼치기">⬇️</button>
+        <button class="icon-btn icon-only" id="addBtn" title="법인 추가">＋</button>
+      </div>
+
+      <div id="filtersResetSlot"></div>
+
+      <div class="filter-group filter-group--status">
+        <h4><span class="fg-dot"></span>라이선스 상태</h4>
+        <div id="statusFilters"></div>
+      </div>
+      <div class="filter-group filter-group--tags">
+        <h4><span class="fg-dot"></span>태그</h4>
+        <div id="skuKeywordFilters"></div>
+      </div>
+      <div class="filter-group filter-group--country">
+        <h4><span class="fg-dot"></span>사이트</h4>
+        <div id="countryFilters"></div>
+      </div>
+    </aside>
+
+    <main class="content" id="content">
+      <div class="top-filter-row" id="topFilterRow">
+        <div class="tf-search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="searchInput" placeholder="키워드로 검색" />
+        </div>
+        <div class="top-filter-bar" id="topFilterBar"></div>
+      </div>
+      <div id="assetListArea">
+        <!-- group cards injected here -->
+      </div>
+    </main>
+    <main class="content" id="dashboardView" style="display:none;">
+      <!-- 대시보드가 여기에 그려짐 -->
+    </main>
+    <main class="content" id="maintenanceView" style="display:none;">
+      <!-- 유지보수 페이지가 여기에 그려짐 -->
+    </main>
+    <main class="content" id="workHistoryView" style="display:none;">
+      <!-- 업데이트 전체보기 페이지가 여기에 그려짐 -->
+    </main>
+  </div>
+</div>
+
+<div id="addModal">
+  <div class="modal-card">
+    <h2 id="addModalTitle">새 자산 항목 추가</h2>
+    <p class="hint">비밀번호/ID/IP는 잠금 해제된 상태에서만 암호화되어 저장됩니다.</p>
+    <div class="form-grid">
+      <div class="ge-row ge-row-5">
+        <div><label>법인 (OWNER)</label><input id="f_owner" placeholder="예: 삼성전자 ○○법인" disabled></div>
+        <div><label>국가 (COUNTRY)</label><input id="f_country" placeholder="예: 베트남" disabled></div>
+        <div><label>위치 (LOCATION)</label><input id="f_location" placeholder="예: 하노이" disabled></div>
+        <div><label>Support ID</label><input id="f_support" disabled></div>
+        <div><label>점검 방식</label><input id="f_check" placeholder="원격 (RC)" disabled></div>
+      </div>
+      <p class="hint full" style="margin-top:-4px; margin-bottom:0;">법인 / 국가 / 위치 / Support ID / 점검 방식은 이 법인(그룹)의 공통 정보로, 여기서는 확인만 가능합니다. 값을 바꾸려면 법인 카드의 "법인 정보 수정"을 이용해 주세요.</p>
+      <div class="ge-row ge-row-5">
+        <div><label>SKU / 제품</label><input id="f_sku"></div>
+        <div><label>S/N</label><input id="f_sn"></div>
+        <div><label>수량</label><input id="f_qty"></div>
+        <div><label>라이선스 시작일 (YYYY.M.D)</label><input id="f_start"></div>
+        <div><label>라이선스 종료일 (YYYY.M.D)</label><input id="f_end"></div>
+      </div>
+      <div class="ge-row ge-row-5">
+        <div><label>OS 버전</label><input id="f_os"></div>
+        <div><label>IP 주소 🔒 (여러 줄 가능)</label><textarea id="f_ip" rows="2" placeholder="예: 10.0.0.1&#10;10.0.0.2"></textarea></div>
+        <div><label>계정 ID 🔒 (여러 줄 가능)</label><textarea id="f_id" rows="2" placeholder="예: admin&#10;admin2"></textarea></div>
+        <div><label>비밀번호 🔒 (여러 줄 가능)</label><textarea id="f_pw" rows="2" placeholder="예: Passw0rd!&#10;Passw0rd2!"></textarea></div>
+        <div><label>Enable 비밀번호 🔒 (선택)</label><input id="f_enable_pw" placeholder="필요한 경우만"></div>
+      </div>
+      <div class="full"><label>비고 / Remarks</label><textarea id="f_remarks"></textarea></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelAddBtn">취소</button>
+      <button class="btn btn-primary" id="saveAddBtn">항목 저장</button>
+    </div>
+  </div>
+</div>
+
+<div id="groupEditModal">
+  <div class="modal-card">
+    <h2>법인 정보 수정</h2>
+    <p class="hint">Support ID / 구축 엔지니어 / 구축 일자는 이 법인에 Support ID가 하나뿐일 때만 여기서 함께 수정할 수 있습니다. Support ID가 여러 개인 경우는 각 Support ID 영역의 ✎ 버튼에서 따로 수정합니다. <b>상위 법인은 대표 이름 역할만 하며 Support ID를 직접 가질 수 없습니다.</b><br>이 법인 아래에 Support ID가 여러 개인 경우 "상위 법인"을 체크하세요. 이후 연결된 Support ID들은 모두 해당 법인 아래에 보여집니다.</p>
+    <div class="form-grid">
+      <div class="ge-row ge-row-3">
+        <div><label>법인 (OWNER)</label><input id="ge_owner" placeholder="예: 삼성전자 ○○법인"></div>
+        <div><label>Support ID</label><input id="ge_support_id" placeholder="예: 12345678"></div>
+        <div>
+          <label class="parent-flag-check"><input type="checkbox" id="ge_is_parent">상위 법인</label>
+          <select id="ge_parent_group">
+            <option value="">없음 (독립된 법인)</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="ge-row ge-row-3">
+        <div><label>국가 (COUNTRY)</label><input id="ge_country" placeholder="예: 한국"></div>
+        <div><label>위치 (LOCATION)</label><input id="ge_location" placeholder="예: 서울"></div>
+        <div><label>점검 방식</label><input id="ge_check" placeholder="원격/방문"></div>
+      </div>
+      <div class="ge-row ge-row-3">
+        <div><label>구축 엔지니어</label><input id="ge_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
+        <div><label>구축 일자 (YYYY.MM)</label><input id="ge_build_date" placeholder="2026.07"></div>
+        <div><label>구성방식</label>
+          <select id="ge_config_mode">
+            <option value="">선택 안 함</option>
+            <option value="Explicit">Explicit</option>
+            <option value="Inline">Inline</option>
+            <option value="Virtual Inline">Virtual Inline</option>
+            <option value="Transparent">Transparent</option>
+          </select>
+        </div>
+      </div>
+      <div class="ge-row ge-row-2">
+        <div><label>담당 엔지니어 (정)</label><input id="ge_owner_primary" placeholder="주 담당 엔지니어"></div>
+        <div><label>담당 엔지니어 (부)</label><input id="ge_owner_secondary" placeholder="부 담당 엔지니어"></div>
+      </div>
+      <div class="full" id="geCustSectionWrap">
+        <label>고객사 담당자 (최대 5명)</label>
+        <div id="ge_cust_list" class="cust-contact-list"></div>
+        <button type="button" class="btn btn-ghost cust-add-btn" id="ge_cust_add_btn">＋ 담당자 추가</button>
+        <p class="hint" id="geCustHiddenHint" style="display:none; margin-top:6px;">하위 법인에는 고객사 담당자 정보가 필요 없어 이 법인에서는 입력하지 않습니다.</p>
+      </div>
+      <div class="full"><label>비고</label><textarea id="ge_remarks" placeholder="법인 관련 별도 코멘트"></textarea></div>
+    </div>
+    <div id="geError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelGeBtn">취소</button>
+      <button class="btn btn-primary" id="saveGeBtn">저장</button>
+
+    </div>
+  </div>
+</div>
+
+<div id="addGroupModal">
+  <div class="modal-card">
+    <h2>법인 추가</h2>
+    <p class="hint">새로운 법인을 등록합니다. 등록한 뒤에는 각 법인 카드의 ＋ 버튼으로 실제 자산(SKU/S/N/라이선스 등)을 추가해 주세요.<br>이 법인 아래에 Support ID가 여러 개인 경우 "상위 법인"을 체크하세요. 이후 연결된 Support ID들은 모두 해당 법인 아래에 보여집니다.</p>
+    <div class="form-grid">
+      <div class="ge-row ge-row-5">
+        <div><label>법인 (OWNER)</label><input id="ng_owner" placeholder="예: 삼성전자 ○○법인"></div>
+        <div><label>Support ID</label><input id="ng_support_id" placeholder="예: 12345678"></div>
+        <div>
+          <label class="parent-flag-check"><input type="checkbox" id="ng_is_parent"> 상위 법인</label>
+          <select id="ng_parent_group">
+            <option value="">없음 (독립된 법인)</option>
+          </select>
+        </div>
+        <div><label>국가 (COUNTRY)</label><input id="ng_country" placeholder="예: 베트남"></div>
+        <div><label>위치 (LOCATION)</label><input id="ng_location" placeholder="예: 하노이"></div>
+      </div>
+      
+      <div class="ge-row ge-row-3">
+        <div><label>구축 엔지니어</label><input id="ng_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)"></div>
+        <div><label>구축 일자 (YYYY.MM)</label><input id="ng_build_date" placeholder="2026.07"></div>
+        <div><label>구성방식</label>
+          <select id="ng_config_mode">
+            <option value="">선택 안 함</option>
+            <option value="Explicit">Explicit</option>
+            <option value="Inline">Inline</option>
+            <option value="Virtual Inline">Virtual Inline</option>
+            <option value="Transparent">Transparent</option>
+          </select>
+        </div>
+      </div>
+      <div class="ge-row ge-row-3">
+        <div><label>담당 엔지니어 (정)</label><input id="ng_owner_primary" placeholder="주 담당자"></div>
+        <div><label>담당 엔지니어 (부)</label><input id="ng_owner_secondary" placeholder="부 담당자"></div>
+        <div><label>점검 방식</label><input id="ng_check" placeholder="원격 (RC)"></div>
+      </div>
+      <div class="full" id="ngCustSectionWrap">
+        <label>고객사 담당자 (최대 5명)</label>
+        <div id="ng_cust_list" class="cust-contact-list"></div>
+        <button type="button" class="btn btn-ghost cust-add-btn" id="ng_cust_add_btn">＋ 담당자 추가</button>
+        <p class="hint" id="ngCustHiddenHint" style="display:none; margin-top:6px;">하위 법인(자식 법인)에는 고객사 담당자 정보가 필요 없어 이 법인에서는 입력하지 않습니다.</p>
+      </div>
+      <div class="full"><label>비고</label><textarea id="ng_remarks" placeholder="법인 관련 별도 코멘트"></textarea></div>
+    </div>
+    <div id="ngError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelNgBtn">취소</button>
+      <button class="btn btn-primary" id="saveNgBtn">법인 추가</button>
+    </div>
+  </div>
+</div>
+
+<div id="subGroupEditModal">
+  <div class="modal-card">
+    <h2>Support ID 정보 수정</h2>
+    <p class="hint" id="sgHint">Support ID / 구축 엔지니어 / 구축 일자는 같은 Support ID를 쓰는 자산 항목들에 공통으로 적용됩니다.</p>
+    <div class="form-grid sg-edit-fields">
+      <div>
+        <label>Support ID</label>
+        <input id="sg_support" placeholder="예: 12345678">
+      </div>
+    
+      <div>
+        <label>구축 엔지니어</label>
+        <input id="sg_build_engineer" placeholder="장비를 구축한 엔지니어 (선택)">
+      </div>
+    
+      <div>
+        <label>구축 일자 (YYYY.MM)</label>
+        <input id="sg_build_date" placeholder="2026.07">
+      </div>
+    </div>
+    <div id="sgError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelSgBtn">취소</button>
+      <button class="btn btn-primary" id="saveSgBtn">저장</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="custContactsModal">
+  <div class="modal-card">
+    <h2 id="custContactsModalTitle">고객사 담당자</h2>
+    <div id="custContactsModalList" class="ccm-list"></div>
+    <div id="custContactsMemoView" class="ccm-memo" style="display:none;"></div>
+
+    <div id="custEditWrap" style="display:none;">
+      <p class="hint" style="margin-top:0;">여기서 수정한 내용은 바로 저장되며, 별도의 작업 이력이 남지 않습니다.</p>
+      <div id="cce_cust_list" class="cust-contact-list"></div>
+      <button type="button" class="btn btn-ghost cust-add-btn" id="cce_cust_add_btn">＋ 담당자 추가</button>
+      <div class="cust-memo-wrap">
+        <label>공통 메모</label>
+        <textarea id="cce_cust_memo" placeholder="고객사 담당자 관련 공통 메모 (예: 연락 시 유의사항, 부재 안내 등)"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-actions" id="custContactsViewActions">
+      <button class="btn btn-ghost" id="custContactsEditBtn" style="display:none;">편집</button>
+      <button class="btn btn-primary" id="custContactsModalCloseBtn">닫기</button>
+    </div>
+    <div class="modal-actions" id="custContactsEditActions" style="display:none;">
+      <button class="btn btn-ghost" id="custContactsCancelEditBtn">취소</button>
+      <button class="btn btn-primary" id="custContactsSaveEditBtn">저장</button>
+    </div>
+  </div>
+</div>
+
+<div id="moveAssetModal">
+  <div class="modal-card">
+    <h2>자산 이동</h2>
+    <p class="hint" id="maHint">이 자산 항목을 다른 법인으로 옮깁니다. SKU / S/N / 라이선스 기간 / IP·ID·비밀번호 / OS 버전 / 비고 등 자산 고유 정보는 그대로 유지되고, 법인명·국가·위치·Support ID·점검 방식·구성방식·담당자·고객사 담당자는 옮겨갈 법인 기준으로 바뀝니다.</p>
+    <div class="form-grid">
+      <div class="full">
+        <label>이동할 법인 선택</label>
+        <select id="ma_target_group"></select>
+      </div>
+    </div>
+    <div id="maError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelMaBtn">취소</button>
+      <button class="btn btn-primary" id="saveMaBtn">이동</button>
+    </div>
+  </div>
+</div>
+
+<div id="workLogModal">
+  <div class="modal-card">
+    <h2>작업 이력</h2>
+    <p class="hint" id="wlSubtitle">작업 내용과 구축/제거/교체/OS 변경/PM 등 이력을 남길 수 있습니다.</p>
+    <p class="hint" style="margin-top:-14px;">등록된 자산의 세부 정보는 직접 수정할 수 없으며, Tracking을 위해 작업 이력을 남기면서만 변경할 수 있습니다.</p>
+
+    <div id="wlAssetList" class="wl-asset-list" style="display:none;"></div>
+
+    <div class="form-grid">
+      <div class="ge-row ge-row-3">
+        <div><label>작업 구분</label>
+          <select id="wl_type">
+            <option value="라이선스 갱신">라이선스 갱신</option>
+            <option value="자산정보 업데이트">자산정보 업데이트</option>
+            <option value="장비 구축">장비 구축</option>
+            <option value="장비 제거">장비 제거</option>
+            <option value="장비 교체">장비 교체</option>
+            <option value="OS 업그레이드">OS 업그레이드</option>
+            <option value="OS 다운그레이드">OS 다운그레이드</option>
+            <option value="PM">PM</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+        <div><label>날짜 (YYYY.M.D)</label>
+          <div class="date-field">
+            <input id="wl_date" placeholder="2026.7.30">
+            <button type="button" id="wl_date_pick_btn" class="date-pick-btn" title="달력에서 선택">📅</button>
+            <input type="date" id="wl_date_picker" class="date-native-input" tabindex="-1">
+          </div>
+        </div>
+        <div><label>담당자</label><input id="wl_manager" placeholder="작업 담당자"></div>
+      </div>
+      <div class="full"><label>내용 / 멘트</label><textarea id="wl_note" placeholder="간단한 작업 내용"></textarea></div>
+    </div>
+
+    <div id="wlFieldChangeWrap">
+      <label class="wl-fieldchange-toggle">
+        <input type="checkbox" id="wl_apply_toggle">
+        이 이력에 맞춰 자산 정보도 함께 변경
+      </label>
+      <div id="wl_fieldchange_section" style="display:none;">
+        <p class="hint" style="margin-top:0;">현재 등록된 자산 정보가 아래에 표시됩니다. 변경할 항목의 값만 수정하세요. 수정된 항목은 자동으로 강조 표시됩니다.</p>
+        <div id="wl_fieldchange_rows" class="wl-fc-list"></div>
+        <p class="hint" id="wlSensitiveHint" style="margin-top:10px; margin-bottom:0;">IP / 계정 ID / 비밀번호(🔒)는 보안을 위해 변경된 실제 값이 이력에 표시되지 않고, "변경됨"으로만 기록됩니다. 실제 값은 자산 목록에서 잠금 해제 후 👁 로 확인하세요.</p>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="wlCancelEditBtn" style="flex:none; display:none;">수정 취소</button>
+      <button class="btn btn-primary" id="wlAddBtn" style="flex:none;">이력 추가</button>
+    </div>
+
+    <div id="wlHistoryWrap">
+      <div id="wlList" class="worklog-list"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="wlCloseBtn">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div id="maintenanceLogModal">
+  <div class="modal-card ml-compact">
+    <h2 id="mlModalTitle">월별 점검 등록</h2>
+    <div class="form-grid">
+      <div class="full">
+        <label>점검일</label>
+        <div class="ml-date-row" id="mlDateRow">
+          <div class="date-field">
+            <input id="ml_date" placeholder="2026.8.10">
+            <button type="button" id="ml_date_pick_btn" class="date-pick-btn" title="달력에서 선택">📅</button>
+            <input type="date" id="ml_date_picker" class="date-native-input" tabindex="-1">
+          </div>
+        
+          <div class="ml-status-checks">
+            <label class="ml-status-check ml-done-check">
+              <input type="checkbox" id="ml_done">
+              완료
+            </label>
+            <label class="ml-status-check ml-incomplete-check">
+              <input type="checkbox" id="ml_incomplete">
+              미완료
+            </label>
+            <label class="ml-status-check ml-uncontracted-check">
+              <input type="checkbox" id="ml_uncontracted">
+              미계약
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="full">
+        <label>점검 담당자</label>
+        <div class="ml-manager-mail-row">
+          <input id="ml_manager" placeholder="점검을 진행한 담당자">
+          <div class="ml-email-actions">
+            <select id="mlEmailLanguage" class="ml-email-language" title="점검 메일 언어 선택">
+              <option value="ko">한글</option>
+              <option value="en">English</option>
+            </select>
+            <button class="btn ml-email-btn" id="mlEmailBtn" type="button" title="등록된 고객사 담당자를 수신자로 넣고 제목을 채운 뒤, 메일 내용은 클립보드에 복사합니다.">✉ 점검 메일 보내기</button>
+          </div>
+        </div>
+      </div>
+      <div class="full">
+        <label>
+          비고 / 점검 내용
+          <span id="mlNoteRequired" class="ml-required-hint">미완료 시 필수</span>
+        </label>
+        <textarea id="ml_note" placeholder="점검 관련 메모 (선택)"></textarea>
+      </div>
+    </div>
+    <div id="mlError" class="cp-error"></div>
+    <div class="ml-modal-actions">
+      <button class="btn btn-ghost" id="mlDeleteBtn" style="display:none;">등록 취소</button>
+      <div class="ml-right-actions">
+        <button class="btn btn-ghost" id="cancelMlBtn">닫기</button>
+        <button class="btn btn-primary" id="saveMlBtn">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="maintenanceMailSettingsModal">
+  <div class="modal-card maintenance-mail-settings-card">
+    <h2>점검 이메일 설정</h2>
+    <p class="hint">
+      현재 로그인 사용자 전용 템플릿입니다.<br>
+      한글 치환: <b>{법인명}</b>, <b>{위치}</b>, <b>{점검월}</b>, <b>{점검일}</b>, <b>{담당자}</b><br>
+      English placeholders: <b>{Company}</b>, <b>{Location}</b>, <b>{InspectionMonth}</b>, <b>{InspectionDate}</b>, <b>{Engineer}</b>
+    </p>
+    <div class="maintenance-mail-settings-form">
+      <section class="maintenance-mail-language-card">
+        <div class="maintenance-mail-language-title">🇰🇷 한글</div>
+        <div class="maintenance-mail-field">
+          <label>메일 제목</label>
+          <input id="mms_subject_ko" placeholder="예: [{법인명}] {점검월} 정기점검 일정 안내">
+        </div>
+        <div class="maintenance-mail-field">
+          <label>메일 내용</label>
+          <textarea id="mms_body_ko" rows="11" placeholder="한글 점검 안내 메일 내용을 입력하세요."></textarea>
+        </div>
+      </section>
+
+      <section class="maintenance-mail-language-card">
+        <div class="maintenance-mail-language-title">🇺🇸 English</div>
+        <div class="maintenance-mail-field">
+          <label>MAIL SUBJECT</label>
+          <input id="mms_subject_en" placeholder="Example: [{Company}] {InspectionMonth} Maintenance Inspection Schedule">
+        </div>
+        <div class="maintenance-mail-field">
+          <label>MAIL BODY</label>
+          <textarea id="mms_body_en" rows="11" placeholder="Enter the English maintenance inspection email body."></textarea>
+        </div>
+      </section>
+    </div>
+
+
+    <div id="mmsError" class="cp-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelMmsBtn">취소</button>
+      <button class="btn btn-primary" id="saveMmsBtn">한글 + English 저장</button>
+    </div>
+  </div>
+</div>
+
+<div class="recent-activity-dropdown" id="recentActivityDropdown">
+  <div class="ra-header">
+    <span>최근 작업 이력 (최대 10건)</span>
+    <button
+      type="button"
+      class="ra-clear-all-btn"
+      id="raClearAllBtn"
+      title="현재 표시된 모든 알림 삭제"
+    >
+      모든 알림 삭제
+    </button>
+  </div>
+  <div id="recentActivityList"></div>
+</div>
+
+<script defer src="js/sync.js?v=20260814-fast01"></script>
+<script defer src="js/core.js?v=20260814-fast01"></script>
+<script defer src="js/assets.js?v=20260814-fast01"></script>
+<script defer src="js/app.js?v=20260814-fast01"></script>
+</body>
+</html>
