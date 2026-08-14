@@ -1469,6 +1469,7 @@ textarea.wl-fc-input.is-changed{
 
 #maintenanceLogModal .ml-email-language{
   height:32px;
+  min-width:76px;
   padding:0 8px;
   border:1px solid #C6DDF1;
   border-radius:8px;
@@ -1479,11 +1480,6 @@ textarea.wl-fc-input.is-changed{
   font-weight:700;
   outline:none;
   cursor:pointer;
-}
-
-
-#maintenanceLogModal .ml-email-language{
-  min-width:76px;
 }
 
 #maintenanceLogModal .ml-email-language:focus{
@@ -1625,7 +1621,7 @@ textarea.wl-fc-input.is-changed{
   resize:vertical;
 }
 
-/* 한글/English 공통 서명 */
+/* 한글/English 공통 Outlook 서명 */
 #maintenanceMailSettingsModal .maintenance-mail-signature-card{
   margin-top:14px;
   padding:14px;
@@ -4127,4 +4123,3 @@ tr.asset-child-row td.col-sku::before,
 tr.asset-child-row td.col-sku::after{
   display:none !important;
 }
-
