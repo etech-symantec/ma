@@ -7148,11 +7148,6 @@ function renderWhList(){
           }`
         : '';
   
-    const auditBadge =
-      source === 'audit'
-        ? '<span class="wh-audit-badge">감사</span>'
-        : '';
-  
     const canJump =
       !!recGroup;
 
@@ -7205,12 +7200,10 @@ function renderWhList(){
           <!-- 작업명 -->
           <span class="ra-type">
             ${esc(entry.type)}
-  
+          
             ${deleted
               ? '<span class="wh-deleted-badge">삭제됨</span>'
               : ''}
-  
-            ${auditBadge}
           </span>
         </div>
   
