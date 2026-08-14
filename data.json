@@ -10594,7 +10594,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_parent_id": "266",
+      "last_mutation_id": "data-mss7cq44-ee315067-f2ba-4efe-88d6-36ae3a7ab6f1"
     },
     {
       "group": "custom-msnzlh9m",
@@ -15562,6 +15564,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss64lhq-768a5639-31a4-4aad-9413-506e12365eae"
+    },
+    {
+      "id": "audit-1786666919489-f09qoo",
+      "ts": 1786666919489,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "267",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 1",
+      "sn": "91997320",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "266",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cq44-ee315067-f2ba-4efe-88d6-36ae3a7ab6f1"
     }
   ],
   "syncMutations": [
@@ -15683,6 +15710,11 @@
     {
       "id": "data-mss64lhq-768a5639-31a4-4aad-9413-506e12365eae",
       "ts": 1786664860630,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss7cq44-ee315067-f2ba-4efe-88d6-36ae3a7ab6f1",
+      "ts": 1786666919490,
       "scope": "data"
     }
   ]
