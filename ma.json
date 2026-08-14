@@ -1826,11 +1826,11 @@
       "id": 1786712293779,
       "group": "ng",
       "ym": "2026-08",
-      "mutation_id": "ma-mail-mssyf4mn-dd81e8f3-edc6-479a-a25a-438df75638d7",
+      "mutation_id": "ma-mail-mssyfhnc-1dfa72f3-fc7a-469f-99ad-5060695b1b5b",
       "mail_inquiry": true,
-      "mail_inquiry_at": 1786712381231,
+      "mail_inquiry_at": 1786712398104,
       "mail_inquiry_author": "신호근",
-      "updated_at": 1786712381231,
+      "updated_at": 1786712398104,
       "date": "",
       "manager": "",
       "note": "",
@@ -1908,6 +1908,11 @@
     {
       "id": "ma-mail-mssyf4mn-dd81e8f3-edc6-479a-a25a-438df75638d7",
       "ts": 1786712381231,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-mail-mssyfhnc-1dfa72f3-fc7a-469f-99ad-5060695b1b5b",
+      "ts": 1786712398104,
       "scope": "maintenance"
     }
   ]
