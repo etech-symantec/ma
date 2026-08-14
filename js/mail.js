@@ -306,11 +306,15 @@ async function openMaintenanceEmailCompose(){
     `?subject=${encodeURIComponent(subject)}`;
 
   errEl.textContent = '';
-  alert(
-    '메일 내용이 클립보드에 복사되었습니다.\n' +
-    'Outlook 메일 본문에서 Ctrl+V로 붙여넣어 주세요.'
-  );
-  window.location.href = mailto;
+
+  /* 해당 월에 메일 문의 이력을 남기고, 팝업 대신 점검 모달 안에서 안내 */
+  markMaintenanceMailInquiry(gid, ym);
+  showMaintenanceMailCopyNotice(gid, ym);
+
+  /* 안내문이 먼저 화면에 그려진 뒤 기본 메일 앱을 연다. */
+  requestAnimationFrame(() => {
+    window.location.href = mailto;
+  });
 }
 
 const cancelMmsBtn = document.getElementById('cancelMmsBtn');
