@@ -14122,7 +14122,10 @@
       "pwSalt": "h8rXdkk9fNQoXb7F2cE5Eg==",
       "pwIterations": 150000,
       "pwHash": "Er/SkNKtILf5YBiezL9UXK2xIRPK0R/tbJ2jeSixyyQ=",
-      "isAdmin": true
+      "isAdmin": true,
+      "maintenance_mail_subject": "[{법인명}] {점검월} 정기점검 일정 안내",
+      "maintenance_mail_body": "안녕하세요.\n\n{법인명} {점검월} 정기점검 관련하여 안내드립니다.\n\n점검 예정일: {점검일}\n점검 담당자: {담당자}\n\n확인 부탁드립니다.\n감사합니다.",
+      "last_mutation_id": "mail-template-msskxahx-b6924f91-2893-4ffe-a3c8-0080b855dbf4"
     },
     {
       "id": "u1786283710129",
@@ -15627,6 +15630,11 @@
     {
       "id": "data-msskhmxl-6e9bec47-77ab-4483-a4d0-c2bbdfa0e7e1",
       "ts": 1786688983654,
+      "scope": "data"
+    },
+    {
+      "id": "mail-template-msskxahx-b6924f91-2893-4ffe-a3c8-0080b855dbf4",
+      "ts": 1786689714042,
       "scope": "data"
     }
   ]
