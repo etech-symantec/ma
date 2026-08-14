@@ -237,6 +237,58 @@ async function copyMaintenanceMailBodyToClipboard(text){
   return true;
 }
 
+let pendingMaintenanceMailCompose = null;
+
+function openMaintenanceMailCopyModal(payload){
+  pendingMaintenanceMailCompose =
+    payload || null;
+
+  const modal =
+    document.getElementById(
+      'maintenanceMailCopyModal'
+    );
+
+  if (!modal) return;
+
+  modal.style.display = '';
+  modal.classList.add('open');
+
+  requestAnimationFrame(() => {
+    document
+      .getElementById('confirmMlMailCopyBtn')
+      ?.focus();
+  });
+}
+
+function closeMaintenanceMailCopyModal(){
+  const modal =
+    document.getElementById(
+      'maintenanceMailCopyModal'
+    );
+
+  if (!modal) return;
+
+  modal.classList.remove('open');
+  modal.style.display = 'none';
+}
+
+function launchMaintenanceMailto(mailto){
+  if (!mailto) return;
+
+  const a =
+    document.createElement('a');
+
+  a.href = mailto;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.style.display = 'none';
+
+  document.body.appendChild(a);
+
+  a.click();
+  a.remove();
+}
+
 async function openMaintenanceEmailCompose(){
   if (!maintenanceEditTarget) return;
 
@@ -307,14 +359,59 @@ async function openMaintenanceEmailCompose(){
 
   errEl.textContent = '';
 
-  /* 해당 월에 메일 문의 이력을 남기고, 팝업 대신 점검 모달 안에서 안내 */
-  markMaintenanceMailInquiry(gid, ym);
-  showMaintenanceMailCopyNotice(gid, ym);
+  openMaintenanceMailCopyModal({
+     gid,
+     ym,
+     mailto
+   });
+}
 
-  /* 안내문이 먼저 화면에 그려진 뒤 기본 메일 앱을 연다. */
-  requestAnimationFrame(() => {
-    window.location.href = mailto;
-  });
+const cancelMlMailCopyBtn =
+  document.getElementById(
+    'cancelMlMailCopyBtn'
+  );
+
+if (cancelMlMailCopyBtn){
+  cancelMlMailCopyBtn.onclick = () => {
+
+    pendingMaintenanceMailCompose = null;
+
+    closeMaintenanceMailCopyModal();
+  };
+}
+
+
+const confirmMlMailCopyBtn =
+  document.getElementById(
+    'confirmMlMailCopyBtn'
+  );
+
+if (confirmMlMailCopyBtn){
+  confirmMlMailCopyBtn.onclick = () => {
+
+    const pending =
+      pendingMaintenanceMailCompose;
+
+    if (!pending) return;
+
+    launchMaintenanceMailto(
+      pending.mailto
+    );
+
+    pendingMaintenanceMailCompose =
+      null;
+
+    closeMaintenanceMailCopyModal();
+
+    markMaintenanceMailInquiry(
+      pending.gid,
+      pending.ym
+    );
+
+    closeMaintenanceLogModal();
+
+    renderMaintenance();
+  };
 }
 
 const cancelMmsBtn = document.getElementById('cancelMmsBtn');
