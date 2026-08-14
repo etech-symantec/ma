@@ -5406,7 +5406,7 @@
       "location": "천진",
       "support_id": "743737",
       "sku": "SSP-S210-10",
-      "sn": "73998801",
+      "sn": "1422710025",
       "entitlement": "🔗",
       "qty": "1",
       "start": "2026.8.1",
@@ -5426,19 +5426,19 @@
       "tag_note": "천진(톈진) SDT",
       "id": 136,
       "ip_enc": {
-        "iv": "JthAFKVzyuQ2Z5d9",
-        "ct": "3YPNZKBZgFC3p/4oTUg=",
-        "tag": "8P6veS322MofTXS6kcYAoQ=="
+        "iv": "3z3uY3B4nuShtYlC",
+        "ct": "LeLNFztce5G/IkItcao=",
+        "tag": "kMxRuf5voCxrdEqRaN3SfA=="
       },
       "id_enc": {
-        "iv": "Z1lc6ZoUCi4aMQBB",
-        "ct": "SGjDKHY=",
-        "tag": "zUvmzx7ROsV5Zii1SC5mwQ=="
+        "iv": "UAxI3H1W8YbhbxWm",
+        "ct": "WXgVYzg=",
+        "tag": "QYo40ptdYzvfzUl9pHSXMQ=="
       },
       "pw_enc": {
-        "iv": "SuGpB7DP76xQJ8BO",
-        "ct": "/9iZozvoeYIJ",
-        "tag": "B17S500eMx70Eq33wQsTEg=="
+        "iv": "dGf5rrfZrfL4fnBh",
+        "ct": "L3YTkJaOCI9A",
+        "tag": "pLiOjGfrOgCpWZT09ETdyQ=="
       },
       "config_mode": "Explicit",
       "group_remarks": "",
@@ -5465,7 +5465,8 @@
           "note": "23.05 강성준 신규\n23.08 강성준(RMA) 2.3.7.1",
           "author": "윤태리"
         }
-      ]
+      ],
+      "last_mutation_id": "data-mssg7ep8-d4456610-a85b-447f-a6a0-10321f980d78"
     },
     {
       "group": "cn-001",
@@ -18135,6 +18136,52 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssg3v4p-44b59b60-b11e-497f-87cd-05943f5892e0"
+    },
+    {
+      "id": "audit-1786681787956-dzxt07",
+      "ts": 1786681787956,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "136",
+      "group": "cn-001",
+      "owner": "삼성디스플레이 SDT",
+      "label": "SSP-S210-10",
+      "sn": "1422710025",
+      "summary": "자산 정보 4개 항목 수정",
+      "changes": [
+        {
+          "field": "sn",
+          "label": "S/N",
+          "before": "73998801",
+          "after": "1422710025",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "id_enc",
+          "label": "계정 ID",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "pw_enc",
+          "label": "비밀번호",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg7ep8-d4456610-a85b-447f-a6a0-10321f980d78"
     }
   ],
   "syncMutations": [
@@ -18606,6 +18653,11 @@
     {
       "id": "data-mssg3v4p-44b59b60-b11e-497f-87cd-05943f5892e0",
       "ts": 1786681622624,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg7ep8-d4456610-a85b-447f-a6a0-10321f980d78",
+      "ts": 1786681787957,
       "scope": "data"
     }
   ]
