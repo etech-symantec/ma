@@ -5549,7 +5549,7 @@
       "qty": "1",
       "start": "2026.8.1",
       "end": "2027.7.31",
-      "remarks": "",
+      "remarks": "SKU: ISG-PR-ADV-SUB",
       "deploy_date": "",
       "deploy_log": "23.08 강성준 7.3.11.3",
       "mode": "",
@@ -5564,19 +5564,19 @@
       "tag_note": "천진(톈진) SDT",
       "id": 138,
       "ip_enc": {
-        "iv": "47SBrjvcwtwpC/82",
-        "ct": "OhAaxubjX9beqOc=",
-        "tag": "ufcp3iBf0TvoLm649sy5zg=="
+        "iv": "/Tq1bdhJsu5aEZBb",
+        "ct": "uRFYDrhe9qVAVIY=",
+        "tag": "wMBeXIea1pCeOlJHaNUxKg=="
       },
       "id_enc": {
-        "iv": "s01ABRzOb7HBUHIx",
-        "ct": "uzTeOiVrjCGq",
-        "tag": "7OlFF8N+qiqDeHvAWTv7zQ=="
+        "iv": "QY7vsX9zRr13WiIQ",
+        "ct": "pqF69YiQn7eX",
+        "tag": "6CzPM685vKmFHnTv9a/mig=="
       },
       "pw_enc": {
-        "iv": "iKAZV0I/72SJIYGf",
-        "ct": "W8cKZXx00Bio",
-        "tag": "3r7a8e0WZilZQKEkpgSfDw=="
+        "iv": "BstcbFqLEdAilR5b",
+        "ct": "6SZBVhm9l2AZ",
+        "tag": "YcfIL3Eh62/cfByQYMBFvQ=="
       },
       "config_mode": "Explicit",
       "group_remarks": "",
@@ -5624,7 +5624,7 @@
         }
       ],
       "asset_parent_id": "136",
-      "last_mutation_id": "data-mss64fw0-54f4c741-44a1-411a-9b5e-470fa56185db"
+      "last_mutation_id": "data-mssg9s0l-37ac588d-a0a6-459b-8473-614b5db8b247"
     },
     {
       "group": "cn-001",
@@ -5638,7 +5638,7 @@
       "qty": "1",
       "start": "2026.8.1",
       "end": "2027.7.31",
-      "remarks": "",
+      "remarks": "SKU: ISG-PR-ADV-SUB",
       "deploy_date": "",
       "deploy_log": "23.08 강성준 7.3.11.3",
       "mode": "",
@@ -5653,19 +5653,19 @@
       "tag_note": "천진(톈진) SDT",
       "id": 139,
       "ip_enc": {
-        "iv": "lknl6y3t7yXaAb5r",
-        "ct": "wGlC92edKUYfMco=",
-        "tag": "WxaVNSrpqMUDIn+WHGRLNQ=="
+        "iv": "mKr9UPYrBeilXiLA",
+        "ct": "g41v3ytPN7h0n2s=",
+        "tag": "SD0dcq0UoZYow70WGEZSIA=="
       },
       "id_enc": {
-        "iv": "LkY9zFLeka2jqckf",
-        "ct": "ShcDqh5PXstx",
-        "tag": "loZ9FAIUUsdC1K2DEAUYVw=="
+        "iv": "t6NLyUAELUcxLRBy",
+        "ct": "sVxxi0Z/XKbN",
+        "tag": "Y5OMzHr6TDXkq5zZKtJJqA=="
       },
       "pw_enc": {
-        "iv": "YJBFP7bFVZvkOlB4",
-        "ct": "nffxpGzTWZnI",
-        "tag": "J0YsW4YyopxLcmlFR+YgZw=="
+        "iv": "qFnmh9DyKVOZqkSU",
+        "ct": "e78A1IrFfwsX",
+        "tag": "AD+xc2IerwFjndEkY62AeA=="
       },
       "config_mode": "Explicit",
       "group_remarks": "",
@@ -5713,7 +5713,7 @@
         }
       ],
       "asset_parent_id": "137",
-      "last_mutation_id": "data-mss64lhq-768a5639-31a4-4aad-9413-506e12365eae"
+      "last_mutation_id": "data-mssg9uj6-83335157-b82a-4f51-bc5e-d9f5bfb1709f"
     },
     {
       "group": "cn-001",
@@ -5962,9 +5962,9 @@
       "location": "천진",
       "support_id": "743737",
       "sku": "ONSITE-ADVANCED",
-      "sn": "1422710039",
+      "sn": "0073998801",
       "entitlement": "🔗",
-      "qty": "1",
+      "qty": "300",
       "start": "2026.8.1",
       "end": "2027.7.31",
       "remarks": "",
@@ -5999,7 +5999,8 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "강성준",
-      "build_date": "2023.05"
+      "build_date": "2023.05",
+      "last_mutation_id": "data-mssg8zfn-fb9ce4a7-7ad5-4b4e-a88d-11c026d86659"
     },
     {
       "group": "cn-001",
@@ -18269,6 +18270,130 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssg8kxk-fc8c1241-7215-46ea-b21e-dd3c7de40ba2"
+    },
+    {
+      "id": "audit-1786681861485-tj029d",
+      "ts": 1786681861485,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "143",
+      "group": "cn-001",
+      "owner": "삼성디스플레이 SDT",
+      "label": "ONSITE-ADVANCED",
+      "sn": "0073998801",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "sn",
+          "label": "S/N",
+          "before": "1422710039",
+          "after": "0073998801",
+          "sensitive": false
+        },
+        {
+          "field": "qty",
+          "label": "수량",
+          "before": "1",
+          "after": "300",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg8zfn-fb9ce4a7-7ad5-4b4e-a88d-11c026d86659"
+    },
+    {
+      "id": "audit-1786681898524-u305v1",
+      "ts": 1786681898524,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "138",
+      "group": "cn-001",
+      "owner": "삼성디스플레이 SDT",
+      "label": "ISG-Proxy 1",
+      "sn": "0073998801",
+      "summary": "자산 정보 4개 항목 수정",
+      "changes": [
+        {
+          "field": "remarks",
+          "label": "자산 비고",
+          "before": "—",
+          "after": "SKU: ISG-PR-ADV-SUB",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "id_enc",
+          "label": "계정 ID",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "pw_enc",
+          "label": "비밀번호",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg9s0l-37ac588d-a0a6-459b-8473-614b5db8b247"
+    },
+    {
+      "id": "audit-1786681901785-bc1mir",
+      "ts": 1786681901785,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "139",
+      "group": "cn-001",
+      "owner": "삼성디스플레이 SDT",
+      "label": "ISG-Proxy 2",
+      "sn": "0073998789",
+      "summary": "자산 정보 4개 항목 수정",
+      "changes": [
+        {
+          "field": "remarks",
+          "label": "자산 비고",
+          "before": "—",
+          "after": "SKU: ISG-PR-ADV-SUB",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "id_enc",
+          "label": "계정 ID",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "pw_enc",
+          "label": "비밀번호",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssg9uj6-83335157-b82a-4f51-bc5e-d9f5bfb1709f"
     }
   ],
   "syncMutations": [
@@ -18755,6 +18880,21 @@
     {
       "id": "data-mssg8kxk-fc8c1241-7215-46ea-b21e-dd3c7de40ba2",
       "ts": 1786681842700,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg8zfn-fb9ce4a7-7ad5-4b4e-a88d-11c026d86659",
+      "ts": 1786681861487,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg9s0l-37ac588d-a0a6-459b-8473-614b5db8b247",
+      "ts": 1786681898525,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssg9uj6-83335157-b82a-4f51-bc5e-d9f5bfb1709f",
+      "ts": 1786681901786,
       "scope": "data"
     }
   ]
