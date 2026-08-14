@@ -373,12 +373,12 @@ async function openMaintenanceEmailCompose(){
 
   if (recipients.cc.length){
     mailtoParams.push(
-      `cc=${encodeURIComponent(recipients.cc.join(','))}`
+      `cc=${encodeURIComponent(recipients.cc.join(';'))}`
     );
   }
 
   const mailto =
-    `mailto:${recipients.to.join(',')}` +
+    `mailto:${recipients.to.join(';')}` +
     `?${mailtoParams.join('&')}`;
 
   errEl.textContent = '';
