@@ -461,13 +461,58 @@
       </div>
     </div>
     <div id="mlError" class="cp-error"></div>
-    <div id="mlMailNotice" class="ml-mail-notice" role="status" aria-live="polite"></div>
+    
     <div class="ml-modal-actions">
-      <button class="btn btn-ghost" id="mlDeleteBtn" style="display:none;">등록 취소</button>
+      <div class="ml-left-actions">
+        <button class="btn btn-ghost" id="mlDeleteBtn" style="display:none;">등록 취소</button>
+        <button class="btn btn-ghost ml-mail-inquiry-delete-btn"
+                id="mlMailInquiryDeleteBtn"
+                style="display:none;">
+          메일 문의 삭제
+        </button>
+      </div>
       <div class="ml-right-actions">
         <button class="btn btn-ghost" id="cancelMlBtn">닫기</button>
         <button class="btn btn-primary" id="saveMlBtn">저장</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div id="maintenanceMailCopyModal" style="display:none;">
+  <div class="maintenance-mail-copy-card"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="maintenanceMailCopyTitle">
+
+    <div class="maintenance-mail-copy-icon">✓</div>
+
+    <h3 id="maintenanceMailCopyTitle">
+      메일 내용 복사 완료
+    </h3>
+
+    <p>
+      메일 내용이 클립보드에 복사되었습니다.<br>
+      Outlook 메일 본문에서 <b>Ctrl+V</b>로 붙여넣어 주세요.
+    </p>
+
+    <p class="maintenance-mail-copy-sub">
+      확인을 누르면 메일 창이 열리고 해당 월에
+      <b>메일 문의</b>가 저장됩니다.
+    </p>
+
+    <div class="maintenance-mail-copy-actions">
+      <button class="btn btn-ghost"
+              id="cancelMlMailCopyBtn"
+              type="button">
+        취소
+      </button>
+
+      <button class="btn btn-primary"
+              id="confirmMlMailCopyBtn"
+              type="button">
+        확인
+      </button>
     </div>
   </div>
 </div>
