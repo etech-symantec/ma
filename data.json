@@ -14125,7 +14125,11 @@
       "isAdmin": true,
       "maintenance_mail_subject": "[{법인명}] {점검월} 정기점검 일정 안내",
       "maintenance_mail_body": "안녕하세요.\n\n{법인명} {점검월} 정기점검 관련하여 안내드립니다.\n\n점검 예정일: {점검일}\n점검 담당자: {담당자}\n\n확인 부탁드립니다.\n감사합니다.",
-      "last_mutation_id": "mail-template-msskxahx-b6924f91-2893-4ffe-a3c8-0080b855dbf4"
+      "last_mutation_id": "mail-template-msslhpg6-b735b469-e99b-4384-869d-46eef5d2c8a6",
+      "maintenance_mail_subject_ko": "[{법인명}] {점검월} 정기점검 일정 안내",
+      "maintenance_mail_body_ko": "안녕하세요.\n\n{법인명} {점검월} 정기점검 관련하여 안내드립니다.\n\n점검 예정일: {점검일}\n점검 담당자: {담당자}\n\n확인 부탁드립니다.\n감사합니다.",
+      "maintenance_mail_subject_en": "[{Company}] {InspectionMonth} Monthly Maintenance Schedule",
+      "maintenance_mail_body_en": "Hi,\n\nLet me know your availability for the proxy maintenance this month.\nAs usual, there is no network interruption during the check-up.\n\nIf you cannot join the remote session, you can also send me the sysinfo files for maintenance check-up.\nYou can download it from Administration > Snapshots > Show All Snapshots > download 000 sysinfo files for both proxy.\n\nRegards,"
     },
     {
       "id": "u1786283710129",
@@ -15635,6 +15639,11 @@
     {
       "id": "mail-template-msskxahx-b6924f91-2893-4ffe-a3c8-0080b855dbf4",
       "ts": 1786689714042,
+      "scope": "data"
+    },
+    {
+      "id": "mail-template-msslhpg6-b735b469-e99b-4384-869d-46eef5d2c8a6",
+      "ts": 1786690666538,
       "scope": "data"
     }
   ]
