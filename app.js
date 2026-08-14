@@ -5217,47 +5217,18 @@ function assetSkuDisplayHtml(
   hasAssetChildren = false
 ){
 
-  /*
-    SSP 아래에 연결된 ISG Application
-  */
   if (
     isAssetChild &&
     isIsgChildAsset(r)
   ){
-
-    const parent =
-      records.find(
-        x =>
-          String(x.id) ===
-          String(r.asset_parent_id || '')
-      );
-
     return `
-      <div class="asset-app-display">
-
-        <div class="asset-app-relation">
-          <span class="asset-app-icon">◆</span>
-          <span class="asset-app-label">
-            INSTALLED APP
-          </span>
-        </div>
-        <div class="asset-app-sku">
+      <div class="asset-app-display-simple">
+        <span class="asset-child-arrow" aria-hidden="true"></span>
+  
+        <div class="asset-app-main">
           ${skuBadge(r.sku)}
+          ${skuKeywordTagsHtml(r.sku)}
         </div>
-        ${
-          parent
-            ? `
-              <div class="asset-app-host">
-                <span class="asset-app-host-arrow">↳</span>
-                <span class="asset-app-host-label">Host</span>
-                <span class="asset-app-host-name">
-                  ${esc(parent.sku || 'SSP')}
-                </span>
-              </div>
-            `
-            : ''
-        }
-        ${skuKeywordTagsHtml(r.sku)}
       </div>
     `;
   }
@@ -5267,16 +5238,8 @@ function assetSkuDisplayHtml(
     isSspParentAsset(r)
   ){
     return `
-      <div class="asset-host-display">
-        <div class="asset-host-relation">
-          <span class="asset-host-icon">▣</span>
-          <span class="asset-host-label">
-            SSP HOST
-          </span>
-        </div>
-        <div class="asset-host-sku">
-          ${skuBadge(r.sku)}
-        </div>
+      <div class="asset-host-display-simple">
+        ${skuBadge(r.sku)}
         ${skuKeywordTagsHtml(r.sku)}
       </div>
     `;
