@@ -240,51 +240,32 @@ async function copyMaintenanceMailBodyToClipboard(text){
 let pendingMaintenanceMailCompose = null;
 
 function openMaintenanceMailCopyModal(payload){
-  pendingMaintenanceMailCompose =
-    payload || null;
-
-  const modal =
-    document.getElementById(
-      'maintenanceMailCopyModal'
-    );
-
+  pendingMaintenanceMailCompose = payload || null;
+  const modal = document.getElementById('maintenanceMailCopyModal');
   if (!modal) return;
-
   modal.style.display = '';
   modal.classList.add('open');
-
   requestAnimationFrame(() => {
-    document
-      .getElementById('confirmMlMailCopyBtn')
-      ?.focus();
+    document.getElementById('confirmMlMailCopyBtn')?.focus();
   });
 }
 
 function closeMaintenanceMailCopyModal(){
-  const modal =
-    document.getElementById(
-      'maintenanceMailCopyModal'
-    );
-
-  if (!modal) return;
-
-  modal.classList.remove('open');
-  modal.style.display = 'none';
+  const modal = document.getElementById('maintenanceMailCopyModal');
+  if (modal){
+    modal.classList.remove('open');
+    modal.style.display = 'none';
+  }
 }
 
 function launchMaintenanceMailto(mailto){
   if (!mailto) return;
-
-  const a =
-    document.createElement('a');
-
+  const a = document.createElement('a');
   a.href = mailto;
   a.target = '_blank';
   a.rel = 'noopener';
   a.style.display = 'none';
-
   document.body.appendChild(a);
-
   a.click();
   a.remove();
 }
@@ -359,57 +340,32 @@ async function openMaintenanceEmailCompose(){
 
   errEl.textContent = '';
 
-  openMaintenanceMailCopyModal({
-     gid,
-     ym,
-     mailto
-   });
+  /* 확인 전에는 ma.json에 메일 문의 상태를 남기지 않는다. */
+  openMaintenanceMailCopyModal({ gid, ym, mailto });
 }
 
-const cancelMlMailCopyBtn =
-  document.getElementById(
-    'cancelMlMailCopyBtn'
-  );
-
+const cancelMlMailCopyBtn = document.getElementById('cancelMlMailCopyBtn');
 if (cancelMlMailCopyBtn){
   cancelMlMailCopyBtn.onclick = () => {
-
     pendingMaintenanceMailCompose = null;
-
     closeMaintenanceMailCopyModal();
   };
 }
 
-
-const confirmMlMailCopyBtn =
-  document.getElementById(
-    'confirmMlMailCopyBtn'
-  );
-
+const confirmMlMailCopyBtn = document.getElementById('confirmMlMailCopyBtn');
 if (confirmMlMailCopyBtn){
   confirmMlMailCopyBtn.onclick = () => {
-
-    const pending =
-      pendingMaintenanceMailCompose;
-
+    const pending = pendingMaintenanceMailCompose;
     if (!pending) return;
 
-    launchMaintenanceMailto(
-      pending.mailto
-    );
+    /* 현재 페이지를 이동하지 않는 방식으로 기본 메일 앱을 연다. */
+    launchMaintenanceMailto(pending.mailto);
 
-    pendingMaintenanceMailCompose =
-      null;
-
+    pendingMaintenanceMailCompose = null;
     closeMaintenanceMailCopyModal();
 
-    markMaintenanceMailInquiry(
-      pending.gid,
-      pending.ym
-    );
-
+    markMaintenanceMailInquiry(pending.gid, pending.ym);
     closeMaintenanceLogModal();
-
     renderMaintenance();
   };
 }
