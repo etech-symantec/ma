@@ -11,14 +11,14 @@
 <title>Broadcom 유지보수 자산</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20260814-09-mailto-clipboard">
 </head>
 <body>
 
 <!-- 공통 헤더 + 제목 + 버전 -->
 <script>
   window.pageTitle = "Broadcom 유지보수 자산 (Maintenance Assets)";
-  window.pageVersion = "ver.2026.08.14.03";
+  window.pageVersion = "ver.2026.08.14.04";
 </script>
 <script src="https://etech-symantec.github.io/header.js"></script>
 
@@ -457,7 +457,7 @@
           <option value="ko">한글</option>
           <option value="en">English</option>
         </select>
-        <button class="btn ml-email-btn" id="mlEmailBtn" type="button" title="등록된 고객사 담당자 이메일을 수신자로 넣어 새 메일 작성">✉ 점검 메일 보내기</button>
+        <button class="btn ml-email-btn" id="mlEmailBtn" type="button" title="수신자와 제목만 채운 새 메일을 열고, 등록된 메일 내용과 서명은 클립보드에 자동 복사합니다.">✉ 점검 메일 보내기</button>
       </div>
       <div class="ml-right-actions">
         <button class="btn btn-ghost" id="cancelMlBtn">닫기</button>
@@ -516,7 +516,7 @@
         data-placeholder="Outlook 서명을 여기에 복사해서 붙여넣으세요."
       ></div>
       <div class="maintenance-mail-signature-note">
-        ※ 현재 메일 작성은 mailto 방식이므로 Outlook 새 메일에는 서명의 글자와 줄바꿈이 자동 입력됩니다. 이미지·폰트·색상 같은 HTML 서식은 mailto 제한으로 자동 전달되지 않습니다.
+        ※ 점검 메일 보내기를 누르면 수신자와 제목만 새 메일에 입력되고, 등록된 메일 내용 + 공통 서명은 클립보드에 자동 복사됩니다. 새 메일 본문에서 Ctrl+V로 붙여넣으세요. 브라우저가 HTML 클립보드를 지원하면 서명의 글꼴/색상/링크/표/이미지 서식도 함께 복사됩니다.
       </div>
     </section>
 
@@ -543,6 +543,6 @@
   <div id="recentActivityList"></div>
 </div>
 
-<script src="app.js"></script>
+<script src="app.js?v=20260814-09-mailto-clipboard"></script>
 </body>
 </html>
