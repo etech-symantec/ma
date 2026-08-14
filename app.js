@@ -6724,6 +6724,10 @@ async function openMaintenanceEmailCompose(){
     `?subject=${encodeURIComponent(subject)}`;
 
   errEl.textContent = '';
+  alert(
+    '메일 내용이 클립보드에 복사되었습니다.\n' +
+    'Outlook 메일 본문에서 Ctrl+V로 붙여넣어 주세요.'
+  );
   window.location.href = mailto;
 }
 
