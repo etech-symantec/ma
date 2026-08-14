@@ -3029,7 +3029,7 @@
       "flag": "",
       "owner": "삼성전자 SAMEX",
       "location": "티후아나",
-      "support_id": "228292",
+      "support_id": "2065519",
       "sku": "SSP-S210-10",
       "sn": "4524710031",
       "entitlement": "🔗",
@@ -3072,14 +3072,15 @@
       "build_engineer": "강성준",
       "build_date": "2026.04",
       "group_parent": "custom-1786344991848",
-      "is_parent": false
+      "is_parent": false,
+      "last_mutation_id": "data-mss8pczp-a1fc447a-6250-4c12-b7d0-b1b7584d89d3"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
       "location": "티후아나",
-      "support_id": "228292",
+      "support_id": "2065519",
       "sku": "SSP-S210-10",
       "sn": "4524710032",
       "entitlement": "🔗",
@@ -3118,14 +3119,15 @@
       "build_engineer": "강성준",
       "build_date": "2026.04",
       "group_parent": "custom-1786344991848",
-      "is_parent": false
+      "is_parent": false,
+      "last_mutation_id": "data-mss8pczp-a1fc447a-6250-4c12-b7d0-b1b7584d89d3"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
       "location": "티후아나",
-      "support_id": "228292",
+      "support_id": "2065519",
       "sku": "ISG-Proxy",
       "sn": "91991158",
       "entitlement": "🔗",
@@ -3164,14 +3166,15 @@
       "build_engineer": "강성준",
       "build_date": "2026.04",
       "group_parent": "custom-1786344991848",
-      "is_parent": false
+      "is_parent": false,
+      "last_mutation_id": "data-mss8pczp-a1fc447a-6250-4c12-b7d0-b1b7584d89d3"
     },
     {
       "group": "mx-samex",
       "flag": "",
       "owner": "삼성전자 SAMEX",
       "location": "티후아나",
-      "support_id": "228292",
+      "support_id": "2065519",
       "sku": "ISG-Proxy",
       "sn": "91991158",
       "entitlement": "🔗",
@@ -3210,7 +3213,8 @@
       "build_engineer": "강성준",
       "build_date": "2026.04",
       "group_parent": "custom-1786344991848",
-      "is_parent": false
+      "is_parent": false,
+      "last_mutation_id": "data-mss8pczp-a1fc447a-6250-4c12-b7d0-b1b7584d89d3"
     },
     {
       "group": "ng",
@@ -16632,6 +16636,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss8oc51-019e283e-9412-4ecf-90c3-4e88006deded"
+    },
+    {
+      "id": "audit-1786669188630-lewtxz",
+      "ts": 1786669188630,
+      "action": "edit",
+      "target_type": "Support ID",
+      "target_id": "mx-samex:2065519",
+      "group": "mx-samex",
+      "owner": "삼성전자 SAMEX",
+      "label": "SSP-S210-10",
+      "sn": "4524710031",
+      "summary": "Support ID 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "support_id",
+          "label": "Support ID",
+          "before": "228292",
+          "after": "2065519",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss8pczp-a1fc447a-6250-4c12-b7d0-b1b7584d89d3"
     }
   ],
   "syncMutations": [
@@ -16853,6 +16882,11 @@
     {
       "id": "data-mss8oc51-019e283e-9412-4ecf-90c3-4e88006deded",
       "ts": 1786669140868,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss8pczp-a1fc447a-6250-4c12-b7d0-b1b7584d89d3",
+      "ts": 1786669188638,
       "scope": "data"
     }
   ]
