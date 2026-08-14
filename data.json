@@ -11333,8 +11333,8 @@
       "build_engineer": "신호근",
       "build_date": "2026.05",
       "enable_pw_enc": null,
-      "asset_order": 13,
-      "last_mutation_id": "data-mss7evm4-74e3438e-027a-4b82-a997-8d79213eca0d"
+      "asset_order": 12,
+      "last_mutation_id": "data-mss7f0mv-46fada6f-bf4c-425c-bd9d-b90bc54e8db8"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11395,8 +11395,8 @@
       "is_parent": false,
       "build_engineer": "신호근",
       "build_date": "2026.05",
-      "asset_order": 12,
-      "last_mutation_id": "data-mss7evm4-74e3438e-027a-4b82-a997-8d79213eca0d"
+      "asset_order": 13,
+      "last_mutation_id": "data-mss7f0mv-46fada6f-bf4c-425c-bd9d-b90bc54e8db8"
     },
     {
       "group": "custom-msnzlh9m",
@@ -16226,6 +16226,56 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss7evm4-74e3438e-027a-4b82-a997-8d79213eca0d"
+    },
+    {
+      "id": "audit-1786667026440-cxp969",
+      "ts": 1786667026440,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "277",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "Web Security Service - WSS",
+      "sn": "53413234-1-2",
+      "summary": "자산 순서 변경 · Web Security Service - WSS",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "13",
+          "after": "12",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7f0mv-46fada6f-bf4c-425c-bd9d-b90bc54e8db8"
+    },
+    {
+      "id": "audit-1786667026440-ixsf80",
+      "ts": 1786667026440,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "278",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "WEB-PROTECT-SUB",
+      "sn": "53413234-1-1",
+      "summary": "자산 순서 변경 · WEB-PROTECT-SUB",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "12",
+          "after": "13",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7f0mv-46fada6f-bf4c-425c-bd9d-b90bc54e8db8"
     }
   ],
   "syncMutations": [
@@ -16392,6 +16442,11 @@
     {
       "id": "data-mss7evm4-74e3438e-027a-4b82-a997-8d79213eca0d",
       "ts": 1786667019929,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss7f0mv-46fada6f-bf4c-425c-bd9d-b90bc54e8db8",
+      "ts": 1786667026441,
       "scope": "data"
     }
   ]
