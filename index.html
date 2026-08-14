@@ -11,14 +11,14 @@
 <title>Broadcom 유지보수 자산</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260814-01">
+<link rel="stylesheet" href="style.css?v=20260814-02">
 </head>
 <body>
 
 <!-- 공통 헤더 + 제목 + 버전 -->
 <script>
   window.pageTitle = "Broadcom 유지보수 자산 (Maintenance Assets)";
-  window.pageVersion = "ver.2026.08.14.01";
+  window.pageVersion = "ver.2026.08.14.02";
 </script>
 <script src="https://etech-symantec.github.io/header.js"></script>
 
@@ -70,7 +70,6 @@
         <div class="profile-info">
           <div class="profile-name" id="profileName">-</div>
           <div class="profile-info-right">
-            <button type="button" class="profile-mail-settings-text" id="maintenanceMailSettingsBtn" title="내 점검 이메일 제목/내용 설정">메일 설정</button>
             <button type="button" class="profile-logout-text" id="logoutBtn">로그아웃</button>
             <div class="profile-sub" id="profileSub">로그인됨</div>
           </div>
@@ -453,7 +452,13 @@
     <div id="mlError" class="cp-error"></div>
     <div class="ml-modal-actions">
       <button class="btn btn-ghost" id="mlDeleteBtn" style="display:none;">등록 취소</button>
-      <button class="btn ml-email-btn" id="mlEmailBtn" type="button" title="등록된 고객사 담당자 이메일을 수신자로 넣어 새 메일 작성">✉ 담당자에게 점검 이메일 보내기</button>
+      <div class="ml-email-actions">
+        <select id="mlEmailLanguage" class="ml-email-language" title="점검 메일 언어 선택">
+          <option value="ko">한글</option>
+          <option value="en">English</option>
+        </select>
+        <button class="btn ml-email-btn" id="mlEmailBtn" type="button" title="등록된 고객사 담당자 이메일을 수신자로 넣어 새 메일 작성">✉ 점검 메일 보내기</button>
+      </div>
       <div class="ml-right-actions">
         <button class="btn btn-ghost" id="cancelMlBtn">닫기</button>
         <button class="btn btn-primary" id="saveMlBtn">저장</button>
@@ -465,21 +470,40 @@
 <div id="maintenanceMailSettingsModal">
   <div class="modal-card maintenance-mail-settings-card">
     <h2>점검 이메일 설정</h2>
-    <p class="hint">현재 로그인 사용자 전용 템플릿입니다. 사용 가능 항목: <b>{법인명}</b>, <b>{위치}</b>, <b>{점검월}</b>, <b>{점검일}</b>, <b>{담당자}</b></p>
-    <div class="form-grid maintenance-mail-settings-form">
-      <div class="full">
-        <label>메일 제목</label>
-        <input id="mms_subject" placeholder="예: [{법인명}] {점검월} 정기점검 일정 안내">
-      </div>
-      <div class="full">
-        <label>메일 내용</label>
-        <textarea id="mms_body" rows="10" placeholder="점검 안내 메일 내용을 입력하세요."></textarea>
-      </div>
+    <p class="hint">
+      현재 로그인 사용자 전용 템플릿입니다.<br>
+      한글 치환: <b>{법인명}</b>, <b>{위치}</b>, <b>{점검월}</b>, <b>{점검일}</b>, <b>{담당자}</b><br>
+      English placeholders: <b>{Company}</b>, <b>{Location}</b>, <b>{InspectionMonth}</b>, <b>{InspectionDate}</b>, <b>{Engineer}</b>
+    </p>
+    <div class="maintenance-mail-settings-form">
+      <section class="maintenance-mail-language-card">
+        <div class="maintenance-mail-language-title">🇰🇷 한글</div>
+        <div class="maintenance-mail-field">
+          <label>메일 제목</label>
+          <input id="mms_subject_ko" placeholder="예: [{법인명}] {점검월} 정기점검 일정 안내">
+        </div>
+        <div class="maintenance-mail-field">
+          <label>메일 내용</label>
+          <textarea id="mms_body_ko" rows="11" placeholder="한글 점검 안내 메일 내용을 입력하세요."></textarea>
+        </div>
+      </section>
+
+      <section class="maintenance-mail-language-card">
+        <div class="maintenance-mail-language-title">🇺🇸 English</div>
+        <div class="maintenance-mail-field">
+          <label>MAIL SUBJECT</label>
+          <input id="mms_subject_en" placeholder="Example: [{Company}] {InspectionMonth} Maintenance Inspection Schedule">
+        </div>
+        <div class="maintenance-mail-field">
+          <label>MAIL BODY</label>
+          <textarea id="mms_body_en" rows="11" placeholder="Enter the English maintenance inspection email body."></textarea>
+        </div>
+      </section>
     </div>
     <div id="mmsError" class="cp-error"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="cancelMmsBtn">취소</button>
-      <button class="btn btn-primary" id="saveMmsBtn">저장</button>
+      <button class="btn btn-primary" id="saveMmsBtn">한글 + English 저장</button>
     </div>
   </div>
 </div>
@@ -499,6 +523,6 @@
   <div id="recentActivityList"></div>
 </div>
 
-<script src="app.js?v=20260814-01"></script>
+<script src="app.js?v=20260814-02"></script>
 </body>
 </html>
