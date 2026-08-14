@@ -622,9 +622,9 @@ function renderMaintenance(){
             <button type="button"
                     class="maint-license-notice-btn maint-mail-settings-btn"
                     id="maintenanceMailSettingsBtn"
-                    title="내 점검 이메일 한글/English 템플릿 설정">
+                    title="내 점검 이메일 제목 및 내용 한글/영어 템플릿 등록">
               <span class="maint-license-notice-icon">✉</span>
-              <span>점검 메일 설정</span>
+              <span>점검 메일 템플릿 설정</span>
             </button>
         
           </div>
