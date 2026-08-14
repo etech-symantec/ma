@@ -3714,7 +3714,7 @@
           "org": "삼성전자",
           "phone": "",
           "email": "e.sandberg@samsung.com",
-          "mail_recipient_type": "cc"
+          "mail_recipient_type": "to"
         }
       ],
       "country": "미국",
@@ -3724,7 +3724,7 @@
       "group_parent": "",
       "is_parent": false,
       "cust_memo": "",
-      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
+      "last_mutation_id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd"
     },
     {
       "group": "seha",
@@ -3775,7 +3775,7 @@
           "org": "삼성전자",
           "phone": "",
           "email": "e.sandberg@samsung.com",
-          "mail_recipient_type": "cc"
+          "mail_recipient_type": "to"
         }
       ],
       "country": "미국",
@@ -3785,7 +3785,7 @@
       "group_parent": "",
       "is_parent": false,
       "cust_memo": "",
-      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
+      "last_mutation_id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd"
     },
     {
       "group": "seha",
@@ -3844,7 +3844,7 @@
           "org": "삼성전자",
           "phone": "",
           "email": "e.sandberg@samsung.com",
-          "mail_recipient_type": "cc"
+          "mail_recipient_type": "to"
         }
       ],
       "country": "미국",
@@ -3855,7 +3855,7 @@
       "is_parent": false,
       "enable_pw_enc": null,
       "asset_parent_id": "80",
-      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02",
+      "last_mutation_id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd",
       "cust_memo": ""
     },
     {
@@ -3907,7 +3907,7 @@
           "org": "삼성전자",
           "phone": "",
           "email": "e.sandberg@samsung.com",
-          "mail_recipient_type": "cc"
+          "mail_recipient_type": "to"
         }
       ],
       "country": "미국",
@@ -3918,7 +3918,7 @@
       "is_parent": false,
       "enable_pw_enc": null,
       "asset_parent_id": "81",
-      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02",
+      "last_mutation_id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd",
       "cust_memo": ""
     },
     {
@@ -3966,7 +3966,7 @@
           "org": "삼성전자",
           "phone": "",
           "email": "e.sandberg@samsung.com",
-          "mail_recipient_type": "cc"
+          "mail_recipient_type": "to"
         }
       ],
       "country": "미국",
@@ -3976,7 +3976,7 @@
       "group_parent": "",
       "is_parent": false,
       "cust_memo": "",
-      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
+      "last_mutation_id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd"
     },
     {
       "group": "seha",
@@ -4035,7 +4035,7 @@
           "org": "삼성전자",
           "phone": "",
           "email": "e.sandberg@samsung.com",
-          "mail_recipient_type": "cc"
+          "mail_recipient_type": "to"
         }
       ],
       "country": "미국",
@@ -4045,7 +4045,7 @@
       "group_parent": "",
       "is_parent": false,
       "cust_memo": "",
-      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
+      "last_mutation_id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd"
     },
     {
       "group": "seha",
@@ -4104,7 +4104,7 @@
           "org": "삼성전자",
           "phone": "",
           "email": "e.sandberg@samsung.com",
-          "mail_recipient_type": "cc"
+          "mail_recipient_type": "to"
         }
       ],
       "country": "미국",
@@ -4114,7 +4114,7 @@
       "group_parent": "",
       "is_parent": false,
       "cust_memo": "",
-      "last_mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
+      "last_mutation_id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd"
     },
     {
       "group": "us-005",
@@ -15235,6 +15235,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mst1hgml-fdedc5c2-d82e-47c8-a9e9-df18c3e4d558"
+    },
+    {
+      "id": "audit-1786717614302-0pn9cz",
+      "ts": 1786717614302,
+      "action": "edit",
+      "target_type": "법인",
+      "target_id": "seha",
+      "group": "seha",
+      "owner": "삼성전자 SEHA",
+      "label": "SSP-S210-10",
+      "sn": "924710022",
+      "summary": "법인 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "cust_contacts",
+          "label": "고객사 담당자",
+          "before": "운영 / Drake Fisher / 삼성전자 / d.fisher@samsung.com, 운영 / Eric Sandberg / 삼성전자 / e.sandberg@samsung.com",
+          "after": "운영 / Drake Fisher / 삼성전자 / d.fisher@samsung.com, 운영 / Eric Sandberg / 삼성전자 / e.sandberg@samsung.com",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd"
     }
   ],
   "syncMutations": [
@@ -15886,6 +15911,11 @@
     {
       "id": "data-mst1hgml-fdedc5c2-d82e-47c8-a9e9-df18c3e4d558",
       "ts": 1786717528950,
+      "scope": "data"
+    },
+    {
+      "id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd",
+      "ts": 1786717614305,
       "scope": "data"
     }
   ]
