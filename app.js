@@ -178,6 +178,11 @@ let lastMaintenanceSyncError = null;
    ========================================================= */
 let browserSyncQueue = Promise.resolve();
 let browserSyncQueuePending = 0;
+let activeSyncAbortController = null;
+let activeSyncKind = null;
+let syncStuckTimer = null;
+let forceManualRetryBusy = false;
+const SYNC_STUCK_MS = 5000; // 5초
 
 function enqueueBrowserSync(kind, task){
   browserSyncQueuePending += 1;
@@ -495,7 +500,208 @@ async function retryFailedSyncManually(){
   }
 }
 
+async function forceManualResave(){
+
+  if (forceManualRetryBusy){
+    return;
+  }
+
+  if (!githubConfig || !githubToken){
+    setSyncStatus(
+      'error',
+      'GitHub 연결 정보가 없습니다.'
+    );
+    return;
+  }
+
+
+  forceManualRetryBusy = true;
+
+
+  /*
+    현재 어떤 파일을 저장 중이었는지 기억
+  */
+  let retryKind =
+    activeSyncKind;
+
+
+  if (!retryKind){
+
+    if (maintenanceDirty && !dataDirty){
+      retryKind = 'maintenance';
+    }
+    else {
+      retryKind = 'data';
+    }
+
+  }
+
+
+  try{
+
+    clearTimeout(syncStuckTimer);
+    syncStuckTimer = null;
+
+
+    /*
+      예약된 일반 자동저장 제거
+    */
+    if (autoSyncTimer !== null){
+
+      clearTimeout(autoSyncTimer);
+      autoSyncTimer = null;
+
+    }
+
+
+    /*
+      기존 Queue의 자동 재실행 방지
+    */
+    autoSyncQueued = false;
+    maintenanceSyncQueued = false;
+
+
+    /*
+      현재 진행 중인 GitHub GET / PUT 중단
+    */
+    if (
+      activeSyncAbortController &&
+      !activeSyncAbortController.signal.aborted
+    ){
+
+      console.warn(
+        `진행 중인 ${retryKind} 동기화를 중단하고 수동 재저장을 시작합니다.`
+      );
+
+      activeSyncAbortController.abort();
+
+    }
+
+
+    setSyncStatus(
+      'pending',
+      '기존 요청 중단 후 다시 저장합니다.'
+    );
+
+
+    /*
+      기존 요청이 Abort 처리되어
+      finally에 진입할 때까지 기다림
+    */
+    const waitStartedAt =
+      Date.now();
+
+
+    while (
+      autoSyncInFlight ||
+      maintenanceSyncInFlight
+    ){
+
+      await sleepMs(50);
+
+
+      /*
+        Abort인데도 5초 이상 풀리지 않는 경우
+        더 이상 무한대기하지 않음
+      */
+      if (
+        Date.now() -
+        waitStartedAt >
+        5000
+      ){
+
+        console.warn(
+          '기존 동기화 종료 대기 시간이 초과되었습니다.'
+        );
+
+        break;
+
+      }
+
+    }
+
+
+    /*
+      새로운 저장 작업 시작
+      기존 변경 내용은 유지하고
+      새로운 mutation을 만들지는 않음
+    */
+    if (retryKind === 'maintenance'){
+
+      maintenanceDirty = true;
+
+      lastMaintenanceSyncError =
+        null;
+
+
+      await runMaintenanceSync();
+
+
+      if (maintenanceDirty){
+
+        throw (
+          lastMaintenanceSyncError ||
+          new Error(
+            'ma.json 수동 재저장에 실패했습니다.'
+          )
+        );
+
+      }
+
+    }
+    else {
+
+      dataDirty = true;
+
+      lastAutoSyncError =
+        null;
+
+
+      await runAutoSync();
+
+
+      if (dataDirty){
+
+        throw (
+          lastAutoSyncError ||
+          new Error(
+            'data.json 수동 재저장에 실패했습니다.'
+          )
+        );
+
+      }
+
+    }
+
+
+    setSyncStatus('synced');
+
+  }
+  catch(e){
+
+    console.error(
+      '강제 수동 재저장 실패:',
+      e
+    );
+
+
+    setSyncStatus(
+      'error',
+      e.message
+    );
+
+  }
+  finally{
+
+    forceManualRetryBusy =
+      false;
+
+  }
+}
+
 function setSyncStatus(state, msg){
+  clearTimeout(syncStuckTimer);
+  syncStuckTimer = null;
   const el = document.getElementById('githubSyncStatus');
   if (!el) return;
   el.onclick = null;
@@ -508,9 +714,31 @@ function setSyncStatus(state, msg){
     el.className = 'sync-status pending';
   }
   else if (state === 'syncing'){
-    el.textContent = '동기화 중…';
-    el.title = 'GitHub에 데이터를 저장하고 있습니다.';
-    el.className = 'sync-status syncing';
+    el.textContent =
+      '동기화 중…';
+    el.title =
+      'GitHub에 데이터를 저장하고 있습니다.';
+    el.className =
+      'sync-status syncing';
+    clearTimeout(syncStuckTimer);
+    syncStuckTimer =
+      setTimeout(() => {
+        if (
+          !autoSyncInFlight &&
+          !maintenanceSyncInFlight
+        ){
+          return;
+        }
+        el.textContent =
+          '↻ 강제 재저장';
+        el.title =
+          '동기화가 오래 걸리고 있습니다.\n' +
+          '클릭하면 현재 요청을 중단하고 최신 데이터를 다시 불러와 저장합니다.';
+        el.className =
+          'sync-status syncing sync-stuck';
+        el.onclick =
+          forceManualResave;
+      }, SYNC_STUCK_MS);
   }
   else if (state === 'synced'){
     const time = new Date().toLocaleTimeString('ko-KR');
@@ -1336,7 +1564,9 @@ async function runDataSyncCore(){
   autoSyncInFlight = true;
   autoSyncQueued = false;
   setSyncStatus('syncing');
-
+  const syncController = new AbortController();
+  activeSyncAbortController = syncController;
+  activeSyncKind = 'data';
   const syncVersion = dataChangeVersion;
 
   try{
@@ -1362,7 +1592,8 @@ async function runDataSyncCore(){
       } =
         await githubApiGet(
           githubConfig,
-          githubToken
+          githubToken,
+          syncController.signal
         );
       mergedState =
         mergeSyncStates(
@@ -1379,7 +1610,8 @@ async function runDataSyncCore(){
             remoteSha,
 
             '자산 데이터 자동 병합 동기화 - ' +
-            new Date().toLocaleString('ko-KR')
+            new Date().toLocaleString('ko-KR'),
+            syncController.signal
           );
         break;
       }
@@ -1457,18 +1689,35 @@ async function runDataSyncCore(){
     setSyncStatus(dataDirty ? 'pending' : 'synced');
   }
   catch(e){
-  lastAutoSyncError = e;
-  dataDirty = true;
-    console.error(
-      '자동 동기화 실패:',
-      e
-    );
-    setSyncStatus(
-      'error',
-      e.message
-    );
+    dataDirty = true;
+    if (
+      e?.name === 'AbortError' ||
+      syncController.signal.aborted
+    ){
+      console.warn(
+        '기존 data.json 동기화를 수동으로 중단했습니다.'
+      );
+    }
+    else {
+      lastAutoSyncError = e;
+      console.error(
+        '자동 동기화 실패:',
+        e
+      );
+      setSyncStatus(
+        'error',
+        e.message
+      );
+    }
   }
   finally{
+    if (
+      activeSyncAbortController ===
+      syncController
+    ){
+      activeSyncAbortController = null;
+      activeSyncKind = null;
+    }
     autoSyncInFlight = false;
     if (autoSyncQueued){
       runAutoSync();
@@ -1476,8 +1725,6 @@ async function runDataSyncCore(){
   }
 }
 
-
-/* data.json 저장 요청도 브라우저 공용 Queue를 반드시 통과 */
 function runAutoSync(){
   return enqueueBrowserSync(
     'data',
@@ -1485,11 +1732,6 @@ function runAutoSync(){
   );
 }
 
-/* =========================================================
-   ma.json 전용 동기화
-   - data.json은 전혀 읽거나 쓰지 않음
-   - 유지보수 점검 기록만 3-way merge
-   ========================================================= */
 async function runMaintenanceSyncCore(){
   if (!githubConfig || !githubToken){
     return;
@@ -1503,7 +1745,9 @@ async function runMaintenanceSyncCore(){
   maintenanceSyncInFlight = true;
   maintenanceSyncQueued = false;
   setSyncStatus('syncing');
-
+  const syncController = new AbortController();
+  activeSyncAbortController = syncController;
+  activeSyncKind = 'maintenance';
   const syncVersion = maintenanceChangeVersion;
 
   try{
@@ -1523,7 +1767,7 @@ async function runMaintenanceSyncCore(){
       let remoteSha;
 
       try{
-        const remote = await githubApiGet(maConfig, githubToken);
+        const remote = await githubApiGet(maConfig, githubToken, syncController.signal);
         remoteState = remote.json || {maintenanceLogs:[]};
         remoteSha = remote.sha;
       }
@@ -1549,7 +1793,8 @@ async function runMaintenanceSyncCore(){
           mergedState,
           remoteSha,
           '유지보수 점검 데이터 자동 병합 동기화 - ' +
-            new Date().toLocaleString('ko-KR')
+            new Date().toLocaleString('ko-KR'),
+            syncController.signal
         );
         break;
       }
@@ -1582,7 +1827,6 @@ async function runMaintenanceSyncCore(){
       maintenanceDirty = false;
     }
     else {
-      /* 저장 중 새 점검 변경이 생기면 현재 변경을 서버 결과 위에 재병합 */
       const liveState = currentMaintenanceState();
       const rebasedState = mergeMaintenanceStates(
         localState,
@@ -1610,15 +1854,36 @@ async function runMaintenanceSyncCore(){
     setSyncStatus(maintenanceDirty ? 'pending' : 'synced');
   }
   catch(e){
-    lastMaintenanceSyncError = e;
     maintenanceDirty = true;
-
-    console.error('유지보수 점검 자동 동기화 실패:', e);
-    setSyncStatus('error', e.message);
+    if (
+      e?.name === 'AbortError' ||
+      syncController.signal.aborted
+    ){
+      console.warn(
+        '기존 ma.json 동기화를 수동으로 중단했습니다.'
+      );
+    }
+    else {
+      lastMaintenanceSyncError = e;
+      console.error(
+        '유지보수 점검 자동 동기화 실패:',
+        e
+      );
+      setSyncStatus(
+        'error',
+        e.message
+      );
+    }
   }
   finally{
+    if (
+      activeSyncAbortController ===
+      syncController
+    ){
+      activeSyncAbortController = null;
+      activeSyncKind = null;
+    }
     maintenanceSyncInFlight = false;
-
     if (maintenanceSyncQueued){
       runMaintenanceSync();
     }
@@ -7207,13 +7472,13 @@ function parseOwnerRepo(repoStr){
   return { owner: parts[0], repo: parts[1] };
 }
 
-async function githubApiGet(cfg, token){
+async function githubApiGet(cfg, token, signal = null){
   const or = parseOwnerRepo(cfg.repo);
   if (!or) throw new Error('저장소는 owner/repo 형식으로 입력해 주세요.');
   const branch = cfg.branch || 'main';
   const path = cfg.path || 'data.json';
   const url = `https://api.github.com/repos/${or.owner}/${or.repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
-  const res = await fetch(url, { headers: { 'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json' } });
+  const res = await fetch(url, {headers: {'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json'}, signal});
   if (res.status === 404){
     const err = new Error('저장소에 해당 파일이 없습니다. "GitHub에 저장"을 누르면 새로 생성됩니다.');
     err.notFound = true;
@@ -7228,7 +7493,7 @@ async function githubApiGet(cfg, token){
   return { json, sha: data.sha };
 }
 
-async function githubApiPut(cfg, token, jsonObj, sha, message){
+async function githubApiPut(cfg, token, jsonObj, sha, message, signal = null){
   const or = parseOwnerRepo(cfg.repo);
   if (!or) throw new Error('저장소는 owner/repo 형식으로 입력해 주세요.');
   const branch = cfg.branch || 'main';
@@ -7243,7 +7508,8 @@ async function githubApiPut(cfg, token, jsonObj, sha, message){
   const res = await fetch(url, {
     method: 'PUT',
     headers: { 'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
+    signal
   });
   if (!res.ok){
     const errBody =
