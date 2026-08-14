@@ -85,15 +85,28 @@ function closeMaintenanceMailSettingsModal(){
     .classList.remove('open');
 }
 
-function maintenanceMailRecipientsForGroup(gid){
+function maintenanceMailRecipientGroupsForGroup(gid){
   const items = records.filter(r => r.group === gid);
-  if (!items.length) return [];
+  if (!items.length){
+    return { to:[], cc:[] };
+  }
 
   const meta = groupMeta(items);
-  const seen = new Set();
-  const out = [];
+  const toMap = new Map();
+  const ccMap = new Map();
 
   (meta.cust_contacts || []).forEach(contact => {
+    const typeRaw = String(
+      contact?.mail_recipient_type || 'to'
+    ).toLowerCase();
+    const type = typeRaw === 'cc'
+      ? 'cc'
+      : typeRaw === 'exclude'
+        ? 'exclude'
+        : 'to';
+
+    if (type === 'exclude') return;
+
     const email = String(contact?.email || '').trim();
     if (!email) return;
 
@@ -103,14 +116,31 @@ function maintenanceMailRecipientsForGroup(gid){
       .filter(Boolean)
       .forEach(addr => {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr)) return;
+
         const key = addr.toLowerCase();
-        if (seen.has(key)) return;
-        seen.add(key);
-        out.push(addr);
+
+        /* 동일 주소가 수신자와 CC에 모두 있으면 수신자를 우선한다. */
+        if (type === 'to'){
+          ccMap.delete(key);
+          if (!toMap.has(key)) toMap.set(key, addr);
+          return;
+        }
+
+        if (!toMap.has(key) && !ccMap.has(key)){
+          ccMap.set(key, addr);
+        }
       });
   });
 
-  return out;
+  return {
+    to:[...toMap.values()],
+    cc:[...ccMap.values()]
+  };
+}
+
+function maintenanceMailRecipientsForGroup(gid){
+  const groups = maintenanceMailRecipientGroupsForGroup(gid);
+  return [...groups.to, ...groups.cc];
 }
 
 function maintenanceMonthLabelEnglish(ym){
@@ -197,11 +227,12 @@ function refreshMaintenanceMailButton(gid){
   const btn = document.getElementById('mlEmailBtn');
   if (!btn) return;
 
-  const recipients = maintenanceMailRecipientsForGroup(gid);
+  const recipients = maintenanceMailRecipientGroupsForGroup(gid);
+  const total = recipients.to.length + recipients.cc.length;
 
-  btn.title = recipients.length
-    ? `등록된 고객사 담당자 ${recipients.length}명을 수신자로 넣고 제목을 채웁니다. 메일 내용은 클립보드에 자동 복사됩니다.`
-    : '이 법인에 등록된 고객사 담당자 이메일이 없습니다.';
+  btn.title = total
+    ? `점검 메일 수신자 ${recipients.to.length}명 · CC ${recipients.cc.length}명으로 새 메일을 엽니다. 미포함으로 지정된 담당자는 제외됩니다.`
+    : '점검 메일에 포함할 고객사 담당자 이메일이 없습니다.';
 }
 
 async function copyMaintenanceMailBodyToClipboard(text){
@@ -282,11 +313,13 @@ async function openMaintenanceEmailCompose(){
     return;
   }
 
-  const recipients = maintenanceMailRecipientsForGroup(gid);
+  const recipients = maintenanceMailRecipientGroupsForGroup(gid);
+  const includedRecipientCount =
+    recipients.to.length + recipients.cc.length;
 
-  if (!recipients.length){
+  if (!includedRecipientCount){
     errEl.textContent =
-      '이 법인에 등록된 고객사 담당자 이메일이 없습니다. 법인 정보의 고객사 담당자 이메일을 먼저 등록해 주세요.';
+      '점검 메일에 포함할 고객사 담당자 이메일이 없습니다. 고객사 담당자 편집에서 수신자 또는 CC로 지정해 주세요.';
     return;
   }
 
@@ -334,9 +367,19 @@ async function openMaintenanceEmailCompose(){
     return;
   }
 
+  const mailtoParams = [
+    `subject=${encodeURIComponent(subject)}`
+  ];
+
+  if (recipients.cc.length){
+    mailtoParams.push(
+      `cc=${encodeURIComponent(recipients.cc.join(','))}`
+    );
+  }
+
   const mailto =
-    `mailto:${recipients.join(',')}` +
-    `?subject=${encodeURIComponent(subject)}`;
+    `mailto:${recipients.to.join(',')}` +
+    `?${mailtoParams.join('&')}`;
 
   errEl.textContent = '';
 
