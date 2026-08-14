@@ -10400,9 +10400,9 @@
       "country": "한국",
       "group_parent": "",
       "is_parent": false,
-      "build_engineer": "김상문",
-      "build_date": "2025.08",
-      "last_mutation_id": "data-mss8kedj-6f17cdc9-2241-4f28-8815-69acce7dec91"
+      "build_engineer": "",
+      "build_date": "",
+      "last_mutation_id": "data-mss8l38a-4e4cb6ee-80db-480a-9d90-abd3ad252225"
     },
     {
       "group": "custom-1786349440902",
@@ -16386,6 +16386,38 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss8kedj-6f17cdc9-2241-4f28-8815-69acce7dec91"
+    },
+    {
+      "id": "audit-1786668989358-3fi2m9",
+      "ts": 1786668989358,
+      "action": "edit",
+      "target_type": "Support ID",
+      "target_id": "custom-1786349440902:356307",
+      "group": "custom-1786349440902",
+      "owner": "삼성전자 구미",
+      "label": "MC-S400-20-100-STANDARD",
+      "sn": "5017320108",
+      "summary": "Support ID 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "build_engineer",
+          "label": "구축 엔지니어",
+          "before": "김상문",
+          "after": "—",
+          "sensitive": false
+        },
+        {
+          "field": "build_date",
+          "label": "구축 일자",
+          "before": "2025.08",
+          "after": "—",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss8l38a-4e4cb6ee-80db-480a-9d90-abd3ad252225"
     }
   ],
   "syncMutations": [
@@ -16577,6 +16609,11 @@
     {
       "id": "data-mss8kedj-6f17cdc9-2241-4f28-8815-69acce7dec91",
       "ts": 1786668957142,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss8l38a-4e4cb6ee-80db-480a-9d90-abd3ad252225",
+      "ts": 1786668989359,
       "scope": "data"
     }
   ]
