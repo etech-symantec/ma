@@ -15107,159 +15107,6 @@
       "actor_name": "윤태리",
       "actor_role": "일반사용자",
       "mutation_id": "data-msskhmxl-6e9bec47-77ab-4483-a4d0-c2bbdfa0e7e1"
-    },
-    {
-      "id": "audit-1786717219190-q3twgn",
-      "ts": 1786717219190,
-      "action": "edit",
-      "target_type": "법인",
-      "target_id": "uk-seuk",
-      "group": "uk-seuk",
-      "owner": "삼성전자 SEUK",
-      "label": "SSP-S410-20B",
-      "sn": "625700032",
-      "summary": "법인 정보 2개 항목 수정",
-      "changes": [
-        {
-          "field": "cust_contacts",
-          "label": "고객사 담당자",
-          "before": "운영 / Roger Alphonso / 삼성전자 / r.alphonso@partner.samsung.com, 운영 / Suman Ghimire / 삼성전자 / s.ghimire@partner.samsung.com",
-          "after": "운영 / Roger Alphonso / 삼성전자 / r.alphonso@partner.samsung.com, 운영 / Suman Ghimire / 삼성전자 / s.ghimire@partner.samsung.com",
-          "sensitive": false
-        },
-        {
-          "field": "cust_memo",
-          "label": "고객사 담당자 메모",
-          "before": "—",
-          "after": "—",
-          "sensitive": false
-        }
-      ],
-      "actor_id": "u1786085321715",
-      "actor_name": "신호근",
-      "actor_role": "마스터",
-      "mutation_id": "data-mst1atlz-b295acf1-1d28-4bc7-b2ac-4b22bfeff01b"
-    },
-    {
-      "id": "audit-1786717508568-6mxuu1",
-      "ts": 1786717508568,
-      "action": "edit",
-      "target_type": "법인",
-      "target_id": "ng",
-      "group": "ng",
-      "owner": "삼성중공업 SHI-MCI",
-      "label": "ASG-S400-20",
-      "sn": "5216320027",
-      "summary": "법인 정보 2개 항목 수정",
-      "changes": [
-        {
-          "field": "cust_contacts",
-          "label": "고객사 담당자",
-          "before": "운영 / 공기덕 프로 / SHI / gideok.gong@samsung.com",
-          "after": "운영 / 공기덕 프로 / SHI / gideok.gong@samsung.com, 운영 / Pamela Azike / SHI / +234 803 951 9261 / p.azike@samsung.com",
-          "sensitive": false
-        },
-        {
-          "field": "cust_memo",
-          "label": "고객사 담당자 메모",
-          "before": "—",
-          "after": "—",
-          "sensitive": false
-        }
-      ],
-      "actor_id": "u1786085321715",
-      "actor_name": "신호근",
-      "actor_role": "마스터",
-      "mutation_id": "data-mst1h0wc-0ec67458-4429-4224-b48a-b4f4ba235e3f"
-    },
-    {
-      "id": "audit-1786717520847-f5at7o",
-      "ts": 1786717520847,
-      "action": "edit",
-      "target_type": "법인",
-      "target_id": "seha",
-      "group": "seha",
-      "owner": "삼성전자 SEHA",
-      "label": "SSP-S210-10",
-      "sn": "924710022",
-      "summary": "법인 정보 2개 항목 수정",
-      "changes": [
-        {
-          "field": "cust_contacts",
-          "label": "고객사 담당자",
-          "before": "운영 / Drake Fisher / 삼성전자 / d.fisher@samsung.com, 운영 / Eric Sandberg / 삼성전자 / e.sandberg@samsung.com",
-          "after": "운영 / Drake Fisher / 삼성전자 / d.fisher@samsung.com, 운영 / Eric Sandberg / 삼성전자 / e.sandberg@samsung.com",
-          "sensitive": false
-        },
-        {
-          "field": "cust_memo",
-          "label": "고객사 담당자 메모",
-          "before": "—",
-          "after": "—",
-          "sensitive": false
-        }
-      ],
-      "actor_id": "u1786085321715",
-      "actor_name": "신호근",
-      "actor_role": "마스터",
-      "mutation_id": "data-mst1hadf-c13360ae-8155-4e04-87cf-c5e1db00ad02"
-    },
-    {
-      "id": "audit-1786717528950-340eg6",
-      "ts": 1786717528950,
-      "action": "edit",
-      "target_type": "법인",
-      "target_id": "custom-1786348497151",
-      "group": "custom-1786348497151",
-      "owner": "한화큐셀",
-      "label": "한화큐셀",
-      "sn": "",
-      "summary": "법인 정보 2개 항목 수정",
-      "changes": [
-        {
-          "field": "cust_contacts",
-          "label": "고객사 담당자",
-          "before": "운영 / 함우철 / 이테크시스템, 운영 / 문다형 / 한화시스템",
-          "after": "운영 / 함우철 / 이테크시스템, 운영 / 문다형 / 한화시스템",
-          "sensitive": false
-        },
-        {
-          "field": "cust_memo",
-          "label": "고객사 담당자 메모",
-          "before": "—",
-          "after": "—",
-          "sensitive": false
-        }
-      ],
-      "actor_id": "u1786085321715",
-      "actor_name": "신호근",
-      "actor_role": "마스터",
-      "mutation_id": "data-mst1hgml-fdedc5c2-d82e-47c8-a9e9-df18c3e4d558"
-    },
-    {
-      "id": "audit-1786717614302-0pn9cz",
-      "ts": 1786717614302,
-      "action": "edit",
-      "target_type": "법인",
-      "target_id": "seha",
-      "group": "seha",
-      "owner": "삼성전자 SEHA",
-      "label": "SSP-S210-10",
-      "sn": "924710022",
-      "summary": "법인 정보 1개 항목 수정",
-      "changes": [
-        {
-          "field": "cust_contacts",
-          "label": "고객사 담당자",
-          "before": "운영 / Drake Fisher / 삼성전자 / d.fisher@samsung.com, 운영 / Eric Sandberg / 삼성전자 / e.sandberg@samsung.com",
-          "after": "운영 / Drake Fisher / 삼성전자 / d.fisher@samsung.com, 운영 / Eric Sandberg / 삼성전자 / e.sandberg@samsung.com",
-          "sensitive": false
-        }
-      ],
-      "actor_id": "u1786085321715",
-      "actor_name": "신호근",
-      "actor_role": "마스터",
-      "mutation_id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd"
     }
   ],
   "syncMutations": [
@@ -15916,6 +15763,11 @@
     {
       "id": "data-mst1jah8-a5ade676-837c-490e-bed6-8d403fbc01fd",
       "ts": 1786717614305,
+      "scope": "data"
+    },
+    {
+      "id": "data-mst2bdc5-7c8aba33-2d4b-468c-a56f-35ee3e9d2f81",
+      "ts": 1786718924377,
       "scope": "data"
     }
   ]
