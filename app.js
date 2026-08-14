@@ -730,7 +730,7 @@ function setSyncStatus(state, msg){
           return;
         }
         el.textContent =
-          '↻ 강제 재저장';
+          '↻ 수동 재저장';
         el.title =
           '동기화가 오래 걸리고 있습니다.\n' +
           '클릭하면 현재 요청을 중단하고 최신 데이터를 다시 불러와 저장합니다.';
@@ -874,7 +874,7 @@ function ensureWorkLogSyncOverlay(){
         id="workLogSyncRetryBtn"
         disabled
       >
-        ↻ 강제 재저장 (10초 후)
+        ↻ 수동 재저장 (10초 후)
       </button>
     </div>
   `;
@@ -969,13 +969,13 @@ function showWorkLogSyncOverlay(label){
     if (remain > 0){
       retryBtn.disabled = true;
       retryBtn.textContent =
-        `↻ 강제 재저장 (${remain}초 후)`;
+        `↻ 수동 재저장 (${remain}초 후)`;
       return;
     }
   
     retryBtn.disabled = false;
     retryBtn.textContent =
-      '↻ 강제 재저장';
+      '↻ 수동 재저장';
   
     if (syncCountdownTimer){
       clearInterval(
