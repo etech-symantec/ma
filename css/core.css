@@ -1,0 +1,2324 @@
+:root{
+  --bg:#F5F7FA;
+  --surface:#FFFFFF;
+  --surface2:#EEF1F6;
+  --surface3:#E3E8F0;
+  --border:#1E293B14;
+  --border-solid:#E2E6EE;
+  --text:#1F2430;
+  --text-dim:#616B7D;
+  --text-faint:#93A0B4;
+  --accent:#0EA5E9;
+  --accent-dim:#0284C7;
+  --brand:#1E3A8A;
+  --amber:#F59E0B;
+  --red:#EF4444;
+  --green:#10B981;
+  --shadow:0 6px 22px rgba(0,0,0,.08);
+  --mono:"Nanum Gothic", monospace;
+  --display:"Nanum Gothic", sans-serif;
+  --body:"Nanum Gothic", sans-serif;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ height:100%; }
+body{ min-height:100%; }
+body{
+  background: radial-gradient(1200px 800px at 85% -10%, rgba(14,165,233,0.08) 0%, transparent 60%),
+              radial-gradient(900px 600px at -10% 110%, rgba(30,58,138,0.06) 0%, transparent 55%),
+              var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{ background:rgba(14,165,233,0.25); color:var(--text); }
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:#CBD5E1; border-radius:8px; }
+
+a{color:var(--accent);}
+
+/* ---------- Lock overlay ---------- */
+#lockOverlay{
+  position:fixed; inset:0; z-index:100;
+  background: linear-gradient(180deg, #EEF2F7 0%, #F5F7FA 100%);
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+}
+.lock-card{
+  width:100%; max-width:440px;
+  background:var(--surface);
+  border:1px solid var(--border-solid);
+  border-radius:14px;
+  padding:36px 32px;
+  box-shadow: var(--shadow);
+}
+.lock-glyph{
+  width:52px; height:52px; border-radius:12px;
+  background:linear-gradient(145deg, var(--accent), var(--brand));
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:20px;
+  font-size:22px;
+}
+.lock-card .lock-title{
+  font-family:var(--display); font-size:22px; font-weight:600; letter-spacing:-0.01em;
+  margin-bottom:8px;
+}
+.lock-card p{ color:var(--text-dim); font-size:13.5px; line-height:1.6; margin-bottom:22px; }
+.lock-card input{
+  width:100%; background:var(--surface2); border:1px solid var(--border-solid);
+  border-radius:9px; padding:13px 14px; color:var(--text); font-family:var(--mono); font-size:14.5px;
+  letter-spacing:0.03em;
+  outline:none; transition:border-color .15s;
+}
+.lock-card input:focus{ border-color:var(--accent); }
+.lock-actions{ display:flex; gap:10px; margin-top:14px; }
+.btn{
+  font-family:var(--body); font-weight:600; font-size:13.5px;
+  border-radius:9px; border:1px solid var(--border-solid);
+  padding:11px 16px; cursor:pointer; background:var(--surface2); color:var(--text);
+  transition: all .15s;
+}
+.btn:hover{ background:var(--surface3); border-color:#C7CFDC; }
+.btn-primary{
+  background:var(--accent); border-color:var(--accent); color:#fff; flex:1;
+}
+.btn-primary:hover{ background:var(--accent-dim); border-color:var(--accent-dim); }
+.btn-ghost{ background:transparent; }
+.btn-danger{ background:var(--red); border-color:var(--red); color:#fff; flex:1; }
+.btn-danger:hover{ background:#C43D3D; border-color:#C43D3D; }
+
+/* ---------- 자산 일괄 선택 이동 ---------- */
+
+
+
+
+
+
+
+
+
+#lockError{ color:var(--red); font-size:12.5px; margin-top:10px; min-height:16px; }
+.lock-meta{ margin-top:22px; padding-top:18px; border-top:1px solid var(--border); }
+.lock-meta button{ font-size:12.5px; color:var(--text-faint); background:none; border:none; cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
+.lock-meta button:hover{ color:var(--text-dim); }
+
+/* 계정 로그인 게이트 (앱 진입 전 1단계) */
+.ag-reg-fields{ display:flex; flex-direction:column; gap:10px; margin-bottom:4px; }
+#agRegisterView .cp-error{ margin-top:12px; }
+#ag_user_list.user-list{ margin-top:0; }
+.user-row-main{ flex-wrap:wrap; row-gap:6px; }
+.user-row-main .wl-action-btn + .wl-action-btn{ margin-left:2px; }
+.user-delete-hint{ font-size:11.8px; color:var(--red); line-height:1.5; margin:9px 0 0; }
+.user-changepw-hint{ font-size:11.8px; color:var(--text-dim); line-height:1.5; margin:9px 0 0; }
+.user-changepw-form{ flex-direction:column; align-items:stretch; }
+.user-changepw-form button{ width:100%; margin-top:2px; }
+
+/* ---------- App shell ---------- */
+#app{ display:none; }
+#app.ready{ display:block; }
+
+/* 공용 헤더(.header-wrap, header.js가 주입)는 외부 style.css에서 이미
+   position:sticky !important; top:0 !important; z-index:1000 !important 로 지정되어 있음.
+   이 페이지에서도 동일하게 재확인 고정 — 혹시 모를 다른 규칙에 덮이지 않도록 방어적으로 추가. */
+.header-wrap{ position:sticky !important; top:0 !important; z-index:1000 !important; }
+
+/* NOTE: intentionally namespaced (not the generic .topbar) — the shared portal stylesheet above almost certainly
+   defines its own rules for such common class names with !important (same
+   as it does for .header-wrap), which was silently clobbering our sticky
+   positioning regardless of what offset we computed in JS. !important here
+   too, defensively, in case anything else still collides. */
+.icon-btn{
+  display:flex; align-items:center; gap:6px;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:9px;
+  padding:9px 13px; color:var(--text-dim); font-size:12.5px; font-weight:600; cursor:pointer;
+  transition:all .15s;
+}
+.icon-btn:hover{ color:var(--text); border-color:#C7CFDC; }
+.icon-btn.on{ color:var(--accent); border-color:var(--accent); background:#E6F4FD; }
+
+/* 대시보드/유지보수처럼 "누르면 켜지고 다시 누르면 꺼지는" 토글 버튼임을 분명히 보여준다.
+   켜진 상태는 강조색으로 꽉 채우고, 마우스를 올리면 아이콘 대신 ✕(닫기)가 나타난다. */
+.icon-btn.icon-only.on{
+  position:relative;
+  background:var(--accent); border-color:var(--accent); color:#fff;
+  box-shadow:0 0 0 3px rgba(58,141,222,0.16);
+}
+.icon-btn.icon-only.on::after{
+  content:"✕"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:var(--accent); color:#fff; font-size:14px; font-weight:700; border-radius:inherit;
+  opacity:0; transition:opacity .12s ease;
+}
+.icon-btn.icon-only.on:hover{ background:var(--accent); border-color:var(--accent); }
+.icon-btn.icon-only.on:hover::after{ opacity:1; }
+
+/* 전체 펼치기/닫기 버튼: 펼쳐진 상태(닫기 동작)일 때 아이콘과 색을 다르게 하여 현재 동작을 명확히 표시 */
+#expandAllBtn.is-collapse-mode{
+  color:var(--accent-dim); border-color:var(--accent-dim); background:#E6F4FD;
+}
+
+/* 최근 작업 이력 알림 드롭다운 */
+.activity-wrap{ position:relative; }
+/* 알림 버튼 */
+#recentActivityBtn{
+  position:relative;
+  overflow:visible;
+}
+
+
+/* 알림 버튼 영역 */
+.activity-wrap{
+  position:relative;
+  flex-shrink:0;
+  overflow:visible;
+}
+
+
+/* 작업 이력 숫자 배지 */
+.ra-badge{
+  position:absolute;
+
+  /* 종 오른쪽 위에 살짝 겹침 */
+  top:-5px;
+  right:-6px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-width:14px;
+  height:14px;
+  padding:0 3px;
+
+  border-radius:999px;
+
+  background:var(--red);
+  color:#fff;
+
+  font-family:var(--mono);
+  font-size:8.5px;
+  font-weight:700;
+  line-height:1;
+
+  box-shadow:0 0 0 2px #EEF4F8;
+
+  pointer-events:none;
+  z-index:5;
+}
+.recent-activity-dropdown{
+  display:none; position:fixed; width:340px; max-height:440px;
+  overflow-y:auto; background:var(--surface); border:1px solid var(--border-solid); border-radius:12px;
+  box-shadow:var(--shadow); z-index:1100; padding:6px;
+}
+.recent-activity-dropdown.open{ display:block; }
+.ra-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:7px 8px 7px 10px;
+  border-bottom:1px solid var(--border-solid);
+  font-size:11px;
+  letter-spacing:.03em;
+  color:var(--text-faint);
+  font-family:var(--mono);
+}
+
+.ra-clear-all-btn{
+  flex:0 0 auto;
+  padding:4px 7px;
+  border:0;
+  border-radius:6px;
+  background:transparent;
+  color:var(--text-faint);
+  font-family:var(--body);
+  font-size:9.5px;
+  font-weight:600;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:
+    color .12s,
+    background .12s;
+}
+
+.ra-clear-all-btn:hover:not(:disabled){
+  background:#FDECEC;
+  color:var(--red);
+}
+
+.ra-clear-all-btn:disabled{
+  opacity:.35;
+  cursor:default;
+}
+.ra-empty{ font-size:12.5px; color:var(--text-faint); text-align:center; padding:24px 10px; }
+.ra-item{
+  padding:9px 10px; border-radius:8px; cursor:pointer;
+}
+.ra-item:hover{ background:var(--surface2); }
+.ra-item + .ra-item{ margin-top:2px; }
+.ra-top{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.ra-type{ font-size:12.5px; font-weight:700; color:var(--accent); }
+.ra-date{ font-size:11px; font-family:var(--mono); color:var(--text-faint); flex-shrink:0; }
+.ra-asset{ font-size:12px; color:var(--text-dim); margin-top:2px; }
+.ra-note{ font-size:11.8px; color:var(--text-faint); margin-top:3px; line-height:1.4; }
+.ra-author{ font-size:11px; color:var(--text-faint); margin-top:4px; font-family:var(--mono); }
+.ra-changes{
+  margin-top:6px; padding:8px 9px; background:var(--surface2);
+  border:1px solid var(--border-solid); border-radius:8px;
+}
+.ra-changes-label{ font-size:10.5px; color:var(--text-faint); font-weight:700; margin-bottom:5px; }
+.ra-change-row{
+  display:flex; align-items:baseline; flex-wrap:wrap; gap:5px;
+  font-size:11.5px; line-height:1.5;
+}
+.ra-change-row + .ra-change-row{ margin-top:3px; }
+.ra-change-label{ font-weight:700; color:var(--text-dim); flex-shrink:0; }
+.ra-change-before{
+  color:var(--text-faint); text-decoration:line-through; text-decoration-color:#D8B4B4;
+  font-family:var(--mono); word-break:break-all;
+}
+.ra-change-arrow{ color:var(--text-faint); flex-shrink:0; }
+.ra-change-after{
+  color:var(--accent-dim); font-weight:600; font-family:var(--mono); word-break:break-all;
+}
+
+/* 사용자 관리 모달 */
+.user-add-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+.user-add-row input{
+  flex:1; min-width:120px; background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
+  padding:9px 11px; color:var(--text); font-size:13px; outline:none; font-family:var(--body);
+}
+.user-add-row input:focus{ border-color:var(--accent); }
+.user-add-row button{ flex-shrink:0; width:auto; }
+.user-list{ display:flex; flex-direction:column; gap:6px; max-height:320px; overflow-y:auto; margin-top:16px; }
+.user-list-empty{ font-size:12.5px; color:var(--text-faint); text-align:center; padding:24px 0; }
+.user-row{
+  padding:9px 11px;
+  border:1px solid var(--border-solid); border-radius:9px;
+}
+.user-row.active{ border-color:var(--accent); background:#E6F4FD; }
+.user-row-main{ display:flex; align-items:center; gap:10px; }
+.user-name{ flex:1; font-size:13px; color:var(--text); }
+.user-current-tag{ font-size:11px; color:var(--accent); font-family:var(--mono); flex-shrink:0; }
+.user-login-form{ display:flex; gap:8px; margin-top:9px; }
+.user-login-form input{
+  flex:1; background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
+  padding:8px 10px; color:var(--text); font-size:12.8px; outline:none; font-family:var(--body);
+}
+.user-login-form input:focus{ border-color:var(--accent); }
+.user-login-form button{ flex-shrink:0; width:auto; padding:8px 14px; font-size:12.5px; }
+.user-login-error{ color:var(--red); font-size:11.8px; margin-top:6px; min-height:14px; }
+
+.layout{ display:flex; align-items:flex-start; }
+
+/* sidebar */
+
+
+/* 로그인 사용자 영역 */
+.panel-profile{
+  display:grid;
+
+  /* 1행: 사용자 정보
+     2행: 알림 / My / 저장상태 */
+  grid-template-columns:42px 66px minmax(0, 1fr);
+  grid-template-rows:auto 34px;
+
+  gap:8px;
+
+  padding:12px;
+  margin-bottom:16px;
+
+  background:linear-gradient(135deg, #E6F4FD, #EEF1F6);
+  border:1px solid var(--border-solid);
+  border-radius:12px;
+}
+
+
+/* 첫 줄 전체 */
+.panel-profile .profile-info{
+  grid-column:1 / -1;
+  grid-row:1;
+
+  width:100%;
+  min-width:0;
+}
+
+
+/* 두 번째 줄 - 알림 */
+.panel-profile .activity-wrap{
+  grid-column:1;
+  grid-row:2;
+
+  width:42px;
+  min-width:0;
+}
+
+
+/* 두 번째 줄 - My */
+
+
+
+/* 두 번째 줄 - GitHub 저장 상태 */
+#githubSyncStatus{
+  grid-column:3;
+  grid-row:2;
+
+  width:100%;
+  min-width:0;
+  height:34px;
+
+  margin:0;
+  padding:0 5px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  box-sizing:border-box;
+
+  border:1px solid var(--border-solid);
+  border-radius:9px;
+
+  font-family:var(--mono);
+  font-size:9.5px;
+  font-weight:700;
+  line-height:1;
+
+  text-align:center;
+
+  /* 절대 줄바꿈 안 함 */
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.profile-info{
+  flex:1 1 100%; min-width:0; order:1;   /* 이름·등급이 항상 첫 줄 전체를 차지 */
+  display:flex; align-items:baseline; justify-content:space-between; gap:8px;
+}
+.panel-profile .activity-wrap{ order:2; }
+
+.profile-name{
+  font-size:14.5px; font-weight:700; color:var(--text);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  flex:0 1 auto; min-width:0;
+}
+.profile-info-right{
+  flex:0 0 auto; display:flex; align-items:baseline; gap:8px; white-space:nowrap;
+}
+.profile-logout-text{
+  background:none; border:none; padding:0; margin:0; cursor:pointer;
+  font-size:11px; color:var(--text-faint); font-family:var(--body);
+  transition:color .15s;
+}
+.profile-logout-text:hover{ color:var(--red); }
+.profile-mail-settings-text{
+  background:none; border:none; padding:0; margin:0; cursor:pointer;
+  font-size:11px; color:var(--accent-dim); font-family:var(--body);
+  transition:color .15s; white-space:nowrap;
+}
+.profile-mail-settings-text:hover{ color:var(--accent); text-decoration:underline; text-underline-offset:2px; }
+.profile-sub{
+  font-size:11px; color:var(--text-faint); font-family:var(--mono); letter-spacing:.03em;
+  white-space:nowrap;
+}
+.panel-profile .activity-wrap{ flex-shrink:0; }
+.panel-profile .activity-wrap .icon-btn.icon-only{
+  width:auto; min-width:34px; height:34px; padding:0 10px; border-radius:9px; font-size:16px; gap:4px;
+  background:rgba(255,255,255,0.7);
+}
+
+/* 사용자 영역(panel-profile) 안에 들어간 My 버튼: 내용(글자+갯수)에 맞춰 가로폭이 자동으로 늘고 줄어든다 */
+
+
+
+
+/* 상단 필터행 맨 앞의 검색창 (콤팩트하게 절반 크기) */
+
+
+
+
+/* 좌측 패널 액션 버튼 (내 사이트만 / 전체 펼치기 / 자산 추가) */
+.panel-top-actions{
+  display:flex; flex-direction:row; gap:6px; align-items:stretch;
+  margin-bottom:18px; padding-bottom:18px;
+  border-bottom:1px solid var(--border-solid);
+}
+.panel-top-actions .icon-btn.icon-only{ flex:0 0 40px; width:40px; height:38px; padding:0; }
+.icon-btn.icon-only{
+  justify-content:center; padding:9px 0; font-size:14.5px; line-height:1;
+}
+
+/* 내 사이트만 보기 토글 */
+
+
+
+
+.mat-icon{ display:inline-flex; flex:0 0 auto; color:var(--text-faint); }
+
+.mat-label{ flex:0 0 auto; font-size:12.5px; font-weight:600; color:var(--text-dim); white-space:nowrap; }
+
+.mat-count{
+  flex-shrink:0; font-family:var(--mono); font-size:11px; font-weight:700; color:var(--text-faint);
+  background:var(--surface); border:1px solid var(--border-solid); border-radius:999px;
+  padding:1px 7px; min-width:20px; text-align:center;
+}
+
+
+
+
+.fg-dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+
+
+
+
+
+
+
+
+/* 국가/법인 필터 — 즐겨찾기 별 */
+.country-filter-item{ justify-content:flex-start; }
+.country-filter-item .country-name{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.fav-star{
+  flex-shrink:0; background:none; border:none; cursor:pointer; padding:0 2px 0 0;
+  font-size:13px; line-height:1; color:var(--text-faint); transition:color .12s, transform .12s;
+}
+.fav-star:hover{ color:var(--amber); transform:scale(1.15); }
+.fav-star.active{ color:var(--amber); }
+
+/* 라이선스 상태 - 4열 / 상태명 위, 숫자 아래 */
+
+
+
+
+
+
+
+
+/* 태그는 3열로 컴팩트하게 */
+
+
+/* 태그 항목만 조금 더 작게 */
+
+
+
+
+.filters-reset-btn{
+  width:100%; margin-bottom:18px; padding:8px 0;
+  background:#FEF2F2; border:1px solid #FBD5D5; border-radius:9px;
+  color:#B91C1C; font-size:12px; font-family:var(--body); font-weight:700; cursor:pointer;
+  transition:all .15s;
+}
+.filters-reset-btn:hover{ background:#FEE2E2; border-color:#F3B4B4; }
+
+/* main content */
+main.content{ flex:1; min-width:0; padding:24px 26px 80px; }
+
+/* 페이지 상단 필터행 — 검색창(맨 앞) + 필드별 드롭다운 필터. 스크롤해도 항상 보이도록 고정하고,
+   각 항목은 폭을 똑같이 맞춰 한 줄에 콤팩트하게 나열한다. */
+
+
+
+
+
+
+/* 법인 카드 상단 메타 칩과 동일한 색상 팔레트를 적용해서 항목을 구분하기 쉽게 한다 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ---------- 대시보드 ---------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* OS 버전 / SKU 처럼 클릭해서 사용 법인 목록을 펼쳐볼 수 있는 행 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.build-eng-date{ font-weight:500; font-size:12px; color:#B8873A; }
+.mgr-primary{
+  font-weight:700; font-size:13.5px; color:var(--accent-dim);
+}
+.mgr-secondary{
+  font-weight:500; font-size:12px; color:var(--text-dim); margin-left:8px;
+}
+
+
+
+
+
+/* 부모-자식 관계가 있는 법인의 "관계"(모회사/자회사) 칩 — 다른 법인 정보 칩들과 같은 줄에 나온다 */
+
+
+
+/* 법인명 바로 옆에 나란히 붙는 Support ID 배지 — 하위 "SUPPORT ID" 칩(.sg-support-chip)과
+   같은 버튼형 스타일로 보이게 한다. */
+.title-support-ids{ display:inline-flex; flex-wrap:wrap; gap:4px; align-items:center; }
+
+
+
+
+
+
+/* 고객사 담당자 전체보기 모달 */
+
+
+
+
+
+
+
+
+/* 고객사 담당자 모달 — 공통 메모 (보기 모드) */
+
+
+
+/* 고객사 담당자 모달 — 공통 메모 (편집 모드) */
+.cust-memo-wrap{ margin-top:14px; }
+.cust-memo-wrap label{
+  display:block; font-size:11px; color:var(--text-faint); margin-bottom:5px;
+  font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em;
+}
+.cust-memo-wrap textarea{
+  width:100%; resize:vertical; min-height:60px; font-size:13px; font-family:var(--body);
+  padding:9px 11px; color:var(--text); background:var(--surface2); border:1px solid var(--border-solid);
+  border-radius:8px; outline:none;
+}
+.cust-memo-wrap textarea:focus{ border-color:var(--accent); }
+
+.cust-role-tag{
+  display:inline-block; font-family:var(--mono); font-size:9.5px; font-weight:700;
+  padding:1.5px 6px; border-radius:4px; letter-spacing:.02em;
+  background:var(--surface2); color:var(--text-faint); border:1px solid var(--border-solid);
+}
+.cust-role-tag[data-role="운영"]{ color:var(--accent-dim); background:#E6F4FD; border-color:#BFE4F8; }
+.cust-role-tag[data-role="영업"]{ color:#B45309; background:#FEF3C7; border-color:#FDE4A8; }
+.cust-role-tag.cust-role-none{ color:var(--text-faint); background:var(--surface); border-style:dashed; }
+
+
+.badge{
+  font-size:10.5px; font-family:var(--mono); padding:3px 8px; border-radius:6px;
+  border:1px solid var(--border-solid); color:var(--text-dim); white-space:nowrap;
+  background:var(--surface2);
+}
+.badge.tag-o{ color:#0D8A5F; border-color:#A7E8CB; background:#E9FBF2; }
+.badge.tag-x{ color:var(--text-faint); }
+.badge.tag-partial{ color:#B45309; border-color:#FBD38D; background:#FFF7E6; }
+.chev{ color:var(--text-faint); flex-shrink:0; margin-top:3px; display:flex; align-items:center; justify-content:center; width:22px; height:22px; }
+.chev svg{ display:block; }
+.chev.open{ color:var(--accent); }
+
+.items{ display:none; }
+.items.open{ display:block; }
+table{ width:100%; min-width:1180px; border-collapse:collapse; }
+thead th{
+  text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--text-faint); font-family:var(--mono); font-weight:500;
+  padding:9px 12px; background:var(--surface2); position:sticky; top:0;
+  border-bottom:1px solid var(--border-solid);
+}
+tbody td{
+  padding:11px 12px; font-size:12.8px; border-bottom:1px solid var(--border);
+  vertical-align:top; color:var(--text-dim);
+}
+tbody tr:last-child td{ border-bottom:none; }
+tbody tr:hover{ background:#F3F6FA; }
+
+/* Support ID 단위 하위 그룹 — 같은 법인 안에서 Support ID가 여러 개일 때
+   각 Support ID별로 구축 엔지니어/구축 일자와 자산 목록을 따로 묶어서 보여준다. */
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 최근 작업 이력 알림에서 클릭해 이동했을 때, 해당 행/카드를 한 번 강조해서 보여준다 */
+@keyframes activityFlash{
+  0%{ background-color:#FEF3C7; }
+  100%{ background-color:transparent; }
+}
+.activity-highlight-flash{ animation:activityFlash 1.8s ease; }
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+/* 자산 하나에 IP 주소가 여러 개일 수 있어, 잠금 해제 후에는 각 IP를 줄마다 하나씩
+   따로 클릭해서 복사할 수 있는 칩 목록으로 보여준다 */
+
+
+
+
+
+
+/* PW 셀 — 일반 비밀번호 아래에 Enable 비밀번호가 있으면 한 줄 더 붙여서 보여준다 */
+.pw-cell{ display:flex; flex-direction:column; gap:3px; }
+.pw-cell-row{ display:flex; align-items:center; }
+.pw-cell-enable{ gap:5px; }
+.en-badge{
+  flex-shrink:0; display:inline-flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:9px; font-weight:700; letter-spacing:.02em;
+  color:var(--accent-dim); background:#E6F4FD; border:1px solid #C9E7F7; border-radius:4px;
+  padding:1px 5px; line-height:1.4;
+}
+
+.contact-cell{ font-size:11.8px; line-height:1.5; }
+.contact-cell .who{ color:var(--text); }
+.contact-cell .mail{ color:var(--text-faint); font-family:var(--mono); font-size:11px; }
+
+.empty-state{
+  text-align:center; padding:70px 20px; color:var(--text-faint);
+}
+.empty-state h3{ font-family:var(--display); color:var(--text-dim); margin-bottom:6px; font-size:16px;}
+
+/* SKU category tag */
+
+
+
+
+
+
+
+
+/* S/N link */
+
+
+
+/* work log */
+.worklog-btn{
+  display:inline-flex; align-items:center; gap:5px;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
+  padding:6px 9px; color:var(--text-dim); font-size:11.5px; font-weight:600; cursor:pointer;
+}
+.worklog-btn:hover{ color:var(--accent); border-color:var(--accent-dim); }
+.worklog-btn .cnt{ color:var(--text-faint); font-family:var(--mono); }
+.worklog-list{ margin-top:20px; border-top:1px solid var(--border); padding-top:16px; max-height:280px; overflow-y:auto; }
+.worklog-item{
+  display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--border);
+}
+.worklog-item:last-child{ border-bottom:none; }
+.worklog-item .wl-type{
+  flex-shrink:0; font-size:10.5px; font-family:var(--mono); padding:4px 8px; border-radius:6px;
+  border:1px solid var(--border-solid); color:var(--text-dim); height:fit-content; white-space:nowrap;
+  background:var(--surface2);
+}
+.worklog-item .wl-body{ min-width:0; flex:1; }
+.worklog-item .wl-meta{ font-size:11px; color:var(--text-faint); font-family:var(--mono); margin-bottom:3px;}
+.worklog-item .wl-note{ font-size:12.8px; color:var(--text-dim); line-height:1.5; }
+.worklog-item .wl-actions{ display:flex; gap:6px; flex-shrink:0; }
+.wl-action-btn{
+  background:none; border:1px solid var(--border-solid); border-radius:6px; cursor:pointer;
+  color:var(--text-faint); font-size:11px; padding:4px 8px; font-family:var(--body);
+}
+.wl-action-btn:hover{ color:var(--text); border-color:#C7CFDC; }
+.wl-action-btn.danger{ color:var(--red); border-color:#F3B4B4; }
+.wl-action-btn.danger:hover{ color:#fff; background:var(--red); border-color:var(--red); }
+.wl-action-btn.icon-only{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:28px; height:28px; padding:0;
+}
+.worklog-empty{ color:var(--text-faint); font-size:12.5px; text-align:center; padding:16px 0; }
+.wl-asset-list{
+  display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+  background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
+  padding:10px 12px; margin-bottom:14px;
+}
+.wl-asset-list-label{
+  flex:0 0 100%; font-size:11px; color:var(--text-faint); font-family:var(--mono);
+  text-transform:uppercase; letter-spacing:.03em; margin-bottom:2px;
+}
+.wl-asset-chip{
+  font-size:11.8px; color:var(--text-dim); background:var(--surface); border:1px solid var(--border-solid);
+  border-radius:6px; padding:4px 9px; font-family:var(--mono);
+}
+.worklog-item .wl-changes{
+  margin-top:6px; font-size:11.5px; color:var(--accent-dim); background:#E6F4FD;
+  border-radius:6px; padding:5px 8px; line-height:1.5; font-family:var(--mono);
+}
+.worklog-item .wl-changes-title{
+  margin-bottom:5px;
+  font-weight:700;
+}
+
+.worklog-item .wl-change-line{
+  display:block;
+  width:100%;
+
+  margin-top:3px;
+
+  white-space:normal;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+
+  line-height:1.55;
+}
+
+.worklog-item .wl-change-line:first-of-type{
+  margin-top:0;
+}
+.wl-fieldchange-toggle{
+  display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12.5px;
+  color:var(--text-dim); cursor:pointer;
+}
+.wl-fieldchange-toggle input{ width:auto; }
+.wl-fc-list{ display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.wl-fc-row{ display:flex; gap:8px; align-items:flex-start; }
+.wl-fc-row label{
+  flex-shrink:0; width:110px; padding-top:9px; font-size:11px; color:var(--text-faint);
+  font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em;
+}
+.wl-fc-row input, .wl-fc-row textarea{
+  flex:1; min-width:0; background:var(--surface2); border:1px solid var(--border-solid); border-radius:7px;
+  padding:8px 9px; color:var(--text); font-size:12.3px; outline:none; font-family:var(--body);
+}
+.wl-fc-row textarea{ min-height:56px; resize:vertical; font-family:var(--mono); font-size:12px; }
+.wl-fc-row input:focus, .wl-fc-row textarea:focus{ border-color:var(--accent); }
+
+/* 작업 이력 - 자산 정보 변경 항목 하이라이트 */
+.wl-fc-input-wrap{
+  position:relative;
+  flex:1;
+  min-width:0;
+  display:flex;
+}
+.wl-fc-input-wrap .wl-fc-input{
+  width:100%;
+}
+.wl-fc-row.is-changed{
+  margin:0 -7px;
+  padding:6px 7px;
+  background:#FFF8E8;
+  border:1px solid #F2D99B;
+  border-radius:8px;
+}
+.wl-fc-input.is-changed{
+  background:#FFFDF7 !important;
+  border-color:#E4B84F !important;
+  box-shadow:0 0 0 2px rgba(228,184,79,.10);
+}
+.wl-fc-changed-badge{
+  position:absolute;
+  right:8px;
+  top:7px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:2px 6px;
+  background:#F8E7B4;
+  color:#9A6A10;
+  border:1px solid #E8CE83;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:700;
+  line-height:1.3;
+  pointer-events:none;
+}
+input.wl-fc-input.is-changed,
+textarea.wl-fc-input.is-changed{
+  padding-right:62px !important;
+}
+#wl_fieldchange_grid{ margin-top:12px; }
+
+/* add form / modals */
+#addModal, #workLogModal, #groupEditModal, #addGroupModal, #subGroupEditModal, #custContactsModal, #moveAssetModal, #maintenanceLogModal, #maintenanceMailSettingsModal{
+  position:fixed; inset:0; z-index:1200; background:rgba(15,23,42,0.45); backdrop-filter:blur(3px);
+  display:none; align-items:flex-start; justify-content:center; overflow-y:auto;
+  padding:calc(var(--global-header-h, 0px) + 24px) 20px 40px;
+}
+#addModal.open, #workLogModal.open, #groupEditModal.open, #addGroupModal.open, #subGroupEditModal.open, #custContactsModal.open, #moveAssetModal.open, #maintenanceLogModal.open, #maintenanceMailSettingsModal.open{ display:flex; }
+.cp-error{ color:var(--red); font-size:12.5px; margin-top:14px; min-height:16px; }
+.modal-card{
+  width:100%; max-width:640px; background:var(--surface); border:1px solid var(--border-solid);
+  border-radius:14px; padding:26px; margin-bottom:40px;
+  box-shadow: var(--shadow);
+}
+.modal-card h2{ font-family:var(--display); font-size:18px; margin-bottom:4px; }
+.modal-card p.hint{ font-size:12.5px; color:var(--text-dim); margin-bottom:20px; }
+.form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.form-grid label{ display:block; font-size:11px; color:var(--text-faint); margin-bottom:5px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.03em;}
+.form-grid input, .form-grid textarea, .form-grid select{
+  width:100%; background:var(--surface2); border:1px solid var(--border-solid); border-radius:8px;
+  padding:9px 11px; color:var(--text); font-size:13px; outline:none; font-family:var(--body);
+}
+.form-grid input:focus, .form-grid textarea:focus, .form-grid select:focus{ border-color:var(--accent); }
+.form-grid .full{ grid-column:1/-1; }
+
+/* 법인 추가/수정창 — "이 법인은 상위 법인입니다" 체크박스. 상위 법인(부모) select 바로 위에 놓인다. */
+
+
+
+/* 법인 정보 수정창 — 요청한 3열/2열 행 배치. 각 행은 form-grid(2열) 안에서 전체 너비를 차지하고,
+   행 내부에서 자체적으로 3열 또는 2열 그리드를 이룬다. */
+.form-grid .ge-row{ grid-column:1/-1; display:grid; gap:12px; }
+.form-grid .ge-row-5{ grid-template-columns:repeat(5, 1fr); }
+.form-grid .ge-row-3{ grid-template-columns:1fr 1fr 1fr; }
+.form-grid .ge-row-2{ grid-template-columns:1fr 1fr; }
+
+/* 법인 추가창 — 가로로 넓게, 세로는 짧게 (한 행에 필드를 더 많이 배치) */
+#addGroupModal .modal-card{ max-width:900px; }
+
+/* 자산 추가/수정창 — SKU/S/N/수량/라이선스, OS/IP/ID/PW/Enable PW를 각각 5열로 배치하기 위해 더 넓게 */
+#addModal .modal-card{ max-width:960px; }
+.form-grid input:disabled,
+.form-grid select:disabled,
+.form-grid textarea:disabled{
+  background:var(--surface2);
+  color:var(--text-faint);
+  cursor:not-allowed;
+  opacity:.75;
+}
+.ge-limited-edit-notice{
+  margin:10px 0 12px;
+  padding:8px 10px;
+
+  background:#FFF8E8;
+  border:1px solid #F0D79A;
+  border-radius:8px;
+
+  color:#8A6614;
+  font-size:11.5px;
+}
+.date-field{ position:relative; display:flex; align-items:center; gap:0; }
+.date-field input:not(.date-native-input){ padding-right:38px; }
+
+/* =========================================================
+   유지보수 점검 등록 모달 - 최종 스타일
+   ========================================================= */
+
+/* 공통 모달 규칙 위에서 이 모달만 화면 중앙에 고정 */
+
+
+
+
+/* 흰색 카드 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 날짜 + 상태 버튼 */
+
+
+
+
+
+
+
+
+
+
+/* 커스텀 체크박스 */
+
+
+
+
+/* 완료 */
+
+
+
+
+
+
+/* 미완료 */
+
+
+
+
+
+
+/* 미완료 선택 시 날짜 비활성화 표시 */
+
+
+
+
+
+
+/* 유지보수 모달 전용 액션 컨테이너. 공용 .modal-actions 클래스와 완전히 분리 */
+
+
+/* 하단 액션 버튼은 반드시 카드 내부의 일반 흐름에 배치 */
+
+
+
+
+/* 점검 담당자 입력창 오른쪽에 메일 언어/보내기 버튼 배치 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 점검 이메일 사용자별 한글/English 템플릿 설정 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 좁은 화면에서는 날짜/상태를 두 줄로 */
+
+
+.date-pick-btn{
+  position:absolute; right:4px; top:50%; transform:translateY(-50%);
+  background:none; border:none; cursor:pointer; font-size:14px; padding:6px; line-height:1;
+  color:var(--text-faint);
+}
+.date-pick-btn:hover{ color:var(--accent); }
+.date-native-input{
+  position:absolute; inset:0; width:100%; height:100%; opacity:0; pointer-events:none;
+  padding:0; border:none;
+}
+.form-grid textarea{ resize:vertical; min-height:60px; font-family:var(--mono); font-size:12px;}
+
+
+.cc-row-top{ display:flex; gap:6px; align-items:center; }
+.cc-row-bottom{ display:flex; gap:6px; }
+
+
+
+
+.cc-remove-btn{
+  flex-shrink:0; width:26px; height:26px; border-radius:6px; border:1px solid var(--border-solid);
+  background:var(--surface); color:var(--text-faint); cursor:pointer; font-size:12px; line-height:1;
+}
+.cc-remove-btn:hover{ color:var(--red); border-color:#F3B4B4; }
+.cust-add-btn{
+  margin-top:8px; padding:6px 10px; font-size:11.5px; width:auto;
+}
+.modal-actions{ display:flex; gap:10px; margin-top:22px; justify-content:flex-end; }
+
+/* ---------- 유지보수(월별 점검) 페이지 ---------- */
+/* 헤더 + 탭을 하나로 묶어 스크롤 시 상단에 고정 (main.content 좌우 패딩만큼 음수 마진으로 폭을 맞추고 되돌려준다) */
+.maint-sticky-top{
+  position:sticky; top:calc(var(--global-header-h, 0px) + var(--topbar-h, 0px)); z-index:20;
+  background:var(--bg);
+  margin:0 -26px; padding:0 26px;
+}
+.maint-header{ margin-bottom:18px; }
+.maint-header-row{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.maint-header h2{ font-family:var(--display); font-size:20px; color:var(--text); }
+.maint-sub{ font-size:12.5px; color:var(--text-faint); margin-top:4px; font-family:var(--mono); }
+
+
+
+
+
+
+#maintTabBody{ padding-top:2px; }
+
+
+
+
+/* =========================================================
+   업데이트 전체보기 - 가로형 + 고정 헤더
+   ========================================================= */
+
+/* 히스토리 페이지에서는 제목 + 툴바 + 열 제목까지 한 덩어리로 상단 고정 */
+
+
+/* 상단: 선택 도구는 좌측 / 검색·필터는 우측 */
+
+
+
+
+
+
+
+
+
+
+
+#whSortSelect{ width:88px; }
+
+/*
+  모든 행과 제목 헤더가 반드시 같은 열 폭을 사용한다.
+  체크 | 날짜/시간 | 작업명 | 자산 | 내용 | 변경 내용 | 담당자
+*/
+
+
+/* 제목 헤더: 상단 고정 영역의 마지막 줄 */
+
+
+
+
+
+
+
+
+
+
+
+
+/* 목록 */
+
+
+
+
+
+
+/* 매우 중요: wh-top은 실제 레이아웃 박스를 만들지 않는다. */
+
+
+
+
+/* 날짜 + 시간: 작업명보다 먼저 */
+
+
+/* 작업명 */
+
+
+/* 법인 / SKU / S/N */
+
+
+
+
+
+
+
+
+/* 작업 내용 */
+
+
+/* 변경 내용: 폭이 부족하면 여러 줄 */
+
+
+
+
+
+
+
+
+
+
+
+
+/* 담당자 정보는 항상 마지막 열의 오른쪽 끝 */
+
+
+/* 변경 내용이 없는 행도 담당자는 절대 앞으로 당기지 않는다. */
+
+
+
+
+
+
+
+
+
+
+
+
+/* 연도 이전/다음 화살표 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 월별 등록 탭: 좌측 법인 정보 + 우측 1~12월 연간 스프레드시트 */
+
+
+
+
+
+
+
+
+
+
+
+
+/* 계약만료 D-DAY */
+
+
+/* 담당 */
+
+
+/* 1월 ~ 12월
+   고정폭을 없애면 남은 공간을 12개 월이 동일하게 나눠 사용 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 미완료 점검 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 법인별 평균 점검일 분포 (1일~31일) 막대그래프 */
+
+
+
+
+
+
+
+
+
+
+/* 막대 위 커스텀 툴팁 (기본 title 속성 대신 예쁘게 스타일링) */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 담당자별 사이트 요약 카드 — 담당자를 가로로 나열하고, 담당 법인은 카드 안에서 세로로 쌓는다 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 880px){
+.panel-top-actions{ margin-bottom:0; padding-bottom:0; border-bottom:none; max-width:220px; }
+  table, thead, tbody, tr, td{ display:block; }
+  thead{ display:none; }
+  tbody tr{ padding:12px; border-bottom:1px solid var(--border-solid); }
+  tbody td{ border:none; padding:4px 0; }
+  tbody td::before{ content:attr(data-label); display:block; font-size:9.5px; color:var(--text-faint); text-transform:uppercase; font-family:var(--mono); margin-bottom:2px;}
+  .form-grid{ grid-template-columns:1fr; }
+  .form-grid .ge-row-3, .form-grid .ge-row-2, .form-grid .ge-row-5{ grid-template-columns:1fr; }
+  
+  
+  
+  
+  
+  /* 연간 표(월별 등록)는 카드형으로 바꾸지 않고, 좌측 법인 열을 고정한 채 가로 스크롤로 본다 */
+}
+
+/* 국가 → 위치 → 법인 3단계 현황 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 국가 → 위치 → 법인 : 하위 단계로 갈수록 연한 노란색 */
+
+
+
+
+
+
+
+
+
+
+
+/* 점검지 월 칸 - 날짜/상태 */
+
+
+/* 점검 내용 */
+
+
+/* 미완료 사유는 붉은 계열 */
+
+.maint-header-actions{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:6px;
+  flex-shrink:0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 미계약 */
+
+
+
+
+
+
+
+
+
+
+
+
+/* 미계약일 때 점검 내용 비활성화 */
+
+
+
+
+
+
+
+/* ---------- 작업 이력 전체보기 - 삭제 이력 ---------- */
+
+
+
+
+
+
+/* =========================================================
+   자산 정보 - 최근 업데이트 툴팁
+   ========================================================= */
+
+
+
+
+
+
+
+/* 제목 */
+
+
+
+
+
+/* 목록 */
+
+
+
+/* 개별 이력 */
+
+
+
+
+
+/* 상단 */
+
+
+
+/* 작업 종류 */
+
+
+
+/* 날짜 */
+
+
+
+/* 실제 작업/변경 내용 */
+
+
+
+/* 담당자 */
+
+
+
+/* 삭제된 이력 */
+
+
+
+
+
+
+/* ---------- GitHub 자동 저장 상태 ---------- */
+#githubSyncStatus{
+  order:4;
+
+  /* 위치가 절대 밀리지 않도록 폭 고정 */
+  flex:0 0 84px;
+  width:84px;
+  min-width:84px;
+  max-width:84px;
+
+  margin-left:auto;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:34px;
+  padding:5px 5px;
+
+  border:1px solid var(--border-solid);
+  border-radius:9px;
+
+  background:#fff;
+
+  font-family:var(--mono);
+  font-size:10px;
+  font-weight:700;
+  line-height:1.2;
+
+  text-align:center;
+
+  white-space:normal;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+
+  box-sizing:border-box;
+}
+/* 알림 버튼 */
+#profileBox .icon-btn{
+  flex-shrink:0;
+}
+
+/* My 버튼 */
+#myAssetsToggle{
+  flex:0 0 auto;
+  flex-shrink:0;
+}
+
+/* 저장 상태 */
+#githubSyncStatus{
+  flex-shrink:0;
+}
+/* 저장 대기 */
+#githubSyncStatus.pending{
+  color:#9A6B12;
+  background:#FFF8E8;
+  border-color:#F0D79A;
+}
+
+/* 저장 중 */
+#githubSyncStatus.syncing{
+  color:#1473A5;
+  background:#EAF6FC;
+  border-color:#B8DEF1;
+}
+
+/* 저장 완료 */
+#githubSyncStatus.synced{
+  color:#2F8F52;
+  background:#EAF7EF;
+  border-color:#B8DDC4;
+}
+
+/* 저장 실패 */
+#githubSyncStatus.error{
+  color:#C62828;
+  background:#FDECEC;
+  border-color:#E9B2B2;
+
+  cursor:pointer;
+  user-select:none;
+
+  transition:
+    background .15s,
+    border-color .15s,
+    box-shadow .15s,
+    transform .15s;
+}
+
+#githubSyncStatus.error:hover{
+  background:#FBE0E0;
+  border-color:#DB8E8E;
+
+  box-shadow:
+    0 2px 8px rgba(198,40,40,.12);
+
+  transform:
+    translateY(-1px);
+}
+
+#githubSyncStatus.error:active{
+  transform:
+    translateY(0);
+}
+
+/* =========================================================
+   유지보수 점검지 - 담당자별 고유 색상
+   ========================================================= */
+
+
+
+
+/* 담당자별 사업장 구분선 */
+
+
+/* Support ID 정보 수정 - 기존 스타일 유지 + 1열 배치 */
+
+
+
+
+/* =========================================================
+   다중 자산 작업 이력 - 자산별 편집 스타일 개선
+   ========================================================= */
+
+.wl-multi-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+
+  color:var(--text-muted);
+  font-size:11px;
+}
+
+.wl-multi-toolbar > div{
+  display:flex;
+  gap:6px;
+}
+
+.wl-multi-toggle-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  height:28px;
+  padding:0 10px;
+
+  border:1px solid var(--border-solid);
+  border-radius:7px;
+
+  background:#fff;
+  color:var(--text-muted);
+
+  font-size:10.5px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.wl-multi-toggle-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:#F7FBFF;
+}
+
+
+/* 자산 카드 목록 */
+.wl-multi-assets{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+
+/* 각 자산 카드 */
+.wl-multi-asset{
+  border:1px solid #C9D6E3;
+  border-radius:10px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 1px 2px rgba(15,23,42,.03);
+}
+
+.wl-multi-asset[open]{
+  border-color:#B8CBE0;
+  box-shadow:0 3px 10px rgba(15,23,42,.05);
+}
+
+
+/* summary 기본 마커 정리 */
+.wl-multi-summary{
+  list-style:none;
+}
+
+.wl-multi-summary::-webkit-details-marker{
+  display:none;
+}
+
+
+/* 접힌 헤더 */
+.wl-multi-summary{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  min-height:42px;
+  padding:10px 12px;
+
+  background:linear-gradient(180deg, #F8FBFE, #F1F6FB);
+  border-bottom:1px solid #D9E4EF;
+
+  cursor:pointer;
+  user-select:none;
+}
+
+.wl-multi-summary::before{
+  content:"▸";
+  flex:0 0 auto;
+  color:#7D8EA3;
+  font-size:11px;
+  transition:transform .15s ease;
+  margin-right:2px;
+}
+
+.wl-multi-asset[open] .wl-multi-summary::before{
+  transform:rotate(90deg);
+}
+
+.wl-multi-summary-main{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+
+  min-width:0;
+  flex:1 1 auto;
+}
+
+.wl-multi-summary-main strong{
+  color:var(--text);
+  font-size:12.5px;
+  font-weight:700;
+}
+
+.wl-multi-summary-main span{
+  color:var(--text-muted);
+  font-size:10.5px;
+  line-height:1.2;
+}
+
+.wl-multi-owner{
+  color:var(--text-faint) !important;
+}
+
+.wl-multi-change-count{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:3px 8px;
+
+  border:1px solid #E7D08A;
+  border-radius:999px;
+
+  background:#FFF5D6;
+  color:#9A6A10;
+
+  font-size:9.5px;
+  font-weight:700;
+  line-height:1;
+}
+
+
+/* 펼친 내용 */
+.wl-multi-fields{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:12px 14px;
+  padding:14px 12px 14px;
+  background:#FCFDFE;
+}
+
+
+/* 각 필드 */
+.wl-multi-field{
+  position:relative;
+  min-width:0;
+}
+
+.wl-multi-field label{
+  display:block;
+  margin-bottom:5px;
+
+  color:var(--text-muted);
+  font-size:10.5px;
+  font-weight:600;
+  line-height:1.35;
+}
+
+.wl-multi-field.is-changed{
+  background:#FFF9EB;
+  border:1px solid #F0D997;
+  border-radius:8px;
+  padding:7px;
+}
+
+
+/* 입력창 - 기존 앱 스타일에 맞춤 */
+.wl-multi-input{
+  width:100%;
+  box-sizing:border-box;
+
+  min-height:32px;
+  padding:7px 10px;
+
+  border:1px solid var(--border-solid);
+  border-radius:7px;
+
+  background:var(--surface2);
+  color:var(--text);
+
+  font-size:12px;
+  line-height:1.35;
+  font-family:var(--mono);
+
+  outline:none;
+  transition:border-color .15s, box-shadow .15s, background .15s;
+}
+
+.wl-multi-input:focus{
+  border-color:var(--accent);
+  background:#fff;
+  box-shadow:0 0 0 2px rgba(42,157,214,.10);
+}
+
+.wl-multi-input:disabled{
+  background:#F1F3F5;
+  color:#A0A8B4;
+  cursor:not-allowed;
+}
+
+textarea.wl-multi-input{
+  min-height:58px;
+  resize:vertical;
+  white-space:pre-wrap;
+}
+
+
+/* 변경된 입력창 */
+.wl-multi-input.is-changed{
+  background:#FFFDF7 !important;
+  border-color:#E4B84F !important;
+  box-shadow:0 0 0 2px rgba(228,184,79,.10);
+}
+
+
+/* 변경 배지 */
+.wl-multi-changed-badge{
+  position:absolute;
+  top:8px;
+  right:8px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:2px 6px;
+
+  border-radius:999px;
+  border:1px solid #E8CE83;
+
+  background:#F8E7B4;
+  color:#95670C;
+
+  font-size:8.5px;
+  font-weight:700;
+  line-height:1;
+
+  pointer-events:none;
+}
+
+
+/* 모바일/좁은 화면 */
+@media (max-width:800px){
+.wl-multi-toolbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .wl-multi-fields{
+    grid-template-columns:1fr;
+  }
+
+  .wl-multi-summary{
+    align-items:flex-start;
+  }
+
+  .wl-multi-summary-main{
+    padding-right:4px;
+  }
+}
+/* =========================================================
+   자산 테이블 - 앞 4열은 내용 크기만 사용
+   ========================================================= */
+
+/* SKU / S/N / 수량 / 라이선스 기간은
+   필요한 크기만 차지 */
+table th.col-sku,
+table td.col-sku,
+table th.col-sn,
+table td.col-sn,
+table th.col-qty,
+table td.col-qty,
+table th.col-license,
+table td.col-license{
+  width:1%;
+  white-space:nowrap;
+}
+
+
+/* SKU */
+table th.col-sku,
+table td.col-sku{
+  padding-right:10px;
+}
+
+/* SKU 아래 태그 때문에 열이 불필요하게 넓어지는 것 방지 */
+
+
+
+/* S/N */
+table th.col-sn,
+table td.col-sn{
+  padding-left:8px;
+  padding-right:10px;
+}
+
+
+/* 수량 */
+table th.col-qty,
+table td.col-qty{
+  text-align:center;
+  padding-left:8px;
+  padding-right:8px;
+}
+table th.col-license,
+table td.col-license{
+  padding-left:10px;
+  padding-right:12px;
+}
+
+
+
+
+
+
+/* =========================================================
+   작업 이력 히스토리 - 마스터 선택 삭제
+   ========================================================= */
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   자산 순서 드래그 앤 드롭
+   ========================================================= */
+/* 체크박스 + 드래그 핸들 */
+
+
+
+
+
+/* 자산 순서 드래그 핸들 */
+
+
+
+
+
+
+/* 현재 들고 있는 자산 */
+
+
+/* 이 행 위에 놓임 */
+
+
+/* 이 행 아래에 놓임 */
+
+
+/* 드롭 대상 행 */
+
+
+/* =========================================================
+   자산 정보 IP / ID / PW / OS / 비고 세로 정렬 통일
+   ========================================================= */
+/* 5개 열의 셀 자체를 동일하게 중앙 정렬 */
+tbody td[data-label="IP"],
+tbody td[data-label="ID"],
+tbody td[data-label="PW"],
+tbody td[data-label="OS 버전"],
+tbody td[data-label="비고"]{
+  vertical-align:top !important;
+  line-height:20px;
+}
+
+
+/* IP / ID / PW 기본 표시값 */
+
+
+
+
+tbody td[data-label="PW"] .pw-cell{
+  align-items:flex-start;
+  justify-content:flex-start;
+}
+
+tbody td[data-label="PW"] .pw-cell-row{
+  align-items:flex-start;
+}
+
+
+/* =========================================================
+   작업 이력 GitHub 동기화 - 전체 화면 잠금
+   ========================================================= */
+.worklog-sync-overlay{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    rgba(245,247,250,.68);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+  pointer-events:auto;
+}
+
+.worklog-sync-overlay.open{
+  display:flex;
+}
+
+.worklog-sync-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:280px;
+  min-height:150px;
+  padding:24px 22px;
+  background:#fff;
+  border:1px solid var(--border-solid);
+  border-radius:14px;
+  box-shadow:
+    0 15px 45px rgba(15,23,42,.18);
+  text-align:center;
+}
+
+
+/* 회전 로딩 */
+.worklog-sync-spinner{
+  width:30px;
+  height:30px;
+  margin-bottom:15px;
+  border:3px solid #DDE8EF;
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:
+    worklogSyncSpin .75s linear infinite;
+}
+
+
+@keyframes worklogSyncSpin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.worklog-sync-title{
+  color:var(--text);
+  font-size:14px;
+  font-weight:700;
+  line-height:1.4;
+}
+
+.worklog-sync-message{
+  margin-top:7px;
+
+  color:var(--text-faint);
+
+  font-size:11px;
+  line-height:1.55;
+}
+
+/* 성공 */
+.worklog-sync-overlay.is-success
+.worklog-sync-card{
+  border-color:#A9D8B8;
+}
+
+.worklog-sync-overlay.is-success
+.worklog-sync-title{
+  color:#2F8F52;
+}
+
+/* 실패 */
+.worklog-sync-overlay.is-error
+.worklog-sync-card{
+  border-color:#E9B2B2;
+}
+
+.worklog-sync-overlay.is-error
+.worklog-sync-title{
+  color:#C62828;
+}
+
+.worklog-sync-retry{
+  flex:none;
+  width:auto;
+  margin-top:14px;
+  padding:8px 18px;
+}
+/* =========================================================
+   업데이트 전체보기 - 툴바/열헤더 최종 강제 보정
+   기존/외부 스타일의 중복 선언보다 항상 마지막에 적용
+   ========================================================= */
+
+
+/* 선택 도구 + 검색 필터 한 줄 복구 */
+
+
+/* 좌측: 전체 선택 / 0건 선택 / 선택 삭제 */
+
+
+
+
+
+
+
+
+/* 우측: 검색 / 구분 / 정렬 */
+
+
+
+
+
+
+/* 열 제목 글자 크기 확대 */
+
+
+
+
+/* 담당자 헤더는 실제 담당자 열과 동일하게 우측 정렬 */
+
+
+/* 작은 화면에서도 툴 자체가 사라지지 않도록 가로 스크롤 허용 */
+
+/* =========================================================
+   SSP-S → ISG 하위 자산 표현
+   ========================================================= */
+/* SSP-S 부모 자산 */
+
+
+/* ISG 하위 자산 */
+
+
+
+
+
+/* ↳ 가지 표시 */
+
+
+
+
+
+
+
+
+
+
+
+
+#githubSyncStatus.sync-stuck{
+  cursor:pointer;
+  color:#B45309;
+  background:#FFF7E6;
+  border-color:#F0C36D;
+  font-weight:700;
+  animation:
+    sync-stuck-pulse 1.2s ease-in-out infinite;
+}
+
+#githubSyncStatus.sync-stuck:hover{
+  background:#FFEDC2;
+  border-color:#DF9D32;
+}
+
+@keyframes sync-stuck-pulse{
+  0%,100%{
+    box-shadow:
+      0 0 0 0 rgba(217,119,6,0);
+  }
+
+  50%{
+    box-shadow:
+      0 0 0 4px rgba(217,119,6,.12);
+  }
+}
+
+/* 부모 SSP SKU 셀 */
+
+
+/* 하위 자산 내용 */
+
+
+/* 하위 자산 왼쪽의 예쁜 연결 화살표 */
+
+
+/* =========================================================
+   SSP → ISG 하위 자산 연결선
+   ========================================================= */
+
+
+/* 하위 자산 전체 위치 */
+
+
+/* 연결선 영역 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+.feature-loading{padding:70px 20px;text-align:center;color:var(--text-faint);font-size:12.5px;}
