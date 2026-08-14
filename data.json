@@ -7599,7 +7599,7 @@
       "sku": "ISG-Proxy 9",
       "sn": "32996856",
       "entitlement": "🔗",
-      "qty": "1",
+      "qty": "32",
       "start": "2025.1.1",
       "end": "2026.12.31",
       "remarks": "인터넷 느린 현상 발생, 프록시 BCIS 다운 불가 4번 발생",
@@ -7617,9 +7617,9 @@
       "tag_note": "수원 사업장",
       "id": 211,
       "ip_enc": {
-        "iv": "CjrdtJyo2/lI389d",
-        "ct": "owOsbb6uu7Qe3a0EWsg=",
-        "tag": "yBeCwwzKnrYfzVlrlecOsg=="
+        "iv": "DLzu91wz0Yf0w/XI",
+        "ct": "HQZpeY6p5A0G9f+/+ak=",
+        "tag": "k/uv/CbFgFpe4ucKKR5MTA=="
       },
       "id_enc": null,
       "pw_enc": null,
@@ -7662,7 +7662,7 @@
       "build_date": "",
       "cust_memo": "※ 신청 시스템 : https://www.sdigitalcity.com\n- 내방 담당자 : 김지수 프로\n- 내방장소 : 삼성전자디지털시티\n- 내방목적 : 일반\n- 내방상세\n> 방문일시 :\n> 방문목적 : A/S\n> 접견자 : 김지수 프로",
       "asset_parent_id": "210",
-      "last_mutation_id": "data-mssfta2u-f43ed5f3-4ece-4673-9fe6-ebaf27212323"
+      "last_mutation_id": "data-mssfz27r-3602da55-5ef9-4cbb-9347-52dd0985c2b8"
     },
     {
       "group": "kr-004",
@@ -17948,6 +17948,38 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssfvzo4-24eb6306-52cf-4d10-940d-293944afd8c3"
+    },
+    {
+      "id": "audit-1786681398525-uvf9b1",
+      "ts": 1786681398525,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "211",
+      "group": "kr-004",
+      "owner": "삼성전자 수원사업장",
+      "label": "ISG-Proxy 9",
+      "sn": "32996856",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "qty",
+          "label": "수량",
+          "before": "1",
+          "after": "32",
+          "sensitive": false
+        },
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssfz27r-3602da55-5ef9-4cbb-9347-52dd0985c2b8"
     }
   ],
   "syncMutations": [
@@ -18334,6 +18366,11 @@
     {
       "id": "data-mssfvzo4-24eb6306-52cf-4d10-940d-293944afd8c3",
       "ts": 1786681255258,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssfz27r-3602da55-5ef9-4cbb-9347-52dd0985c2b8",
+      "ts": 1786681398526,
       "scope": "data"
     }
   ]
