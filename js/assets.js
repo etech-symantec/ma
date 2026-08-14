@@ -2549,11 +2549,38 @@ function repairKnownBrokenGeneratedGroups(){
   return changed;
 }
 
+function normalizeCustMailRecipientType(value){
+  const type = String(value || '').toLowerCase();
+  if (type === 'cc' || type === 'exclude') return type;
+  return 'to';
+}
+
+function normalizeCustContact(contact){
+  return {
+    ...(contact || {}),
+    mail_recipient_type: normalizeCustMailRecipientType(
+      contact?.mail_recipient_type
+    )
+  };
+}
+
 function getGroupCustContacts(items){
   const withArr = items.find(i => Array.isArray(i.cust_contacts) && i.cust_contacts.length);
-  if (withArr) return withArr.cust_contacts.slice(0,5);
-  const legacy = items.map(i => ({name:i.cust_contact||'', phone:i.cust_phone||'', email:i.cust_email||''}))
+  if (withArr){
+    return withArr.cust_contacts
+      .slice(0,5)
+      .map(normalizeCustContact);
+  }
+
+  const legacy = items
+    .map(i => ({
+      name:i.cust_contact||'',
+      phone:i.cust_phone||'',
+      email:i.cust_email||'',
+      mail_recipient_type:'to'
+    }))
     .find(c => c.name || c.phone || c.email);
+
   return legacy ? [legacy] : [];
 }
 
@@ -3499,12 +3526,23 @@ function openCustContactsModal(gid){
     const roleTag = c.role
       ? `<span class="cust-role-tag" data-role="${esc(c.role)}">${esc(c.role)}</span>`
       : `<span class="cust-role-tag cust-role-none">미지정</span>`;
+
+    const mailRecipientType = normalizeCustMailRecipientType(
+      c.mail_recipient_type
+    );
+    const mailRecipientLabel = mailRecipientType === 'cc'
+      ? 'CC'
+      : mailRecipientType === 'exclude'
+        ? '미포함'
+        : '수신자';
+    const mailRecipientTag = `<span class="cust-mail-recipient-tag cust-mail-recipient-${mailRecipientType}">${mailRecipientLabel}</span>`;
+
     const rows = [];
     if (c.org) rows.push(`<span class="ccm-field"><b>소속</b> ${esc(c.org)}</span>`);
     if (c.phone) rows.push(`<span class="ccm-field"><b>연락처</b> ${esc(c.phone)}</span>`);
     if (c.email) rows.push(`<span class="ccm-field"><b>이메일</b> ${esc(c.email)}</span>`);
     return `<div class="ccm-card">
-      <div class="ccm-head">${roleTag}<span class="ccm-name">${esc(c.name||'(이름 미입력)')}</span></div>
+      <div class="ccm-head">${roleTag}${mailRecipientTag}<span class="ccm-name">${esc(c.name||'(이름 미입력)')}</span></div>
       ${rows.length ? `<div class="ccm-details">${rows.join('')}</div>` : ''}
     </div>`;
   }).join('') || `<div class="user-list-empty">등록된 담당자가 없습니다.</div>`;
@@ -3538,7 +3576,7 @@ document.getElementById('custContactsEditBtn').onclick = () => {
   const meta = groupMeta(items);
   cceCustContacts = (meta.cust_contacts && meta.cust_contacts.length
     ? meta.cust_contacts.slice(0,5)
-    : [{role:'',name:'',org:'',phone:'',email:''}]
+    : [{role:'',name:'',org:'',phone:'',email:'',mail_recipient_type:'to'}]
   ).map(c=>({...c}));
   renderCceCustRows();
   document.getElementById('cce_cust_memo').value = meta.cust_memo || '';
@@ -3586,6 +3624,11 @@ function renderCceCustRows(){
         <input class="cc-org" placeholder="소속" value="${esc(c.org||'')}">
         <input class="cc-phone" placeholder="연락처" value="${esc(c.phone||'')}">
         <input class="cc-email" placeholder="이메일" value="${esc(c.email||'')}">
+        <select class="cc-mail-recipient-type" title="점검 메일 포함 방식">
+          <option value="to" ${normalizeCustMailRecipientType(c.mail_recipient_type)==='to'?'selected':''}>수신자</option>
+          <option value="cc" ${normalizeCustMailRecipientType(c.mail_recipient_type)==='cc'?'selected':''}>CC</option>
+          <option value="exclude" ${normalizeCustMailRecipientType(c.mail_recipient_type)==='exclude'?'selected':''}>미포함</option>
+        </select>
       </div>
     </div>`).join('');
   wrap.querySelectorAll('[data-remove]').forEach(btn=>{
@@ -3606,6 +3649,9 @@ function captureCceCustContactsFromDom(){
     org: row.querySelector('.cc-org').value.trim(),
     phone: row.querySelector('.cc-phone').value.trim(),
     email: row.querySelector('.cc-email').value.trim(),
+    mail_recipient_type: normalizeCustMailRecipientType(
+      row.querySelector('.cc-mail-recipient-type')?.value
+    ),
   }));
 }
 
@@ -3617,7 +3663,7 @@ function updateCceCustAddBtnState(){
 document.getElementById('cce_cust_add_btn').onclick = () => {
   captureCceCustContactsFromDom();
   if (cceCustContacts.length >= 5) return;
-  cceCustContacts.push({role:'', name:'', org:'', phone:'', email:''});
+  cceCustContacts.push({role:'', name:'', org:'', phone:'', email:'', mail_recipient_type:'to'});
   renderCceCustRows();
 };
 
@@ -4646,6 +4692,11 @@ function renderCustContactRows(){
         <input class="cc-org" placeholder="소속" value="${esc(c.org||'')}">
         <input class="cc-phone" placeholder="연락처" value="${esc(c.phone||'')}">
         <input class="cc-email" placeholder="이메일" value="${esc(c.email||'')}">
+        <select class="cc-mail-recipient-type" title="점검 메일 포함 방식">
+          <option value="to" ${normalizeCustMailRecipientType(c.mail_recipient_type)==='to'?'selected':''}>수신자</option>
+          <option value="cc" ${normalizeCustMailRecipientType(c.mail_recipient_type)==='cc'?'selected':''}>CC</option>
+          <option value="exclude" ${normalizeCustMailRecipientType(c.mail_recipient_type)==='exclude'?'selected':''}>미포함</option>
+        </select>
       </div>
     </div>`).join('');
   wrap.querySelectorAll('[data-remove]').forEach(btn=>{
@@ -4666,6 +4717,9 @@ function captureCustContactsFromDom(){
     org: row.querySelector('.cc-org').value.trim(),
     phone: row.querySelector('.cc-phone').value.trim(),
     email: row.querySelector('.cc-email').value.trim(),
+    mail_recipient_type: normalizeCustMailRecipientType(
+      row.querySelector('.cc-mail-recipient-type')?.value
+    ),
   }));
 }
 
@@ -4677,7 +4731,7 @@ function updateCustAddBtnState(){
 document.getElementById('ge_cust_add_btn').onclick = () => {
   captureCustContactsFromDom();
   if (geCustContacts.length >= 5) return;
-  geCustContacts.push({role:'', name:'', org:'', phone:'', email:''});
+  geCustContacts.push({role:'', name:'', org:'', phone:'', email:'', mail_recipient_type:'to'});
   renderCustContactRows();
 };
 
@@ -4763,8 +4817,8 @@ function openGroupEditModal(gid){
 
   populateParentGroupSelect(gid, meta.group_parent);
   geCustContacts = (meta.cust_contacts && meta.cust_contacts.length
-    ? meta.cust_contacts.slice(0,5)
-    : [{role:'',name:'',org:'',phone:'',email:''}]
+    ? meta.cust_contacts.slice(0,5).map(normalizeCustContact)
+    : [{role:'',name:'',org:'',phone:'',email:'',mail_recipient_type:'to'}]
   ).map(c=>({...c}));
   renderCustContactRows();
   updateGeCustSectionVisibility();
@@ -4911,6 +4965,11 @@ function renderNgCustContactRows(){
         <input class="cc-org" placeholder="소속" value="${esc(c.org||'')}">
         <input class="cc-phone" placeholder="연락처" value="${esc(c.phone||'')}">
         <input class="cc-email" placeholder="이메일" value="${esc(c.email||'')}">
+        <select class="cc-mail-recipient-type" title="점검 메일 포함 방식">
+          <option value="to" ${normalizeCustMailRecipientType(c.mail_recipient_type)==='to'?'selected':''}>수신자</option>
+          <option value="cc" ${normalizeCustMailRecipientType(c.mail_recipient_type)==='cc'?'selected':''}>CC</option>
+          <option value="exclude" ${normalizeCustMailRecipientType(c.mail_recipient_type)==='exclude'?'selected':''}>미포함</option>
+        </select>
       </div>
     </div>`).join('');
   wrap.querySelectorAll('[data-remove]').forEach(btn=>{
@@ -4931,6 +4990,9 @@ function captureNgCustContactsFromDom(){
     org: row.querySelector('.cc-org').value.trim(),
     phone: row.querySelector('.cc-phone').value.trim(),
     email: row.querySelector('.cc-email').value.trim(),
+    mail_recipient_type: normalizeCustMailRecipientType(
+      row.querySelector('.cc-mail-recipient-type')?.value
+    ),
   }));
 }
 
@@ -4942,7 +5004,7 @@ function updateNgCustAddBtnState(){
 document.getElementById('ng_cust_add_btn').onclick = () => {
   captureNgCustContactsFromDom();
   if (ngCustContacts.length >= 5) return;
-  ngCustContacts.push({role:'', name:'', org:'', phone:'', email:''});
+  ngCustContacts.push({role:'', name:'', org:'', phone:'', email:'', mail_recipient_type:'to'});
   renderNgCustContactRows();
 };
 
@@ -4994,7 +5056,7 @@ function openAddGroupModal(presetParentGid){
     const sel = document.getElementById('ng_parent_group');
     if ([...sel.options].some(o => o.value === presetParentGid)) sel.value = presetParentGid;
   }
-  ngCustContacts = [{role:'',name:'',org:'',phone:'',email:''}];
+  ngCustContacts = [{role:'',name:'',org:'',phone:'',email:'',mail_recipient_type:'to'}];
   renderNgCustContactRows();
   updateNgCustSectionVisibility();
   document.getElementById('ngError').textContent = '';
