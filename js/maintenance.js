@@ -751,11 +751,21 @@ function openMaintenanceLogModal(gid, ym){
   document.getElementById('mlError').textContent = '';
   document.getElementById('mlDeleteBtn').style.display = hasInspectionLog ? '' : 'none';
 
-  const mailInquiryDeleteBtn = document.getElementById('mlMailInquiryDeleteBtn');
+  const mailInquiryDeleteBtn =
+    document.getElementById(
+      'mlMailInquiryDeleteBtn'
+    );
+  
   if (mailInquiryDeleteBtn){
-    mailInquiryDeleteBtn.style.display = log && log.mail_inquiry ? '' : 'none';
+  
+    const hasMailInquiry =
+      !!log?.mail_inquiry;
+  
+    mailInquiryDeleteBtn.style.display =
+      hasMailInquiry
+        ? ''
+        : 'none';
   }
-
   refreshMaintenanceMailButton(gid);
   document.getElementById('maintenanceLogModal').classList.add('open');
 }
