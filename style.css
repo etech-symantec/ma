@@ -3811,9 +3811,9 @@ tr.asset-child-row td.col-sku{
 /* 연결선 영역 */
 .col-sku-app .asset-child-arrow{
   position:relative;
-  flex:0 0 17px;
-  width:17px;
-  min-height:24px;
+  flex:0 0 18px;
+  width:18px;
+  min-height:28px;
   align-self:stretch;
   margin-top:0;
 }
@@ -3821,10 +3821,10 @@ tr.asset-child-row td.col-sku{
 .col-sku-app .asset-child-arrow::before{
   content:'';
   position:absolute;
-  left:6px;
-  top:-4px;
+  left:9px;
+  top:-12px;
   width:0;
-  height:16px;
+  height:26px;
   border-left:
     1px solid #C9D4E5;
   box-sizing:border-box;
@@ -3833,23 +3833,20 @@ tr.asset-child-row td.col-sku{
 .col-sku-app .asset-child-arrow::after{
   content:'';
   position:absolute;
-  left:6px;
-  top:11px;
-  width:10px;
+  left:9px;
+  top:6px;
+  width:11px;
   height:8px;
-  border-left:
-    1px solid #C9D4E5;
-  border-bottom:
-    1px solid #C9D4E5;
-  border-bottom-left-radius:
-    5px;
+  border-left:1px solid #C9D4E5;
+  border-bottom:1px solid #C9D4E5;
+  border-bottom-left-radius:5px;
   box-sizing:border-box;
 }
 
 tr.asset-child-row:has(+ tr.asset-child-row)
 .asset-child-arrow::before{
-  top:-4px;
-  bottom:-18px;
+  top:-12px;
+  bottom:-16px;
   height:auto;
 }
 
@@ -3857,7 +3854,7 @@ tr.asset-child-row
 +
 tr.asset-child-row
 .asset-child-arrow::before{
-  top:-18px;
+  top:-16px;
   height:30px;
 }
 
@@ -3865,8 +3862,8 @@ tr.asset-child-row
 +
 tr.asset-child-row:has(+ tr.asset-child-row)
 .asset-child-arrow::before{
-  top:-18px;
-  bottom:-18px;
+  top:-16px;
+  bottom:-16px;
   height:auto;
 }
 
