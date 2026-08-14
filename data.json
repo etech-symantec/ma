@@ -7,7 +7,7 @@
       "flag": "●",
       "owner": "삼성SDS 일본",
       "location": "도쿄",
-      "support_id": "560569",
+      "support_id": "298214",
       "sku": "ASG-S400-30-U5000",
       "sn": "3917320082",
       "entitlement": "🔗",
@@ -67,14 +67,15 @@
       "build_date": "",
       "cust_memo": "",
       "deleted_work_log": [],
-      "asset_order": 1
+      "asset_order": 1,
+      "last_mutation_id": "data-mss7www0-cc1d4906-0ba7-48ef-80f3-46b818a6d48b"
     },
     {
       "group": "jp-sds",
       "flag": "●",
       "owner": "삼성SDS 일본",
       "location": "도쿄",
-      "support_id": "560569",
+      "support_id": "298214",
       "sku": "ASG-S400-30-U5000",
       "sn": "3917320085",
       "entitlement": "🔗",
@@ -135,14 +136,15 @@
       "cust_memo": "",
       "work_log": [],
       "deleted_work_log": [],
-      "asset_order": 2
+      "asset_order": 2,
+      "last_mutation_id": "data-mss7www0-cc1d4906-0ba7-48ef-80f3-46b818a6d48b"
     },
     {
       "group": "jp-sds",
       "flag": "●",
       "owner": "삼성SDS 일본",
       "location": "도쿄",
-      "support_id": "560569",
+      "support_id": "298214",
       "sku": "IS-SWSA-SWG-1000-2500-1Y",
       "sn": "50648324-4-1",
       "entitlement": "🔗",
@@ -184,14 +186,15 @@
       "build_engineer": "",
       "build_date": "",
       "cust_memo": "",
-      "asset_order": 3
+      "asset_order": 3,
+      "last_mutation_id": "data-mss7www0-cc1d4906-0ba7-48ef-80f3-46b818a6d48b"
     },
     {
       "group": "jp-sds",
       "flag": "●",
       "owner": "삼성SDS 일본",
       "location": "도쿄",
-      "support_id": "560569",
+      "support_id": "298214",
       "sku": "MC-S400-20-100",
       "sn": "5017320101",
       "entitlement": "🔗",
@@ -250,14 +253,15 @@
       "build_engineer": "",
       "build_date": "",
       "cust_memo": "",
-      "asset_order": 4
+      "asset_order": 4,
+      "last_mutation_id": "data-mss7www0-cc1d4906-0ba7-48ef-80f3-46b818a6d48b"
     },
     {
       "group": "jp-sds",
       "flag": "●",
       "owner": "삼성SDS 일본",
       "location": "도쿄",
-      "support_id": "560569",
+      "support_id": "298214",
       "sku": "RP-V100-1Y",
       "sn": "26482591",
       "entitlement": "🔗",
@@ -311,7 +315,8 @@
       "build_engineer": "",
       "build_date": "",
       "cust_memo": "",
-      "asset_order": 5
+      "asset_order": 5,
+      "last_mutation_id": "data-mss7www0-cc1d4906-0ba7-48ef-80f3-46b818a6d48b"
     },
     {
       "group": "tw-ds",
@@ -16330,6 +16335,31 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss7f9x5-786b1323-8f44-41e1-b8e1-65534d148351"
+    },
+    {
+      "id": "audit-1786667861385-f81bnz",
+      "ts": 1786667861385,
+      "action": "edit",
+      "target_type": "Support ID",
+      "target_id": "jp-sds:298214",
+      "group": "jp-sds",
+      "owner": "삼성SDS 일본",
+      "label": "ASG-S400-30-U5000",
+      "sn": "3917320082",
+      "summary": "Support ID 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "support_id",
+          "label": "Support ID",
+          "before": "560569",
+          "after": "298214",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7www0-cc1d4906-0ba7-48ef-80f3-46b818a6d48b"
     }
   ],
   "syncMutations": [
@@ -16511,6 +16541,11 @@
     {
       "id": "data-mss7f9x5-786b1323-8f44-41e1-b8e1-65534d148351",
       "ts": 1786667038478,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss7www0-cc1d4906-0ba7-48ef-80f3-46b818a6d48b",
+      "ts": 1786667861389,
       "scope": "data"
     }
   ]
