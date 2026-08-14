@@ -3312,25 +3312,18 @@ table td.col-license .lic-bar{
 /* 자산 순서 드래그 핸들 */
 .asset-drag-handle{
   flex:0 0 auto;
-
   display:inline-flex;
   align-items:center;
   justify-content:center;
-
   width:12px;
   height:20px;
-
   margin:0;
-
   color:var(--text-faint);
-
   font-size:15px;
   font-weight:700;
   line-height:1;
-
   cursor:grab;
   user-select:none;
-
   border-radius:4px;
 }
 
@@ -3348,13 +3341,11 @@ tbody tr.asset-dragging{
   opacity:.42;
 }
 
-
 /* 이 행 위에 놓임 */
 tbody tr.asset-drop-before td{
   box-shadow:
     inset 0 2px 0 var(--accent);
 }
-
 
 /* 이 행 아래에 놓임 */
 tbody tr.asset-drop-after td{
@@ -3362,16 +3353,15 @@ tbody tr.asset-drop-after td{
     inset 0 -2px 0 var(--accent);
 }
 
-
 /* 드롭 대상 행 */
 tbody tr.asset-drop-before,
 tbody tr.asset-drop-after{
   background:#F3F9FD;
 }
+
 /* =========================================================
    자산 정보 IP / ID / PW / OS / 비고 세로 정렬 통일
    ========================================================= */
-
 /* 5개 열의 셀 자체를 동일하게 중앙 정렬 */
 tbody td[data-label="IP"],
 tbody td[data-label="ID"],
@@ -3428,57 +3418,38 @@ tbody td[data-label="비고"] .remarks-txt{
 /* =========================================================
    작업 이력 GitHub 동기화 - 전체 화면 잠금
    ========================================================= */
-
 .worklog-sync-overlay{
   position:fixed;
   inset:0;
-
   z-index:99999;
-
   display:none;
   align-items:center;
   justify-content:center;
-
   padding:20px;
-
   background:
     rgba(245,247,250,.68);
-
   backdrop-filter:blur(3px);
   -webkit-backdrop-filter:blur(3px);
-
-  /*
-    화면 전체를 덮기 때문에
-    뒤쪽 버튼/입력창 클릭 불가능
-  */
   pointer-events:auto;
 }
-
 
 .worklog-sync-overlay.open{
   display:flex;
 }
-
 
 .worklog-sync-card{
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-
   width:280px;
   min-height:150px;
-
   padding:24px 22px;
-
   background:#fff;
-
   border:1px solid var(--border-solid);
   border-radius:14px;
-
   box-shadow:
     0 15px 45px rgba(15,23,42,.18);
-
   text-align:center;
 }
 
@@ -3487,14 +3458,10 @@ tbody td[data-label="비고"] .remarks-txt{
 .worklog-sync-spinner{
   width:30px;
   height:30px;
-
   margin-bottom:15px;
-
   border:3px solid #DDE8EF;
   border-top-color:var(--accent);
-
   border-radius:50%;
-
   animation:
     worklogSyncSpin .75s linear infinite;
 }
@@ -3506,16 +3473,12 @@ tbody td[data-label="비고"] .remarks-txt{
   }
 }
 
-
 .worklog-sync-title{
   color:var(--text);
-
   font-size:14px;
   font-weight:700;
-
   line-height:1.4;
 }
-
 
 .worklog-sync-message{
   margin-top:7px;
@@ -3525,7 +3488,6 @@ tbody td[data-label="비고"] .remarks-txt{
   font-size:11px;
   line-height:1.55;
 }
-
 
 /* 성공 */
 .worklog-sync-overlay.is-success
@@ -3538,7 +3500,6 @@ tbody td[data-label="비고"] .remarks-txt{
   color:#2F8F52;
 }
 
-
 /* 실패 */
 .worklog-sync-overlay.is-error
 .worklog-sync-card{
@@ -3550,12 +3511,9 @@ tbody td[data-label="비고"] .remarks-txt{
   color:#C62828;
 }
 
-
 .worklog-sync-retry{
   flex:none;
-
   width:auto;
-
   margin-top:14px;
   padding:8px 18px;
 }
@@ -3563,8 +3521,6 @@ tbody td[data-label="비고"] .remarks-txt{
    업데이트 전체보기 - 툴바/열헤더 최종 강제 보정
    기존/외부 스타일의 중복 선언보다 항상 마지막에 적용
    ========================================================= */
-
-/* 제목 + 선택도구 + 검색필터 + 열 헤더 전체가 sticky 영역 안에서 정상 표시 */
 .wh-sticky-top{
   overflow:visible !important;
   height:auto !important;
@@ -3576,19 +3532,15 @@ tbody td[data-label="비고"] .remarks-txt{
   position:static !important;
   inset:auto !important;
   transform:none !important;
-
   display:flex !important;
   align-items:center !important;
   justify-content:flex-start !important;
-
   width:100% !important;
   height:auto !important;
   min-height:38px !important;
-
   margin:0 !important;
   padding:8px 0 10px !important;
   gap:12px !important;
-
   opacity:1 !important;
   visibility:visible !important;
   overflow:visible !important;
@@ -3599,19 +3551,15 @@ tbody td[data-label="비고"] .remarks-txt{
   position:static !important;
   inset:auto !important;
   transform:none !important;
-
   display:flex !important;
   align-items:center !important;
   justify-content:flex-start !important;
-
   flex:0 0 auto !important;
   width:auto !important;
   height:32px !important;
-
   margin:0 !important;
   padding:0 !important;
   gap:8px !important;
-
   opacity:1 !important;
   visibility:visible !important;
   overflow:visible !important;
@@ -3654,19 +3602,15 @@ tbody td[data-label="비고"] .remarks-txt{
   position:static !important;
   inset:auto !important;
   transform:none !important;
-
   display:flex !important;
   align-items:center !important;
   justify-content:flex-end !important;
-
   flex:0 0 auto !important;
   width:auto !important;
   height:32px !important;
-
   margin:0 0 0 auto !important;
   padding:0 !important;
   gap:6px !important;
-
   opacity:1 !important;
   visibility:visible !important;
   overflow:visible !important;
@@ -3733,93 +3677,61 @@ tbody td[data-label="비고"] .remarks-txt{
 /* =========================================================
    SSP-S → ISG 하위 자산 표현
    ========================================================= */
-
-
 /* SSP-S 부모 자산 */
 tbody tr.asset-parent-row{
   background:#FCFDFE;
 }
-
 
 /* ISG 하위 자산 */
 tbody tr.asset-child-row{
   background:#F8FBFD;
 }
 
-
-/*
-  SKU 부분을 들여쓰기해서
-  실제 하위 자산처럼 표현
-*/
 tbody tr.asset-child-row
 td.col-sku{
   position:relative;
-
   padding-left:34px !important;
 }
-
 
 /* ↳ 가지 표시 */
 tbody tr.asset-child-row
 td.col-sku::before{
   content:'↳';
-
   position:absolute;
   left:14px;
   top:13px;
-
   color:#9AA9B8;
-
   font-size:14px;
   font-weight:700;
   line-height:1;
 }
 
-
-/*
-  하위 자산 좌측에 연한 연결선
-*/
 tbody tr.asset-child-row
 td.col-sku::after{
   content:'';
-
   position:absolute;
-
   left:20px;
   top:0;
   bottom:50%;
-
   width:1px;
-
   background:#D5E0E8;
-
   transform:translateX(-7px);
 }
 
-
-/*
-  ISG를 SSP-S 위에 올리고 있을 때
-  "하위 연결" 대상임을 강조
-*/
 tbody tr.asset-drop-parent td{
   background:#EAF6FD !important;
-
   border-top:1px solid #86C8EA;
   border-bottom:1px solid #86C8EA;
 }
-
 
 tbody tr.asset-drop-parent td:first-child{
   border-left:1px solid #86C8EA;
 }
 
-
 tbody tr.asset-drop-parent td:last-child{
   border-right:1px solid #86C8EA;
 }
 
-
-/* 부모 행 SKU에 살짝 강조 */
 tbody tr.asset-parent-row
 td.col-sku{
   font-weight:700;
@@ -3827,13 +3739,10 @@ td.col-sku{
 
 #githubSyncStatus.sync-stuck{
   cursor:pointer;
-
   color:#B45309;
   background:#FFF7E6;
   border-color:#F0C36D;
-
   font-weight:700;
-
   animation:
     sync-stuck-pulse 1.2s ease-in-out infinite;
 }
@@ -3893,151 +3802,75 @@ tr.asset-child-row td.col-sku{
 .col-sku-app .asset-app-display-simple{
   display:flex;
   align-items:flex-start;
-
   gap:6px;
-
   padding-left:0;
-
-  /*
-    하위 자산을 너무 오른쪽으로 넣지 않음
-  */
-  margin-left:-10px;
-
+  margin-left:-30px;
   position:relative;
 }
-
 
 /* 연결선 영역 */
 .col-sku-app .asset-child-arrow{
   position:relative;
-
   flex:0 0 17px;
   width:17px;
-
   min-height:24px;
-
   align-self:stretch;
-
   margin-top:0;
 }
 
-
-/* ---------------------------------------------------------
-   기본 세로선
-   - 하위 자산이 1개뿐이거나
-   - 마지막 하위 자산일 때
-   - 꺾이는 부분까지만 짧게 표시
-   --------------------------------------------------------- */
 .col-sku-app .asset-child-arrow::before{
   content:'';
-
   position:absolute;
-
   left:6px;
-
   top:-4px;
-
   width:0;
   height:16px;
-
   border-left:
     1px solid #C9D4E5;
-
   box-sizing:border-box;
 }
 
-
-/* ---------------------------------------------------------
-   둥근 ㄴ자 연결선
-   --------------------------------------------------------- */
 .col-sku-app .asset-child-arrow::after{
   content:'';
-
   position:absolute;
-
   left:6px;
   top:11px;
-
   width:10px;
   height:8px;
-
   border-left:
     1px solid #C9D4E5;
-
   border-bottom:
     1px solid #C9D4E5;
-
   border-bottom-left-radius:
     5px;
-
   box-sizing:border-box;
 }
 
-
-/* =========================================================
-   현재 하위 자산 다음에도 또 하위 자산이 있는 경우
-
-   첫 번째 ISG
-        │
-        ├─ ISG-Proxy
-        │
-        └─ ISG-MA
-
-   이런 식으로 세로선을 다음 행까지 연장
-   ========================================================= */
 tr.asset-child-row:has(+ tr.asset-child-row)
 .asset-child-arrow::before{
-
   top:-4px;
-
   bottom:-18px;
-
   height:auto;
 }
 
-
-/* =========================================================
-   두 번째 이후 하위 자산
-
-   이전 행에서 내려온 세로선과
-   현재 행의 세로선이 자연스럽게 연결되도록
-   위쪽으로 조금 연장
-   ========================================================= */
 tr.asset-child-row
 +
 tr.asset-child-row
 .asset-child-arrow::before{
-
   top:-18px;
-
   height:30px;
 }
 
-
-/* =========================================================
-   두 번째 이후 자산인데
-   그 아래에도 하위 자산이 더 있는 경우
-
-   위/아래 모두 연결
-   ========================================================= */
 tr.asset-child-row
 +
 tr.asset-child-row:has(+ tr.asset-child-row)
 .asset-child-arrow::before{
-
   top:-18px;
-
   bottom:-18px;
-
   height:auto;
 }
 
-
-/* 기존 td 자체의 트리선은 사용하지 않음 */
 tr.asset-child-row td.col-sku::before,
 tr.asset-child-row td.col-sku::after{
   display:none !important;
-}
-.col-sku-app .asset-app-display-simple{
-  margin-left:-30px;
 }
