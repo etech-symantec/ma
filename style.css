@@ -3847,13 +3847,13 @@ tr.asset-child-row:has(+ tr.asset-child-row)
 .asset-child-arrow::before{
   top:-12px;
   bottom:-16px;
-  height:auto;
+  height:100px;
 }
 
 tr.asset-child-row+tr.asset-child-row
 .asset-child-arrow::before{
   top:-11px;
-  height:21px;
+  height:16px;
 }
 
 tr.asset-child-row+tr.asset-child-row:has(+ tr.asset-child-row)
