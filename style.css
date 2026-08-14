@@ -3824,7 +3824,7 @@ tr.asset-child-row td.col-sku{
   left:9px;
   top:-12px;
   width:0;
-  height:26px;
+  height:16px;
   border-left:
     1px solid #C9D4E5;
   box-sizing:border-box;
@@ -3847,7 +3847,7 @@ tr.asset-child-row:has(+ tr.asset-child-row)
 .asset-child-arrow::before{
   top:-12px;
   bottom:-16px;
-  height:100px;
+  height:70px;
 }
 
 tr.asset-child-row+tr.asset-child-row
