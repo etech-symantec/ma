@@ -10522,7 +10522,9 @@
       "is_parent": false,
       "build_engineer": "신호근",
       "build_date": "2026.05",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "asset_order": 1,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -10596,7 +10598,8 @@
       "build_engineer": "신호근",
       "build_date": "2026.05",
       "asset_parent_id": "266",
-      "last_mutation_id": "data-mss7cq44-ee315067-f2ba-4efe-88d6-36ae3a7ab6f1"
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c",
+      "asset_order": 2
     },
     {
       "group": "custom-msnzlh9m",
@@ -10670,7 +10673,8 @@
       "build_engineer": "신호근",
       "build_date": "2026.05",
       "asset_parent_id": "266",
-      "last_mutation_id": "data-mss7crdx-1b4065ee-8b6c-4879-bbd9-aa9ee5c59387"
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c",
+      "asset_order": 3
     },
     {
       "group": "custom-msnzlh9m",
@@ -10742,7 +10746,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_order": 4,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -10816,7 +10822,8 @@
       "build_engineer": "신호근",
       "build_date": "2026.05",
       "asset_parent_id": "269",
-      "last_mutation_id": "data-mss7ct1s-c58e5001-2097-4199-bb64-d83724647299"
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c",
+      "asset_order": 5
     },
     {
       "group": "custom-msnzlh9m",
@@ -10888,7 +10895,10 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_order": 6,
+      "last_mutation_id": "data-mss7cvkv-9a43e9de-4b48-4f77-adbc-3dcb0553e73e",
+      "asset_parent_id": "269"
     },
     {
       "group": "custom-msnzlh9m",
@@ -10960,7 +10970,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_order": 7,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11032,7 +11044,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_order": 8,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11104,7 +11118,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_order": 9,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11176,7 +11192,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_order": 10,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11248,7 +11266,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_order": 11,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11309,7 +11329,9 @@
       "is_parent": false,
       "build_engineer": "신호근",
       "build_date": "2026.05",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "asset_order": 12,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11369,7 +11391,9 @@
       "group_parent": "",
       "is_parent": false,
       "build_engineer": "신호근",
-      "build_date": "2026.05"
+      "build_date": "2026.05",
+      "asset_order": 13,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11442,7 +11466,9 @@
       "is_parent": false,
       "build_engineer": "신호근",
       "build_date": "2026.05",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "asset_order": 14,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11503,7 +11529,9 @@
       "is_parent": false,
       "build_engineer": "신호근",
       "build_date": "2026.05",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "asset_order": 15,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-msnzlh9m",
@@ -11564,7 +11592,9 @@
       "is_parent": false,
       "build_engineer": "신호근",
       "build_date": "2026.05",
-      "enable_pw_enc": null
+      "enable_pw_enc": null,
+      "asset_order": 16,
+      "last_mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
     },
     {
       "group": "custom-mso09xln",
@@ -15643,6 +15673,431 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mss7ct1s-c58e5001-2097-4199-bb64-d83724647299"
+    },
+    {
+      "id": "audit-1786666924679-jfdwyq",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "266",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "SSP-S410-40B",
+      "sn": "226700014",
+      "summary": "자산 순서 변경 · SSP-S410-40B",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "1",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-lb7d65",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "267",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 1",
+      "sn": "91997320",
+      "summary": "자산 순서 변경 · ISG-Proxy 1",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "2",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-sp94uz",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "268",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 2",
+      "sn": "91997320",
+      "summary": "자산 순서 변경 · ISG-Proxy 2",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "3",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-2p26m7",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "269",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "SSP-S410-40B",
+      "sn": "326700001",
+      "summary": "자산 순서 변경 · SSP-S410-40B",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "4",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-nklm1a",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "270",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 3",
+      "sn": "91997320",
+      "summary": "자산 순서 변경 · ISG-Proxy 3",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "5",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-tdityc",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "271",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 4",
+      "sn": "91997320",
+      "summary": "자산 순서 변경 · ISG-Proxy 4",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "6",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-88lssz",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "272",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "SSP-S410-40B",
+      "sn": "326700016",
+      "summary": "자산 순서 변경 · SSP-S410-40B",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "7",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-4gvb3v",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "273",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 5",
+      "sn": "91997320",
+      "summary": "자산 순서 변경 · ISG-Proxy 5",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "8",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-5kqy0k",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "274",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 6",
+      "sn": "91997320",
+      "summary": "자산 순서 변경 · ISG-Proxy 6",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "9",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-uqvdtj",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "275",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "SSP-S210-10",
+      "sn": "4524710027",
+      "summary": "자산 순서 변경 · SSP-S210-10",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "10",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-hhjjie",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "276",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-MC",
+      "sn": "91997687",
+      "summary": "자산 순서 변경 · ISG-MC",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "11",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-97zirz",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "277",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "Web Security Service - WSS",
+      "sn": "53413234-1-2",
+      "summary": "자산 순서 변경 · Web Security Service - WSS",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "12",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-cwgdje",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "278",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "WEB-PROTECT-SUB",
+      "sn": "53413234-1-1",
+      "summary": "자산 순서 변경 · WEB-PROTECT-SUB",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "13",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-m5yzae",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "279",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ELK",
+      "sn": "",
+      "summary": "자산 순서 변경 · ELK",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "14",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-5t1xsv",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "280",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "PAC 1",
+      "sn": "",
+      "summary": "자산 순서 변경 · PAC 1",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "15",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666924679-0uzzfo",
+      "ts": 1786666924679,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "281",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "PAC 2",
+      "sn": "",
+      "summary": "자산 순서 변경 · PAC 2",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "—",
+          "after": "16",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c"
+    },
+    {
+      "id": "audit-1786666926579-udhaq3",
+      "ts": 1786666926579,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "271",
+      "group": "custom-msnzlh9m",
+      "owner": "삼성전자 R&D",
+      "label": "ISG-Proxy 4",
+      "sn": "91997320",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "269",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mss7cvkv-9a43e9de-4b48-4f77-adbc-3dcb0553e73e"
     }
   ],
   "syncMutations": [
@@ -15779,6 +16234,16 @@
     {
       "id": "data-mss7ct1s-c58e5001-2097-4199-bb64-d83724647299",
       "ts": 1786666923287,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss7cu4g-46f7c793-697c-421e-a70c-056bf1aedd5c",
+      "ts": 1786666924679,
+      "scope": "data"
+    },
+    {
+      "id": "data-mss7cvkv-9a43e9de-4b48-4f77-adbc-3dcb0553e73e",
+      "ts": 1786666926581,
       "scope": "data"
     }
   ]
