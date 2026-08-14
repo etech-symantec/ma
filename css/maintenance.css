@@ -184,7 +184,13 @@
   justify-content:flex-end;
   gap:5px;
   white-space:nowrap;
-}#maintenanceLogModal .ml-email-language{
+}
+
+/* 메일 문의 상태에 따라 언어/보내기 또는 삭제 버튼 중 하나만 표시 */
+#maintenanceLogModal .ml-email-actions .is-hidden{
+  display:none !important;
+}
+#maintenanceLogModal .ml-email-language{
   height:32px;
   width:64px;
   min-width:64px;
@@ -222,13 +228,19 @@
   min-width:0;
 }
 #maintenanceLogModal .ml-mail-inquiry-delete-btn{
+  min-width:124px !important;
+  height:32px !important;
+  padding:0 12px !important;
   color:#2563A8 !important;
-  background:#fff !important;
-  border-color:#BFDDF3 !important;
+  background:#EEF6FD !important;
+  border-color:#C6DDF1 !important;
+  font-size:11.5px !important;
+  line-height:1 !important;
+  white-space:nowrap;
 }
 #maintenanceLogModal .ml-mail-inquiry-delete-btn:hover{
   color:#174D7A !important;
-  background:#EEF7FD !important;
+  background:#E2F0FB !important;
   border-color:#9FC8E8 !important;
 }
 #maintenanceLogModal .ml-right-actions{
