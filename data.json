@@ -13945,7 +13945,7 @@
       "remarks": "",
       "deploy_date": "",
       "mode": "",
-      "os_ver": "",
+      "os_ver": "2.4.7.1",
       "owner_primary": "홍진영",
       "owner_secondary": "박동석",
       "check_method": "방문",
@@ -13973,10 +13973,23 @@
       "group_parent": "",
       "is_parent": false,
       "work_log": [],
-      "ip_enc": null,
-      "id_enc": null,
-      "pw_enc": null,
-      "enable_pw_enc": null
+      "ip_enc": {
+        "iv": "CAHKKWW6RXpSrny1",
+        "ct": "hZwXoHbtegWTl5qCe+Q=",
+        "tag": "qR9/x1jvjEDCd7seVStkiQ=="
+      },
+      "id_enc": {
+        "iv": "ZSSshSmtvtRR0h4B",
+        "ct": "+9q+uzs=",
+        "tag": "b0hVzZeQQG39G2aTPJU1MA=="
+      },
+      "pw_enc": {
+        "iv": "OQ7CJnRGkXhOTxCP",
+        "ct": "UJPj+HU=",
+        "tag": "oY1ZUXctKgITHVA+swVyZw=="
+      },
+      "enable_pw_enc": null,
+      "last_mutation_id": "data-mssgfjx8-a9dc1020-c533-4aca-a761-350b8dac640a"
     },
     {
       "id": 1786349440907,
@@ -14097,7 +14110,8 @@
       },
       "pw_enc": null,
       "enable_pw_enc": null,
-      "last_mutation_id": "data-mssgetwk-83de8179-e3fe-441b-8f67-6c334973adbc"
+      "last_mutation_id": "data-mssgfmf6-68fd6831-2b04-49e4-8333-84cd2b0cec82",
+      "asset_parent_id": "1786349440906"
     }
   ],
   "users": [
@@ -18574,6 +18588,120 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssgetwk-83de8179-e3fe-441b-8f67-6c334973adbc"
+    },
+    {
+      "id": "audit-1786682149168-rdhpp7",
+      "ts": 1786682149168,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "1786349440906",
+      "group": "custom-mspt0fl7",
+      "owner": "동우화인켐",
+      "label": "SSP-S410-40B",
+      "sn": "1123700021",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "os_ver",
+          "label": "OS 버전",
+          "before": "—",
+          "after": "2.4.7.1",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgf5et-7ccac3d2-0c7c-481c-8dbe-7d2b8fb888b8"
+    },
+    {
+      "id": "audit-1786682160749-tat550",
+      "ts": 1786682160749,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "1786349440906",
+      "group": "custom-mspt0fl7",
+      "owner": "동우화인켐",
+      "label": "SSP-S410-40B",
+      "sn": "1123700021",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "—",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgfecm-ceb85218-0f47-4402-b70b-90f01257f0bc"
+    },
+    {
+      "id": "audit-1786682167972-wyelf4",
+      "ts": 1786682167972,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "1786349440906",
+      "group": "custom-mspt0fl7",
+      "owner": "동우화인켐",
+      "label": "SSP-S410-40B",
+      "sn": "1123700021",
+      "summary": "자산 정보 3개 항목 수정",
+      "changes": [
+        {
+          "field": "ip_enc",
+          "label": "IP 주소",
+          "before": "변경됨",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "id_enc",
+          "label": "계정 ID",
+          "before": "—",
+          "after": "변경됨",
+          "sensitive": true
+        },
+        {
+          "field": "pw_enc",
+          "label": "비밀번호",
+          "before": "—",
+          "after": "변경됨",
+          "sensitive": true
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgfjx8-a9dc1020-c533-4aca-a761-350b8dac640a"
+    },
+    {
+      "id": "audit-1786682171209-mwzngs",
+      "ts": 1786682171209,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "1786349440908",
+      "group": "custom-mspt0fl7",
+      "owner": "동우화인켐",
+      "label": "ISG-Proxy",
+      "sn": "0076996458",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "1786349440906",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786085321715",
+      "actor_name": "신호근",
+      "actor_role": "마스터",
+      "mutation_id": "data-mssgfmf6-68fd6831-2b04-49e4-8333-84cd2b0cec82"
     }
   ],
   "syncMutations": [
@@ -19120,6 +19248,26 @@
     {
       "id": "data-mssgetwk-83de8179-e3fe-441b-8f67-6c334973adbc",
       "ts": 1786682134259,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgf5et-7ccac3d2-0c7c-481c-8dbe-7d2b8fb888b8",
+      "ts": 1786682149168,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgfecm-ceb85218-0f47-4402-b70b-90f01257f0bc",
+      "ts": 1786682160749,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgfjx8-a9dc1020-c533-4aca-a761-350b8dac640a",
+      "ts": 1786682167972,
+      "scope": "data"
+    },
+    {
+      "id": "data-mssgfmf6-68fd6831-2b04-49e4-8333-84cd2b0cec82",
+      "ts": 1786682171209,
       "scope": "data"
     }
   ]
