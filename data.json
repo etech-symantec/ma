@@ -2075,7 +2075,7 @@
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
       "is_parent": false,
-      "asset_order": 3,
+      "asset_order": 4,
       "work_log": [
         {
           "id": 1786606830937,
@@ -2106,7 +2106,7 @@
         }
       ],
       "asset_parent_id": "44",
-      "last_mutation_id": "data-msrmt3yi-e38d8e39-9376-45ac-8d59-a2d2aa9ca794"
+      "last_mutation_id": "data-msskb0o4-e90b498a-f4d1-4a4e-a0ce-93af43272f6b"
     },
     {
       "group": "vn-sdv-new",
@@ -2158,7 +2158,7 @@
       "enable_pw_enc": null,
       "group_parent": "custom-1786348811427",
       "is_parent": false,
-      "asset_order": 4,
+      "asset_order": 3,
       "work_log": [
         {
           "id": 1786606830938,
@@ -2189,7 +2189,7 @@
         }
       ],
       "asset_parent_id": "45",
-      "last_mutation_id": "data-msrmt9c4-f0652b6f-e30d-4cdf-b94d-17b2b3930fc6"
+      "last_mutation_id": "data-msskay6k-c295c956-e68e-473b-a1f1-89d6293f9f41"
     },
     {
       "group": "vn-sdv-new",
@@ -14908,6 +14908,88 @@
       "actor_name": "신호근",
       "actor_role": "마스터",
       "mutation_id": "data-mssgetwk-83de8179-e3fe-441b-8f67-6c334973adbc"
+    },
+    {
+      "id": "audit-1786688671636-aqu3qz",
+      "ts": 1786688671636,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "46",
+      "group": "vn-sdv-new",
+      "owner": "삼성디스플레이 SDV",
+      "label": "ISG-Proxy",
+      "sn": "0032996841",
+      "summary": "자산 정보 2개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "3",
+          "after": "4",
+          "sensitive": false
+        },
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "44",
+          "after": "—",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786519956793",
+      "actor_name": "윤태리",
+      "actor_role": "일반사용자",
+      "mutation_id": "data-msskay6k-c295c956-e68e-473b-a1f1-89d6293f9f41"
+    },
+    {
+      "id": "audit-1786688671636-chbmcm",
+      "ts": 1786688671636,
+      "action": "reorder",
+      "target_type": "자산",
+      "target_id": "47",
+      "group": "vn-sdv-new",
+      "owner": "삼성디스플레이 SDV",
+      "label": "ISG-Proxy",
+      "sn": "0032996841",
+      "summary": "자산 순서 변경 · ISG-Proxy",
+      "changes": [
+        {
+          "field": "asset_order",
+          "label": "자산 순서",
+          "before": "4",
+          "after": "3",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786519956793",
+      "actor_name": "윤태리",
+      "actor_role": "일반사용자",
+      "mutation_id": "data-msskay6k-c295c956-e68e-473b-a1f1-89d6293f9f41"
+    },
+    {
+      "id": "audit-1786688674859-jxpu1s",
+      "ts": 1786688674859,
+      "action": "edit",
+      "target_type": "자산",
+      "target_id": "46",
+      "group": "vn-sdv-new",
+      "owner": "삼성디스플레이 SDV",
+      "label": "ISG-Proxy",
+      "sn": "0032996841",
+      "summary": "자산 정보 1개 항목 수정",
+      "changes": [
+        {
+          "field": "asset_parent_id",
+          "label": "asset_parent_id",
+          "before": "—",
+          "after": "44",
+          "sensitive": false
+        }
+      ],
+      "actor_id": "u1786519956793",
+      "actor_name": "윤태리",
+      "actor_role": "일반사용자",
+      "mutation_id": "data-msskb0o4-e90b498a-f4d1-4a4e-a0ce-93af43272f6b"
     }
   ],
   "syncMutations": [
@@ -15499,6 +15581,21 @@
     {
       "id": "data-msska5tf-f6fb5eca-c6e3-430b-b516-b4f1433f3d20",
       "ts": 1786688634877,
+      "scope": "data"
+    },
+    {
+      "id": "data-msska80w-f8e518b1-ccf2-4b72-809f-06c0d617f61d",
+      "ts": 1786688637739,
+      "scope": "data"
+    },
+    {
+      "id": "data-msskay6k-c295c956-e68e-473b-a1f1-89d6293f9f41",
+      "ts": 1786688671638,
+      "scope": "data"
+    },
+    {
+      "id": "data-msskb0o4-e90b498a-f4d1-4a4e-a0ce-93af43272f6b",
+      "ts": 1786688674861,
       "scope": "data"
     }
   ]
