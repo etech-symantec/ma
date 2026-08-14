@@ -751,22 +751,22 @@ function openMaintenanceLogModal(gid, ym){
   document.getElementById('mlError').textContent = '';
   document.getElementById('mlDeleteBtn').style.display = hasInspectionLog ? '' : 'none';
 
-  const mailInquiryDeleteBtn =
-    document.getElementById(
-      'mlMailInquiryDeleteBtn'
-    );
-  
-  if (mailInquiryDeleteBtn){
-  
-    const hasMailInquiry =
-      !!log?.mail_inquiry;
-  
-    mailInquiryDeleteBtn.style.display =
-      hasMailInquiry
-        ? ''
-        : 'none';
+  const mailInquiryDeleteBtn = document.getElementById('mlMailInquiryDeleteBtn');
+  const mailSendBtn = document.getElementById('mlEmailBtn');
+  const hasMailInquiry = log?.mail_inquiry === true;
+
+  /*
+    메일 문의가 저장된 달에는 기존 메일 작성 컨트롤을 숨기고
+    같은 위치에 '메일 문의 삭제' 버튼만 표시한다.
+    display !important 규칙의 영향을 받지 않도록 is-hidden 클래스로 제어한다.
+  */
+  mailInquiryDeleteBtn?.classList.toggle('is-hidden', !hasMailInquiry);
+  mailLanguageEl?.classList.toggle('is-hidden', hasMailInquiry);
+  mailSendBtn?.classList.toggle('is-hidden', hasMailInquiry);
+
+  if (!hasMailInquiry){
+    refreshMaintenanceMailButton(gid);
   }
-  refreshMaintenanceMailButton(gid);
   document.getElementById('maintenanceLogModal').classList.add('open');
 }
 
