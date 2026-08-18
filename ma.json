@@ -2329,6 +2329,20 @@
       "updated_at": 1787026829042
     },
     {
+      "id": 1787026954542,
+      "group": "in-sdn-cama",
+      "ym": "2026-08",
+      "mutation_id": "ma-msy5piy6-0994d96b-f0d5-4f6b-98de-c7e9a6b397aa",
+      "date": "2026.8.27",
+      "manager": "윤태리",
+      "note": "",
+      "done": false,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1787026954542
+    },
+    {
       "id": 1787026841478,
       "group": "sg-001",
       "ym": "2026-06",
@@ -2742,6 +2756,11 @@
     {
       "id": "ma-msy5n3pi-f4f831a6-4f9f-49d3-8e92-9a526cf03cda",
       "ts": 1787026841478,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msy5piy6-0994d96b-f0d5-4f6b-98de-c7e9a6b397aa",
+      "ts": 1787026954542,
       "scope": "maintenance"
     }
   ]
