@@ -132,3 +132,62 @@ function setDashboardMode(on){ setViewMode(on ? 'dashboard' : 'list'); }
 document.getElementById('dashboardToggle').onclick=()=>setViewMode(dashboardMode?'list':'dashboard');
 document.getElementById('maintenanceToggle').onclick=()=>setViewMode(maintenanceMode?'list':'maintenance');
 document.getElementById('workHistoryToggle').onclick=()=>setViewMode(currentViewMode==='history'?'list':'history');
+
+/* =========================================================
+   좌측 패널 접기 / 펼치기
+   ========================================================= */
+
+const sidebarCollapseBtn =
+  document.getElementById(
+    'sidebarCollapseBtn'
+  );
+
+
+if (sidebarCollapseBtn){
+
+  sidebarCollapseBtn.onclick = () => {
+
+    const layout =
+      document.querySelector(
+        '.layout'
+      );
+
+    if (!layout){
+      return;
+    }
+
+
+    const collapsed =
+      layout.classList.toggle(
+        'sidebar-collapsed'
+      );
+
+
+    sidebarCollapseBtn.textContent =
+      collapsed
+        ? '›'
+        : '‹';
+
+
+    sidebarCollapseBtn.title =
+      collapsed
+        ? '좌측 패널 펼치기'
+        : '좌측 패널 접기';
+
+
+    sidebarCollapseBtn.setAttribute(
+      'aria-label',
+      collapsed
+        ? '좌측 패널 펼치기'
+        : '좌측 패널 접기'
+    );
+
+
+    sidebarCollapseBtn.setAttribute(
+      'aria-expanded',
+      collapsed
+        ? 'false'
+        : 'true'
+    );
+  };
+}
