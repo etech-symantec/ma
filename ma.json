@@ -2022,7 +2022,7 @@
       "id": 1787013280255,
       "group": "jp-sds",
       "ym": "2026-06",
-      "mutation_id": "ma-msxxl534-f8cd296a-b6d9-4538-bfb2-0b6235c33a69",
+      "mutation_id": "ma-msxxlwpe-64d17825-e23e-4368-afb4-43b48d1b58f0",
       "date": "2026.6.29",
       "manager": "박동석",
       "note": "",
@@ -2030,7 +2030,7 @@
       "incomplete": false,
       "uncontracted": false,
       "author": "박동석",
-      "updated_at": 1787013313024
+      "updated_at": 1787013348818
     },
     {
       "id": 1787013243902,
@@ -2281,6 +2281,11 @@
     {
       "id": "ma-msxxl534-f8cd296a-b6d9-4538-bfb2-0b6235c33a69",
       "ts": 1787013313024,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msxxlwpe-64d17825-e23e-4368-afb4-43b48d1b58f0",
+      "ts": 1787013348818,
       "scope": "maintenance"
     }
   ]
