@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/core.css?v=20260814-fast01">
-<link rel="stylesheet" href="css/assets.css?v=20260814-fast03">
+<link rel="stylesheet" href="css/core.css">
+<link rel="stylesheet" href="css/assets.css">
 </head>
 <body>
 
@@ -67,7 +67,19 @@
     <aside class="filters">
       <div class="panel-profile">
         <div class="profile-info">
-          <div class="profile-name" id="profileName">-</div>
+          <div class="profile-name-wrap">
+            <div class="profile-name" id="profileName">-</div>
+          
+            <button
+              type="button"
+              class="profile-data-refresh-btn"
+              id="profileDataRefreshBtn"
+              title="data.json / ma.json 새로고침"
+              aria-label="데이터 새로고침"
+            >
+              <span aria-hidden="true">↻</span>
+            </button>
+          </div>
           <div class="profile-info-right">
             <button type="button" class="profile-logout-text" id="logoutBtn">로그아웃</button>
             <div class="profile-sub" id="profileSub">로그인됨</div>
