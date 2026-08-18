@@ -702,3 +702,20 @@ td.maint-cell-owner{
 #maintenanceMailCopyModal .maintenance-mail-copy-sub{margin-top:8px;padding:8px 10px;border-radius:8px;background:#EEF7FD;color:#2563A8;font-size:11px}
 #maintenanceMailCopyModal .maintenance-mail-copy-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 #maintenanceMailCopyModal .maintenance-mail-copy-actions .btn{min-width:72px;height:34px;padding:0 14px;font-size:11.5px}
+
+.maint-owner-filter-btn{
+  border:1px solid var(--owner-border);
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.maint-owner-filter-btn:hover{
+  filter:brightness(.96);
+  box-shadow:0 0 0 2px rgba(14,165,233,.10);
+}
+
+.maint-owner-filter-btn.is-filtered{
+  box-shadow:
+    0 0 0 2px var(--owner-border);
+  font-weight:800;
+}
