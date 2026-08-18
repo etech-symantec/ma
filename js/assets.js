@@ -5575,6 +5575,498 @@ function captureAuditFromStateDiff(mutationId = createMutationId('data')){
 
   auditSnapshot = after;
 }
+
+let profileDataRefreshBusy = false;
+
+
+/*
+  GitHub 연결이 없는 환경에서
+  브라우저 캐시를 사용하지 않고 JSON을 다시 읽는다.
+*/
+async function fetchFreshLocalJson(
+  path,
+  allowMissing = false
+){
+
+  const separator =
+    path.includes('?')
+      ? '&'
+      : '?';
+
+  const url =
+    `${path}${separator}_refresh=${Date.now()}`;
+
+  const response =
+    await fetch(
+      url,
+      {
+        cache:'no-store'
+      }
+    );
+
+  if (
+    allowMissing &&
+    response.status === 404
+  ){
+    return null;
+  }
+
+  if (!response.ok){
+
+    throw new Error(
+      `${path} 불러오기 실패: HTTP ${response.status}`
+    );
+  }
+
+  return await response.json();
+}
+
+
+/*
+  data.json + ma.json 강제 새로고침
+*/
+async function refreshAllServerData(){
+
+  if (profileDataRefreshBusy){
+    return;
+  }
+
+
+  /*
+    아직 저장하지 못한 변경사항이 있는 상태에서
+    서버 데이터를 다시 읽으면 현재 수정내용이 사라질 수 있으므로
+    새로고침하지 않는다.
+  */
+  const syncBusy =
+    dataDirty ||
+    maintenanceDirty ||
+    autoSyncInFlight ||
+    maintenanceSyncInFlight ||
+    autoSyncTimer !== null ||
+    browserSyncQueuePending > 0;
+
+
+  if (syncBusy){
+
+    alert(
+      '현재 저장 중이거나 저장 대기 중인 변경사항이 있습니다.\n' +
+      '저장이 완료된 후 다시 새로고침해 주세요.'
+    );
+
+    return;
+  }
+
+
+  const btn =
+    document.getElementById(
+      'profileDataRefreshBtn'
+    );
+
+
+  profileDataRefreshBusy = true;
+
+
+  if (btn){
+
+    btn.disabled = true;
+
+    btn.classList.remove(
+      'is-success'
+    );
+
+    btn.classList.add(
+      'is-loading'
+    );
+
+    btn.title =
+      'data.json / ma.json 새로고침 중…';
+  }
+
+
+  try{
+
+    let dataJson = null;
+    let dataSha = null;
+
+    let maJson = null;
+    let maSha = null;
+
+
+    /*
+      GitHub API를 사용 중이면
+      GitHub에서 최신 파일을 직접 다시 읽는다.
+    */
+    if (
+      githubConfig &&
+      githubToken
+    ){
+
+      const dataRequest =
+        githubApiGet(
+          githubConfig,
+          githubToken
+        );
+
+
+      const maRequest =
+        githubApiGet(
+          maintenanceGithubConfigOf(
+            githubConfig
+          ),
+          githubToken
+        )
+        .catch(e => {
+
+          /*
+            ma.json이 아직 없는 경우는
+            오류로 처리하지 않고 기존 호환 데이터를 사용
+          */
+          if (e?.notFound){
+
+            return {
+              json:null,
+              sha:null
+            };
+          }
+
+          throw e;
+        });
+
+
+      const [
+        dataResult,
+        maResult
+      ] =
+        await Promise.all([
+          dataRequest,
+          maRequest
+        ]);
+
+
+      dataJson =
+        dataResult.json;
+
+      dataSha =
+        dataResult.sha;
+
+
+      maJson =
+        maResult?.json || null;
+
+      maSha =
+        maResult?.sha || null;
+    }
+
+    /*
+      GitHub 연결 정보가 없으면
+      현재 웹서버의 JSON을 직접 새로 읽는다.
+    */
+    else {
+
+      const [
+        freshData,
+        freshMa
+      ] =
+        await Promise.all([
+
+          fetchFreshLocalJson(
+            'data.json'
+          ),
+
+          fetchFreshLocalJson(
+            'ma.json',
+            true
+          )
+
+        ]);
+
+
+      dataJson =
+        freshData;
+
+      maJson =
+        freshMa;
+    }
+
+
+    if (
+      !dataJson ||
+      !Array.isArray(dataJson.records)
+    ){
+
+      throw new Error(
+        'data.json 형식이 올바르지 않습니다.'
+      );
+    }
+
+
+    /*
+      구버전 data.json에 maintenanceLogs가
+      남아 있는 경우를 위한 fallback
+    */
+    const newLegacyMaintenanceLogs =
+      (
+        dataJson.maintenanceLogs ||
+        []
+      )
+      .map(
+        m => ({...m})
+      );
+
+
+    /*
+      data.json 적용
+    */
+    ENC_STORE =
+      dataJson;
+
+
+    records =
+      (
+        dataJson.records ||
+        []
+      )
+      .map(
+        r => ({...r})
+      );
+
+
+    users =
+      (
+        dataJson.users ||
+        []
+      )
+      .map(
+        u => ({...u})
+      );
+
+
+    auditLogs =
+      (
+        dataJson.auditLogs ||
+        []
+      )
+      .map(
+        a => ({...a})
+      );
+
+
+    dataSyncMutations =
+      (
+        dataJson.syncMutations ||
+        []
+      )
+      .map(
+        m => ({...m})
+      );
+
+
+    legacyMaintenanceLogs =
+      newLegacyMaintenanceLogs;
+
+
+    /*
+      ma.json 적용
+    */
+    if (maJson){
+
+      maintenanceLogs =
+        (
+          maJson.maintenanceLogs ||
+          []
+        )
+        .map(
+          m => ({...m})
+        );
+
+
+      maintenanceSyncMutations =
+        (
+          maJson.syncMutations ||
+          []
+        )
+        .map(
+          m => ({...m})
+        );
+
+    }
+    else {
+
+      maintenanceLogs =
+        newLegacyMaintenanceLogs;
+
+
+      maintenanceSyncMutations =
+        [];
+    }
+
+
+    githubSha =
+      dataSha;
+
+
+    maintenanceGithubSha =
+      maSha;
+
+
+    /*
+      최신 서버 상태를 새로운 동기화 기준점(BASE)으로 지정
+    */
+    lastSyncedState =
+      currentSyncState();
+
+
+    lastSyncedMaintenanceState =
+      currentMaintenanceState();
+
+
+    maintenanceDataLoaded =
+      true;
+
+
+    maintenanceDataLoadPromise =
+      null;
+
+
+    dataDirty =
+      false;
+
+
+    maintenanceDirty =
+      false;
+
+
+    lastAutoSyncError =
+      null;
+
+
+    lastMaintenanceSyncError =
+      null;
+
+
+    refreshAuditSnapshot();
+
+    updateSidebarProfile();
+
+
+    /*
+      기본 자산 화면 갱신
+    */
+    render();
+
+
+    /*
+      현재 다른 화면을 열어둔 경우
+      해당 화면도 최신 데이터로 다시 그림
+    */
+    if (
+      currentViewMode === 'dashboard' &&
+      typeof renderDashboard === 'function'
+    ){
+
+      renderDashboard();
+
+    }
+    else if (
+      currentViewMode === 'maintenance' &&
+      typeof renderMaintenance === 'function'
+    ){
+
+      renderMaintenance();
+
+    }
+    else if (
+      currentViewMode === 'history' &&
+      typeof renderWorkHistoryPage === 'function'
+    ){
+
+      renderWorkHistoryPage();
+    }
+
+
+    setSyncStatus(
+      'synced'
+    );
+
+
+    if (btn){
+
+      btn.classList.remove(
+        'is-loading'
+      );
+
+      btn.classList.add(
+        'is-success'
+      );
+
+      btn.title =
+        'data.json / ma.json 새로고침 완료';
+
+
+      setTimeout(
+        () => {
+
+          if (!btn.isConnected){
+            return;
+          }
+
+          btn.classList.remove(
+            'is-success'
+          );
+
+          btn.title =
+            'data.json / ma.json 새로고침';
+
+        },
+        1500
+      );
+    }
+
+  }
+  catch(e){
+
+    console.error(
+      'data.json / ma.json 새로고침 실패:',
+      e
+    );
+
+
+    alert(
+      '데이터 새로고침에 실패했습니다.\n\n' +
+      (
+        e?.message ||
+        String(e)
+      )
+    );
+
+  }
+  finally{
+
+    profileDataRefreshBusy =
+      false;
+
+
+    if (btn){
+
+      btn.disabled =
+        false;
+
+      btn.classList.remove(
+        'is-loading'
+      );
+    }
+  }
+}
+
+document
+  .getElementById(
+    'profileDataRefreshBtn'
+  )
+  ?.addEventListener(
+    'click',
+    refreshAllServerData
+  );
+
 function updateSidebarProfile(){
   const nameEl = document.getElementById('profileName');
   const subEl = document.getElementById('profileSub');
