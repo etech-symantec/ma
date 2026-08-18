@@ -617,3 +617,118 @@ tr.asset-child-row td.col-sku::after{
     transform:rotate(360deg);
   }
 }
+/* =========================================================
+   좌측 패널 접기 / 펼치기
+   ========================================================= */
+
+.layout{
+  position:relative;
+}
+
+
+/* 좌측 패널 애니메이션 */
+aside.filters{
+  transition:
+    width .18s ease,
+    padding .18s ease,
+    opacity .12s ease;
+}
+
+
+/* 패널 접힌 상태 */
+.layout.sidebar-collapsed aside.filters{
+  width:0 !important;
+  min-width:0 !important;
+
+  padding-left:0 !important;
+  padding-right:0 !important;
+
+  opacity:0;
+
+  overflow:hidden !important;
+  pointer-events:none;
+}
+
+
+/* 접기 / 펼치기 버튼 */
+.sidebar-collapse-btn{
+  position:sticky;
+
+  top:calc(
+    var(--global-header-h, 0px) +
+    var(--topbar-h, 0px) +
+    14px
+  );
+
+  align-self:flex-start;
+
+  flex:0 0 28px;
+
+  width:28px;
+  height:42px;
+
+  margin-left:-14px;
+  margin-right:-14px;
+
+  z-index:30;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+
+  border:1px solid var(--border-solid);
+  border-radius:0 8px 8px 0;
+
+  background:#fff;
+  color:var(--text-faint);
+
+  box-shadow:2px 2px 8px rgba(0,0,0,.06);
+
+  font-size:20px;
+  font-weight:700;
+  line-height:1;
+
+  cursor:pointer;
+
+  transition:
+    color .15s,
+    background .15s,
+    transform .18s ease;
+}
+
+
+.sidebar-collapse-btn:hover{
+  color:var(--accent-dim);
+  background:#F3F8FC;
+}
+
+
+/* 접힌 상태에서는 버튼이 왼쪽 가장자리에 남음 */
+.layout.sidebar-collapsed .sidebar-collapse-btn{
+  margin-left:0;
+  margin-right:-28px;
+
+  border-radius:0 8px 8px 0;
+}
+
+
+/*
+  모바일에서는 좌측 패널이 상단 영역이 되므로
+  접기 버튼을 사용하지 않음
+*/
+@media (max-width:880px){
+
+  .sidebar-collapse-btn{
+    display:none !important;
+  }
+
+  .layout.sidebar-collapsed aside.filters{
+    width:100% !important;
+    padding:14px 16px !important;
+    opacity:1 !important;
+    overflow:visible !important;
+    pointer-events:auto !important;
+  }
+}
