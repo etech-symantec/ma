@@ -1601,6 +1601,128 @@ function mergeMaintenanceStates(
   };
 }
 
+/*
+  data.json 저장 완료 후
+  GitHub의 최신 데이터를 다시 읽어서 현재 화면에 반영
+*/
+async function reloadFreshDataFromGithub(){
+
+  if (
+    !githubConfig ||
+    !githubToken
+  ){
+    return false;
+  }
+
+  const {
+    json,
+    sha
+  } =
+    await githubApiGet(
+      githubConfig,
+      githubToken
+    );
+
+
+  ENC_STORE = json;
+
+
+  records =
+    cloneSyncState(
+      json.records || []
+    );
+
+
+  users =
+    cloneSyncState(
+      json.users || []
+    );
+
+
+  auditLogs =
+    cloneSyncState(
+      json.auditLogs || []
+    );
+
+
+  dataSyncMutations =
+    cloneSyncState(
+      json.syncMutations || []
+    );
+
+
+  githubSha = sha;
+
+
+  lastSyncedState =
+    currentSyncState();
+
+
+  dataDirty = false;
+
+
+  refreshAuditSnapshot();
+
+
+  return true;
+}
+
+
+/*
+  ma.json 저장 완료 후
+  GitHub의 최신 점검 데이터를 다시 읽어서 현재 화면에 반영
+*/
+async function reloadFreshMaintenanceFromGithub(){
+
+  if (
+    !githubConfig ||
+    !githubToken
+  ){
+    return false;
+  }
+
+
+  const maConfig =
+    maintenanceGithubConfigOf(
+      githubConfig
+    );
+
+
+  const {
+    json,
+    sha
+  } =
+    await githubApiGet(
+      maConfig,
+      githubToken
+    );
+
+
+  maintenanceLogs =
+    cloneSyncState(
+      json.maintenanceLogs || []
+    );
+
+
+  maintenanceSyncMutations =
+    cloneSyncState(
+      json.syncMutations || []
+    );
+
+
+  maintenanceGithubSha = sha;
+
+
+  lastSyncedMaintenanceState =
+    currentMaintenanceState();
+
+
+  maintenanceDirty = false;
+
+
+  return true;
+}
+
 async function runDataSyncCore(){
   if (!githubConfig || !githubToken){
     return;
@@ -1732,8 +1854,11 @@ async function runDataSyncCore(){
     finally{
       suppressAuditCapture = false;
     }
+    
     lastAutoSyncError = null;
-
+    if (!dataDirty){
+      await reloadFreshDataFromGithub();
+    }
     setSyncStatus(dataDirty ? 'pending' : 'synced');
   }
   catch(e){
@@ -1898,7 +2023,9 @@ async function runMaintenanceSyncCore(){
     lastSyncedMaintenanceState = cloneSyncState(mergedState);
 
     lastMaintenanceSyncError = null;
-
+    if (!maintenanceDirty){
+      await reloadFreshMaintenanceFromGithub();
+    }
     setSyncStatus(maintenanceDirty ? 'pending' : 'synced');
   }
   catch(e){
