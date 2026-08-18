@@ -206,13 +206,13 @@ function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable, hi
             ' dash-version-oldest';
   
           versionBadge =
-            `<span class="dash-version-badge dash-version-badge-oldest">오래된 버전</span>`;
+            `<span class="dash-version-badge dash-version-badge-oldest">오래된</span>`;
         }
         else if (isLatest){
           versionClass =
             ' dash-version-latest';
           versionBadge =
-            `<span class="dash-version-badge dash-version-badge-latest">최신 버전</span>`;
+            `<span class="dash-version-badge dash-version-badge-latest">최신</span>`;
         }
   
         const detailId = `dashDetail_${sectionKey}_${idx}`;
