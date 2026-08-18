@@ -2474,15 +2474,15 @@
       "id": 1787037127957,
       "group": "uk-seuk",
       "ym": "2026-08",
-      "mutation_id": "ma-msybrkt1-de4c0380-76f5-463a-8bf0-ac9f00582083",
+      "mutation_id": "ma-msylrhhy-b40df003-1c21-4d9d-91f2-46eb5fb8de42",
       "date": "2026.8.18",
       "manager": "신호근",
-      "note": "",
-      "done": false,
+      "note": "ELK 1.4/2.0TB",
+      "done": true,
       "incomplete": false,
       "uncontracted": false,
       "author": "신호근",
-      "updated_at": 1787037127957
+      "updated_at": 1787053919830
     }
   ],
   "syncMutations": [
@@ -3004,6 +3004,11 @@
     {
       "id": "ma-msyer1aa-7c42ca02-b874-4335-8268-cd35a56d3d0f",
       "ts": 1787042141506,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msylrhhy-b40df003-1c21-4d9d-91f2-46eb5fb8de42",
+      "ts": 1787053919830,
       "scope": "maintenance"
     }
   ]
