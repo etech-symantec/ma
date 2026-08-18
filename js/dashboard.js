@@ -277,17 +277,6 @@ function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable, hi
         return row + detail;
       }
     );
-    const detailId = `dashDetail_${sectionKey}_${idx}`;
-    const row = `
-    <div class="dash-row${clickable?' dash-row-clickable':''}"${clickable?` data-dash-toggle="${detailId}"`:''}>
-      <span class="dash-row-label" title="${esc(label)}">${esc(label)}</span>
-      <div class="dash-bar-track"><div class="dash-bar-fill ${colorClass}" style="width:${Math.max(5, Math.round(count/max*100))}%"></div></div>
-      <span class="dash-row-count">${count}</span>
-      ${clickable?'<span class="dash-row-caret">▾</span>':''}
-    </div>`;
-    const detail = clickable ? `<div class="dash-row-detail" id="${detailId}" style="display:none;">${dashboardCompanyListHtml(items)}</div>` : '';
-    return row + detail;
-  });
 
   const top = rowsHtml.slice(0, DASH_VISIBLE_ROWS).join('');
   const rest = rowsHtml.slice(DASH_VISIBLE_ROWS);
