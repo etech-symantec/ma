@@ -2315,6 +2315,20 @@
       "updated_at": 1787026517025
     },
     {
+      "id": 1787027756847,
+      "group": "kr-003",
+      "ym": "2026-08",
+      "mutation_id": "ma-msy66q0f-2c790a02-0aaf-41a0-b080-be0389806da2",
+      "date": "2026.8.20",
+      "manager": "신호근",
+      "note": "",
+      "done": false,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "신호근",
+      "updated_at": 1787027756847
+    },
+    {
       "id": 1787026829042,
       "group": "sg-001",
       "ym": "2026-05",
@@ -2856,6 +2870,11 @@
     {
       "id": "ma-msy61ct7-c52bed6a-6c42-4454-b10f-86f67eec7df6",
       "ts": 1787027506459,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msy66q0f-2c790a02-0aaf-41a0-b080-be0389806da2",
+      "ts": 1787027756847,
       "scope": "maintenance"
     }
   ]
