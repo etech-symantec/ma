@@ -2471,20 +2471,6 @@
       "updated_at": 1787027793641
     },
     {
-      "id": 1787029549090,
-      "group": "kr-018",
-      "ym": "2026-09",
-      "mutation_id": "ma-msy794wy-4ab6066e-efa6-4cd4-901c-96360b0a8a23",
-      "date": "2026.9.3",
-      "manager": "김상문",
-      "note": "",
-      "done": false,
-      "incomplete": false,
-      "uncontracted": false,
-      "author": "김상문",
-      "updated_at": 1787029549090
-    },
-    {
       "id": 1787029556731,
       "group": "kr-009",
       "ym": "2026-09",
@@ -3007,6 +2993,11 @@
     {
       "id": "ma-msy79gkt-65e2d2a7-7446-4f4e-8d9b-65cff4061578",
       "ts": 1787029564205,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-delete-msy79tn2-b983e7ca-6a50-4617-b84b-403539991ed3",
+      "ts": 1787029581134,
       "scope": "maintenance"
     }
   ]
