@@ -552,3 +552,68 @@ td.col-sku{
 tr.asset-child-row td.col-sku::after{
   display:none !important;
 }
+/* 사용자 이름 + 데이터 새로고침 */
+.profile-name-wrap{
+  display:flex;
+  align-items:center;
+  gap:5px;
+
+  min-width:0;
+}
+
+.profile-name-wrap .profile-name{
+  min-width:0;
+}
+
+.profile-data-refresh-btn{
+  flex:0 0 auto;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  width:22px;
+  height:22px;
+
+  padding:0;
+
+  border:0;
+  border-radius:6px;
+
+  background:transparent;
+  color:var(--text-faint);
+
+  font-size:16px;
+  line-height:1;
+
+  cursor:pointer;
+
+  transition:
+    color .15s,
+    background .15s;
+}
+
+.profile-data-refresh-btn:hover{
+  color:var(--accent-dim);
+  background:rgba(255,255,255,.7);
+}
+
+.profile-data-refresh-btn:disabled{
+  cursor:default;
+  opacity:.65;
+}
+
+.profile-data-refresh-btn.is-loading span{
+  display:inline-block;
+  animation:profile-data-refresh-spin .7s linear infinite;
+}
+
+.profile-data-refresh-btn.is-success{
+  color:var(--green);
+}
+
+@keyframes profile-data-refresh-spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
