@@ -81,22 +81,29 @@
    대시보드 OS 버전 최신 / 오래된 버전 강조
    ========================================================= */
 .dash-version-label-wrap{
-  flex:0 0 155px;
-  min-width:155px;
+  flex:0 0 96px;
+  width:96px;
+  min-width:96px;
 
   display:flex;
   align-items:center;
-  gap:5px;
+  gap:4px;
 
   white-space:nowrap;
+  overflow:visible;
 }
 
 .dash-version-label-wrap .dash-row-label{
-  flex:0 1 auto;
+  flex:0 0 auto;
 
   width:auto;
-  max-width:72px;
+  max-width:none;
   min-width:0;
+}
+.dash-version-label-wrap .dash-version-badge{
+  flex:0 0 auto;
+  font-size:7.5px;
+  letter-spacing:-0.03em;
 }
 
 
