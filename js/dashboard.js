@@ -224,11 +224,13 @@ function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable, hi
             }
           >
   
-            <span class="dash-row-label" title="${esc(label)}">
-              ${esc(label)}
+            <span class="dash-version-label-wrap">
+              <span class="dash-row-label" title="${esc(label)}">
+                ${esc(label)}
+              </span>
+            
+              ${versionBadge}
             </span>
-  
-            ${versionBadge}
   
             <div class="dash-bar-track">
               <div
