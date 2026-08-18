@@ -39,7 +39,7 @@ async function githubApiGet(cfg, token, signal = null){
   const branch = cfg.branch || 'main';
   const path = cfg.path || 'data.json';
   const url = `https://api.github.com/repos/${or.owner}/${or.repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
-  const res = await fetch(url, {headers: {'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json'}, signal});
+  const res = await fetch(url, {headers: {'Authorization':'Bearer '+token, 'Accept':'application/vnd.github+json'}, cache:'no-store', signal});
   if (res.status === 404){
     const err = new Error('저장소에 해당 파일이 없습니다. "GitHub에 저장"을 누르면 새로 생성됩니다.');
     err.notFound = true;
