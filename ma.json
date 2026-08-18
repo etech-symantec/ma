@@ -2317,6 +2317,20 @@
       "updated_at": 1787026517025
     },
     {
+      "id": 1787027756847,
+      "group": "kr-003",
+      "ym": "2026-08",
+      "mutation_id": "ma-msy66q0f-2c790a02-0aaf-41a0-b080-be0389806da2",
+      "date": "2026.8.20",
+      "manager": "신호근",
+      "note": "",
+      "done": false,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "신호근",
+      "updated_at": 1787027756847
+    },
+    {
       "id": 1787026829042,
       "group": "sg-001",
       "ym": "2026-05",
@@ -2415,34 +2429,6 @@
       "updated_at": 1787027494621
     },
     {
-      "id": 1787027793641,
-      "group": "kr-003",
-      "ym": "2026-08",
-      "mutation_id": "ma-msy67ieh-9db6a838-b820-423f-a7f6-eaf79199b56d",
-      "date": "2026.8.21",
-      "manager": "김상문",
-      "note": "",
-      "done": false,
-      "incomplete": false,
-      "uncontracted": false,
-      "author": "김상문",
-      "updated_at": 1787027793641
-    },
-    {
-      "id": 1787027756847,
-      "group": "kr-003",
-      "ym": "2026-08",
-      "mutation_id": "ma-msy66q0f-2c790a02-0aaf-41a0-b080-be0389806da2",
-      "date": "2026.8.20",
-      "manager": "신호근",
-      "note": "",
-      "done": false,
-      "incomplete": false,
-      "uncontracted": false,
-      "author": "신호근",
-      "updated_at": 1787027756847
-    },
-    {
       "id": 1787027506459,
       "group": "kr-003",
       "ym": "2026-08",
@@ -2455,6 +2441,34 @@
       "uncontracted": false,
       "author": "김상문",
       "updated_at": 1787027506459
+    },
+    {
+      "id": 1787027844434,
+      "group": "custom-msnzlh9m",
+      "ym": "2026-08",
+      "mutation_id": "ma-msy68lle-90439b73-f01d-4b66-8046-9e321b220b1e",
+      "date": "2026.8.27",
+      "manager": "김상문",
+      "note": "",
+      "done": false,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1787027844434
+    },
+    {
+      "id": 1787027793641,
+      "group": "kr-003",
+      "ym": "2026-08",
+      "mutation_id": "ma-msy67ieh-9db6a838-b820-423f-a7f6-eaf79199b56d",
+      "date": "2026.8.21",
+      "manager": "김상문",
+      "note": "",
+      "done": false,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "김상문",
+      "updated_at": 1787027793641
     }
   ],
   "syncMutations": [
@@ -2896,6 +2910,11 @@
     {
       "id": "ma-msy67ieh-9db6a838-b820-423f-a7f6-eaf79199b56d",
       "ts": 1787027793641,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msy68lle-90439b73-f01d-4b66-8046-9e321b220b1e",
+      "ts": 1787027844434,
       "scope": "maintenance"
     },
     {
