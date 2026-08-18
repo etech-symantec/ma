@@ -61,6 +61,7 @@ async function ensureMaintenanceDataLoaded(){
 let maintenanceTab = 'entry';
 let maintenanceYear = null;
 let maintenanceEditTarget = null;
+let maintenanceManagerFilter = '';
 
 function pad2(n){ return String(n).padStart(2, '0'); }
 function currentYm(){
@@ -181,11 +182,50 @@ function removeMaintenanceMailInquiry(gid, ym){
 }
 
 function maintenanceVisibleGroupList(){
-  const groups = maintenanceGroupList();
-  if (!activeMyAssetsFilter) return groups;
-  const me = currentUserName();
-  if (!me) return groups;
-  return groups.filter(g => g.meta.owner_primary === me);
+
+  let groups =
+    maintenanceGroupList();
+
+
+  /*
+    기존 My 필터
+  */
+  if (activeMyAssetsFilter){
+
+    const me =
+      currentUserName();
+
+    if (me){
+
+      groups =
+        groups.filter(
+          g =>
+            g.meta.owner_primary === me
+        );
+    }
+  }
+
+
+  /*
+    점검지 담당자 이름 클릭 필터
+  */
+  if (
+    maintenanceTab === 'entry' &&
+    maintenanceManagerFilter
+  ){
+
+    groups =
+      groups.filter(
+        g =>
+          String(
+            g.meta.owner_primary || ''
+          ).trim() ===
+          maintenanceManagerFilter
+      );
+  }
+
+
+  return groups;
 }
 
 function setMaintenanceTab(tab){
@@ -234,9 +274,36 @@ function maintenanceEntryTabHtml(){
     }
 
     const ownerColors = maintenanceOwnerColors(g.meta.owner_primary);
-    const engineerHtml = g.meta.owner_primary
-      ? `<span class="maint-owner-badge" style="--owner-fg:${ownerColors.fg};--owner-bg:${ownerColors.bg};--owner-border:${ownerColors.border};">${esc(g.meta.owner_primary)}</span>`
-      : '<span class="maint-td-empty">-</span>';
+    const isManagerFiltered =
+      maintenanceManagerFilter ===
+      String(
+        g.meta.owner_primary || ''
+      ).trim();
+    
+    
+    const engineerHtml =
+      g.meta.owner_primary
+    
+        ? `
+          <button
+            type="button"
+            class="maint-owner-badge maint-owner-filter-btn${isManagerFiltered ? ' is-filtered' : ''}"
+            data-maint-manager="${esc(g.meta.owner_primary)}"
+            style="
+              --owner-fg:${ownerColors.fg};
+              --owner-bg:${ownerColors.bg};
+              --owner-border:${ownerColors.border};
+            "
+            title="${isManagerFiltered
+              ? '담당자 필터 해제'
+              : `${esc(g.meta.owner_primary)} 담당 법인만 보기`
+            }"
+          >
+            ${esc(g.meta.owner_primary)}
+          </button>
+        `
+    
+        : '<span class="maint-td-empty">-</span>';
 
     const monthCellsHtml = MAINT_MONTHS.map(m => {
       const ym = `${maintenanceYear}-${pad2(m)}`;
@@ -672,6 +739,24 @@ function renderMaintenance(){
       openMaintenanceLogModal(gid, ym);
     };
   });
+
+  wrap.querySelectorAll('[data-maint-manager]').forEach(btn => {
+      btn.onclick = e => {
+        e.preventDefault();
+        e.stopPropagation();
+  
+        const manager =
+          String(
+            btn.dataset.maintManager || ''
+          ).trim();
+        maintenanceManagerFilter =
+          maintenanceManagerFilter === manager
+            ? ''
+            : manager;
+  
+        renderMaintenance();
+      };
+    });
 
   wrap.querySelectorAll('[data-maint-site-gid]').forEach(site => {
     site.onclick = () => {
