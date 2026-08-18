@@ -2191,7 +2191,7 @@
       "id": 1787025967886,
       "group": "custom-1786348811427",
       "ym": "2026-08",
-      "mutation_id": "ma-mail-msy59omt-f879af8f-f863-4622-83de-a9f8e1b42265",
+      "mutation_id": "ma-mail-delete-msy5ilbj-7a09b8e7-698e-4995-9674-03e2f409f2ba",
       "date": "2026.8.25",
       "manager": "윤태리",
       "note": "",
@@ -2199,10 +2199,7 @@
       "incomplete": false,
       "uncontracted": false,
       "author": "윤태리",
-      "updated_at": 1787026215413,
-      "mail_inquiry": true,
-      "mail_inquiry_at": 1787026215413,
-      "mail_inquiry_author": "윤태리"
+      "updated_at": 1787026631023
     },
     {
       "id": 1787026333019,
@@ -2686,6 +2683,11 @@
     {
       "id": "ma-msy5i18c-7fcf5bd1-5b9b-417e-94a4-d9ac04656833",
       "ts": 1787026604988,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-mail-delete-msy5ilbj-7a09b8e7-698e-4995-9674-03e2f409f2ba",
+      "ts": 1787026631023,
       "scope": "maintenance"
     },
     {
