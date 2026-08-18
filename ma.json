@@ -2231,6 +2231,20 @@
       "uncontracted": false,
       "author": "박동석",
       "updated_at": 1787026355132
+    },
+    {
+      "id": 1787026417776,
+      "group": "kr-004",
+      "ym": "2026-03",
+      "mutation_id": "ma-msy5e0s0-2a3f39b8-2909-4169-88a6-537779463376",
+      "date": "2026.3.10",
+      "manager": "박동석",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "박동석",
+      "updated_at": 1787026417776
     }
   ],
   "syncMutations": [
@@ -2567,6 +2581,11 @@
     {
       "id": "ma-msy5cofw-4e7f2ca1-3d9f-48e4-99f8-9d05f973be90",
       "ts": 1787026355132,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msy5e0s0-2a3f39b8-2909-4169-88a6-537779463376",
+      "ts": 1787026417776,
       "scope": "maintenance"
     }
   ]
