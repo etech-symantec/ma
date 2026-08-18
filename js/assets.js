@@ -861,7 +861,6 @@ async function flushAutoSyncNow(){
   captureAuditFromStateDiff(mutationId);
   markDataDirty(mutationId);
 
-
   if (
     !githubConfig ||
     !githubToken
@@ -870,72 +869,228 @@ async function flushAutoSyncNow(){
       'GitHub 연결 정보가 없습니다.'
     );
   }
-
   if (autoSyncTimer !== null){
-
     clearTimeout(
       autoSyncTimer
     );
-
     autoSyncTimer = null;
   }
 
-
-  /*
-    이미 다른 저장이 진행 중이라면
-    먼저 끝날 때까지 기다림
-  */
   while (autoSyncInFlight){
-
     await sleepMs(80);
-
   }
-
-
   autoSyncQueued = false;
-
   lastAutoSyncError = null;
-
-
-  /*
-    현재 최신 데이터를 즉시 저장
-  */
   await runAutoSync();
-
-
-  /*
-    runAutoSync() 내부에서 오류를 catch하므로
-    dataDirty로 최종 성공 여부 확인
-  */
   if (dataDirty){
-
     throw (
       lastAutoSyncError ||
       new Error(
         'GitHub 동기화가 완료되지 않았습니다.'
       )
     );
-
   }
-
-
   return true;
 }
 
+/* =========================================================
+   ma.json 저장 완료 판정
+   - maintenanceDirty 하나만으로 성공/실패를 판단하지 않는다.
+   - 이번 저장 대상 mutation_id가 실제 저장 BASE 또는 GitHub ma.json에
+     존재하는지를 확인한다.
+   - 저장 중 다른 점검 변경이 추가되어 maintenanceDirty=true가 남아도
+     이번 mutation이 저장됐다면 현재 작업은 성공으로 처리한다.
+   ========================================================= */
+function maintenanceMutationIdSet(state){
+  return new Set(
+    ((state && state.syncMutations) || [])
+      .map(item => String(item?.id || ''))
+      .filter(Boolean)
+  );
+}
 
+function pendingMaintenanceMutationIds(){
+  const syncedIds =
+    maintenanceMutationIdSet(
+      lastSyncedMaintenanceState
+    );
+
+  return (maintenanceSyncMutations || [])
+    .map(item => String(item?.id || ''))
+    .filter(
+      id =>
+        id &&
+        !syncedIds.has(id)
+    );
+}
+
+function maintenanceMutationsAreSaved(
+  mutationIds,
+  state = lastSyncedMaintenanceState
+){
+  const ids = [
+    ...new Set(
+      (mutationIds || [])
+        .map(id => String(id || ''))
+        .filter(Boolean)
+    )
+  ];
+
+  if (!ids.length){
+    return false;
+  }
+
+  const savedIds =
+    maintenanceMutationIdSet(state);
+
+  return ids.every(
+    id => savedIds.has(id)
+  );
+}
+
+/*
+  PUT 응답이 끊겼거나 Abort/네트워크 오류가 발생했더라도
+  GitHub에는 이미 저장됐을 수 있다.
+  그런 경우 ma.json을 다시 읽어 mutation_id 존재 여부로 최종 확인한다.
+*/
+async function verifyMaintenanceMutationsOnGithub(
+  mutationIds
+){
+  const ids = [
+    ...new Set(
+      (mutationIds || [])
+        .map(id => String(id || ''))
+        .filter(Boolean)
+    )
+  ];
+
+  if (
+    !ids.length ||
+    !githubConfig ||
+    !githubToken
+  ){
+    return false;
+  }
+
+  const maConfig =
+    maintenanceGithubConfigOf(
+      githubConfig
+    );
+
+  /*
+    GitHub PUT 직후 응답만 유실된 경우를 고려해
+    짧게 최대 3번 확인한다.
+  */
+  for (let attempt = 1; attempt <= 3; attempt++){
+    try{
+      if (attempt > 1){
+        await sleepMs(200 * attempt);
+      }
+
+      const remote =
+        await githubApiGet(
+          maConfig,
+          githubToken
+        );
+
+      const remoteState = {
+        maintenanceLogs:
+          cloneSyncState(
+            remote.json?.maintenanceLogs || []
+          ),
+        syncMutations:
+          cloneSyncState(
+            remote.json?.syncMutations || []
+          )
+      };
+
+      if (
+        !maintenanceMutationsAreSaved(
+          ids,
+          remoteState
+        )
+      ){
+        continue;
+      }
+
+      /*
+        실제 GitHub에 저장된 상태를 새로운 BASE로 사용한다.
+        현재 화면의 maintenanceLogs는 덮어쓰지 않는다.
+        저장 확인 중 사용자가 추가로 입력한 값이 사라지는 것을 방지한다.
+      */
+      maintenanceGithubSha =
+        remote.sha;
+
+      lastSyncedMaintenanceState =
+        cloneSyncState(remoteState);
+
+      const stillPending =
+        pendingMaintenanceMutationIds();
+
+      maintenanceDirty =
+        stillPending.length > 0;
+
+      lastMaintenanceSyncError =
+        null;
+
+      setSyncStatus(
+        maintenanceDirty
+          ? 'pending'
+          : 'synced'
+      );
+
+      return true;
+    }
+    catch(e){
+      /* 마지막 확인까지 실패하면 기존 동기화 오류를 그대로 사용 */
+      if (attempt === 3){
+        console.warn(
+          'ma.json 저장 결과 재확인 실패:',
+          e
+        );
+      }
+    }
+  }
+
+  return false;
+}
 
 /* ma.json 유지보수 점검을 즉시 동기화 */
 async function flushMaintenanceSyncNow(){
-  if (!maintenanceDirty){
-    markMaintenanceDirty(createMutationId('ma-sync'));
-  }
-
   if (!githubConfig || !githubToken){
     throw new Error('GitHub 연결 정보가 없습니다.');
   }
 
+  /*
+    이 함수가 호출된 시점까지 만들어진 미저장 mutation을
+    "이번 저장의 성공 판정 대상"으로 고정한다.
+  */
+  const targetMutationIds =
+    pendingMaintenanceMutationIds();
+
+  /* 저장할 변경이 없으면 성공 */
+  if (
+    !maintenanceDirty &&
+    !targetMutationIds.length
+  ){
+    return true;
+  }
+
+  /* 이미 진행 중인 ma.json 저장이 있으면 먼저 종료를 기다린다. */
   while (maintenanceSyncInFlight){
     await sleepMs(80);
+  }
+
+  /*
+    기다리는 동안 기존 저장 작업이 이번 mutation까지 저장했을 수도 있다.
+  */
+  if (
+    targetMutationIds.length &&
+    maintenanceMutationsAreSaved(
+      targetMutationIds
+    )
+  ){
+    return true;
   }
 
   maintenanceSyncQueued = false;
@@ -943,22 +1098,49 @@ async function flushMaintenanceSyncNow(){
 
   await runMaintenanceSync();
 
-  if (maintenanceDirty){
-    throw (
-      lastMaintenanceSyncError ||
-      new Error('유지보수 점검 GitHub 동기화가 완료되지 않았습니다.')
-    );
+  /*
+    핵심 변경점:
+    maintenanceDirty가 true여도 이번 mutation이 BASE에 들어갔다면 성공이다.
+    true가 남는 이유는 저장 도중 새 변경이 추가되었기 때문일 수 있다.
+  */
+  if (
+    targetMutationIds.length &&
+    maintenanceMutationsAreSaved(
+      targetMutationIds
+    )
+  ){
+    return true;
   }
 
-  return true;
+  /*
+    정상 PUT 후 응답만 유실된 경우를 위해 GitHub의 ma.json을 직접 재확인.
+  */
+  if (targetMutationIds.length){
+    const verified =
+      await verifyMaintenanceMutationsOnGithub(
+        targetMutationIds
+      );
+
+    if (verified){
+      return true;
+    }
+  }
+
+  /* mutation 대상이 없고 Dirty도 해제됐다면 정상 종료 */
+  if (!maintenanceDirty){
+    return true;
+  }
+
+  throw (
+    lastMaintenanceSyncError ||
+    new Error(
+      '유지보수 점검 GitHub 동기화가 완료되지 않았습니다.'
+    )
+  );
 }
 
 /*
   작업 이력 저장 전용
-
-  성공할 때까지 화면 전체 클릭 차단.
-  실패하면 화면은 계속 잠긴 상태이고
-  "다시 시도"만 사용할 수 있음.
 */
 async function syncWorkLogAndWait(
   label,
