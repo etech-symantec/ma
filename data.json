@@ -5988,17 +5988,27 @@
           "manager": "윤태리",
           "note": "24년? 강성준 v100 > v50 11.0.1.1\n25.02.13 윤태리 v100으로 확인\n25.03.12 윤태리 v100>v50 용량이슈",
           "author": "윤태리"
-        },
+        }
+      ],
+      "last_mutation_id": "data-msy75xat-b46f6d96-3905-42e9-bd8d-2a1e91b5e858",
+      "deleted_work_log": [
         {
           "id": 1786607811206,
           "type": "장비 구축",
           "date": "2026.8.13",
           "manager": "윤태리",
           "note": "24년? 강성준 v100 > v50 11.0.1.1\n25.02.13 윤태리 v100으로 확인\n25.03.12 윤태리 v100>v50 용량이슈",
-          "author": "윤태리"
+          "author": "윤태리",
+          "history_id": 1787029399252,
+          "deleted_at": 1787029399252,
+          "deleted_by": "윤태리",
+          "delete_revert_result": {
+            "reverted": 0,
+            "skipped": 0
+          },
+          "mutation_id": "data-msy75xat-b46f6d96-3905-42e9-bd8d-2a1e91b5e858"
         }
-      ],
-      "last_mutation_id": "data-msy6jaut-ce9ad687-805d-48e1-995a-21fac5a67c83"
+      ]
     },
     {
       "group": "cn-001",
@@ -15787,6 +15797,11 @@
     {
       "id": "data-msy6jaut-ce9ad687-805d-48e1-995a-21fac5a67c83",
       "ts": 1787028343748,
+      "scope": "data"
+    },
+    {
+      "id": "data-msy75xat-b46f6d96-3905-42e9-bd8d-2a1e91b5e858",
+      "ts": 1787029399278,
       "scope": "data"
     }
   ]
