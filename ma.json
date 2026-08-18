@@ -1963,20 +1963,6 @@
       "updated_at": 1787013106952
     },
     {
-      "id": 1787013148220,
-      "group": "jp-sds",
-      "ym": "2026-04",
-      "mutation_id": "ma-msxxhlx8-fa2043b0-d2b4-4c69-87c7-3826b015ae7b",
-      "date": "2026.4.7",
-      "manager": "박동석",
-      "note": "",
-      "done": true,
-      "incomplete": false,
-      "uncontracted": false,
-      "author": "박동석",
-      "updated_at": 1787013148220
-    },
-    {
       "id": 1787013118516,
       "group": "jp-sds",
       "ym": "2026-04",
@@ -1991,20 +1977,6 @@
       "updated_at": 1787013118516
     },
     {
-      "id": 1787013218756,
-      "group": "jp-sds",
-      "ym": "2026-05",
-      "mutation_id": "ma-msxxj4ck-15f55dc5-05a1-484d-a40a-de5ca415509e",
-      "date": "2026.5.27",
-      "manager": "박동석",
-      "note": "",
-      "done": true,
-      "incomplete": false,
-      "uncontracted": false,
-      "author": "박동석",
-      "updated_at": 1787013218756
-    },
-    {
       "id": 1787013182324,
       "group": "jp-sds",
       "ym": "2026-05",
@@ -2017,6 +1989,48 @@
       "uncontracted": false,
       "author": "박동석",
       "updated_at": 1787013182324
+    },
+    {
+      "id": 1787013148220,
+      "group": "jp-sds",
+      "ym": "2026-04",
+      "mutation_id": "ma-msxxhlx8-fa2043b0-d2b4-4c69-87c7-3826b015ae7b",
+      "date": "2026.4.7",
+      "manager": "박동석",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "박동석",
+      "updated_at": 1787013148220
+    },
+    {
+      "id": 1787013243902,
+      "group": "jp-sds",
+      "ym": "2026-06",
+      "mutation_id": "ma-msxxjnr1-08167b42-f7b8-49d6-ac6e-2712ff28cb4c",
+      "date": "2026.6.29",
+      "manager": "박동석",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "박동석",
+      "updated_at": 1787013243902
+    },
+    {
+      "id": 1787013218756,
+      "group": "jp-sds",
+      "ym": "2026-05",
+      "mutation_id": "ma-msxxj4ck-15f55dc5-05a1-484d-a40a-de5ca415509e",
+      "date": "2026.5.27",
+      "manager": "박동석",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "박동석",
+      "updated_at": 1787013218756
     }
   ],
   "syncMutations": [
@@ -2238,6 +2252,11 @@
     {
       "id": "ma-msxxj4ck-15f55dc5-05a1-484d-a40a-de5ca415509e",
       "ts": 1787013218756,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msxxjnr1-08167b42-f7b8-49d6-ac6e-2712ff28cb4c",
+      "ts": 1787013243902,
       "scope": "maintenance"
     }
   ]
