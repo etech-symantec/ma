@@ -14237,7 +14237,14 @@
       "pwSalt": "uP4tqAI9JIYyscdJIUOYcQ==",
       "pwIterations": 150000,
       "pwHash": "T/qhEY/v1HPV0tJ5vdIblE98HcU2Olz1V/hfJGug9lI=",
-      "isAdmin": false
+      "isAdmin": false,
+      "maintenance_mail_subject_ko": "[{법인명}] {점검월} 정기점검 일정 안내",
+      "maintenance_mail_body_ko": "안녕하세요.\n\n{법인명} {점검월} 정기점검 관련하여 안내드립니다.\n\n점검 예정일: {점검일}\n점검 담당자: {담당자}\n\n확인 부탁드립니다.\n감사합니다.",
+      "maintenance_mail_subject_en": "[{Company}] {InspectionMonth} Maintenance Inspection Schedule",
+      "maintenance_mail_body_en": "Hello,\n\nThis is to inform you about the scheduled maintenance inspection for {Company} in {InspectionMonth}.\n\nInspection date: {InspectionDate}\nEngineer: {Engineer}\n\nPlease review the schedule.\nThank you.",
+      "maintenance_mail_subject": "[{법인명}] {점검월} 정기점검 일정 안내",
+      "maintenance_mail_body": "안녕하세요.\n\n{법인명} {점검월} 정기점검 관련하여 안내드립니다.\n\n점검 예정일: {점검일}\n점검 담당자: {담당자}\n\n확인 부탁드립니다.\n감사합니다.",
+      "last_mutation_id": "mail-template-msy58l2e-32ba4125-7b04-43a7-8146-f8c66a690d22"
     },
     {
       "id": "u1786521628374",
@@ -15768,6 +15775,11 @@
     {
       "id": "data-mst2bdc5-7c8aba33-2d4b-468c-a56f-35ee3e9d2f81",
       "ts": 1786718924377,
+      "scope": "data"
+    },
+    {
+      "id": "mail-template-msy58l2e-32ba4125-7b04-43a7-8146-f8c66a690d22",
+      "ts": 1787026164149,
       "scope": "data"
     }
   ]
