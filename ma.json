@@ -2177,15 +2177,15 @@
       "id": 1787025150219,
       "group": "pl-sepm",
       "ym": "2026-08",
-      "mutation_id": "ma-msy4muq3-93245fd2-1ee2-487c-a6b1-c1e06e96df10",
-      "date": "",
+      "mutation_id": "ma-msy5ilz7-3656acf1-7272-4bf1-a4b7-4c686e05faa9",
+      "date": "2026.8.18",
       "manager": "박동석",
       "note": "점검 예정",
       "done": false,
-      "incomplete": true,
+      "incomplete": false,
       "uncontracted": false,
       "author": "박동석",
-      "updated_at": 1787025150219
+      "updated_at": 1787026631875
     },
     {
       "id": 1787025967886,
@@ -2686,6 +2686,11 @@
     {
       "id": "ma-msy5i18c-7fcf5bd1-5b9b-417e-94a4-d9ac04656833",
       "ts": 1787026604988,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msy5ilz7-3656acf1-7272-4bf1-a4b7-4c686e05faa9",
+      "ts": 1787026631875,
       "scope": "maintenance"
     }
   ]
