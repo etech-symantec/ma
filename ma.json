@@ -1963,6 +1963,20 @@
       "updated_at": 1787013106952
     },
     {
+      "id": 1787013148220,
+      "group": "jp-sds",
+      "ym": "2026-04",
+      "mutation_id": "ma-msxxhlx8-fa2043b0-d2b4-4c69-87c7-3826b015ae7b",
+      "date": "2026.4.7",
+      "manager": "박동석",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "박동석",
+      "updated_at": 1787013148220
+    },
+    {
       "id": 1787013118516,
       "group": "jp-sds",
       "ym": "2026-04",
@@ -2181,6 +2195,11 @@
     {
       "id": "ma-msxxgz04-53855a6c-3c92-4240-88db-6526edba1844",
       "ts": 1787013118516,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msxxhlx8-fa2043b0-d2b4-4c69-87c7-3826b015ae7b",
+      "ts": 1787013148220,
       "scope": "maintenance"
     }
   ]
