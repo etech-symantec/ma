@@ -2203,6 +2203,20 @@
       "mail_inquiry": true,
       "mail_inquiry_at": 1787026215413,
       "mail_inquiry_author": "윤태리"
+    },
+    {
+      "id": 1787026333019,
+      "group": "kr-004",
+      "ym": "2026-01",
+      "mutation_id": "ma-msy5c7dn-b309990d-cfd4-4e70-8f0a-e43ead6d1b66",
+      "date": "2026.1.15",
+      "manager": "박동석",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "박동석",
+      "updated_at": 1787026333019
     }
   ],
   "syncMutations": [
@@ -2529,6 +2543,11 @@
     {
       "id": "ma-mail-msy59omt-f879af8f-f863-4622-83de-a9f8e1b42265",
       "ts": 1787026215414,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msy5c7dn-b309990d-cfd4-4e70-8f0a-e43ead6d1b66",
+      "ts": 1787026333019,
       "scope": "maintenance"
     }
   ]
