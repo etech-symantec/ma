@@ -5885,7 +5885,7 @@
       "qty": "1",
       "start": "2026.8.1",
       "end": "2027.7.31",
-      "remarks": "1. 25.02.06 VM datastore1 capa 100%, rp 작동 중단.",
+      "remarks": "V50\n1. 25.02.06 VM datastore1 capa 100%, rp 작동 중단.",
       "deploy_date": "",
       "deploy_log": "24년? 강성준 v100 > v50 11.0.1.1 / 25.02.13 윤태리 v100으로 확인 / 25.03.12 윤태리 v100>v50 용량이슈",
       "mode": "",
@@ -5941,9 +5941,9 @@
           "field_changes": {
             "id": true,
             "pw": true,
-            "remarks": "1. 25.02.06 VM datastore1 capa 100%, rp 작동 중단."
+            "remarks": "V50\n1. 25.02.06 VM datastore1 capa 100%, rp 작동 중단."
           },
-          "change_summary": "계정 ID (여러 개면 줄바꿈으로 구분) 변경됨 · 비밀번호 (여러 개면 줄바꿈으로 구분) 변경됨 · 비고: 25.02.06 VM datastore1 capa 100%, rp 작동 중단. → 1. 25.02.06 VM datastore1 capa 100%, rp 작동 중단.",
+          "change_summary": "계정 ID (여러 개면 줄바꿈으로 구분) 변경됨 · 비밀번호 (여러 개면 줄바꿈으로 구분) 변경됨 · 비고: 25.02.06 VM datastore1 capa 100%, rp 작동 중단. → V50\n1. 25.02.06 VM datastore1 capa 100%, rp 작동 중단.",
           "rollback_changes": {
             "id": {
               "sensitive": true,
@@ -5976,9 +5976,10 @@
             "remarks": {
               "sensitive": false,
               "before": "25.02.06 VM datastore1 capa 100%, rp 작동 중단.",
-              "after": "1. 25.02.06 VM datastore1 capa 100%, rp 작동 중단."
+              "after": "V50\n1. 25.02.06 VM datastore1 capa 100%, rp 작동 중단."
             }
-          }
+          },
+          "mutation_id": "data-msy6jaut-ce9ad687-805d-48e1-995a-21fac5a67c83"
         },
         {
           "id": 1786607875244,
@@ -5996,7 +5997,8 @@
           "note": "24년? 강성준 v100 > v50 11.0.1.1\n25.02.13 윤태리 v100으로 확인\n25.03.12 윤태리 v100>v50 용량이슈",
           "author": "윤태리"
         }
-      ]
+      ],
+      "last_mutation_id": "data-msy6jaut-ce9ad687-805d-48e1-995a-21fac5a67c83"
     },
     {
       "group": "cn-001",
@@ -15780,6 +15782,11 @@
     {
       "id": "mail-template-msy58l2e-32ba4125-7b04-43a7-8146-f8c66a690d22",
       "ts": 1787026164149,
+      "scope": "data"
+    },
+    {
+      "id": "data-msy6jaut-ce9ad687-805d-48e1-995a-21fac5a67c83",
+      "ts": 1787028343748,
       "scope": "data"
     }
   ]
