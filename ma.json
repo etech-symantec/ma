@@ -2275,6 +2275,20 @@
       "updated_at": 1787026466439
     },
     {
+      "id": 1787026517025,
+      "group": "kr-004",
+      "ym": "2026-07",
+      "mutation_id": "ma-msy5g5cx-16f047ad-25ab-49fe-888a-62963964931f",
+      "date": "2026.7.10",
+      "manager": "박동석",
+      "note": "",
+      "done": true,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "박동석",
+      "updated_at": 1787026517025
+    },
+    {
       "id": 1787026503224,
       "group": "kr-004",
       "ym": "2026-06",
@@ -2643,6 +2657,11 @@
     {
       "id": "ma-msy5fupk-c28d5fe9-9630-4bd2-a6a7-b30df2fea9e7",
       "ts": 1787026503224,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msy5g5cx-16f047ad-25ab-49fe-888a-62963964931f",
+      "ts": 1787026517025,
       "scope": "maintenance"
     }
   ]
