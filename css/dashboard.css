@@ -77,3 +77,90 @@
 }.dash-geo-bar-company{
   background:#E8C982;
 }
+/* =========================================================
+   대시보드 OS 버전 최신 / 오래된 버전 강조
+   ========================================================= */
+
+.dash-version-oldest,
+.dash-version-latest,
+.dash-version-only{
+  padding:6px 7px;
+  margin:0 -7px;
+  border-radius:8px;
+}
+
+
+/* 가장 낮은 버전 */
+.dash-version-oldest{
+  background:#FFF1F1;
+  border:1px solid #F2C2C2;
+}
+
+.dash-version-oldest .dash-row-label{
+  color:#C33D3D;
+  font-weight:800;
+}
+
+
+/* 가장 높은 버전 */
+.dash-version-latest{
+  background:#EDF9F2;
+  border:1px solid #B8DFC8;
+}
+
+.dash-version-latest .dash-row-label{
+  color:#238552;
+  font-weight:800;
+}
+
+
+/* 버전이 하나뿐인 경우 */
+.dash-version-only{
+  background:#F1F6FB;
+  border:1px solid #C7D8E8;
+}
+
+.dash-version-only .dash-row-label{
+  color:#55748E;
+  font-weight:800;
+}
+
+
+/* 상태 라벨 */
+.dash-version-badge{
+  flex:0 0 auto;
+
+  padding:2px 6px;
+
+  border-radius:999px;
+
+  font-size:8.5px;
+  font-weight:800;
+  line-height:1.3;
+
+  white-space:nowrap;
+}
+
+
+/* 오래된 버전 */
+.dash-version-badge-oldest{
+  color:#B93636;
+  background:#FDE3E3;
+  border:1px solid #F0B8B8;
+}
+
+
+/* 최신 버전 */
+.dash-version-badge-latest{
+  color:#21834E;
+  background:#DDF3E6;
+  border:1px solid #A9D7BC;
+}
+
+
+/* 버전 하나 */
+.dash-version-badge-only{
+  color:#55748E;
+  background:#E5EEF5;
+  border:1px solid #C5D6E3;
+}
