@@ -2292,15 +2292,15 @@
       "id": 1787026565827,
       "group": "kr-004",
       "ym": "2026-08",
-      "mutation_id": "ma-msy5h70j-3e23ff10-38df-4536-ba68-6d67e1426cc5",
+      "mutation_id": "ma-msy5i18c-7fcf5bd1-5b9b-417e-94a4-d9ac04656833",
       "date": "2026.8.21",
       "manager": "박동석",
-      "note": "(예)",
-      "done": true,
+      "note": "",
+      "done": false,
       "incomplete": false,
       "uncontracted": false,
       "author": "박동석",
-      "updated_at": 1787026565827
+      "updated_at": 1787026604988
     },
     {
       "id": 1787026517025,
@@ -2681,6 +2681,11 @@
     {
       "id": "ma-msy5h70j-3e23ff10-38df-4536-ba68-6d67e1426cc5",
       "ts": 1787026565827,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-msy5i18c-7fcf5bd1-5b9b-417e-94a4-d9ac04656833",
+      "ts": 1787026604988,
       "scope": "maintenance"
     }
   ]
