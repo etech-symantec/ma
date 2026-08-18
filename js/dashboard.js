@@ -28,6 +28,90 @@ function osVersionTag(osVer){
   return m ? m[0] : null;
 }
 
+/*
+  7.4.2 / 7.10.1 같은 버전을
+  문자열이 아니라 숫자 단위로 비교
+*/
+function compareDashboardVersions(a, b){
+
+  const av =
+    String(a || '')
+      .split('.')
+      .map(v => Number(v) || 0);
+
+  const bv =
+    String(b || '')
+      .split('.')
+      .map(v => Number(v) || 0);
+
+  const length =
+    Math.max(
+      av.length,
+      bv.length
+    );
+
+  for (
+    let i = 0;
+    i < length;
+    i++
+  ){
+
+    const an =
+      av[i] || 0;
+
+    const bn =
+      bv[i] || 0;
+
+    if (an < bn){
+      return -1;
+    }
+
+    if (an > bn){
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+
+/*
+  해당 태그 카드에서
+  가장 낮은 버전 / 가장 높은 버전 계산
+*/
+function dashboardVersionExtremes(data){
+
+  const versions =
+    data
+      .map(([label]) =>
+        String(label || '').trim()
+      )
+      .filter(version =>
+        /^\d+(?:\.\d+)*$/.test(version)
+      )
+      .sort(compareDashboardVersions);
+
+
+  if (!versions.length){
+
+    return {
+      oldest:'',
+      latest:''
+    };
+  }
+
+
+  return {
+    oldest:
+      versions[0],
+
+    latest:
+      versions[
+        versions.length - 1
+      ]
+  };
+}
+
 const DASH_VISIBLE_ROWS = 16;
 
 function dashboardCompanyListHtml(items){
@@ -69,9 +153,130 @@ function dashboardCompanyListHtml(items){
     </ul>`;
 }
 
-function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable){
-  const max = data.length ? data[0][1] : 1;
-  const rowsHtml = data.map(([label, count, items], idx) => {
+function dashboardSectionHtml(sectionKey, title, colorClass, data, clickable, highlightVersions = false){
+  const max = data.length ? Math.max(
+          ...data.map(
+            row => row[1]
+          )
+        )
+      : 1;
+  
+  const versionExtremes =
+    highlightVersions
+      ? dashboardVersionExtremes(data)
+      : {
+          oldest:'',
+          latest:''
+        };
+  
+  const rowsHtml =
+    data.map(
+      ([label, count, items], idx) => {
+  
+        const version =
+          String(label || '').trim();
+  
+        const isOldest =
+          highlightVersions &&
+          version &&
+          version ===
+            versionExtremes.oldest;
+  
+        const isLatest =
+          highlightVersions &&
+          version &&
+          version ===
+            versionExtremes.latest;
+  
+        const isOnlyVersion =
+          isOldest &&
+          isLatest;
+  
+        let versionClass = '';
+        let versionBadge = '';
+  
+        if (isOnlyVersion){
+          versionClass =
+            ' dash-version-only';
+          versionBadge =
+            `<span class="dash-version-badge dash-version-badge-only">유일 버전</span>`;
+        }
+        else if (isOldest){
+          versionClass =
+            ' dash-version-oldest';
+  
+          versionBadge =
+            `<span class="dash-version-badge dash-version-badge-oldest">오래된 버전</span>`;
+        }
+        else if (isLatest){
+          versionClass =
+            ' dash-version-latest';
+          versionBadge =
+            `<span class="dash-version-badge dash-version-badge-latest">최신 버전</span>`;
+        }
+  
+        const detailId = `dashDetail_${sectionKey}_${idx}`;
+  
+        const row = `<div class="dash-row${clickable ? ' dash-row-clickable' : ''}${versionClass}"
+            ${clickable
+              ? `data-dash-toggle="${detailId}"`
+              : ''
+            }
+          >
+  
+            <span class="dash-row-label" title="${esc(label)}">
+              ${esc(label)}
+            </span>
+  
+            ${versionBadge}
+  
+            <div class="dash-bar-track">
+              <div
+                class="dash-bar-fill ${colorClass}"
+                style="
+                  width:${
+                    Math.max(
+                      5,
+                      Math.round(
+                        count /
+                        max *
+                        100
+                      )
+                    )
+                  }%
+                "
+              ></div>
+            </div>
+  
+            <span class="dash-row-count">
+              ${count}
+            </span>
+  
+            ${
+              clickable
+                ? '<span class="dash-row-caret">▾</span>'
+                : ''
+            }
+          </div>
+        `;
+  
+        const detail =
+          clickable
+  
+            ? `
+              <div
+                class="dash-row-detail"
+                id="${detailId}"
+                style="display:none;"
+              >
+                ${dashboardCompanyListHtml(items)}
+              </div>
+            `
+            : '';
+  
+        return row + detail;
+      }
+    );
     const detailId = `dashDetail_${sectionKey}_${idx}`;
     const row = `
     <div class="dash-row${clickable?' dash-row-clickable':''}"${clickable?` data-dash-toggle="${detailId}"`:''}>
@@ -130,10 +335,10 @@ function renderDashboard(){
   const osNoTagItems = validOsRecords.filter(r => skuKeywordMatches(r.sku).length === 0);
 
   const osTagCardsHtml = osTagGroups.map(g =>
-    dashboardSectionHtml(`os_${g.tag}`, `${g.tag} 태그 · 버전별`, 'dash-c1', bucketGroups(g.items, r => osVersionTag(r.os_ver)), true)
+    dashboardSectionHtml(`os_${g.tag}`, `${g.tag} 태그 · 버전별`, 'dash-c1', bucketGroups(g.items, r => osVersionTag(r.os_ver)), true, true)
   ).join('');
   const osNoTagCardHtml = osNoTagItems.length
-    ? dashboardSectionHtml('os_none', '태그 없음 · 버전별', 'dash-c1', bucketGroups(osNoTagItems, r => osVersionTag(r.os_ver)), true)
+    ? dashboardSectionHtml('os_none', '태그 없음 · 버전별', 'dash-c1', bucketGroups(osNoTagItems, r => osVersionTag(r.os_ver)), true, true)
     : '';
 
   const byTag = bucketByTags(assetRecords)
