@@ -2483,6 +2483,20 @@
       "uncontracted": false,
       "author": "신호근",
       "updated_at": 1787053919830
+    },
+    {
+      "id": 1787205904443,
+      "group": "custom-mso09xln",
+      "ym": "2026-09",
+      "mutation_id": "ma-mt1491kr-50fb92f7-7545-4c04-b16f-21a5b0807d20",
+      "date": "2026.09.18",
+      "manager": "윤태리",
+      "note": "",
+      "done": false,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1787205904443
     }
   ],
   "syncMutations": [
@@ -3014,6 +3028,11 @@
     {
       "id": "ma-mszbqzkp-e6fd9aeb-340e-4bde-8e9a-76dddb9545dc",
       "ts": 1787097566618,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-mt1491kr-50fb92f7-7545-4c04-b16f-21a5b0807d20",
+      "ts": 1787205904443,
       "scope": "maintenance"
     }
   ]
