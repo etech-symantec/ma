@@ -2497,6 +2497,20 @@
       "uncontracted": false,
       "author": "윤태리",
       "updated_at": 1787205904443
+    },
+    {
+      "id": 1787275543461,
+      "group": "kr-001",
+      "ym": "2026-08",
+      "mutation_id": "ma-mt29pndx-d62d0be5-92f7-4819-af52-58d5459384ad",
+      "date": "2026.8.25",
+      "manager": "윤태리",
+      "note": "",
+      "done": false,
+      "incomplete": false,
+      "uncontracted": false,
+      "author": "윤태리",
+      "updated_at": 1787275543461
     }
   ],
   "syncMutations": [
@@ -3033,6 +3047,11 @@
     {
       "id": "ma-mt1491kr-50fb92f7-7545-4c04-b16f-21a5b0807d20",
       "ts": 1787205904443,
+      "scope": "maintenance"
+    },
+    {
+      "id": "ma-mt29pndx-d62d0be5-92f7-4819-af52-58d5459384ad",
+      "ts": 1787275543461,
       "scope": "maintenance"
     }
   ]
